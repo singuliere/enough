@@ -5,7 +5,7 @@
   vars:
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
-    secrets: "{{ lookup('file', '../secrets.yml') | from_yaml }}"
+    secrets: "{{ lookup('file', '../../secrets.yml') | from_yaml }}"
   tasks:
     - name: key
       os_keypair: 

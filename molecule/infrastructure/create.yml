@@ -7,16 +7,15 @@
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
-    secrets: "{{ lookup('file', '../secrets.yml') | from_yaml }}"
+    secrets: "{{ lookup('file', '../../secrets.yml') | from_yaml }}"
     user: debian
     ssh_port: 22
   tasks:
     - name: key
       os_keypair: 
         state: present
-        name: loic
-        public_key: >-
-          ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEApKfP/I/WoSeX7MAFGpdntC56oHk0wJNn+qy0cud321yTaZRReJGQyqhoBk/sXsnqF4mOpXTf3+Ao1hQIiFazR5Fbmvk7DR0nKj8sGPV0iJB1F0+eyL+w7mgPyD8VDCw+ygCWG4ghMfeGKRAJQweO4v7rFx61UeYDxNk3roOgeuM= loic@inspiron.dachary.org
+        name: testkey
+        public_key_file: "{{ secrets.ssh_public_keyfile }}"
         auth:
           auth_url: "{{ secrets.OS_AUTH_URL }}"
           username: "{{ secrets.OS_USERNAME }}"
@@ -35,7 +34,7 @@
         region_name: "{{ secrets.OS_REGION_NAME }}"
         name: "{{ item.name }}"
         image: Debian 9
-        key_name: loic
+        key_name: testkey
         timeout: 200
         flavor: "{{ item.flavor }}"
         security_groups: default
@@ -52,6 +51,7 @@
     - name: Wait for python on the instances
       command: >
         ssh -oBatchMode=yes -oStrictHostKeyChecking=no
+        -i {{ secrets.ssh_private_keyfile }}
         debian@{{item.openstack.public_v4}} which python
       register: result
       until: result|success
@@ -66,7 +66,7 @@
           'address': "{{ item.openstack.accessIPv4 }}",
           'user': "{{ user }}",
           'port': "{{ ssh_port }}",
-          'identity_file': /home/loic/.ssh/id_rsa, }
+          'identity_file': "{{ secrets.ssh_private_keyfile }}", }
       with_items: "{{ server.results }}"
       register: instance_config_dict
 #      when: server.changed | bool
