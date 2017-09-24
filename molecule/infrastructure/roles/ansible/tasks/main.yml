@@ -1,5 +1,36 @@
 ---
 - name: apt-get install virtualenv
   apt:
-    name: python-virtualenv
+    name: virtualenv
     state: present
+
+- name: apt-get install git
+  apt:
+    name: git
+    state: present
+
+- name: chown debian /srv
+  file:
+    path: /srv
+    owner: debian
+
+- name: git clone http://lab.securedrop.club/main/securedrop-club.git
+  git:
+    repo: 'http://lab.securedrop.club/main/securedrop-club.git'
+    dest: /srv/checkout
+  become: False
+
+- name: Copy secrets
+  copy:
+    src: secrets.yml
+    dest: /srv/checkout/secrets.yml
+    mode: "0700"
+  become: False
+
+- name: bootstrap securedrop-club
+  shell: |
+    set -ex
+    bash -x bootstrap
+  args:
+    chdir: /srv/checkout
+  become: False
