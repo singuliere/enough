@@ -1,0 +1,21 @@
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
+    secrets: "{{ lookup('file', '..', 'secrets.yml') | from_yaml }}"
+  tasks:
+    - name: key
+      os_keypair: 
+        state: present
+        name: loic
+        public_key: >-
+          ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAIEApKfP/I/WoSeX7MAFGpdntC56oHk0wJNn+qy0cud321yTaZRReJGQyqhoBk/sXsnqF4mOpXTf3+Ao1hQIiFazR5Fbmvk7DR0nKj8sGPV0iJB1F0+eyL+w7mgPyD8VDCw+ygCWG4ghMfeGKRAJQweO4v7rFx61UeYDxNk3roOgeuM= loic@inspiron.dachary.org
+        auth:
+          auth_url: "{{ secrets.OS_AUTH_URL }}"
+          username: "{{ secrets.OS_USERNAME }}"
+          password: "{{ secrets.OS_PASSWORD }}"
+          project_name: "{{ secrets.OS_TENANT_NAME }}"
+        region_name: "{{ secrets.OS_REGION_NAME }}"
