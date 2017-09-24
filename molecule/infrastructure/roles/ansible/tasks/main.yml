@@ -1,0 +1,5 @@
+---
+- name: apt-get install virtualenv
+  apt:
+    name: python-virtualenv
+    state: present
