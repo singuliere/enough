@@ -4,18 +4,18 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: icinga
+  - name: icinga_host
     flavor: "s1-2"
     groups:
-      - icinga
-  - name: weblate
+      - icinga_group
+  - name: weblate_host
     flavor: "s1-4"
     groups:
-      - weblate
-  - name: ansible
+      - weblate_group
+  - name: ansible_host
     flavor: "s1-2"
     groups:
-      - ansible
+      - ansible_group
 provisioner:
   name: ansible
   lint:
