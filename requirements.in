@@ -2,3 +2,7 @@ ansible
 pip-tools
 molecule
 shade
+# we need 1.7.1 otherwise it fails but ... molecule wants 1.6.3 so we need
+# to patch requirements.txt manually. Debugging conflicts requires running
+# pip-compile --verbose because of https://github.com/jazzband/pip-tools/issues/220
+testinfra

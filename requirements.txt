@@ -102,7 +102,7 @@ simplejson==3.11.1        # via osc-lib, python-cinderclient, python-novaclient
 six==1.11.0               # via ansible-lint, bcrypt, click-completion, cliff, cmd2, cryptography, debtcollector, fasteners, git-url-parse, keystoneauth1, munch, openstacksdk, osc-lib, oslo.config, oslo.i18n, oslo.serialization, oslo.utils, pip-tools, pynacl, pyopenssl, python-cinderclient, python-dateutil, python-glanceclient, python-ironicclient, python-keystoneclient, python-novaclient, python-openstackclient, shade, stevedore, testinfra, warlock
 stevedore==1.26.0         # via cliff, keystoneauth1, openstacksdk, osc-lib, oslo.config, python-keystoneclient
 tabulate==0.7.7           # via molecule
-testinfra==1.6.3          # via molecule
+testinfra==1.7.1
 tree-format==0.1.1        # via molecule
 unicodecsv==0.14.1        # via cliff
 urllib3==1.22             # via requests

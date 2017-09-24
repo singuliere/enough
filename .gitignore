@@ -2,3 +2,5 @@
 .molecule
 secrets.yml
 *.retry
+__pycache__
+.cache
