@@ -1,5 +1,5 @@
 rm -fr ../virtualenv
 virtualenv ../virtualenv
 source ../virtualenv/bin/activate
-
+sudo apt-get install -y libssl-dev gcc python-dev
 pip install -r requirements.txt
