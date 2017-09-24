@@ -1,0 +1,31 @@
+- name: Destroy
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
+    molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
+    secrets: "{{ lookup('file', '../secrets.yml') | from_yaml }}"
+  tasks:
+    - name: key
+      os_keypair: 
+        state: absent
+        name: loic
+        auth:
+          auth_url: "{{ secrets.OS_AUTH_URL }}"
+          username: "{{ secrets.OS_USERNAME }}"
+          password: "{{ secrets.OS_PASSWORD }}"
+          project_name: "{{ secrets.OS_TENANT_NAME }}"
+        region_name: "{{ secrets.OS_REGION_NAME }}"
+
+    - name: destroy instances
+      os_server:
+        state: absent
+        auth:
+          auth_url: "{{ secrets.OS_AUTH_URL }}"
+          username: "{{ secrets.OS_USERNAME }}"
+          password: "{{ secrets.OS_PASSWORD }}"
+          project_name: "{{ secrets.OS_TENANT_NAME }}"
+        region_name: "{{ secrets.OS_REGION_NAME }}"
+        name: "{{ item.name }}"
+      with_items: "{{ molecule_yml.platforms }}"
