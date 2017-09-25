@@ -1,0 +1,49 @@
+---
+- name: key "{{ state }}"
+  os_keypair: 
+    state: "{{ state }}"
+    name: testkey
+    public_key_file: "{{ ssh_public_keyfile }}"
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+
+- name: instances "{{ state }}"
+  os_server:
+    state: "{{ state }}"
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+    name: "{{ item.name }}"
+    image: Debian 9
+    key_name: testkey
+    timeout: 200
+    flavor: "{{ item.flavor }}"
+    security_groups: default
+    auto_ip: yes
+    wait: true
+    userdata: |
+      #cloud-config
+      packages:
+        - python
+      package_upgrade: true
+  with_items: "{{ molecule_yml.platforms }}"
+  register: server
+
+- name: Wait for python on the instances
+  command: >
+    ssh -oBatchMode=yes -oStrictHostKeyChecking=no
+    -i {{ ssh_private_keyfile }}
+    debian@{{item.openstack.public_v4}} which python
+  register: result
+  until: result|success
+  retries: 30
+  delay: 10
+  with_items: "{{ server.results }}"
+  when: state == "present"
