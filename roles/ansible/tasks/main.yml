@@ -20,11 +20,11 @@
     dest: /srv/checkout
   become: False
 
-- name: Copy secrets
+- name: Copy clouds credentials
   copy:
-    src: secrets.yml
-    dest: /srv/checkout/secrets.yml
-    mode: "0700"
+    src: clouds.yml
+    dest: /srv/checkout/clouds.yml
+    mode: "0600"
   become: False
 
 - name: bootstrap securedrop-club
