@@ -1,0 +1,15 @@
+---
+- name: debconf
+  shell: |
+    sudo debconf-set-selections <<< "postfix postfix/mailname string mail.{{ domain }}"
+    sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+  args:
+    executable: /bin/bash
+- name: apt-get install postfix
+  apt:
+    name: postfix
+    state: present
+- name: configure postfix
+  shell: |
+    sudo sed -i -e 's:^mynetworks.*:mynetworks = 127.0.0.0/8 172.17.0.0/24 172.18.0.0/24:' /etc/postfix/main.cf
+    sudo systemctl restart postfix
