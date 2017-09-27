@@ -11,6 +11,89 @@
       project_name: "{{ clouds.ovh.auth.project_name }}"
     region_name: "{{ clouds.ovh.region_name }}"
 
+- name: security group for securedrop-club servers
+  os_security_group:
+    state: "{{ state }}"
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+    state: present
+    name: securedrop-club
+    description: security group for securedrop-club servers
+
+- name: security group for securedrop-club servers
+  os_security_group:
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+    state: present
+    name: securedrop-club
+    description: security group for securedrop-club servers
+
+- name: security group rule for icinga API
+  os_security_group_rule:
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+    security_group: securedrop-club
+    protocol: tcp
+    port_range_min: 5665
+    port_range_max: 5665
+#    remote_group: securedrop-club
+    remote_ip_prefix: 0.0.0.0/0
+
+- name: security group rule for ssh
+  os_security_group_rule:
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+    security_group: securedrop-club
+    protocol: tcp
+    port_range_min: 22
+    port_range_max: 22
+#    remote_group: securedrop-club
+    remote_ip_prefix: 0.0.0.0/0
+
+- name: security group rule for HTTPS
+  os_security_group_rule:
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+    security_group: securedrop-club
+    protocol: tcp
+    port_range_min: 443
+    port_range_max: 443
+#    remote_group: securedrop-club
+    remote_ip_prefix: 0.0.0.0/0
+
+- name: security group rule for ping
+  os_security_group_rule:
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+    security_group: securedrop-club
+    protocol: icmp
+#    remote_group: securedrop-club
+    remote_ip_prefix: 0.0.0.0/0
+
 - name: instances "{{ state }}"
   os_server:
     state: "{{ state }}"
@@ -33,6 +116,8 @@
       packages:
         - python
       package_upgrade: true
+    security_groups:
+      - securedrop-club
   with_items: "{{ molecule_yml.platforms }}"
   register: server
 
