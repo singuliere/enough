@@ -1,6 +1,6 @@
 *~
 .molecule
-clouds.yml
+/clouds.yml
 *.retry
 __pycache__
 .cache
