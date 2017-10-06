@@ -1,3 +1,4 @@
+* git submodule update --init
 * apt-get install virtualenv
 * deactivate || true ; source bootstrap
 * # get OpenStack credentials and store then in openrc.sh
