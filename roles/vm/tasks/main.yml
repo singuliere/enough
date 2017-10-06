@@ -81,6 +81,21 @@
 #    remote_group: securedrop-club
     remote_ip_prefix: 0.0.0.0/0
 
+- name: security group rule for HTTP
+  os_security_group_rule:
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+    security_group: securedrop-club
+    protocol: tcp
+    port_range_min: 80
+    port_range_max: 80
+#    remote_group: securedrop-club
+    remote_ip_prefix: 0.0.0.0/0
+
 - name: security group rule for ping
   os_security_group_rule:
     auth:
