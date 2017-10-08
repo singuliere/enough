@@ -9,3 +9,58 @@
     name: monitoring-plugins
     state: present
     install_recommends: no
+
+- name: retrieve the process user name
+  shell: ps -o'user' `pgrep icinga2` | tail -n 1
+  register: command_output
+
+- set_fact:
+    icinga_user: "{{ command_output.stdout }}"
+
+- name: retrieve the process group name
+  shell: ps -o'group' `pgrep icinga2` | tail -n 1
+  register: command_output
+
+- set_fact:
+    icinga_group: "{{ command_output.stdout }}"
+
+- name: ensure that /etc/icinga2/pki exists and is owned by the icinga user
+  file:
+    path: /etc/icinga2/pki
+    state: directory
+    mode: 0700
+    owner: "{{ icinga_user  }}"
+    group: "{{ icinga_group }}"
+
+- name: generate a new local self-signed certificate
+  shell: |
+    icinga2 pki new-cert \
+      --cn   {{ inventory_hostname }} \
+      --key  /etc/icinga2/pki/{{ inventory_hostname }}.key \
+      --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt
+  args:
+    creates:  /etc/icinga2/pki/{{ inventory_hostname }}.crt
+
+- name: request the master certificate from the master host
+  shell: |
+    icinga2 pki save-cert \
+      --key /etc/icinga2/pki/{{ inventory_hostname }}.key  \
+      --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt \
+      --trustedcert /etc/icinga2/pki/trusted-master.crt \
+      --host 54.36.103.194
+  args:
+    creates:  /etc/icinga2/pki/trusted-master.crt
+
+- name: generate ticket number
+  shell: to be done
+
+- name: node setup
+  shell: |
+    icinga2 node setup --ticket ead2d570e18c78abf285d6b85524970a0f69c22d \
+      --cn {{ inventory_hostname }} \
+      --endpoint {{ icinga-host }} \
+      --zone {{ inventory_hostname }} \
+      --master_host 54.36.103.194 \
+      --trustedcert /etc/icinga2/pki/trusted-master.crt \
+      --accept-commands \
+      --accept-config
