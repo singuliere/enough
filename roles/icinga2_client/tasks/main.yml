@@ -1,0 +1,11 @@
+---
+- name: apt-get install icinga2
+  apt:
+    name: icinga2
+    state: present
+
+- name: apt-get install monitoring-plugins
+  apt:
+    name: monitoring-plugins
+    state: present
+    install_recommends: no
