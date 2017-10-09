@@ -1,4 +1,22 @@
 ---
+- name: get icinga master (the tricky way)
+  # Perhaps molecule could/should know about it
+  shell: |
+    openstack server list | awk '$4 == "icinga_host" {print $2}'
+  register: command_output
+  delegate_to: localhost
+  changed_when: False
+
+- set_fact:
+    icinga_master: "{{ command_output.stdout }}"
+
+- assert:
+    that: icinga_master in hostvars
+    msg: didn't found any valid hostname for icinga master
+
+- set_fact:
+    icinga_master_ip: "{{ hostvars[icinga_master]['ansible_host'] }}"
+
 - name: apt-get install icinga2
   apt:
     name: icinga2
@@ -13,6 +31,7 @@
 - name: retrieve the process user name
   shell: ps -o'user' `pgrep icinga2` | tail -n 1
   register: command_output
+  changed_when: False
 
 - set_fact:
     icinga_user: "{{ command_output.stdout }}"
@@ -20,6 +39,7 @@
 - name: retrieve the process group name
   shell: ps -o'group' `pgrep icinga2` | tail -n 1
   register: command_output
+  changed_when: False
 
 - set_fact:
     icinga_group: "{{ command_output.stdout }}"
@@ -47,20 +67,32 @@
       --key /etc/icinga2/pki/{{ inventory_hostname }}.key  \
       --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt \
       --trustedcert /etc/icinga2/pki/trusted-master.crt \
-      --host 54.36.103.194
+      --host {{ icinga_master_ip }}
   args:
     creates:  /etc/icinga2/pki/trusted-master.crt
 
-- name: generate ticket number
-  shell: to be done
+- name: generate ticket number on master in the "icinga2" docker container
+  shell: |
+    docker-compose exec -T icinga2      icinga2 pki ticket --cn {{ inventory_hostname }}
+  args:
+    chdir: /srv/icinga2/
+  delegate_to: "{{ icinga_master_ip }}"
+  register: command_output
+  changed_when: False
+
+- set_fact:
+    icinga_ticket: "{{ command_output.stdout }}"
 
 - name: node setup
   shell: |
-    icinga2 node setup --ticket ead2d570e18c78abf285d6b85524970a0f69c22d \
+    icinga2 node setup \
+      --ticket {{ icinga_ticket }} \
       --cn {{ inventory_hostname }} \
-      --endpoint {{ icinga-host }} \
+      --endpoint {{ icinga_master }} \
       --zone {{ inventory_hostname }} \
-      --master_host 54.36.103.194 \
+      --master_host {{ icinga_master_ip }} \
       --trustedcert /etc/icinga2/pki/trusted-master.crt \
       --accept-commands \
       --accept-config
+  changed_when: False
+
