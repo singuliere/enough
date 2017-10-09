@@ -114,9 +114,9 @@ def get_groups_from_server(server_vars, namegroup=True):
     return groups
 
 
-def get_host_groups(inventory, refresh=False, cloud=None):
+def get_host_groups(inventory, refresh=False, cloud=None, hold=False):
     (cache_file, cache_expiration_time) = get_cache_settings(cloud)
-    if is_cache_stale(cache_file, cache_expiration_time, refresh=refresh):
+    if is_cache_stale(cache_file, cache_expiration_time, refresh=refresh, hold=hold):
         groups = to_json(get_host_groups_from_cloud(inventory))
         open(cache_file, 'w').write(groups)
     else:
@@ -176,10 +176,12 @@ def get_host_groups_from_cloud(inventory):
     return groups
 
 
-def is_cache_stale(cache_file, cache_expiration_time, refresh=False):
+def is_cache_stale(cache_file, cache_expiration_time, refresh=False, hold=False):
     ''' Determines if cache file has expired, or if it is still valid '''
     if refresh:
         return True
+    if hold:
+        return False
     if os.path.isfile(cache_file) and os.path.getsize(cache_file) > 0:
         mod_time = os.path.getmtime(cache_file)
         current_time = time.time()
@@ -213,6 +215,8 @@ def parse_args():
     parser.add_argument('--private',
                         action='store_true',
                         help='Use private address for ansible host')
+    parser.add_argument('--hold', action='store_true',
+                        help='Force use of cached information')
     parser.add_argument('--refresh', action='store_true',
                         help='Refresh cached information')
     parser.add_argument('--debug', action='store_true', default=False,
@@ -249,7 +253,7 @@ def main():
         inventory = shade.inventory.OpenStackInventory(**inventory_args)
 
         if args.list:
-            output = get_host_groups(inventory, refresh=args.refresh, cloud=args.cloud)
+            output = get_host_groups(inventory, refresh=args.refresh, cloud=args.cloud, hold=args.hold)
         elif args.host:
             output = to_json(inventory.get_host(args.host))
         print(output)
