@@ -1,21 +1,24 @@
 ---
-- name: get icinga master (the tricky way)
+- name: fetch icinga master info (the tricky way)
   # Perhaps molecule could/should know about it
   shell: |
-    openstack server list | awk '$4 == "icinga_host" {print $2}'
-  register: command_output
+    openstack server show icinga_host
+  register: openstack_output
   delegate_to: localhost
   changed_when: False
 
 - set_fact:
-    icinga_master: "{{ command_output.stdout }}"
+    icinga_master: "icinga_host"
 
-- assert:
-    that: icinga_master in hostvars
-    msg: didn't found any valid hostname for icinga master
+- name: get icinga2 master ip
+  shell: |
+    awk -F '[|,= ]+' '$2 == "addresses" {print $5}' <<EOF
+      {{ openstack_output.stdout }}
+    EOF
+  register: command_output
 
 - set_fact:
-    icinga_master_ip: "{{ hostvars[icinga_master]['ansible_host'] }}"
+    icinga_master_ip: "{{ command_output.stdout }}"
 
 - name: apt-get install icinga2
   apt:
