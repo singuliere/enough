@@ -215,7 +215,7 @@ def parse_args():
     parser.add_argument('--private',
                         action='store_true',
                         help='Use private address for ansible host')
-    parser.add_argument('--hold', action='store_true',
+    parser.add_argument('--hold', action='store_true', default=os.environ.get('USE_CACHE'),
                         help='Force use of cached information')
     parser.add_argument('--refresh', action='store_true',
                         help='Refresh cached information')
