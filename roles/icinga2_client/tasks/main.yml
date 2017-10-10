@@ -124,9 +124,9 @@
   delegate_to: icinga_host
 
 - name: restart the "icinga2" docker container
-  shell: |
-    docker-compose restart icinga2
-  args:
-    chdir: /srv/icinga2/
+  docker_service:
+    project_src: /srv/icinga2
+    state: present
+    restarted: true
   delegate_to: icinga_host
   changed_when: False
