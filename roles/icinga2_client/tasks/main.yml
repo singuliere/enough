@@ -53,6 +53,7 @@
       --host {{ hostvars['icinga_host']['ansible_default_ipv4']['address'] }}
   args:
     creates:  /etc/icinga2/pki/trusted-master.crt
+  register: result
   until: result|success
   retries: 30
   delay: 10
@@ -62,7 +63,7 @@
     docker-compose exec -T icinga2      icinga2 pki ticket --cn {{ inventory_hostname }}
   args:
     chdir: /srv/icinga2/
-  delegate_to: "{{ hostvars['icinga_host']['ansible_default_ipv4']['address'] }}"
+  delegate_to: icinga_host
   register: command_output
   changed_when: False
 
