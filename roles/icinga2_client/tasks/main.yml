@@ -1,27 +1,4 @@
 ---
-# - name: fetch icinga master info (the tricky way)
-#   # Perhaps molecule could/should know about it
-#   shell: |
-#     openstack server show icinga_host
-#   register: openstack_output
-#   delegate_to: localhost
-#   changed_when: False
-
-# - set_fact:
-#     icinga_master: "icinga_host"
-
-- debug:
-    var: hostvars
-    
-# - name: get icinga2 master ip
-#   shell: |
-#     awk -F '[|,= ]+' '$2 == "addresses" {print $5}' <<EOF
-#       {{ openstack_output.stdout }}
-#     EOF
-#   register: command_output
-
-# - set_fact:
-#     icinga_master_ip: "{{ command_output.stdout }}"
 
 - name: apt-get install icinga2
   apt:
