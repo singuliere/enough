@@ -53,6 +53,9 @@
       --host {{ hostvars['icinga_host']['ansible_default_ipv4']['address'] }}
   args:
     creates:  /etc/icinga2/pki/trusted-master.crt
+  until: result|success
+  retries: 30
+  delay: 10
 
 - name: generate ticket number on master in the "icinga2" docker container
   shell: |
