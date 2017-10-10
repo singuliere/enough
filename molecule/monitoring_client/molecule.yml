@@ -4,10 +4,14 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: monitoring_client_host
+  - name: icinga_host
     flavor: "s1-2"
     groups:
       - icinga_group
+  - name: monitoring_client_host
+    flavor: "s1-2"
+    groups:
+      - client_group
 provisioner:
   name: ansible
   lint:

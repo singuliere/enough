@@ -1,24 +1,27 @@
 ---
-- name: fetch icinga master info (the tricky way)
-  # Perhaps molecule could/should know about it
-  shell: |
-    openstack server show icinga_host
-  register: openstack_output
-  delegate_to: localhost
-  changed_when: False
+# - name: fetch icinga master info (the tricky way)
+#   # Perhaps molecule could/should know about it
+#   shell: |
+#     openstack server show icinga_host
+#   register: openstack_output
+#   delegate_to: localhost
+#   changed_when: False
 
-- set_fact:
-    icinga_master: "icinga_host"
+# - set_fact:
+#     icinga_master: "icinga_host"
 
-- name: get icinga2 master ip
-  shell: |
-    awk -F '[|,= ]+' '$2 == "addresses" {print $5}' <<EOF
-      {{ openstack_output.stdout }}
-    EOF
-  register: command_output
+- debug:
+    var: hostvars
+    
+# - name: get icinga2 master ip
+#   shell: |
+#     awk -F '[|,= ]+' '$2 == "addresses" {print $5}' <<EOF
+#       {{ openstack_output.stdout }}
+#     EOF
+#   register: command_output
 
-- set_fact:
-    icinga_master_ip: "{{ command_output.stdout }}"
+# - set_fact:
+#     icinga_master_ip: "{{ command_output.stdout }}"
 
 - name: apt-get install icinga2
   apt:
@@ -70,7 +73,7 @@
       --key /etc/icinga2/pki/{{ inventory_hostname }}.key  \
       --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt \
       --trustedcert /etc/icinga2/pki/trusted-master.crt \
-      --host {{ icinga_master_ip }}
+      --host {{ hostvars['icinga_host']['ansible_default_ipv4']['address'] }}
   args:
     creates:  /etc/icinga2/pki/trusted-master.crt
 
@@ -79,7 +82,7 @@
     docker-compose exec -T icinga2      icinga2 pki ticket --cn {{ inventory_hostname }}
   args:
     chdir: /srv/icinga2/
-  delegate_to: "{{ icinga_master_ip }}"
+  delegate_to: "{{ hostvars['icinga_host']['ansible_default_ipv4']['address'] }}"
   register: command_output
   changed_when: False
 
@@ -91,9 +94,9 @@
     icinga2 node setup \
       --ticket {{ icinga_ticket }} \
       --cn {{ inventory_hostname }} \
-      --endpoint {{ icinga_master }} \
+      --endpoint icinga_host \
       --zone {{ inventory_hostname }} \
-      --master_host {{ icinga_master_ip }} \
+      --master_host {{ hostvars['icinga_host']['ansible_default_ipv4']['address'] }} \
       --trustedcert /etc/icinga2/pki/trusted-master.crt \
       --accept-commands \
       --accept-config
@@ -125,24 +128,24 @@
   file:
     path: /etc/icinga2/zones.d/{{ inventory_hostname }}
     state: directory
-  delegate_to: "{{ icinga_master_ip }}"
+  delegate_to: icinga_host
 
 - name: install node definition on master
   template:
     src: templates/host.conf
     dest: /etc/icinga2/zones.d/{{ inventory_hostname }}/host.conf
-  delegate_to: "{{ icinga_master_ip }}"
+  delegate_to: icinga_host
 
 - name: install client zone definition on master
   template:
     src: templates/client_zone.conf
     dest: /etc/icinga2/zones.d/{{ inventory_hostname }}.conf
-  delegate_to: "{{ icinga_master_ip }}"
+  delegate_to: icinga_host
 
 - name: restart the "icinga2" docker container
   shell: |
     docker-compose restart icinga2
   args:
     chdir: /srv/icinga2/
-  delegate_to: "{{ icinga_master_ip }}"
+  delegate_to: icinga_host
   changed_when: False

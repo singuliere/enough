@@ -16,8 +16,8 @@ services:
       - ICINGA2_FEATURE_GRAPHITE_HOST=graphite
       - ICINGA2_FEATURE_GRAPHITE_PORT=2003
       - ICINGA2_FEATURE_GRAPHITE_URL=http://graphite
-      #- ICINGAWEB2_ADMIN_USER=icingaadmin
-      #- ICINGAWEB2_ADMIN_PASS=icinga
+      - ICINGAWEB2_ADMIN_USER=icingaadmin
+      - ICINGAWEB2_ADMIN_PASS=Okei2AhbooghohWah6Or
       #- ICINGA2_USER_FULLNAME=Icinga2 Docker Monitoring Instance
     volumes:
       - ./icinga/cache:/var/cache/icinga2
