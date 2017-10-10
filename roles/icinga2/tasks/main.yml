@@ -14,12 +14,15 @@
     repo: 'https://github.com/jjethwa/icinga2'
     force: yes
     dest: /srv/icinga2
+  register: output
+  changed_when: output.before != output.after
 
 - name: Copy docker-compose.yml
   copy:
-    src: docker-compose.yml
+    src: files/docker-compose.yml
     dest: /srv/icinga2/docker-compose.yml
     mode: "0600"
+  changed_when: false
 
 - name: apt-get install virtualenv
   apt:
