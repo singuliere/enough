@@ -44,6 +44,12 @@
   args:
     creates:  /etc/icinga2/pki/{{ inventory_hostname }}.crt
 
+- name: wait for master availability
+  wait_for:
+    host: "{{ hostvars['icinga_host']['ansible_host'] }}"
+    port: 5665
+    state: drained
+
 - name: request the master certificate from the master host
   shell: |
     icinga2 pki save-cert \
@@ -53,10 +59,6 @@
       --host {{ hostvars['icinga_host']['ansible_host'] }}
   args:
     creates:  /etc/icinga2/pki/trusted-master.crt
-  register: result
-  until: result|success
-  retries: 30
-  delay: 10
 
 - name: generate ticket number on master in the "icinga2" docker container
   shell: |
@@ -69,6 +71,12 @@
 
 - set_fact:
     icinga_ticket: "{{ command_output.stdout }}"
+
+- name: wait for master availability
+  wait_for:
+    host: "{{ hostvars['icinga_host']['ansible_host'] }}"
+    port: 5665
+    state: drained
 
 - name: node setup
   shell: |
