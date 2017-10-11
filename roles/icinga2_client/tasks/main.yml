@@ -127,6 +127,6 @@
   docker_service:
     project_src: /srv/icinga2
     state: present
-    restarted: true
+    restarted: yes
   delegate_to: icinga_host
   changed_when: False
