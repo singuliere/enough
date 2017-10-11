@@ -4,7 +4,7 @@ services:
   icinga2:
     image: jordan/icinga2
     restart: on-failure:5
-    hostname: icinga2
+    hostname: icinga_host
     ports:
       - 80:80
       - 5665:5665
