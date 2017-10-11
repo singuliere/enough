@@ -46,6 +46,63 @@
   pip:
     name: docker-compose
 
-- docker_service:
+- name: launch icinga2 docker
+  docker_service:
     project_src: /srv/icinga2
     state: present
+
+- name: wait for icinga starting up and conf creation, before tweaking it
+  wait_for:
+    port: 5665
+    delay: 10
+    state: drained
+
+- name: install zone definition on master
+  template:
+    src: templates/zones.conf.master
+    dest: /srv/icinga2/icinga/etc/icinga2/zones.conf
+
+- name: remove host sample
+  file:
+    path: /srv/icinga2/icinga/etc/icinga2/conf.d/hosts.conf
+    state: absent
+
+- name: create zone directory on master
+  file:
+    path: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}
+    state: directory
+
+- name: install host definition
+  template:
+    src: templates/host.conf
+    dest: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+
+- name: create global zone directory
+  file:
+    path: /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates
+    state: directory
+
+- name: move monitoring configurations to global zone (for sharing with clients)
+  command: mv /srv/icinga2/icinga/etc/icinga2/conf.d/{{ item }}.conf /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates
+  with_items:
+    - commands
+    - downtimes
+    - groups
+    - notifications
+    - templates
+    - timeperiods
+    - users
+
+- name: create global service zone directory
+  file:
+    path: /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates/services
+    state: directory
+
+- name: move services to global zone (for sharing with clients)
+  command: mv /srv/icinga2/icinga/etc/icinga2/conf.d/services.conf /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates/services/base.conf
+
+- name: restart icinga2 docker
+  docker_service:
+    project_src: /srv/icinga2
+    state: present
+    restarted: yes

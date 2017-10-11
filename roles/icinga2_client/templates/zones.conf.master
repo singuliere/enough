@@ -1,7 +1,7 @@
 /* {{ inventory_hostname }} */
  
 object Zone "{{ inventory_hostname }}" {
-  endpoints = [ "{{ hostvars[inventory_hostname]['ansible_host'] }}" ]
+  endpoints = [ "{{ inventory_hostname }}" ]
   parent = "master"
 }
  

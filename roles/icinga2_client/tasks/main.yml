@@ -94,9 +94,9 @@
     name: checker
     state: absent
 
-- name: install global zone on client
-  file:
-    src: files/zone.conf
+- name: install master and global zones definitions on client
+  template:
+    src: templates/zones.conf.client
     dest: /etc/icinga2/zones.conf
 
 - name: restart icinga client
@@ -105,22 +105,22 @@
     state: reloaded
   changed_when: False
 
-- name: create zone directory
+- name: create zone directory on master
   file:
-    path: /etc/icinga2/zones.d/{{ inventory_hostname }}
+    path: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}
     state: directory
   delegate_to: icinga_host
 
-- name: install node definition on master
+- name: install host definition on master
   template:
     src: templates/host.conf
-    dest: /etc/icinga2/zones.d/{{ inventory_hostname }}/host.conf
+    dest: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
   delegate_to: icinga_host
 
 - name: install client zone definition on master
   template:
-    src: templates/client_zone.conf
-    dest: /etc/icinga2/zones.d/{{ inventory_hostname }}.conf
+    src: templates/zones.conf.master
+    dest: /srv/icinga2/icinga/etc/icinga2/zones.d/{{ inventory_hostname }}.conf
   delegate_to: icinga_host
 
 - name: restart the "icinga2" docker container
