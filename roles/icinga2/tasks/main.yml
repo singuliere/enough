@@ -51,11 +51,24 @@
     project_src: /srv/icinga2
     state: present
 
+- name: test icinga new configuration availability
+  command: ls /srv/icinga2/icinga/etc/icinga2/zones.d/master
+  register: result
+  ignore_errors: True
+
 - name: wait for icinga starting up and conf creation, before tweaking it
   wait_for:
-    port: 5665
-    delay: 10
-    state: drained
+    path: /srv/icinga2/icinga/etc/icinga2/conf.d/{{ item }}.conf
+  with_items:
+    - commands
+    - downtimes
+    - groups
+    - notifications
+    - templates
+    - timeperiods
+    - users
+    - services
+  when: result|failed
 
 - name: install zone definition on master
   template:
@@ -66,6 +79,7 @@
   file:
     path: /srv/icinga2/icinga/etc/icinga2/conf.d/hosts.conf
     state: absent
+  when: result|failed
 
 - name: create zone directory on master
   file:
@@ -92,6 +106,7 @@
     - templates
     - timeperiods
     - users
+  when: result|failed
 
 - name: create global service zone directory
   file:
@@ -100,9 +115,11 @@
 
 - name: move services to global zone (for sharing with clients)
   command: mv /srv/icinga2/icinga/etc/icinga2/conf.d/services.conf /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates/services/base.conf
+  when: result|failed
 
 - name: restart icinga2 docker
   docker_service:
     project_src: /srv/icinga2
     state: present
     restarted: yes
+  changed_when: False
