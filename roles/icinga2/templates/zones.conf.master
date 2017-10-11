@@ -1,12 +1,5 @@
 /* Node setup */
 
-object Endpoint NodeName {
-}
-
-object Zone ZoneName {
-	endpoints = [ NodeName ]
-}
-
 /* Global zone */
 
 object Zone "global-templates" {
