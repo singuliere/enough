@@ -70,6 +70,12 @@
     - services
   when: result|failed
 
+- name: wait for icingaweb2 starting up and database setting up
+  wait_for:
+    port: 80
+    state: drained
+    delay: 30
+
 - name: install zone definition on master
   template:
     src: templates/zones.conf.master
