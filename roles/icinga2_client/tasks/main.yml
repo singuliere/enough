@@ -59,6 +59,10 @@
       --host {{ hostvars['icinga_host']['ansible_host'] }}
   args:
     creates:  /etc/icinga2/pki/trusted-master.crt
+  register: output
+  until: output|success
+  retries: 10
+  delay: 5
 
 - name: generate ticket number on master in the "icinga2" docker container
   shell: |
@@ -90,6 +94,10 @@
       --accept-commands \
       --accept-config
   changed_when: False
+  register: output
+  until: output|success
+  retries: 10
+  delay: 5
 
 - name: disable local configuration
   lineinfile:
