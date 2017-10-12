@@ -41,10 +41,3 @@
   apt:
     name: libfindbin-libs-perl
     state: present
-
-- name: declare sendmail on monitoring master (verify idempotence of lineinfile)
-  lineinfile:
-    line: '  vars.sendmail = true'
-    insertafter: 'Define host attributes'
-    path: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
-  delegate_to: icinga_host
