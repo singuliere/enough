@@ -11,6 +11,12 @@
     state: present
     install_recommends: no
 
+- name: apt-get install monitoring-plugins-contrib
+  apt:
+    name: monitoring-plugins-contrib
+    state: present
+    install_recommends: no
+
 - name: retrieve the process user name
   shell: ps -o'user' `pgrep icinga2` | tail -n 1
   register: command_output
