@@ -149,10 +149,10 @@
     dest: /srv/icinga2/icinga/etc/icinga2/zones.d/{{ inventory_hostname }}.conf
   delegate_to: icinga_host
 
-- name: restart the "icinga2" docker container
-  docker_service:
-    project_src: /srv/icinga2
-    state: present
-    restarted: yes
+- name: reload icinga2 configuration
+  shell: |
+    docker-compose exec -T icinga2      /etc/init.d/icinga2 reload
+  args:
+    chdir: /srv/icinga2/
   delegate_to: icinga_host
   changed_when: False

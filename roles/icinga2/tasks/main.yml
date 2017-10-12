@@ -136,9 +136,10 @@
     - services/mail
     - services/volumes
 
-- name: restart icinga2 docker
-  docker_service:
-    project_src: /srv/icinga2
-    state: present
-    restarted: yes
+- name: reload icinga2 configuration
+  shell: |
+    docker-compose exec -T icinga2      /etc/init.d/icinga2 reload
+  args:
+    chdir: /srv/icinga2/
+  delegate_to: icinga_host
   changed_when: False
