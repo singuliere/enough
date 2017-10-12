@@ -11,9 +11,9 @@
     state: present
     install_recommends: no
 
-- name: apt-get install monitoring-plugins-contrib
+- name: apt-get install nagios-plugins-contrib
   apt:
-    name: monitoring-plugins-contrib
+    name: nagios-plugins-contrib
     state: present
     install_recommends: no
 
