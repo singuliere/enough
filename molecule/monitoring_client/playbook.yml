@@ -12,5 +12,6 @@
   hosts: monitoring_client_host
   roles:
     - { role: icinga2_client }
+    - { role: postfix, domain: 'securedrop.club' }
     - { role: fail2ban }
   become: True
