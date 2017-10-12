@@ -5,4 +5,5 @@
     - { role: postfix, domain: 'securedrop.club' }
     - { role: ansible-role-docker, docker_install_compose: true }
     - { role: icinga2 }
+    - { role: fail2ban }
   become: True
