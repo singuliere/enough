@@ -1,3 +1,18 @@
 [submodule "roles/ansible-role-docker"]
 	path = roles/ansible-role-docker
 	url = https://github.com/geerlingguy/ansible-role-docker
+[submodule "roles/debops.etc_aliases"]
+	path = roles/debops.etc_aliases
+	url = https://github.com/debops/ansible-etc_aliases
+[submodule "roles/debops.ferm"]
+	path = roles/debops.ferm
+	url = https://github.com/debops/ansible-ferm
+[submodule "roles/debops.secret"]
+	path = roles/debops.secret
+	url = https://github.com/debops/ansible-secret
+[submodule "roles/debops.postfix"]
+	path = roles/debops.postfix
+	url = https://github.com/debops/ansible-postfix
+[submodule "roles/debops.ansible_plugins"]
+	path = roles/debops.ansible_plugins
+	url = https://github.com/debops/ansible-ansible_plugins

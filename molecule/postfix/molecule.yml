@@ -1,0 +1,27 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: postfix
+    flavor: "s1-2"
+    groups:
+      # https://docs.debops.org/en/latest/ansible/roles/ansible-postfix/docs/getting-started.html#default-configuration
+      - debops_service_postfix
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+scenario:
+  name: postfix
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
