@@ -50,25 +50,23 @@
   docker_service:
     project_src: /srv/icinga2
     state: present
-
-- name: test icinga new configuration availability
-  command: ls /srv/icinga2/icinga/etc/icinga2/zones.d/master
-  register: result
-  ignore_errors: True
+  changed_when: false
 
 - name: wait for icinga starting up and conf creation, before tweaking it
   wait_for:
-    path: /srv/icinga2/icinga/etc/icinga2/conf.d/{{ item }}.conf
+    path: /srv/icinga2/icinga/etc/icinga2/{{ item }}
   with_items:
-    - commands
-    - downtimes
-    - groups
-    - notifications
-    - templates
-    - timeperiods
-    - users
-    - services
-  when: result|failed
+    - conf.d
+    - constants.conf
+    - features-available
+    - features-enabled
+    - icinga2.conf
+    - init.conf
+    - pki
+    - repository.d
+    - scripts
+    - zones.conf
+    - zones.d
 
 - name: wait for icingaweb2 starting up and database setting up
   wait_for:
@@ -80,12 +78,6 @@
   template:
     src: templates/zones.conf.master
     dest: /srv/icinga2/icinga/etc/icinga2/zones.conf
-
-- name: remove host sample
-  file:
-    path: /srv/icinga2/icinga/etc/icinga2/conf.d/hosts.conf
-    state: absent
-  when: result|failed
 
 - name: create zone directory on master
   file:
@@ -102,26 +94,47 @@
     path: /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates
     state: directory
 
-- name: move monitoring configurations to global zone (for sharing with clients)
-  command: mv /srv/icinga2/icinga/etc/icinga2/conf.d/{{ item }}.conf /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates
+- name: remove unused configuration
+  file:
+    path: /srv/icinga2/icinga/etc/icinga2/conf.d/{{ item }}.conf
+    state: absent
   with_items:
+    - apt
+    - groups
+    - services
+    - hosts
     - commands
     - downtimes
-    - groups
     - notifications
     - templates
     - timeperiods
     - users
-  when: result|failed
 
-- name: create global service zone directory
+- name: create global services directory
   file:
     path: /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates/services
     state: directory
 
-- name: move services to global zone (for sharing with clients)
-  command: mv /srv/icinga2/icinga/etc/icinga2/conf.d/services.conf /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates/services/base.conf
-  when: result|failed
+- name: deploy our global configuration
+  copy:
+    src:  files/{{ item }}.conf
+    dest: /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates/{{ item }}.conf
+  with_items:
+    - commands
+    - downtimes
+    - notifications
+    - templates
+    - timeperiods
+    - users
+    - groups
+    - services/apt
+    - services/base
+    - services/database
+    - services/disks
+    - services/dns
+    - services/http
+    - services/mail
+    - services/volumes
 
 - name: restart icinga2 docker
   docker_service:
