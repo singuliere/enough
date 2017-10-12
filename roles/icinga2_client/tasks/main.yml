@@ -5,17 +5,21 @@
     name: icinga2
     state: present
 
-- name: apt-get install monitoring-plugins
+- name: apt-get install monitoring plugins
   apt:
-    name: monitoring-plugins
+    name: "{{ item }}"
     state: present
     install_recommends: no
+  with_items:
+    - monitoring-plugins
+    - nagios-plugins-contrib
 
-- name: apt-get install nagios-plugins-contrib
+- name: apt-get install monitoring plugins deps
   apt:
-    name: nagios-plugins-contrib
+    name: "{{ item }}"
     state: present
-    install_recommends: no
+  with_items:
+    - xz-utils
 
 - name: retrieve the process user name
   shell: ps -o'user' `pgrep icinga2` | tail -n 1
