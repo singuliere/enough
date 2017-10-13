@@ -25,28 +25,28 @@ def sloppy_get(url, headers={}, auth=None):
     r.raise_for_status()
     return r
 
-def test_icinga_api_hosts(File, host):
+def test_icinga_api_hosts(host):
     address = get_master_address(host)
     r = sloppy_get(
             'https://{address}:5665/v1/objects/hosts'.format(address=address,),
             {'Accept': 'application/json'},
-            get_auth(File),
+            get_auth(host.file),
             )
     answer = r.json()
     assert len(answer['results']) == 1
     assert answer['results'][0]['name'] == 'icinga_host'
 
-def test_icinga_api_services (File, host):
+def test_icinga_api_services (host):
     address = get_master_address(host)
     r = sloppy_get(
             'https://{address}:5665/v1/objects/services'.format(address=address,),
             {'Accept': 'application/json'},
-            get_auth(File),
+            get_auth(host.file),
             )
     answer = r.json()
     assert len(answer['results']) > 10
 
-def test_icingaweb2_login_screen(File, host):
+def test_icingaweb2_login_screen(host):
     address = get_master_address(host)
     s = requests.Session()
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
