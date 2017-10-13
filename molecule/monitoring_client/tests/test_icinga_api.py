@@ -4,6 +4,8 @@ import requests
 import pytest
 import yaml
 
+testinfra_hosts = ['icinga_host']
+
 def get_auth(File):
     f = File("/srv/icinga2/icinga/etc/icinga2/conf.d/api-users.conf")
     return (
@@ -26,9 +28,6 @@ def sloppy_get(url, headers={}, auth=None):
     return r
 
 def test_icinga_api_hosts(host):
-    if host.backend.host != 'icinga_host':
-        # testinfra isn't ver helpful for querying API credential
-        return
     address = get_master_address(host)
     r = sloppy_get(
             'https://{address}:5665/v1/objects/hosts'.format(address=address,),
@@ -40,9 +39,6 @@ def test_icinga_api_hosts(host):
     assert set([h['name'] for h in answer['results']]) == set(['icinga_host', 'monitoring_client_host'])
 
 def test_icinga_api_services (host):
-    if host.backend.host != 'icinga_host':
-        # testinfra isn't ver helpful for querying API credential
-        return
     address = get_master_address(host)
     r = sloppy_get(
             'https://{address}:5665/v1/objects/services'.format(address=address,),
@@ -51,17 +47,3 @@ def test_icinga_api_services (host):
             )
     answer = r.json()
     assert len(answer['results']) > 30
-
-def test_icingaweb2_login_screen(host):
-    address = get_master_address(host)
-    s = requests.Session()
-    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    r = s.get('http://{address}/icingaweb2/authentication/login'.format(
-        address=address,
-    ))
-    cookies= dict(r.cookies)
-    r = s.get('http://{address}/icingaweb2/authentication/login?_checkCookie=1'.format(
-        address=address,
-    ), cookies=cookies)
-    r.raise_for_status()
-    assert 'Icinga Web 2 Login' in r.text
