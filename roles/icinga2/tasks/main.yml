@@ -141,5 +141,4 @@
     docker-compose exec -T icinga2      /etc/init.d/icinga2 reload
   args:
     chdir: /srv/icinga2/
-  delegate_to: icinga_host
   changed_when: False
