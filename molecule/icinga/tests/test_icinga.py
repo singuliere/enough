@@ -4,12 +4,13 @@ import requests
 import pytest
 import yaml
 
-def get_auth(File):
-    f = File("/etc/icinga2/conf.d/api-users.conf")
-    return (
-        re.search('ApiUser "(.*)"', f.content_string).group(1),
-        re.search('password = "(.*)"', f.content_string).group(1)
-    )
+def get_auth(host):
+    with host.sudo():
+        f = host.file("/etc/icinga2/conf.d/api-users.conf")
+        return (
+            re.search('ApiUser "(.*)"', f.content_string).group(1),
+            re.search('password = "(.*)"', f.content_string).group(1)
+        )
     
 def get_master_address(host):
     inventory = yaml.load(open(host.backend.ansible_inventory))
@@ -30,7 +31,7 @@ def test_icinga_api_hosts(host):
     r = sloppy_get(
             'https://{address}:5665/v1/objects/hosts'.format(address=address,),
             {'Accept': 'application/json'},
-            get_auth(host.file),
+            get_auth(host),
             )
     answer = r.json()
     assert len(answer['results']) == 1
@@ -41,7 +42,7 @@ def test_icinga_api_services (host):
     r = sloppy_get(
             'https://{address}:5665/v1/objects/services'.format(address=address,),
             {'Accept': 'application/json'},
-            get_auth(host.file),
+            get_auth(host),
             )
     answer = r.json()
     assert len(answer['results']) > 10
