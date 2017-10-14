@@ -8,10 +8,11 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - "icinga2"
-    - "mariadb-server"
-    - "mariadb-client"
-    - "icinga2-ido-mysql"
+    - xz-utils
+    - icinga2
+    - mariadb-server
+    - mariadb-client
+    - icinga2-ido-mysql
 
 - name: apt-get install monitoring plugins
   apt:
