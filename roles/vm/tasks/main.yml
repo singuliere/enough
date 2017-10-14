@@ -66,7 +66,7 @@
 #    remote_group: securedrop-club
     remote_ip_prefix: 0.0.0.0/0
 
-- name: security group rule for smtp
+- name: security group rule for smtps
   os_security_group_rule:
     auth:
       auth_url: "{{ clouds.ovh.auth.auth_url }}"
@@ -76,8 +76,8 @@
     region_name: "{{ clouds.ovh.region_name }}"
     security_group: securedrop-club
     protocol: tcp
-    port_range_min: 25
-    port_range_max: 25
+    port_range_min: 465
+    port_range_max: 465
 #    remote_group: securedrop-club
     remote_ip_prefix: 0.0.0.0/0
 
