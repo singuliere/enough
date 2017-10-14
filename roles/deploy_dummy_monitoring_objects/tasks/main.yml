@@ -27,6 +27,11 @@
     marker: "/* {mark} Systemd login process */"
   delegate_to: icinga_host
 
+- name: install git
+  apt:
+    name: git
+    state: present
+
 - name: install check_git on icinga_host
   copy:
     src: files/check_git
@@ -55,8 +60,6 @@
     repo: 'https://github.com/jjethwa/icinga2'
     force: yes
     dest: /root/icinga2
-  register: output
-  changed_when: output.before != output.after
 
 - name: reload icinga2 configuration
   systemd:
