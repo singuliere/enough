@@ -4,9 +4,8 @@ import requests
 import pytest
 import yaml
 
-testinfra_hosts = ['icinga_host']
-
 def get_auth(host):
+    host= host.get_host('ansible://icinga_host', ansible_inventory=host.backend.ansible_inventory)
     with host.sudo():
         f = host.file("/etc/icinga2/conf.d/api-users.conf")
         return (
