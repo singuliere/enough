@@ -34,7 +34,14 @@
   lineinfile:
     line: '  vars.sendmail = true'
     insertafter: 'Define host attributes'
-    path: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+    path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+  delegate_to: icinga_host
+
+- name: reload icinga2 configuration
+  systemd:
+    name: icinga2
+    state: reloaded
+  changed_when: False
   delegate_to: icinga_host
 
 - name: install check_mailq dependancy

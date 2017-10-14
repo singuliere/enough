@@ -5,7 +5,7 @@ import pytest
 import yaml
 
 def get_auth(File):
-    f = File("/srv/icinga2/icinga/etc/icinga2/conf.d/api-users.conf")
+    f = File("/etc/icinga2/conf.d/api-users.conf")
     return (
         re.search('ApiUser "(.*)"', f.content_string).group(1),
         re.search('password = "(.*)"', f.content_string).group(1)

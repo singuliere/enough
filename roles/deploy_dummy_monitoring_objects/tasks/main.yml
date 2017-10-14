@@ -10,7 +10,7 @@
           http_string = "devops discussions"
         }
     insertafter: 'Define httpd services and attributes'
-    path: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+    path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
     marker: "/* {mark} Secure Drop Forum Vhost */"
   delegate_to: icinga_host
 
@@ -23,7 +23,7 @@
           procs_critical = "1:1"
         }
     insertafter: 'Define processes and attributes'
-    path: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+    path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
     marker: "/* {mark} Systemd login process */"
   delegate_to: icinga_host
 
@@ -32,30 +32,34 @@
     src: files/check_git
     dest: /usr/local/bin/check_git
     mode: 0755
-  delegate_to: icinga_host
 
 - name: install sudo file for check_git on icinga_host
   template:
     dest: /etc/sudoers.d/icinga2_check_git
     src: templates/icinga2_check_git
-  delegate_to: icinga_host
 
-- name: declare git repo on icinga_host
+- name: declare git repo
   # Warn: successives "blockinfile" in the same file require using differents markers
   blockinfile:
     block: |
         vars.repos["Icinga2 Docker image"] = {
-          dir = "/src/icinga2"
+          dir = "/root/icinga2"
         }
     insertafter: 'Define git repos and attributes'
-    path: /srv/icinga2/icinga/etc/icinga2/zones.d/master/icinga_host/host.conf
+    path: /etc/icinga2/zones.d/master/icinga_host/host.conf
     marker: "/* {mark} Icinga2 Docker image git repo */"
   delegate_to: icinga_host
 
+- name: git clone https://github.com/jjethwa/icinga2
+  git:
+    repo: 'https://github.com/jjethwa/icinga2'
+    force: yes
+    dest: /root/icinga2
+  register: output
+  changed_when: output.before != output.after
+
 - name: reload icinga2 configuration
-  shell: |
-    docker-compose exec -T icinga2      /etc/init.d/icinga2 reload
-  args:
-    chdir: /srv/icinga2/
-  delegate_to: icinga_host
+  systemd:
+    name: icinga2
+    state: reloaded
   changed_when: False

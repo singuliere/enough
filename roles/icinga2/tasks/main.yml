@@ -1,60 +1,30 @@
 ---
-- name: apt-get install git
+- set_fact:
+    icingaweb2_user:      "icingaadmin"
+    icingaweb2_user_pass: "zoR9thie6Phud4mooYoo"
+
+- name: apt-get install icinga2 and friends
   apt:
-    name: git
+    name: "{{ item }}"
     state: present
+  with_items:
+    - "icinga2"
+    - "mariadb-server"
+    - "mariadb-client"
+    - "icinga2-ido-mysql"
 
-- name: chown debian /srv
-  file:
-    path: /srv
-    owner: debian
-
-- name: git clone https://github.com/jjethwa/icinga2
-  git:
-    repo: 'https://github.com/jjethwa/icinga2'
-    force: yes
-    dest: /srv/icinga2
-  register: output
-  changed_when: output.before != output.after
-
-- name: Copy docker-compose.yml
-  copy:
-    src: files/docker-compose.yml
-    dest: /srv/icinga2/docker-compose.yml
-    mode: "0600"
-  changed_when: false
-
-- name: apt-get install virtualenv
+- name: apt-get install monitoring plugins
   apt:
-    name: virtualenv
+    name: "{{ item }}"
     state: present
-
-- name: apt-get install python-pip
-  apt:
-    name: python-pip
-    state: present
-
-- name: pip install setuptools
-  pip:
-    name: setuptools
-
-- name: pip install docker
-  pip:
-    name: docker
-
-- name: pip install docker-compose
-  pip:
-    name: docker-compose
-
-- name: launch icinga2 docker
-  docker_service:
-    project_src: /srv/icinga2
-    state: present
-  changed_when: false
+    install_recommends: no
+  with_items:
+    - "monitoring-plugins"
+    - "nagios-plugins-contrib"
 
 - name: wait for icinga starting up and conf creation, before tweaking it
   wait_for:
-    path: /srv/icinga2/icinga/etc/icinga2/{{ item }}
+    path: /etc/icinga2/{{ item }}
   with_items:
     - conf.d
     - constants.conf
@@ -68,35 +38,36 @@
     - zones.conf
     - zones.d
 
-- name: wait for icingaweb2 starting up and database setting up
-  wait_for:
-    port: 80
-    state: drained
-    delay: 30
+- name: master node setup
+  shell: |
+    icinga2 node setup \
+      --master \
+      --cn {{ inventory_hostname }}
+  changed_when: False
 
 - name: install zone definition on master
   template:
     src: templates/zones.conf.master
-    dest: /srv/icinga2/icinga/etc/icinga2/zones.conf
+    dest: /etc/icinga2/zones.conf
 
 - name: create zone directory on master
   file:
-    path: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}
+    path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}
     state: directory
 
 - name: install host definition
   template:
     src: templates/host.conf
-    dest: /srv/icinga2/icinga/etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+    dest: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
 
 - name: create global zone directory
   file:
-    path: /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates
+    path: /etc/icinga2/zones.d/global-templates
     state: directory
 
 - name: remove unused configuration
   file:
-    path: /srv/icinga2/icinga/etc/icinga2/conf.d/{{ item }}.conf
+    path: /etc/icinga2/conf.d/{{ item }}.conf
     state: absent
   with_items:
     - apt
@@ -112,13 +83,13 @@
 
 - name: create global services directory
   file:
-    path: /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates/services
+    path: /etc/icinga2/zones.d/global-templates/services
     state: directory
 
 - name: deploy our global configuration
   copy:
     src:  files/{{ item }}.conf
-    dest: /srv/icinga2/icinga/etc/icinga2/zones.d/global-templates/{{ item }}.conf
+    dest: /etc/icinga2/zones.d/global-templates/{{ item }}.conf
   with_items:
     - commands
     - downtimes
@@ -136,9 +107,138 @@
     - services/mail
     - services/volumes
 
-- name: reload icinga2 configuration
+- name: retrieve generated DB credentials
   shell: |
-    docker-compose exec -T icinga2      /etc/init.d/icinga2 reload
-  args:
-    chdir: /srv/icinga2/
+    awk -F '"' '$1 ~ "password" {print $2}' /etc/icinga2/features-available/ido-mysql.conf
+  register: output
+  changed_when: False
+
+- set_fact:
+    icinga2_dbpass: "{{ output.stdout }}"
+
+- name: create icinga2 DB
+  command: mariadb -e "CREATE DATABASE IF NOT EXISTS icinga2;"
+  changed_when: False
+
+- name: create access to icinga2 DB
+  command: mariadb -e "GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON icinga2.* TO 'icinga2'@'localhost' IDENTIFIED BY '{{ icinga2_dbpass }}';"
+  changed_when: False
+
+- name: create icinga2 DB scheme
+  shell: mariadb icinga2 < /usr/share/icinga2-ido-mysql/schema/mysql.sql || true
+  changed_when: False
+
+- name: enable icinga2 features
+  icinga2_feature:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - command
+    - ido-mysql
+
+- name: reload icinga2 configuration
+  systemd:
+    name: icinga2
+    state: reloaded
+  changed_when: False
+
+- name: apt-get install nginx, icingaweb2 and friends
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "nginx-full"
+    - "icingacli"
+    - "icingaweb2"
+    - "icingaweb2-module-monitoring"
+    - "php-mysql"
+    - "php7.0-intl"
+    - "php7.0-fpm"
+
+- name: append icingaweb2 group to www-data
+  command: usermod -a -G icingaweb2 www-data
+  changed_when: False
+
+- name: install nginx configuration
+  template:
+    src:  templates/nginx.conf
+    dest: /etc/nginx/sites-available/{{ inventory_hostname }}
+  changed_when: False
+
+- name: set up nginx configuration
+  file:
+    src:  /etc/nginx/sites-available/{{ inventory_hostname }}
+    dest: /etc/nginx/sites-enabled/{{ inventory_hostname }}
+    state: link
+
+- name: unset default nginx configuration
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: 'hash icingaweb2 user password'
+  shell: openssl passwd -1 "{{ icingaweb2_user_pass }}"
+  register: output
+
+- set_fact:
+    icingaweb2_user_hash: "{{ output.stdout }}"
+
+- set_fact:
+    icingaweb2_dbpass: "{{ lookup('password', '/tmp/icingaweb2_dbpass') }}"
+
+- name: create icingaweb2 DB
+  command: mariadb -e "CREATE DATABASE IF NOT EXISTS icingaweb2;"
+  changed_when: False
+
+- name: create access to icingaweb2 DB
+  command: mariadb -e "GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON icingaweb2.* TO 'icingaweb2'@'localhost' IDENTIFIED BY '{{ icingaweb2_dbpass }}';"
+  changed_when: False
+
+- name: create icingaweb2 DB scheme
+  shell: mariadb icingaweb2 < /usr/share/icingaweb2/etc/schema/mysql.schema.sql || true
+  changed_when: False
+
+- name: set up icingaweb2 configuration
+  template:
+    src: templates/{{ item }}
+    dest: /etc/icingaweb2/{{ item }}
+    owner: www-data
+    group: icingaweb2
+  with_items:
+    - authentication.ini
+    - config.ini
+    - groups.ini
+    - resources.ini
+    - roles.ini
+
+- name: create icingaweb2 monitoring configuration directory
+  file:
+    path: /etc/icingaweb2/modules/monitoring/
+    state: directory
+
+- name: set up icingaweb2 monitoring configuration
+  copy:
+    src: files/icingaweb2/{{ item }}
+    dest: /etc/icingaweb2/modules/monitoring/{{ item }}
+    owner: www-data
+    group: icingaweb2
+  with_items:
+    - backends.ini
+    - commandtransports.ini
+    - config.ini
+
+- name: set up icingaweb2 user
+  command: mariadb icingaweb2 -e "INSERT IGNORE INTO icingaweb_user (name, active, password_hash) VALUES ('{{ icingaweb2_user }}', 1, '{{ icingaweb2_user_hash }}');"
+- name: enable translation module
+  command: icingacli module enable translation
+  changed_when: False
+
+- name: enable monitoring module
+  command: icingacli module enable monitoring
+  changed_when: False
+
+- name: reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
   changed_when: False
