@@ -23,7 +23,7 @@ def test_sendmail(host):
     check = ("grep -q 'connection established to spool.mail.gandi.net' "
              "/var/log/mail.log")
     for _ in range(300):
-        print(cmd)
+        print(check)
         cmd = postfix_host.run(check)
         if cmd.rc == 0:
             break
