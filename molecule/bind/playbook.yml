@@ -1,0 +1,35 @@
+---
+- name: install bind
+  hosts: [ 'bind_group' ]
+  become: True
+
+  tasks:
+    - debug:
+        var: hostvars
+        
+  roles:
+    - role: bertvv.bind
+      bind_allow_query:
+        - any
+      bind_listen_ipv4:
+        - any
+      bind_acls:
+        - name: acl1
+          match_list:
+            - 172.17.0.0/16
+      bind_forwarders:
+        - '8.8.8.8'
+        - '8.8.4.4'
+      bind_recursion: true
+      bind_zone_networks:
+        - '172.17'
+        - '10'
+      bind_zone_name: 'test.securedrop.club'
+      bind_zone_master_server_ip: '{{ hostvars["bind_host"]["ansible_default_ipv4"]["address"] }}'
+      bind_zone_name_servers:
+        - ns1
+      bind_zone_hosts:
+        - name: ns1
+          ip: '{{ hostvars["bind_host"]["ansible_default_ipv4"]["address"] }}'
+        - name: client
+          ip: '{{ hostvars["bind_client_host"]["ansible_default_ipv4"]["address"] }}'

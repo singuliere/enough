@@ -16,3 +16,9 @@
 [submodule "roles/debops.ansible_plugins"]
 	path = roles/debops.ansible_plugins
 	url = https://github.com/debops/ansible-ansible_plugins
+[submodule "roles/bertvv.bind"]
+	path = roles/bertvv.bind
+	url = https://github.com/bertvv/ansible-role-bind
+[submodule "roles/jdauphant.dns"]
+	path = roles/jdauphant.dns
+	url = https://github.com/jdauphant/ansible-role-dns

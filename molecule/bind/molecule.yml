@@ -1,0 +1,33 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: bind_host
+    flavor: "s1-2"
+    groups:
+      - bind_group
+  - name: bind_client_host
+    flavor: "s1-2"
+    groups:
+      - bind_client_group
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+scenario:
+  name: bind
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: True
+    s: True
+  lint:
+    name: flake8
