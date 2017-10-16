@@ -1,24 +1,24 @@
 [submodule "roles/ansible-role-docker"]
-	path = roles/ansible-role-docker
+	path = roles-external/ansible-role-docker
 	url = https://github.com/geerlingguy/ansible-role-docker
 [submodule "roles/debops.etc_aliases"]
-	path = roles/debops.etc_aliases
+	path = roles-external/debops.etc_aliases
 	url = https://github.com/debops/ansible-etc_aliases
 [submodule "roles/debops.ferm"]
-	path = roles/debops.ferm
+	path = roles-external/debops.ferm
 	url = https://github.com/debops/ansible-ferm
 [submodule "roles/debops.secret"]
-	path = roles/debops.secret
+	path = roles-external/debops.secret
 	url = https://github.com/debops/ansible-secret
 [submodule "roles/debops.postfix"]
-	path = roles/debops.postfix
+	path = roles-external/debops.postfix
 	url = https://github.com/debops/ansible-postfix
 [submodule "roles/debops.ansible_plugins"]
-	path = roles/debops.ansible_plugins
+	path = roles-external/debops.ansible_plugins
 	url = https://github.com/debops/ansible-ansible_plugins
 [submodule "roles/bertvv.bind"]
-	path = roles/bertvv.bind
+	path = roles-external/bertvv.bind
 	url = https://github.com/bertvv/ansible-role-bind
 [submodule "roles/jdauphant.dns"]
-	path = roles/jdauphant.dns
+	path = roles-external/jdauphant.dns
 	url = https://github.com/jdauphant/ansible-role-dns
