@@ -1,0 +1,7 @@
+---
+- name: install icinga
+  hosts: icinga_host
+  roles:
+    - { role: icinga2 }
+    - { role: fail2ban }
+  become: True
