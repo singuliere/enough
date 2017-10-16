@@ -1,0 +1,40 @@
+---
+- name: install postfix
+  hosts: [ 'debops_service_postfix' ]
+  become: True
+
+  environment: '{{ inventory__environment | d({})
+                   | combine(inventory__group_environment | d({}))
+                   | combine(inventory__host_environment  | d({})) }}'
+
+  roles:
+
+    - role: debops.etc_aliases/env
+    - role: debops.postfix/env
+    - role: debops.secret
+      secret__directories:
+        - '{{ etc_aliases__secret__directories }}'
+        - '{{ postfix__secret__directories }}'
+
+    - role: debops.ferm
+      ferm__dependent_rules:
+        - '{{ postfix__ferm__dependent_rules }}'
+
+    - role: debops.etc_aliases
+
+    - role: debops.postfix
+      postfix__mastercf:
+        - name: 'smtps'
+          state: 'present'
+          options:
+            - smtpd_sasl_auth_enable: False
+            - name: 'smtpd_relay_restrictions'
+              state: 'comment'
+
+      postfix__maincf:
+        - name: 'smtpd_relay_restrictions'
+          state: 'absent'
+        - name: 'mynetworks'
+          value:
+            - name: '0.0.0.0/0'
+      postfix__restrictions_maincf: []
