@@ -1,8 +1,0 @@
----
-- name: install icinga
-  hosts: icinga_host
-  roles:
-    - { role: icinga2 }
-    - { role: postfix, domain: 'securedrop.club' }
-    - { role: fail2ban }
-  become: True
