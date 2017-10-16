@@ -3,15 +3,6 @@
   hosts: icinga_host
   roles:
     - { role: icinga2 }
-    - { role: postfix, domain: 'securedrop.club' }
     - { role: fail2ban }
   become: True
-
-- name: install monitoring client
-  hosts: monitoring_client_host
-  roles:
-    - { role: icinga2_client }
-    - { role: postfix, domain: 'securedrop.club' }
-    - { role: fail2ban }
-    - { role: deploy_dummy_monitoring_objects }
-  become: True
+- include: test-icinga-client.yml

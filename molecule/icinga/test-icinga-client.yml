@@ -1,0 +1,8 @@
+---
+- name: install monitoring client
+  hosts: monitoring_client_host
+  roles:
+    - { role: icinga2_client }
+    - { role: fail2ban }
+    - { role: deploy_dummy_monitoring_objects }
+  become: True
