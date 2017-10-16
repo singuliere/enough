@@ -47,7 +47,7 @@
       postfix__restrictions_maincf: []
       tags: [ 'role::postfix' ]
 
-- name: install postfix
+- name: install postfix client
   hosts: [ 'debops_service_postfix_client' ]
   become: True
 
