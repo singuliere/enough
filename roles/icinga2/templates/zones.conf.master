@@ -1,0 +1,22 @@
+/* Node setup */
+
+/* Global zone */
+
+object Zone "global-templates" {
+  global = true
+}
+
+/* Master zone */
+
+object Zone "master" {
+  endpoints = [ "{{ inventory_hostname }}" ]
+}
+
+object Endpoint "{{ inventory_hostname }}" {
+  host = "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+}
+
+/* Including each client zone */
+
+include "zones.d/*.conf"
+

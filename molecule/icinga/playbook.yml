@@ -2,7 +2,7 @@
 - name: install icinga
   hosts: icinga_host
   roles:
-    - { role: postfix, domain: 'securedrop.club' }
-    - { role: ansible-role-docker, docker_install_compose: true }
     - { role: icinga2 }
+    - { role: postfix, domain: 'securedrop.club' }
+    - { role: fail2ban }
   become: True

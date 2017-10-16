@@ -1,0 +1,1 @@
+{{ icinga_user }} ALL=NOPASSWD: /usr/local/bin/check_git -g *

@@ -1,0 +1,30 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: icinga_host
+    flavor: "s1-2"
+    groups:
+      - icinga_group
+  - name: monitoring_client_host
+    flavor: "s1-2"
+    groups:
+      - client_group
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+scenario:
+  name: monitoring_client
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
