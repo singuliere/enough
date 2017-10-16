@@ -7,5 +7,6 @@
   hosts: weblate_host
   roles:
     - { role: ansible-role-docker, docker_install_compose: true }
+    - { role: fail2ban }
     - { role: weblate }
   become: True
