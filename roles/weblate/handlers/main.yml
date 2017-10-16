@@ -1,0 +1,6 @@
+---
+- name: recreate weblate
+  docker_service:
+#    files: docker-compose-https.yml
+    project_src: /srv/weblate
+    state: present

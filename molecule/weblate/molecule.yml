@@ -1,0 +1,42 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: bind_host
+    flavor: "s1-2"
+    groups:
+      - bind_group
+      - bind_client_group
+  - name: postfix_host
+    flavor: "s1-2"
+    groups:
+      - debops_service_postfix
+      - bind_client_group
+  - name: icinga_host
+    flavor: "s1-2"
+    groups:
+      - icinga_group
+      - bind_client_group
+  - name: weblate_host
+    flavor: "s1-2"
+    groups:
+      - weblate_group
+      - bind_client_group
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+scenario:
+  name: weblate
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
