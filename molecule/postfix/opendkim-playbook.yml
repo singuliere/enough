@@ -1,22 +1,6 @@
 ---
 
 - name: Manage OpenDKIM service
-  vars:
-    opendkim__config:
-      - name: 'PidFile'
-        comment: 'Needed by systemd opendkim.service file'
-        value: '/var/run/opendkim/opendkim.pid'
-        state: "present"
-
-      - name: 'UserID'
-        comment: 'Needed by opendkim on stretch'
-        value: 'opendkim:opendkim'
-        state: "present"
-
-      - name: 'SyslogSuccess'
-        comment: 'Needed by molecule verify'
-        value: 'Yes'
-        state: "present"
 
   hosts: [ 'debops_service_opendkim' ]
   become: True
@@ -49,3 +33,18 @@
 
     - role: debops.opendkim
       tags: [ 'role::opendkim' ]
+      opendkim__config:
+        - name: 'PidFile'
+          comment: 'Needed by systemd opendkim.service file'
+          value: '/var/run/opendkim/opendkim.pid'
+          state: "present"
+
+        - name: 'UserID'
+          comment: 'Needed by opendkim on stretch'
+          value: 'opendkim:opendkim'
+          state: "present"
+
+        - name: 'SyslogSuccess'
+          comment: 'Needed by molecule verify'
+          value: 'Yes'
+          state: "present"
