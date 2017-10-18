@@ -1,4 +1,13 @@
 ---
+- name: configure firewall
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  roles:
+    - role: firewall
+      os_security_group_udp: [ 53 ]
+
 - name: setup DNS server
   hosts: [ 'bind_group' ]
   become: True

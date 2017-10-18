@@ -3,6 +3,7 @@
 - include: dns-client-playbook.yml
 - include: postfix-playbook.yml
 - include: icinga-playbook.yml
+- include: test-icinga-playbook.yml
 - name: install weblate
   hosts: weblate_host
   roles:
