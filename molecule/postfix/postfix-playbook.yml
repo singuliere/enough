@@ -1,4 +1,13 @@
 ---
+- name: configure firewall
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  roles:
+    - role: firewall
+      os_security_group_tcp: [ 465 ]
+
 - name: install postfix
   hosts: [ 'debops_service_postfix' ]
   become: True
