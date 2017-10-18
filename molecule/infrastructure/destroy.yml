@@ -11,3 +11,4 @@
     - ../../group_vars/all/secrets.yml
   roles:
     - { role: vm, state: absent }
+    - { role: firewall, state: absent }

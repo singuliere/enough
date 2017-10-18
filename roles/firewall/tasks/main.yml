@@ -1,0 +1,87 @@
+---
+- include_vars: clouds.yml
+
+- name: define os_auth
+  os_security_group: &os_auth
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+  when: false
+
+- name: security group
+  os_security_group:
+    <<: *os_auth
+    state: "{{ state }}"
+    name: "{{ item }}"
+    description: security group for securedrop-club servers
+  with_items:
+    - [ securedrop-club, securedrop-club-external ]
+
+- block:
+
+  - name: security group rule for TCP ports (define rule_tcp)
+    os_security_group_rule: &rule_tcp
+      <<: *os_auth
+      security_group: securedrop-club
+      protocol: tcp
+      port_range_min: "{{ item }}"
+      port_range_max: "{{ item }}"
+    when: false
+
+  - name: security group rule for TCP ports (internal)
+    os_security_group_rule:
+      <<: *rule_tcp
+      remote_group: securedrop-club
+    with_items:
+      - "{{ os_security_group_tcp }}"
+
+  - name: security group rule for TCP ports (external)
+    os_security_group_rule:
+      <<: *rule_tcp
+      remote_ip_prefix: 0.0.0.0/0
+    with_items:
+      - "{{ os_security_group_tcp_external }}"
+  
+  - name: security group rule for UDP ports (define rule_udp)
+    os_security_group_rule: &rule_udp
+      <<: *os_auth
+      security_group: securedrop-club
+      protocol: udp
+      port_range_min: "{{ item }}"
+      port_range_max: "{{ item }}"
+    when: false
+
+  - name: security group rule for UDP ports (internal)
+    os_security_group_rule:
+      <<: *rule_udp
+      remote_group: securedrop-club
+    with_items:
+      - "{{ os_security_group_udp }}"
+
+  - name: security group rule for UDP ports (external)
+    os_security_group_rule:
+      <<: *rule_udp
+      remote_ip_prefix: 0.0.0.0/0
+    with_items:
+      - "{{ os_security_group_udp_external }}"
+  
+  - name: security group rule for ICMP (internal)
+    os_security_group_rule:
+      <<: *os_auth
+      security_group: securedrop-club
+      protocol: icmp
+      remote_group: securedrop-club
+    when: os_security_group_icmp
+
+  - name: security group rule for ICMP (external)
+    os_security_group_rule:
+      <<: *os_auth
+      security_group: securedrop-club-external
+      protocol: icmp
+      remote_ip_prefix: 0.0.0.0/0
+    when: os_security_group_icmp
+  
+  when: state == 'present'
