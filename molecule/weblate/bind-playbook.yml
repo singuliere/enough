@@ -26,3 +26,8 @@
           ip: '{{ hostvars["icinga_host"]["ansible_host"] }}'
         - name: postfix
           ip: '{{ hostvars["postfix_host"]["ansible_host"] }}'
+      bind_zone_text:
+        - name: '@'
+          text: 'v=spf1 a mx ?all'
+        - name: '_dmarc'
+          text: 'v=DMARC1; p=none;'
