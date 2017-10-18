@@ -14,6 +14,7 @@ platforms:
     groups:
       - debops_service_postfix
       - bind_client_group
+      - debops_service_opendkim
   - name: icinga_host
     flavor: "s1-2"
     groups:

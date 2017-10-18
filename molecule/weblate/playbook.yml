@@ -2,6 +2,7 @@
 - include: bind-playbook.yml
 - include: dns-client-playbook.yml
 - include: postfix-playbook.yml
+- include: opendkim-playbook.yml
 - include: icinga-playbook.yml
 - name: install weblate
   hosts: weblate_host
