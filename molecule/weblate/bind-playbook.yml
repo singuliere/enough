@@ -41,5 +41,7 @@
         - name: '_dmarc'
           text: 'v=DMARC1; p=none;'
 
+    - role: icinga2_client
+
     - role: monitoring-bind
       bind_zone_name: 'securedrop.club'
