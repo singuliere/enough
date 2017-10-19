@@ -1,0 +1,5 @@
+---
+WEBLATE_SERVER_EMAIL: noreply@weblate.org
+WEBLATE_ADMIN_EMAIL: admin@securedrop.club
+WEBLATE_ADMIN_PASSWORD: admin
+WEBLATE_DEFAULT_FROM_EMAIL: admin@securedrop.club
