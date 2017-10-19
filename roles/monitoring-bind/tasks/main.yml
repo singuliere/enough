@@ -1,0 +1,32 @@
+- name: apt-get install monitoring plugins deps
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - whois
+    - libdate-manip-perl
+
+- name: declare zone securedrop.club on bind_host
+  # Warn: successives "blockinfile" in the same file require using differents markers
+  blockinfile:
+    block: |
+        vars.zones["{{ bind_zone_name }}"] = {
+          fqdn = "{{ bind_zone_name }}"
+          file = "/var/cache/bind/{{ bind_zone_name }}"
+        }
+    insertafter: 'Define DNS zones and attributes'
+    path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+    marker: "/* {mark} Zone {{ bind_zone_name }} */"
+  delegate_to: icinga_host
+
+- name: install sudo file for check named zone
+  copy:
+    dest: /etc/sudoers.d/icinga2_check_zone
+    src: files/icinga2_check_zone
+
+- name: reload icinga2 configuration
+  systemd:
+    name: icinga2
+    state: reloaded
+  changed_when: False
+  delegate_to: icinga_host
