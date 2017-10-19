@@ -28,3 +28,7 @@ def test_weblate(host):
             break
         time.sleep(1)
     assert 0 == postfix_host.run(check).rc
+
+    check = ("grep -q 'DKIM-Signature field added' "
+             "/var/log/mail.log")
+    assert 0 == postfix_host.run(check).rc

@@ -9,6 +9,8 @@ platforms:
     groups:
       # https://docs.debops.org/en/latest/ansible/roles/ansible-postfix/docs/getting-started.html#default-configuration
       - debops_service_postfix
+      # https://docs.debops.org/en/latest/ansible/roles/ansible-opendkim/docs/getting-started.html#example-inventory
+      - debops_service_opendkim
   - name: postfix_client
     flavor: "s1-2"
     groups:
