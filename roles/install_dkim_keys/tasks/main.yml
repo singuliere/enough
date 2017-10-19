@@ -1,7 +1,7 @@
 ---
 
 - name: dump domainkeys in zone format
-  script: secret/opendkim/lib/extract-domainkey-zone {{ item.src }}
+  script: files/extract-domainkey-zone {{ item.src }}
   register: output
   with_filetree: "secret/opendkim/domainkeys"
   when: item.state == 'file'
