@@ -41,6 +41,8 @@
         - name: '_dmarc'
           text: 'v=DMARC1; p=none;'
 
+    - role: fail2ban
+
     - role: icinga2_client
 
     - role: monitoring-bind
