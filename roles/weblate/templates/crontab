@@ -1,3 +1,0 @@
-*/5 * * * * cd /srv/weblate; sudo docker-compose run --rm weblate update_index
-@daily cd /srv/weblate; sudo docker-compose run --rm weblate cleanuptrans
-@hourly cd /srv/weblate; sudo docker-compose run --rm weblate commit_pending --all --age=1
