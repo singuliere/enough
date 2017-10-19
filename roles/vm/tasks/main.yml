@@ -23,7 +23,7 @@
     name: "{{ item.name }}"
     image: Debian 9
     key_name: testkey
-    timeout: 200
+    timeout: 600
     flavor: "{{ item.flavor }}"
     security_groups: default
     auto_ip: yes
