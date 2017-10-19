@@ -1,0 +1,24 @@
+---
+
+- name: dump domainkeys in zone format
+  script: secret/opendkim/lib/extract-domainkey-zone {{ item.src }}
+  register: output
+  with_filetree: "secret/opendkim/domainkeys"
+  when: item.state == 'file'
+  delegate_to: localhost
+
+- name: install domainkeys in securedrop zone
+  # blockinfile rely on unique markers to not squeeze multiple blocks
+  blockinfile:
+    content: "{{ item.stdout }}"
+    path: /var/cache/bind/securedrop.club
+    marker: ";; {mark} {{ item.stdout|regex_search('----- (DKIM key.*)$') }}"
+  with_items: "{{ output.results }}"
+  delegate_to: bind_host
+
+- name: reload bind
+  systemd:
+    name: bind9
+    state: reloaded
+  changed_when: False
+  delegate_to: bind_host

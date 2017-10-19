@@ -48,3 +48,5 @@
           comment: 'Needed by molecule verify'
           value: 'Yes'
           state: "present"
+
+    - role: install_dkim_keys
