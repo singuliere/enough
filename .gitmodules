@@ -17,8 +17,8 @@
 	path = roles-external/debops.ansible_plugins
 	url = https://github.com/debops/ansible-ansible_plugins
 [submodule "roles/bertvv.bind"]
-	path = roles-external/bertvv.bind
+	path = molecule/bind/roles/bertvv.bind
 	url = https://github.com/bertvv/ansible-role-bind
 [submodule "roles/jdauphant.dns"]
-	path = roles-external/jdauphant.dns
+	path = molecule/bind/roles/jdauphant.dns
 	url = https://github.com/jdauphant/ansible-role-dns

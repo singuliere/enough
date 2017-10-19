@@ -16,6 +16,8 @@ provisioner:
   name: ansible
   lint:
     name: ansible-lint
+  env:
+    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles
 scenario:
   name: bind
   test_sequence:
