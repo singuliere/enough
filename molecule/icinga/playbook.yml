@@ -1,4 +1,4 @@
 ---
-- include: icinga-playbook.yml
-- include: test-icinga-playbook.yml
-- include: test-icinga-client-playbook.yml
+- import_playbook: icinga-playbook.yml
+- import_playbook: test-icinga-playbook.yml
+- import_playbook: test-icinga-client-playbook.yml

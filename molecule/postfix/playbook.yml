@@ -1,4 +1,4 @@
 ---
-- include: postfix-playbook.yml
-- include: opendkim-playbook.yml
-- include: test-postfix-client-playbook.yml
+- import_playbook: postfix-playbook.yml
+- import_playbook: opendkim-playbook.yml
+- import_playbook: test-postfix-client-playbook.yml

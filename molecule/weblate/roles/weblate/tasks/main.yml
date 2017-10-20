@@ -1,3 +1,3 @@
 ---
-- include: weblate.yml
-- include: monitoring.yml
+- import_tasks: weblate.yml
+- import_tasks: monitoring.yml

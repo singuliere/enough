@@ -1,10 +1,10 @@
 ---
-- include: bind-playbook.yml
-- include: dns-client-playbook.yml
-- include: postfix-playbook.yml
-- include: opendkim-playbook.yml
-- include: icinga-playbook.yml
-- include: test-icinga-playbook.yml
+- import_playbook: bind-playbook.yml
+- import_playbook: dns-client-playbook.yml
+- import_playbook: postfix-playbook.yml
+- import_playbook: opendkim-playbook.yml
+- import_playbook: icinga-playbook.yml
+- import_playbook: test-icinga-playbook.yml
 - name: install weblate
   hosts: weblate_host
   roles:
