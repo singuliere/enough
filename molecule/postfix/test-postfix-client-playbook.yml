@@ -30,6 +30,8 @@
       tags: [ 'role::etc_aliases' ]
 
     - role: debops.postfix
+      postfix__mailname: 'securedrop.club'
+      postfix__fqdn: 'postfix-client.securedrop.club'
       postfix__relayhost: '[{{ hostvars["postfix"]["ansible_default_ipv4"]["address"] }}]:465'
       postfix__maincf:
         - name: 'smtp_tls_security_level'
