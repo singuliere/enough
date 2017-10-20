@@ -1,5 +1,7 @@
 ---
-- include_tasks: authorized-keys.yml
-  with_items: "{{ groups['all'] }}"
-  loop_control:
-    loop_var: authorized_keys_host
+- name: Set up multiple authorized keys
+  authorized_key:
+    user: debian
+    state: present
+    key: "{{ lookup('file', item) }}"
+  with_fileglob: "{{ ssh_keys_directories }}"

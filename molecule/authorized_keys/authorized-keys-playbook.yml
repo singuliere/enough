@@ -1,7 +1,6 @@
 ---
 - name: configure authorized_keys
-  hosts: localhost
-  connection: local
+  hosts: [ 'all' ]
   gather_facts: False
 
   roles:
