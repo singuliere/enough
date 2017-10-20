@@ -27,7 +27,6 @@
     key_name: testkey
     timeout: 600
     flavor: "{{ item.flavor }}"
-    security_groups: default
     auto_ip: yes
     wait: true
     userdata: |
