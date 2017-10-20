@@ -23,5 +23,5 @@
 	path = molecule/bind/roles/jdauphant.dns
 	url = https://github.com/jdauphant/ansible-role-dns
 [submodule "molecule/postfix/roles/ansible-opendkim"]
-	path = molecule/postfix/roles/ansible-opendkim
+	path = molecule/postfix/roles/debops.opendkim
 	url = https://github.com/debops/ansible-opendkim
