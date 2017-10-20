@@ -1,0 +1,5 @@
+---
+- include_tasks: authorized-keys.yml
+  with_items: "{{ groups['all'] }}"
+  loop_control:
+    loop_var: authorized_keys_host

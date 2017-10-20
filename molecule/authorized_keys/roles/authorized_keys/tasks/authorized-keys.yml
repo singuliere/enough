@@ -1,0 +1,8 @@
+---
+- name: Set up multiple authorized keys
+  authorized_key:
+    user: debian
+    state: present
+    key: "{{ lookup('file', item) }}"
+  with_fileglob: "{{ ssh_keys_directories }}"
+  delegate_to: "{{ authorized_keys_host }}"
