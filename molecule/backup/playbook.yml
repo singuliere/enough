@@ -1,0 +1,7 @@
+---
+- name: setup backup
+  hosts: [ 'backup_group' ]
+  become: true
+
+  roles:
+    - backup

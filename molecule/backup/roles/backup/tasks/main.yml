@@ -1,0 +1,28 @@
+---
+- include_vars: clouds.yml
+
+- name: mkdir /usr/lib/backup
+  file:
+    state: directory
+    path: /usr/lib/backup
+
+- name: copy openrc.sh
+  template:
+    src: openrc.sh
+    dest: /usr/lib/backup/openrc.sh
+
+- name: copy backup.sh
+  template:
+    src: backup.sh
+    dest: /etc/cron.daily/backup.sh
+    mode: +x
+
+- name: copy prune-backup.sh
+  template:
+    src: prune-backup.sh
+    dest: /etc/cron.daily/prune-backup.sh
+    mode: +x
+
+- name: apt-get install python-openstackclient
+  apt:
+    name: python-openstackclient
