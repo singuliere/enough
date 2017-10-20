@@ -6,6 +6,7 @@
   with_filetree: "secret/opendkim/domainkeys"
   when: item.state == 'file'
   delegate_to: localhost
+  become: False
 
 - name: install domainkeys in securedrop zone
   # blockinfile rely on unique markers to not squeeze multiple blocks
