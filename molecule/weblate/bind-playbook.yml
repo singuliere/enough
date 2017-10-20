@@ -40,3 +40,10 @@
           text: 'v=spf1 a mx ?all'
         - name: '_dmarc'
           text: 'v=DMARC1; p=none;'
+
+    - role: fail2ban
+
+    - role: icinga2_client
+
+    - role: monitoring-bind
+      bind_zone_name: 'securedrop.club'
