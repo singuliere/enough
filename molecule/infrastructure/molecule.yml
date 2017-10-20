@@ -4,18 +4,10 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: icinga_host
+  - name: infrastructure_host
     flavor: "s1-2"
     groups:
-      - icinga_group
-  - name: weblate_host
-    flavor: "s1-4"
-    groups:
-      - weblate_group
-  - name: ansible_host
-    flavor: "s1-2"
-    groups:
-      - ansible_group
+      - infrastructure_group
 provisioner:
   name: ansible
   lint:
@@ -25,8 +17,6 @@ scenario:
   test_sequence:
     - destroy
     - create
-    - converge
-    - verify
     - destroy
 verifier:
   name: testinfra
