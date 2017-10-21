@@ -1,6 +1,6 @@
 ---
 - name: setup DNS client
-  hosts: [ 'bind_client_group' ]
+  hosts: [ 'all' ]
   become: True
 
   roles: 
