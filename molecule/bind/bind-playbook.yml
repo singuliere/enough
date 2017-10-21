@@ -1,0 +1,33 @@
+---
+- name: configure firewall
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  roles:
+    - role: firewall
+      os_security_group_udp: [ 53 ]
+
+- name: setup DNS server
+  hosts: [ 'bind_group' ]
+  become: True
+
+  roles:
+    - role: bertvv.bind
+      bind_allow_query:
+        - any
+      bind_listen_ipv4:
+        - any
+      bind_forwarders:
+        - '8.8.8.8'
+        - '8.8.4.4'
+      bind_recursion: true
+      bind_zone_name: 'securedrop.club'
+      bind_zone_master_server_ip: '{{ hostvars["bind_host"]["ansible_host"] }}'
+      bind_zone_name_servers:
+        - ns1
+      bind_zone_hosts:
+        - name: ns1
+          ip: '{{ hostvars["bind_host"]["ansible_host"] }}'
+        - name: client
+          ip: '{{ hostvars["bind_client_host"]["ansible_host"] }}'
