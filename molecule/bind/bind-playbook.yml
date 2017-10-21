@@ -42,3 +42,8 @@
       bind_zone_name_servers:
         - ns1
       bind_zone_hosts: '{{ bind_zone_hosts_dynamic + bind_zone_hosts_static }}'
+      bind_zone_text:
+        - name: '@'
+          text: 'v=spf1 a mx ?all'
+        - name: '_dmarc'
+          text: 'v=DMARC1; p=none;'
