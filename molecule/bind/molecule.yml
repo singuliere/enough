@@ -10,14 +10,16 @@ platforms:
       - bind_group
   - name: bind_client_host
     flavor: "s1-2"
+  - name: icinga_host
+    flavor: "s1-2"
     groups:
-      - bind_client_group
+      - icinga_group
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles
+    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../icinga/roles
 scenario:
   name: bind
   test_sequence:

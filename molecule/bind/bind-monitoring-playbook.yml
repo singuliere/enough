@@ -1,0 +1,10 @@
+---
+- name: setup DNS server
+  hosts: [ 'bind_group' ]
+  become: True
+
+  roles:
+    - role: icinga2_client
+
+    - role: monitoring-bind
+      bind_zone_name: 'securedrop.club'
