@@ -1,15 +1,7 @@
 ---
-- import_playbook: icinga-playbook.yml
-- import_playbook: test-icinga-playbook.yml
+- import_playbook: ../icinga/icinga-playbook.yml
+- import_playbook: ../icinga/test-icinga-playbook.yml
 - import_playbook: bind-playbook.yml
-- import_playbook: dns-client-playbook.yml
-- import_playbook: postfix-playbook.yml
-- import_playbook: opendkim-playbook.yml
-- name: install weblate
-  hosts: weblate_host
-  roles:
-    - { role: ansible-role-docker, docker_install_compose: true }
-    - { role: fail2ban }
-    - { role: icinga2_client }
-    - { role: weblate }
-  become: True
+- import_playbook: ../bind/bind-client-playbook.yml
+- import_playbook: ../postfix/postfix-playbook.yml
+- import_playbook: weblate-playbook.yml

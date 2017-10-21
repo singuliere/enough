@@ -1,9 +1,0 @@
----
-- name: setup DNS client
-  hosts: [ 'bind_client_group' ]
-  become: True
-
-  roles: 
-    - role: jdauphant.dns
-      dns_domain: securedrop.club
-      dns_nameservers: ['{{ hostvars["bind_host"]["ansible_host"] }}']

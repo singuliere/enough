@@ -1,0 +1,9 @@
+---
+- name: install weblate
+  hosts: weblate_host
+  roles:
+    - { role: ansible-role-docker, docker_install_compose: true }
+    - { role: fail2ban }
+    - { role: icinga2_client }
+    - { role: weblate }
+  become: True
