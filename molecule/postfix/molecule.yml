@@ -4,7 +4,7 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: postfix
+  - name: postfix_host
     flavor: "s1-2"
   - name: postfix_client
     flavor: "s1-2"

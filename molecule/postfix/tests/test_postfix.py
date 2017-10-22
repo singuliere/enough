@@ -2,10 +2,9 @@ import pytest
 import time
 import testinfra
 
+testinfra_hosts = ['postfix_host']
 
 def test_sendmail(host):
-    if host.backend.host != 'postfix':
-        pytest.skip("hack to run once")
 
     postfix_host = host
     postfix_client_host = testinfra.host.Host.get_host(

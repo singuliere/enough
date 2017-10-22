@@ -35,7 +35,7 @@
 
     - role: debops.postfix
       postfix__mailname: 'securedrop.club'
-      postfix__fqdn: 'postfix.securedrop.club'
+      postfix__fqdn: 'postfix_host.securedrop.club'
       postfix__mastercf:
         - name: 'smtps'
           state: 'present'
@@ -58,7 +58,7 @@
 
     - role: debops.opendkim
       opendkim__domain: 'securedrop.club'
-      opendkim__fqdn: 'postfix.securedrop.club'
+      opendkim__fqdn: 'postfix_host.securedrop.club'
       opendkim__trusted_hosts: "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | list }}"
       opendkim__config:
         - name: 'PidFile'
