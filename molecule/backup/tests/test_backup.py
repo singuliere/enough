@@ -30,4 +30,4 @@ def test_backup(host):
         expected_backups(host, '1')
     finally:
         host.run("timedatectl set-ntp 1")
-        host.run("/etc/cron.daily/prune-backup.sh 0")
+        host.run("bash -x /etc/cron.daily/prune-backup.sh 0")
