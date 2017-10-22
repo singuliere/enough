@@ -9,7 +9,7 @@
       os_security_group_tcp: [ 465 ]
 
 - name: install postfix
-  hosts: [ 'debops_service_postfix' , 'debops_service_opendkim']
+  hosts: postfix_host
   become: True
 
   environment: '{{ inventory__environment | d({})

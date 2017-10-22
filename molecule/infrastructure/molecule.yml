@@ -6,8 +6,6 @@ lint:
 platforms:
   - name: infrastructure_host
     flavor: "s1-2"
-    groups:
-      - infrastructure_group
 provisioner:
   name: ansible
   lint:

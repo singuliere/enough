@@ -9,7 +9,7 @@
       os_security_group_udp: [ 53 ]
 
 - name: setup DNS server
-  hosts: [ 'bind_group' ]
+  hosts: bind_host
   become: True
 
   vars:

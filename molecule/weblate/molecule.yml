@@ -6,21 +6,12 @@ lint:
 platforms:
   - name: bind_host
     flavor: "s1-2"
-    groups:
-      - bind_group
   - name: postfix_host
     flavor: "s1-2"
-    groups:
-      - debops_service_postfix
-      - debops_service_opendkim
   - name: icinga_host
     flavor: "s1-2"
-    groups:
-      - icinga_group
   - name: weblate_host
     flavor: "s1-4"
-    groups:
-      - weblate_group
 provisioner:
   name: ansible
   lint:

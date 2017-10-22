@@ -1,6 +1,6 @@
 ---
 - name: install postfix client
-  hosts: [ 'debops_service_postfix_client' ]
+  hosts: postfix_client
   become: True
 
   environment: '{{ inventory__environment | d({})
