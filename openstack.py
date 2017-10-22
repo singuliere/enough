@@ -126,8 +126,8 @@ def get_host_groups(inventory, refresh=False, cloud=None, hold=False):
 
 def append_hostvars(hostvars, groups, key, server, namegroup=False):
     hostvars[key] = dict(
-        ansible_ssh_host=server['interface_ip'],
-        ansible_host=server['interface_ip'],
+        ansible_ssh_host=server['public_v4'],
+        ansible_host=server['public_v4'],
         openstack=server)
 
     metadata = server.get('metadata', {})
@@ -153,8 +153,7 @@ def get_host_groups_from_cloud(inventory):
         use_hostnames = False
 
     for server in inventory.list_hosts(**list_args):
-
-        if 'interface_ip' not in server:
+        if 'public_v4' not in server:
             continue
         firstpass[server['name']].append(server)
     for name, servers in firstpass.items():
