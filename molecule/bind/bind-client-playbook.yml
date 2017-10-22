@@ -7,3 +7,5 @@
     - role: jdauphant.dns
       dns_domain: localdomain
       dns_nameservers: ['{{ hostvars["bind_host"]["ansible_host"] }}']
+      dns_searchs: ['securedrop.club']
+      dns_domain: 'securedrop.club'
