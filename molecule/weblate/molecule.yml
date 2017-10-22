@@ -18,7 +18,7 @@ platforms:
     groups:
       - icinga_group
   - name: weblate_host
-    flavor: "s1-2"
+    flavor: "s1-4"
     groups:
       - weblate_group
 provisioner:
