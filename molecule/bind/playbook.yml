@@ -4,3 +4,4 @@
 - import_playbook: ../icinga/icinga-playbook.yml
 - import_playbook: ../icinga/test-icinga-playbook.yml
 - import_playbook: bind-monitoring-playbook.yml
+- import_playbook: test-bind-client-playbook.yml
