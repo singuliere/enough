@@ -12,7 +12,7 @@ def test_sendmail(host):
         ansible_inventory=host.backend.ansible_inventory)
 
     cmd = postfix_client_host.run("""
-    ( echo 'To: noreply@securedrop.club' ; echo POSTFIX TEST ) |
+    ( echo 'To: loic+boundtofail@dachary.org' ; echo POSTFIX TEST ) |
     /usr/sbin/sendmail -v -F 'NO REPLY' -f 'noreply@securedrop.club' -t
     """)
     print(cmd.stdout)
