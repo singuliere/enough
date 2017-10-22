@@ -77,4 +77,3 @@
           state: "present"
 
     - role: install_dkim_keys
-      when: '"bind_host" in hostvars'

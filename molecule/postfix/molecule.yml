@@ -8,6 +8,8 @@ platforms:
     flavor: "s1-2"
   - name: postfix_client
     flavor: "s1-2"
+  - name: bind_host
+    flavor: "s1-2"
 provisioner:
   name: ansible
   lint:

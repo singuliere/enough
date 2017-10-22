@@ -42,3 +42,11 @@
           section: 'smtp-tls'
 
       tags: [ 'role::postfix' ]
+
+  tasks:
+    - name: apt-get install dnsutils
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - dnsutils
