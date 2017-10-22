@@ -1,7 +1,6 @@
 ---
 - name: configure authorized_keys
   hosts: [ 'all' ]
-  gather_facts: False
 
   roles:
     - role: authorized_keys
