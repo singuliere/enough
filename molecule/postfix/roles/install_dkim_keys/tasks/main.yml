@@ -15,11 +15,11 @@
     path: /var/cache/bind/securedrop.club
     marker: ";; {mark} {{ item.stdout|regex_search('----- (DKIM key.*)$') }}"
   with_items: "{{ output.results }}"
-  delegate_to: bind_host
+  delegate_to: bind-host
 
 - name: reload bind
   systemd:
     name: bind9
     state: reloaded
   changed_when: False
-  delegate_to: bind_host
+  delegate_to: bind-host

@@ -2,13 +2,13 @@ import pytest
 import time
 import testinfra
 
-testinfra_hosts = ['postfix_host']
+testinfra_hosts = ['postfix-host']
 
 def test_sendmail(host):
 
     postfix_host = host
     postfix_client_host = testinfra.host.Host.get_host(
-        'ansible://postfix_client',
+        'ansible://postfix-client-host',
         ansible_inventory=host.backend.ansible_inventory)
 
     cmd = postfix_client_host.run("""

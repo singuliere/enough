@@ -12,7 +12,7 @@
     insertafter: 'Define httpd services and attributes'
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
     marker: "/* {mark} Secure Drop Forum Vhost */"
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 
 - name: declare process on {{ inventory_hostname }}
   # Warn: successives "blockinfile" in the same file require using differents markers
@@ -25,20 +25,20 @@
     insertafter: 'Define processes and attributes'
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
     marker: "/* {mark} Systemd login process */"
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 
 - name: install git
   apt:
     name: git
     state: present
 
-- name: install check_git on icinga_host
+- name: install check_git on icinga-host
   copy:
     src: files/check_git
     dest: /usr/local/bin/check_git
     mode: 0755
 
-- name: install sudo file for check_git on icinga_host
+- name: install sudo file for check_git on icinga-host
   template:
     dest: /etc/sudoers.d/icinga2_check_git
     src: templates/icinga2_check_git
@@ -51,9 +51,9 @@
           dir = "/root/icinga2"
         }
     insertafter: 'Define git repos and attributes'
-    path: /etc/icinga2/zones.d/master/icinga_host/host.conf
+    path: /etc/icinga2/zones.d/master/icinga-host/host.conf
     marker: "/* {mark} Icinga2 Docker image git repo */"
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 
 - name: git clone https://github.com/jjethwa/icinga2
   git:

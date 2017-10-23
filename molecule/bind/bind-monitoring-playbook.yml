@@ -1,6 +1,6 @@
 ---
 - name: setup DNS server
-  hosts: bind_host
+  hosts: bind-host
   become: True
 
   roles:

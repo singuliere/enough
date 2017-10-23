@@ -1,6 +1,6 @@
 ---
 - name: install weblate
-  hosts: weblate_host
+  hosts: weblate-host
   roles:
     - { role: ansible-role-docker, docker_install_compose: true }
     - { role: fail2ban }

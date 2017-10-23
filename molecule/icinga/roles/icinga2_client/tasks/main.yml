@@ -56,7 +56,7 @@
 
 - name: wait for master availability
   wait_for:
-    host: "{{ hostvars['icinga_host']['ansible_host'] }}"
+    host: "{{ hostvars['icinga-host']['ansible_host'] }}"
     port: 5665
     state: drained
 
@@ -66,7 +66,7 @@
       --key /etc/icinga2/pki/{{ inventory_hostname }}.key  \
       --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt \
       --trustedcert /etc/icinga2/pki/trusted-master.crt \
-      --host {{ hostvars['icinga_host']['ansible_host'] }}
+      --host {{ hostvars['icinga-host']['ansible_host'] }}
   args:
     creates:  /etc/icinga2/pki/trusted-master.crt
   register: output
@@ -77,7 +77,7 @@
 - name: generate ticket number on the master
   shell: |
     icinga2 pki ticket --cn {{ inventory_hostname }}
-  delegate_to: icinga_host
+  delegate_to: icinga-host
   register: command_output
   changed_when: False
 
@@ -86,7 +86,7 @@
 
 - name: wait for master availability
   wait_for:
-    host: "{{ hostvars['icinga_host']['ansible_host'] }}"
+    host: "{{ hostvars['icinga-host']['ansible_host'] }}"
     port: 5665
     state: drained
 
@@ -95,9 +95,9 @@
     icinga2 node setup \
       --ticket {{ icinga_ticket }} \
       --cn {{ inventory_hostname }} \
-      --endpoint icinga_host \
+      --endpoint icinga-host \
       --zone {{ inventory_hostname }} \
-      --master_host {{ hostvars['icinga_host']['ansible_host'] }} \
+      --master_host {{ hostvars['icinga-host']['ansible_host'] }} \
       --trustedcert /etc/icinga2/pki/trusted-master.crt \
       --accept-commands \
       --accept-config
@@ -133,24 +133,24 @@
   file:
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}
     state: directory
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 
 - name: install host definition on master
   template:
     src: templates/host.conf
     dest: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 
 - name: install client zone definition on master
   template:
     src: templates/zones.conf.master
     dest: /etc/icinga2/zones.d/{{ inventory_hostname }}.conf
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 
 - name: reload icinga2 configuration
   systemd:
     name: icinga2
     state: reloaded
   changed_when: False
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 

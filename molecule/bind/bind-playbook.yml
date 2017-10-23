@@ -9,7 +9,7 @@
       os_security_group_udp: [ 53 ]
 
 - name: setup DNS server
-  hosts: bind_host
+  hosts: bind-host
   become: True
 
   vars:
@@ -25,7 +25,7 @@
 
     bind_zone_hosts_static:
       - name: ns1
-        ip: '{{ hostvars["bind_host"]["ansible_host"] }}'
+        ip: '{{ hostvars["bind-host"]["ansible_host"] }}'
 
   roles:
     - role: bertvv.bind
@@ -38,7 +38,7 @@
         - '8.8.4.4'
       bind_recursion: true
       bind_zone_name: 'securedrop.club'
-      bind_zone_master_server_ip: '{{ hostvars["bind_host"]["ansible_host"] }}'
+      bind_zone_master_server_ip: '{{ hostvars["bind-host"]["ansible_host"] }}'
       bind_zone_name_servers:
         - ns1
       bind_zone_hosts: '{{ bind_zone_hosts_dynamic + bind_zone_hosts_static }}'

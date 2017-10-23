@@ -1,6 +1,6 @@
 ---
 - name: prepare test client
-  hosts: bind_client_host
+  hosts: bind-client-host
   become: True
 
   tasks:

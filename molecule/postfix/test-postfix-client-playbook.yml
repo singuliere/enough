@@ -1,6 +1,6 @@
 ---
 - name: install postfix client
-  hosts: postfix_client
+  hosts: postfix-client-host
   become: True
 
   environment: '{{ inventory__environment | d({})
@@ -32,7 +32,7 @@
     - role: debops.postfix
       postfix__mailname: 'securedrop.club'
       postfix__fqdn: 'postfix-client.securedrop.club'
-      postfix__relayhost: '[{{ hostvars["postfix_host"]["ansible_default_ipv4"]["address"] }}]:465'
+      postfix__relayhost: '[{{ hostvars["postfix-host"]["ansible_default_ipv4"]["address"] }}]:465'
       postfix__maincf:
         - name: 'smtp_tls_security_level'
           value: 'encrypt'

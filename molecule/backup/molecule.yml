@@ -4,7 +4,7 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: backup_host
+  - name: backup-host
     flavor: "s1-2"
 provisioner:
   name: ansible

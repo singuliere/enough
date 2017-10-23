@@ -2,13 +2,13 @@ import pytest
 import time
 import testinfra
 
-testinfra_hosts = ['weblate_host']
+testinfra_hosts = ['weblate-host']
 
 def test_weblate(host):
 
     weblate_host = host
     postfix_host = testinfra.host.Host.get_host(
-        'ansible://postfix_host',
+        'ansible://postfix-host',
         ansible_inventory=host.backend.ansible_inventory)
 
     cmd = weblate_host.run("""

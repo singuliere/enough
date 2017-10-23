@@ -4,11 +4,11 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: bind_host
+  - name: bind-host
     flavor: "s1-2"
-  - name: bind_client_host
+  - name: bind-client-host
     flavor: "s1-2"
-  - name: icinga_host
+  - name: icinga-host
     flavor: "s1-2"
 provisioner:
   name: ansible

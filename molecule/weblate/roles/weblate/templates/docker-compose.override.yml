@@ -5,7 +5,7 @@ services:
       # is available on the docker hub
       image: dachary/weblate
       environment:
-            - WEBLATE_EMAIL_HOST={{ hostvars["postfix_host"]["ansible_host"] }}
+            - WEBLATE_EMAIL_HOST={{ hostvars["postfix-host"]["ansible_host"] }}
             - WEBLATE_EMAIL_PORT=465
             - WEBLATE_EMAIL_USE_TLS=0
             - WEBLATE_EMAIL_USE_SSL=1

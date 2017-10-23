@@ -4,7 +4,7 @@ import requests
 import pytest
 import yaml
 
-testinfra_hosts = ['icinga_host']
+testinfra_hosts = ['icinga-host']
 
 def get_auth(host):
     with host.sudo():
@@ -16,7 +16,7 @@ def get_auth(host):
     
 def get_master_address(host):
     inventory = yaml.load(open(host.backend.ansible_inventory))
-    address = inventory['all']['hosts']['icinga_host']['ansible_host']
+    address = inventory['all']['hosts']['icinga-host']['ansible_host']
     return address
 
 def sloppy_get(url, headers={}, auth=None):
@@ -31,21 +31,21 @@ def sloppy_get(url, headers={}, auth=None):
 def test_icinga_api_hosts(host):
     address = get_master_address(host)
     r = sloppy_get(
-            'https://{address}:5665/v1/objects/hosts/weblate_host'.format(address=address),
+            'https://{address}:5665/v1/objects/hosts/weblate-host'.format(address=address),
             {'Accept': 'application/json'},
             get_auth(host),
             )
     answer = r.json()
     assert len(answer['results']) == 1
-    assert answer['results'][0]['name'] == 'weblate_host'
+    assert answer['results'][0]['name'] == 'weblate-host'
 
 def test_icinga_api_services (host):
     address = get_master_address(host)
     r = sloppy_get(
-            'https://{address}:5665/v1/objects/services?host=weblate_host'.format(address=address),
+            'https://{address}:5665/v1/objects/services?host=weblate-host'.format(address=address),
             {'Accept': 'application/json'},
             get_auth(host),
             )
     answer = r.json()
     assert len(answer['results']) > 10
-    assert len([s for s in answer['results'] if 'weblate_host!Weblate' == s['name']]) == 1
+    assert len([s for s in answer['results'] if 'weblate-host!Weblate' == s['name']]) == 1

@@ -4,13 +4,13 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: bind_host
+  - name: bind-host
     flavor: "s1-2"
-  - name: postfix_host
+  - name: postfix-host
     flavor: "s1-2"
-  - name: icinga_host
+  - name: icinga-host
     flavor: "s1-2"
-  - name: weblate_host
+  - name: weblate-host
     flavor: "s1-4"
 provisioner:
   name: ansible

@@ -5,7 +5,7 @@ import pytest
 import yaml
 
 def get_auth(host):
-    host= host.get_host('ansible://icinga_host', ansible_inventory=host.backend.ansible_inventory)
+    host= host.get_host('ansible://icinga-host', ansible_inventory=host.backend.ansible_inventory)
     with host.sudo():
         f = host.file("/etc/icinga2/conf.d/api-users.conf")
         return (
@@ -15,7 +15,7 @@ def get_auth(host):
     
 def get_master_address(host):
     inventory = yaml.load(open(host.backend.ansible_inventory))
-    address = inventory['all']['hosts']['icinga_host']['ansible_host']
+    address = inventory['all']['hosts']['icinga-host']['ansible_host']
     return address
 
 def sloppy_get(url, headers={}, auth=None):
@@ -36,7 +36,7 @@ def test_icinga_api_hosts(host):
             )
     answer = r.json()
     assert len(answer['results']) == 2
-    assert set([h['name'] for h in answer['results']]) == set(['icinga_host', 'monitoring_client_host'])
+    assert set([h['name'] for h in answer['results']]) == set(['icinga-host', 'monitoring-client-host'])
 
 def test_icinga_api_services (host):
     address = get_master_address(host)

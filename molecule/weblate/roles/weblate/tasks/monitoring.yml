@@ -11,7 +11,7 @@
     insertafter: 'Define httpd services and attributes'
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
     marker: "/* {mark} Weblate projects */"
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 
 - name: declare http vhost on {{ inventory_hostname }}
   # Warn: successives "blockinfile" in the same file require using differents markers
@@ -26,11 +26,11 @@
     insertafter: 'Define httpd services and attributes'
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
     marker: "/* {mark} Weblate Vhost */"
-  delegate_to: icinga_host
+  delegate_to: icinga-host
 
 - name: reload icinga2 configuration
   systemd:
     name: icinga2
     state: reloaded
   changed_when: False
-  delegate_to: icinga_host
+  delegate_to: icinga-host

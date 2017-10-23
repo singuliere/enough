@@ -3,7 +3,7 @@ import pytest
 def expected_backups(host, count):
     cmd = host.run("""
     source /usr/lib/backup/openrc.sh
-    openstack image list | grep -c $(hostname | sed -e 's/-/_/g')
+    openstack image list | grep -c $(hostname)
     """)
     assert count == cmd.stdout
     print(cmd.stderr)

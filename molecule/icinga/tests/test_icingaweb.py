@@ -6,7 +6,7 @@ import yaml
 
 def get_master_address(host):
     inventory = yaml.load(open(host.backend.ansible_inventory))
-    address = inventory['all']['hosts']['icinga_host']['ansible_host']
+    address = inventory['all']['hosts']['icinga-host']['ansible_host']
     return address
 
 def test_icingaweb2_login_screen(host):
