@@ -15,7 +15,7 @@
   os_keypair:
     <<: *os_auth
     state: "{{ state }}"
-    name: testkey
+    name: securedrop_key
     public_key_file: "{{ ssh_public_keyfile }}"
 
 - name: instances "{{ state }}"
@@ -24,7 +24,7 @@
     <<: *os_auth
     name: "{{ item.name }}"
     image: Debian 9
-    key_name: testkey
+    key_name: securedrop_key
     timeout: 600
     flavor: "{{ item.flavor }}"
     auto_ip: yes
