@@ -34,3 +34,11 @@
   args:
     chdir: /srv/checkout
   become: False
+
+- name: apt-get install dev tools
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - emacs-nox
+    - tmux
