@@ -19,6 +19,7 @@
         {
           'name': '{{ host }}',
           'ip': '{{ info.ansible_host }}',
+          'aliases': ['{{ host|replace("-host","") }}'],
         },
         {% endfor %}
       ]
