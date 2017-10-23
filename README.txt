@@ -15,7 +15,7 @@
 
 ----------------------------------------------------------------------
 
-* weblate create -s weblate
+* molecule create -s weblate
 * openstack.py --list # fill the cache
 * USE_CACHE=true ansible-playbook --private-key id_rsa --user debian -i openstack.py securedrop-club-playbook.yml
 
