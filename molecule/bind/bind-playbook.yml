@@ -44,9 +44,6 @@
         - any
       bind_listen_ipv4:
         - any
-      bind_forwarders:
-        - '8.8.8.8'
-        - '8.8.4.4'
       bind_recursion: true
       bind_allow_recursion: |
         [
