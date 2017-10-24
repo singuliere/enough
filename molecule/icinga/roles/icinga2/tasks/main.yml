@@ -104,7 +104,6 @@
     - notifications
     - templates
     - timeperiods
-    - users
     - groups
     - services/apt
     - services/base
@@ -114,6 +113,13 @@
     - services/http
     - services/mail
     - services/volumes
+
+- name: deploy our templated configuration
+  copy:
+    src:  templates/{{ item }}.conf
+    dest: /etc/icinga2/zones.d/global-templates/{{ item }}.conf
+  with_items:
+    - users
 
 - name: retrieve generated DB credentials
   shell: |
