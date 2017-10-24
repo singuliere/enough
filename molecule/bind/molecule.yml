@@ -8,6 +8,8 @@ platforms:
     flavor: "s1-2"
   - name: bind-client-host
     flavor: "s1-2"
+  - name: external-host
+    flavor: "s1-2"
   - name: icinga-host
     flavor: "s1-2"
 provisioner:
