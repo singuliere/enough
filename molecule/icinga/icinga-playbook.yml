@@ -3,6 +3,8 @@
   hosts: localhost
   connection: local
   gather_facts: False
+  vars:
+    domain: 'securedrop.club'
 
   roles:
     - role: firewall
