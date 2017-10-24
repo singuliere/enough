@@ -3,6 +3,9 @@
   hosts: postfix-client-host
   become: True
 
+  vars:
+    domain: 'securedrop.club'
+
   environment: '{{ inventory__environment | d({})
                    | combine(inventory__group_environment | d({}))
                    | combine(inventory__host_environment  | d({})) }}'
@@ -30,8 +33,8 @@
       tags: [ 'role::etc_aliases' ]
 
     - role: debops.postfix
-      postfix__mailname: 'securedrop.club'
-      postfix__fqdn: 'postfix-client.securedrop.club'
+      postfix__mailname: '{{ domain }}'
+      postfix__fqdn: 'postfix-client.{{ domain }}'
       postfix__relayhost: '[{{ hostvars["postfix-host"]["ansible_default_ipv4"]["address"] }}]:465'
       postfix__maincf:
         - name: 'smtp_tls_security_level'

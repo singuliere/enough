@@ -5,6 +5,7 @@ import testinfra
 testinfra_hosts = ['postfix-host']
 
 def test_sendmail(host):
+    domain = host.run("hostname -d").stdout.strip()
 
     postfix_host = host
     postfix_client_host = testinfra.host.Host.get_host(
@@ -13,8 +14,8 @@ def test_sendmail(host):
 
     cmd = postfix_client_host.run("""
     ( echo 'To: loic+boundtofail@dachary.org' ; echo POSTFIX TEST ) |
-    /usr/sbin/sendmail -v -F 'NO REPLY' -f 'noreply@securedrop.club' -t
-    """)
+    /usr/sbin/sendmail -v -F 'NO REPLY' -f 'noreply@{}' -t
+    """.format(domain))
     print(cmd.stdout)
     print(cmd.stderr)
     assert 0 == cmd.rc

@@ -1,6 +1,8 @@
 ---
 - name: install monitoring client
   hosts: monitoring-client-host
+  vars:
+    domain: 'securedrop.club'
   roles:
     - { role: icinga2_client }
     - { role: fail2ban }

@@ -3,8 +3,11 @@
   hosts: bind-host
   become: True
 
+  vars:
+    domain: 'securedrop.club'
+
   roles:
     - role: icinga2_client
 
     - role: monitoring-bind
-      bind_zone_name: 'securedrop.club'
+      bind_zone_name: '{{ domain }}'

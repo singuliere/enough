@@ -3,8 +3,16 @@
   hosts: [ 'all' ]
   become: True
 
-  roles: 
+  vars:
+    domain: 'securedrop.club'
+
+  roles:
     - role: jdauphant.dns
       dns_nameservers: ['{{ hostvars["bind-host"]["ansible_host"] }}']
-      dns_searchs: ['securedrop.club']
-      dns_domain: 'securedrop.club'
+      dns_searchs: ['{{ domain }}']
+      dns_domain: '{{ domain }}'
+
+  tasks:
+    - name: set hostname
+      hostname:
+        name: '{{ inventory_hostname }}.{{ domain }}'

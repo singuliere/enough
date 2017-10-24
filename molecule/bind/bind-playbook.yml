@@ -13,6 +13,7 @@
   become: True
 
   vars:
+    domain: 'securedrop.club'
     bind_zone_hosts_dynamic: |
       [
         {% for host, info in hostvars.items() %}
@@ -38,7 +39,7 @@
         - '8.8.8.8'
         - '8.8.4.4'
       bind_recursion: true
-      bind_zone_name: 'securedrop.club'
+      bind_zone_name: '{{ domain }}'
       bind_zone_master_server_ip: '{{ hostvars["bind-host"]["ansible_host"] }}'
       bind_zone_name_servers:
         - ns1

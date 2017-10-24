@@ -3,7 +3,7 @@
   blockinfile:
     block: |
         vars.http_vhosts["Weblate projects"] = {
-          http_vhost = "weblate.securedrop.club"
+          http_vhost = "weblate.{{ domain }}"
           http_uri = "/projects/"
           /* http_ssl = true */
           http_string = "<th><a href=\"/projects/securedrop/\">SecureDrop</a></th>"
@@ -18,7 +18,7 @@
   blockinfile:
     block: |
         vars.http_vhosts["Weblate"] = {
-          http_vhost = "weblate.securedrop.club"
+          http_vhost = "weblate.{{ domain }}"
           http_uri = "/"
           /* http_ssl = true */
           http_string = "Weblate"

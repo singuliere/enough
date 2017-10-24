@@ -6,7 +6,7 @@
     - whois
     - libdate-manip-perl
 
-- name: declare zone securedrop.club on bind-host
+- name: declare zone {{ domain }} on bind-host
   # Warn: successives "blockinfile" in the same file require using differents markers
   blockinfile:
     block: |

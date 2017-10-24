@@ -12,6 +12,9 @@
   hosts: postfix-host
   become: True
 
+  vars:
+    domain: 'securedrop.club'
+
   environment: '{{ inventory__environment | d({})
                    | combine(inventory__group_environment | d({}))
                    | combine(inventory__host_environment  | d({})) }}'
@@ -34,8 +37,8 @@
     - role: debops.etc_aliases
 
     - role: debops.postfix
-      postfix__mailname: 'securedrop.club'
-      postfix__fqdn: 'postfix-host.securedrop.club'
+      postfix__mailname: '{{ domain }}'
+      postfix__fqdn: 'postfix-host.{{ domain }}'
       postfix__mastercf:
         - name: 'smtps'
           state: 'present'
@@ -57,8 +60,8 @@
           config: '{{ opendkim__postfix__dependent_maincf }}'
 
     - role: debops.opendkim
-      opendkim__domain: 'securedrop.club'
-      opendkim__fqdn: 'postfix-host.securedrop.club'
+      opendkim__domain: '{{ domain }}'
+      opendkim__fqdn: 'postfix-host.{{ domain }}'
       opendkim__trusted_hosts: "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | list }}"
       opendkim__config:
         - name: 'SyslogSuccess'

@@ -4,7 +4,7 @@
   blockinfile:
     block: |
         vars.http_vhosts["Secure Drop Forum"] = {
-          http_vhost = "forum.securedrop.club"
+          http_vhost = "forum.{{ domain }}"
           http_uri = "/c/devops"
           http_ssl = true
           http_string = "devops discussions"
