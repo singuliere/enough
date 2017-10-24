@@ -14,13 +14,13 @@
 - name: copy backup.sh
   template:
     src: backup.sh
-    dest: /etc/cron.daily/backup.sh
+    dest: /etc/cron.daily/backup
     mode: +x
 
 - name: copy prune-backup.sh
   template:
     src: prune-backup.sh
-    dest: /etc/cron.daily/prune-backup.sh
+    dest: /etc/cron.daily/prune-backup
     mode: +x
 
 - name: apt-get install python-openstackclient
