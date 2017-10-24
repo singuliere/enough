@@ -6,7 +6,7 @@
 
   roles:
     - role: firewall
-      os_security_group_udp: [ 53 ]
+      os_security_group_udp_external: [ 53 ]
 
 - name: setup DNS server
   hosts: bind-host
