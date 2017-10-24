@@ -35,6 +35,21 @@
         - '{{ postfix__ferm__dependent_rules }}'
 
     - role: debops.etc_aliases
+      etc_aliases__recipients:
+
+        - admins: ['loic@dachary.org', 'fpoulain@metrodore.fr']
+
+        - icingaadmins: 'admins'
+        - root:         'admins'
+        - noc:          'admins'
+        - security:     'admins'
+        - abuse:        'admins'
+        - postmaster:   'admins'
+        - hostmaster:   'admins'
+        - webmaster:    'admins'
+
+        - devnull:      '/dev/null'
+        - noreply:      '/dev/null'
 
     - role: debops.postfix
       postfix__mailname: '{{ domain }}'

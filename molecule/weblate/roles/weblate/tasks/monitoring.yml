@@ -5,7 +5,7 @@
         vars.http_vhosts["Weblate projects"] = {
           http_vhost = "weblate.{{ domain }}"
           http_uri = "/projects/"
-          /* http_ssl = true */
+          http_ssl = true
           http_string = "<th><a href=\"/projects/securedrop/\">SecureDrop</a></th>"
         }
     insertafter: 'Define httpd services and attributes'
@@ -20,7 +20,7 @@
         vars.http_vhosts["Weblate"] = {
           http_vhost = "weblate.{{ domain }}"
           http_uri = "/"
-          /* http_ssl = true */
+          http_ssl = true
           http_string = "Weblate"
         }
     insertafter: 'Define httpd services and attributes'
