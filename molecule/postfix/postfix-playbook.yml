@@ -61,16 +61,6 @@
       opendkim__fqdn: 'postfix-host.securedrop.club'
       opendkim__trusted_hosts: "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | list }}"
       opendkim__config:
-        - name: 'PidFile'
-          comment: 'Needed by systemd opendkim.service file'
-          value: '/var/run/opendkim/opendkim.pid'
-          state: "present"
-
-        - name: 'UserID'
-          comment: 'Needed by opendkim on stretch'
-          value: 'opendkim:opendkim'
-          state: "present"
-
         - name: 'SyslogSuccess'
           comment: 'Needed by molecule verify'
           value: 'Yes'
