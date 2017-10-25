@@ -17,12 +17,13 @@
     icingaadmins_email: icingaadmins@{{ domain }}
 
   roles:
-    - role: icinga2
     - role: sexy-debian
-    - role: certbot-nginx
+    - role: icinga2
+      # force https redirection
+      # https_redirect: true
+    #- role: certbot-nginx
       # available but un-needed
       # certbot_redirect: true
-      #
       # use fake LE
       # molecule verify will fail with it
       # certbot_test: true
