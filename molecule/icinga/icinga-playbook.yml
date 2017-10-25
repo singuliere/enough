@@ -3,16 +3,16 @@
   hosts: localhost
   connection: local
   gather_facts: False
-  vars:
-    domain: 'securedrop.club'
 
   roles:
     - role: firewall
       os_security_group_tcp: [ 5665 ]
 
-- name: install icinga
+- name: install icinga VM
   hosts: icinga-host
+  vars:
+    domain: 'securedrop.club'
   roles:
-    - { role: icinga2 }
-    - { role: sexy-debian }
+    - role: icinga2
+    - role: sexy-debian
   become: True
