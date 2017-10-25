@@ -1,0 +1,56 @@
+version: '2'
+services:
+  weblate:
+    # remove when the image containing the fix https://github.com/WeblateOrg/docker/pull/64
+    # is available on the docker hub
+    image: dachary/weblate
+    links:
+      - database
+      - cache
+    volumes:
+      - weblate-data:/app/data
+    ports:
+      - '8000:80'
+    env_file:
+      - ./environment
+    restart: always
+    depends_on:
+      - database
+      - cache
+    environment:
+      - WEBLATE_EMAIL_HOST={{ hostvars["postfix-host"]["ansible_host"] }}
+      - WEBLATE_EMAIL_PORT=465
+      - WEBLATE_EMAIL_USE_TLS=0
+      - WEBLATE_EMAIL_USE_SSL=1
+      - WEBLATE_SERVER_EMAIL={{ WEBLATE_SERVER_EMAIL }}
+      - WEBLATE_DEFAULT_FROM_EMAIL={{ WEBLATE_DEFAULT_FROM_EMAIL }}
+      - WEBLATE_ADMIN_NAME=admin
+      - WEBLATE_ADMIN_EMAIL={{ WEBLATE_ADMIN_EMAIL }}
+      - WEBLATE_ADMIN_PASSWORD={{ WEBLATE_ADMIN_PASSWORD }}
+      - WEBLATE_ALLOWED_HOSTS=*
+      - WEBLATE_ENABLE_HTTPS=1
+      - WEBLATE_REGISTRATION_OPEN=1
+      - WEBLATE_SOCIAL_AUTH_GITHUB_KEY=ccd2a029302c4258d5fd
+      - WEBLATE_SOCIAL_AUTH_GITHUB_SECRET=eec7c91a552bdda745f8a5108738a4afbf888533
+  database:
+    image: postgres:9.6-alpine
+    env_file:
+      - ./environment
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+  cache:
+    image: memcached:1.5-alpine
+    restart: always
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
+    environment:
+      DOMAINS: 'weblate.{{ domain }} -> http://weblate.{{ domain }}:8000'
+      STAGE: production
+volumes:
+  weblate-data: {}
+  postgres-data: {}

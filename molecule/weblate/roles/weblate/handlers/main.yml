@@ -1,6 +1,6 @@
 ---
 - name: recreate weblate
   docker_service:
-#    files: docker-compose-https.yml
+    files: docker-compose-securedrop-club.yml
     project_src: /srv/weblate
     state: present
