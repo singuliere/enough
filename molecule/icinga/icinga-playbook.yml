@@ -11,7 +11,9 @@
 - name: install icinga VM
   hosts: icinga-host
   vars:
-    domain: 'securedrop.club'
+    # vhost_fqdn used by icinga2 and certbot-nginx roles
+    vhost_fqdn: icinga.securedrop.amie.coop
+    domain: securedrop.club
   roles:
     - role: icinga2
     - role: sexy-debian
