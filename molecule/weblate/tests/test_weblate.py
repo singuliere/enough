@@ -13,7 +13,7 @@ def test_weblate(host):
 
     cmd = weblate_host.run("""
     cd /srv/weblate
-    sudo docker-compose exec -T weblate weblate sendtestemail loic@dachary.org
+    sudo docker-compose -f docker-compose-securedrop-club.yml exec -T weblate weblate sendtestemail loic+doomtofail@dachary.org
     """)
     print(cmd.stdout)
     print(cmd.stderr)
