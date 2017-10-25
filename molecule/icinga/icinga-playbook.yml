@@ -13,10 +13,18 @@
   vars:
     domain: securedrop.club
     # icingaadmins_email and vhost_fqdn used by icinga2 and certbot-nginx roles
-    vhost_fqdn: icinga.securedrop.amie.coop
+    vhost_fqdn: icingc.securedrop.amie.coop
     icingaadmins_email: icingaadmins@{{ domain }}
 
   roles:
     - role: icinga2
     - role: sexy-debian
+    - role: certbot-nginx
+      # available but un-needed
+      # certbot_redirect: true
+      #
+      # use fake LE
+      # molecule verify will fail with it
+      # certbot_test: true
+
   become: True
