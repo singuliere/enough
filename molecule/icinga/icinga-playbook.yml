@@ -13,7 +13,7 @@
   vars:
     domain: securedrop.club
     # icingaadmins_email and vhost_fqdn used by icinga2 and certbot-nginx roles
-    vhost_fqdn: icingc.securedrop.amie.coop
+    vhost_fqdn: _
     icingaadmins_email: icingaadmins@{{ domain }}
 
   roles:
