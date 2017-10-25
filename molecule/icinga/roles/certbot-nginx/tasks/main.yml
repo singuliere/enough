@@ -1,0 +1,17 @@
+---
+- name: apt-get install certbot and friends
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - certbot
+    - python-certbot-nginx
+
+- name: call let's encrypt on vhost_fqdn
+  shell: |
+    certbot -n                                                   \
+      --agree-tos --nginx                                        \
+      --email {{ icingaadmins_email }}                           \
+      -d {{ vhost_fqdn }}                                        \
+      {% if certbot_redirect is defined %}--redirect{% endif %}  \
+      {% if certbot_test is defined %}--test-cert{% endif %}

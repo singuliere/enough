@@ -1,18 +1,37 @@
 ---
+# Note
+# To add https via letsencrypt:
+# 1- define 'vhost_fqdn'
+# 2- un-comment 'https_redirect: true'
+# 3- un-comment 'role: certbot-nginx'
+
 - name: configure firewall
   hosts: localhost
   connection: local
   gather_facts: False
-  vars:
-    domain: 'securedrop.club'
 
   roles:
     - role: firewall
       os_security_group_tcp: [ 5665 ]
 
-- name: install icinga
+- name: install icinga VM
   hosts: icinga-host
+  vars:
+    domain: securedrop.club
+    # icingaadmins_email and vhost_fqdn used by icinga2 and certbot-nginx roles
+    vhost_fqdn: _
+    icingaadmins_email: icingaadmins@{{ domain }}
+
   roles:
-    - { role: icinga2 }
-    - { role: sexy-debian }
+    - role: sexy-debian
+    - role: icinga2
+      # force https redirection
+      # https_redirect: true
+    #- role: certbot-nginx
+      # available but un-needed options
+      # certbot_redirect: true
+      # use fake LE
+      # molecule verify will fail with it
+      # certbot_test: true
+
   become: True
