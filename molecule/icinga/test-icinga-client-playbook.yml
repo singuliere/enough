@@ -5,6 +5,6 @@
     domain: 'securedrop.club'
   roles:
     - { role: icinga2_client }
-    - { role: fail2ban }
+    - { role: sexy-debian }
     - { role: deploy_dummy_monitoring_objects }
   become: True

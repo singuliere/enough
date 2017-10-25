@@ -14,5 +14,5 @@
   hosts: icinga-host
   roles:
     - { role: icinga2 }
-    - { role: fail2ban }
+    - { role: sexy-debian }
   become: True
