@@ -1,4 +1,10 @@
 ---
+# Note
+# To add https via letsencrypt:
+# 1- define 'vhost_fqdn'
+# 2- un-comment 'https_redirect: true'
+# 3- un-comment 'role: certbot-nginx'
+
 - name: configure firewall
   hosts: localhost
   connection: local
@@ -22,7 +28,7 @@
       # force https redirection
       # https_redirect: true
     #- role: certbot-nginx
-      # available but un-needed
+      # available but un-needed options
       # certbot_redirect: true
       # use fake LE
       # molecule verify will fail with it
