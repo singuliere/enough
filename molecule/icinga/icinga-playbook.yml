@@ -11,9 +11,11 @@
 - name: install icinga VM
   hosts: icinga-host
   vars:
-    # vhost_fqdn used by icinga2 and certbot-nginx roles
-    vhost_fqdn: icinga.securedrop.amie.coop
     domain: securedrop.club
+    # icingaadmins_email and vhost_fqdn used by icinga2 and certbot-nginx roles
+    vhost_fqdn: icinga.securedrop.amie.coop
+    icingaadmins_email: icingaadmins@{{ domain }}
+
   roles:
     - role: icinga2
     - role: sexy-debian
