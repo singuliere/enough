@@ -21,6 +21,7 @@
 
   roles:
 
+    - role: sexy-debian
     - role: debops.etc_aliases/env
     - role: debops.postfix/env
     - role: debops.opendkim/env
