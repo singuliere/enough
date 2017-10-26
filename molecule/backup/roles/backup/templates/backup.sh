@@ -34,7 +34,7 @@ function wait_for_backup() {
 DEFAULT_HOSTNAMES=""
 {% for host in hostvars %}
 {%   set vars = hostvars[host|string] %}
-DEFAULT_HOSTNAMES+={{ vars.ansible_hostname }}
+DEFAULT_HOSTNAMES+="{{ vars.ansible_hostname }} "
 {% endfor %}
 
 HOSTNAMES=${1:-$DEFAULT_HOSTNAMES}
