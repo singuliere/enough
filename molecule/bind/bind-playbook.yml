@@ -27,6 +27,8 @@
     bind_zone_hosts_static:
       - name: ns1
         ip: '{{ hostvars["bind-host"]["ansible_host"] }}'
+      - name: lab
+        ip: 145.239.15.86
 
     bind_zone_mail_servers: |
       [
