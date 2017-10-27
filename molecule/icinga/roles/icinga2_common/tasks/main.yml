@@ -7,13 +7,13 @@
 - set_fact:
     icinga_user: "{{ command_output.stdout }}"
 
-- name: install check_git on icinga-host
+- name: install check_git
   copy:
     src: files/check_git
     dest: /usr/lib/nagios/plugins/check_git
     mode: 0755
 
-- name: install sudo file for check_git on icinga-host
+- name: install sudo file for check_git
   template:
     dest: /etc/sudoers.d/icinga2_check_git
     src: templates/icinga2_check_git

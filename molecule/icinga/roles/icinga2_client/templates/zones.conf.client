@@ -17,9 +17,9 @@ object Zone "global-templates" {
 /* Master zone */
  
 object Zone "master" {
-  endpoints = [ "icinga-host" ]
+  endpoints = [ "{{ monitoring_master }}" ]
 }
  
-object Endpoint "icinga-host" {
-  host = "{{ hostvars['icinga-host']['ansible_host'] }}"
+object Endpoint "{{ monitoring_master }}" {
+  host = "{{ hostvars[monitoring_master]['ansible_host'] }}"
 }
