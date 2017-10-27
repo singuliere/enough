@@ -6,7 +6,6 @@
 
   roles:
     - { role: ansible-role-docker, docker_install_compose: true }
-    - { role: sexy-debian }
     - { role: icinga2_client }
     - { role: weblate }
   become: True

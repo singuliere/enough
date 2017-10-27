@@ -1,4 +1,5 @@
 ---
+- import_playbook: ../sexy-debian/sexy-debian-playbook.yml
 - import_playbook: bind-playbook.yml
 - import_playbook: bind-client-playbook.yml
 - import_playbook: ../icinga/icinga-playbook.yml

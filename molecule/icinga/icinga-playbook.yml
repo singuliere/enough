@@ -23,7 +23,6 @@
     icingaadmins_email: icingaadmins@{{ domain }}
 
   roles:
-    - role: sexy-debian
     - role: icinga2
       # force https redirection
       # https_redirect: true

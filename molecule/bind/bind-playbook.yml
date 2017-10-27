@@ -41,7 +41,6 @@
       ]
 
   roles:
-    - role: sexy-debian
     - role: bertvv.bind
       bind_allow_query:
         - any
