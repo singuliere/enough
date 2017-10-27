@@ -124,10 +124,12 @@ A host can declare hosting web at a given fqdn:
    should *not* provide some strings in the answer. It is useful to
    prevent from accidentally deploy spywares. For now, spywares checked
    are:
+
    -  googleapis.com
    -  cloudflare.com
    -  google-analytics.com
    -  gravatar.com
+
 -  If ``http_ssl = true`` the check is processes using https and the TLS
    certificate is retrieved for validity check.
 
