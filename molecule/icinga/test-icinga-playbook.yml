@@ -1,9 +1,0 @@
----
-- name: configure firewall
-  hosts: localhost
-  connection: local
-  gather_facts: False
-
-  roles:
-    - role: firewall
-      os_security_group_tcp_external: [ 5665 ]

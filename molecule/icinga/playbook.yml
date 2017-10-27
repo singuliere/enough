@@ -1,5 +1,9 @@
 ---
 - import_playbook: ../sexy-debian/sexy-debian-playbook.yml
 - import_playbook: icinga-playbook.yml
-- import_playbook: test-icinga-playbook.yml
-- import_playbook: test-icinga-client-playbook.yml
+
+- name: deploy dummy monitoring object in molecule environment
+  hosts: monitoring-client-host
+  become: true
+  roles:
+    - role: deploy_dummy_monitoring_objects

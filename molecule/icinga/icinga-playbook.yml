@@ -1,37 +1,59 @@
 ---
-# Note
-# To add https via letsencrypt:
-# 1- define 'vhost_fqdn'
-# 2- un-comment 'https_redirect: true'
-# 3- un-comment 'role: certbot-nginx'
-
 - name: configure firewall
   hosts: localhost
   connection: local
   gather_facts: False
-
-  roles:
-    - role: firewall
-      os_security_group_tcp: [ 5665 ]
-
-- name: install icinga VM
-  hosts: icinga-host
   vars:
-    domain: securedrop.club
-    # icingaadmins_email and vhost_fqdn used by icinga2 and certbot-nginx roles
-    vhost_fqdn: _
-    icingaadmins_email: icingaadmins@{{ domain }}
+    os_security_group_tcp: [ 5665 ]
+  tasks:
 
-  roles:
-    - role: icinga2
-      # force https redirection
-      # https_redirect: true
-    #- role: certbot-nginx
-      # available but un-needed options
-      # certbot_redirect: true
-      # use fake LE
-      # molecule verify will fail with it
-      # certbot_test: true
-    - role: icinga2_common
+  - name: configure firewall
+    include_role:
+      name: firewall
 
-  become: True
+
+- name: install icinga master
+
+  hosts: all
+  become: true
+  tasks:
+
+  - name: install icinga master
+    include_role:
+      name: icinga2
+    when:
+      - 'monitoring_master == inventory_hostname'
+
+  - name: install letsencrypt
+    include_role:
+      name: certbot-nginx
+    when:
+      - 'monitoring_master == inventory_hostname'
+      - 'with_https is defined'
+
+
+
+- name: install icinga clients
+  hosts: all
+  become: true
+  tasks:
+
+  - name: install icinga client
+    include_role:
+      name: icinga2_client
+    when:
+      - 'monitoring_master != inventory_hostname'
+      - 'not_monitored is undefined'
+
+
+
+- name: install icinga monitoring capabilities
+  hosts: all
+  become: true
+  tasks:
+
+  - name: install icinga monitoring capabilities
+    include_role:
+      name: icinga2_common
+    when:
+      - 'not_monitored is undefined'
