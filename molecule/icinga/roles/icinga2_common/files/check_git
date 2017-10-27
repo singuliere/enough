@@ -1,0 +1,103 @@
+#!/bin/bash
+#
+# Nagios plugin to check Git repository status
+#
+# Author : Benjamin Renard <brenard@easter-eggs.com>
+# Date : Wed, 14 Mar 2012 14:45:55 +0000
+# Source : http://git.zionetrix.net/check_git_config
+#
+
+GIT_ROOT=/srv/common
+GIT_REMOTE=origin
+DEBUG=0
+CHECK_REMOTE=0
+
+function usage() {
+	echo "Usage : $0 -g [directory] [-c|-r remote] [-d]
+	-g [directory]	Specify Git root directory (default : $GIT_ROOT)
+	-c		Check Git remote state
+	-r [remote]	Specify Git remote to check (default : $GIT_REMOTE)
+	-d		Enable debug mode"
+}
+
+while getopts "g:r:cdh-:" OPTION
+do
+	case "$OPTION" in
+		c)
+			CHECK_REMOTE=1
+		;;
+		g)
+			GIT_ROOT="${OPTARG}"
+		;;
+		r)
+			CHECK_REMOTE=1
+			GIT_REMOTE="${OPTARG}"
+		;;
+		d)
+			DEBUG=1
+		;;
+		h)
+			usage
+			exit 0
+		;;
+		*)
+			echo "Invalid parameter -$OPTION"
+			echo
+			usage
+			exit 1
+		;;
+	esac
+done
+
+[ ! -d "$GIT_ROOT" ] && echo "UNKNOWN : Git root directory does not exists !" && exit 3
+[ ! -d "$GIT_ROOT/.git" ] && echo "UNKNOWN : Git root directory seem to not being a git repository." && exit 3
+
+cd $GIT_ROOT
+
+STATUS=$( git status -s )
+
+[ $DEBUG -eq 1 ] && echo -e "Status : $STATUS"
+
+if [ -n "$STATUS" ]
+then
+	echo "WARNING : Git config repo on $( hostname ) not clean"
+	exit 1
+elif [ $CHECK_REMOTE -eq 1 ]
+then
+	# Check remote exists
+	[ $DEBUG -eq 1 ] && echo -n "Check remote '$GIT_REMOTE' exist : "
+	git remote show "$GIT_REMOTE" > /dev/null 2>&1
+	res=$?
+	[ $DEBUG -eq 1 ] && echo "done. (Return $res)"
+
+	if [ $res -ne 0 ]
+	then
+		echo "UNKNOWN : Unkown remote '$GIT_REMOTE'"
+		exit 3
+	fi
+
+	[ $DEBUG -eq 1 ] && echo -n "Fecth : "
+	git fetch "$GIT_REMOTE" > /dev/null 2>&1
+	res=$?
+	[ $DEBUG -eq 1 ] && echo "done. (Return $res)"
+
+	if [ $res -ne 0 ]
+	then
+		echo "UNKNOWN : Error fetching remote"
+		exit 3
+	fi
+
+	HEAD="$( git show HEAD|grep ^commit )"
+	[ $DEBUG -eq 1 ] && echo "Local : $HEAD"
+
+	ORIGIN="$( git show origin|grep ^commit )"
+	[ $DEBUG -eq 1 ] && echo "Remote : $ORIGIN"
+	
+	if [ "$HEAD" != "$ORIGIN" ]
+	then
+		echo "CRITICAL : Git config not uptodate"
+		exit 2
+	fi
+fi
+echo "OK"
+exit 0

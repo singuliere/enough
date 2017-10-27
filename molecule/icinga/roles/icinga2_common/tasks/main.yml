@@ -1,0 +1,25 @@
+---
+- name: retrieve the process user name
+  shell: ps -o'user' `pgrep icinga2` | tail -n 1
+  register: command_output
+  changed_when: False
+
+- set_fact:
+    icinga_user: "{{ command_output.stdout }}"
+
+- name: install check_git on icinga-host
+  copy:
+    src: files/check_git
+    dest: /usr/lib/nagios/plugins/check_git
+    mode: 0755
+
+- name: install sudo file for check_git on icinga-host
+  template:
+    dest: /etc/sudoers.d/icinga2_check_git
+    src: templates/icinga2_check_git
+
+- name: reload icinga2 configuration
+  systemd:
+    name: icinga2
+    state: reloaded
+  changed_when: False
