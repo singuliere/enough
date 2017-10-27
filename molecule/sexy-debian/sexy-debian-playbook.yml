@@ -1,0 +1,7 @@
+---
+- name: configure Debian as we love
+  hosts: [ 'all' ]
+  become: true
+
+  roles:
+    - role: sexy-debian
