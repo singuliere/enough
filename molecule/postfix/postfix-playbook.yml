@@ -64,6 +64,7 @@
         - name: 'mynetworks'
           value:
             - name: '0.0.0.0/0'
+        - mydestination: [ "{{ domain }}" ]
       postfix__restrictions_maincf: []
 
       postfix__dependent_maincf:
