@@ -86,7 +86,12 @@
       alias cp='cp -i'
       alias mv='mv -i'
 
-- name: install vimrc
+- name: install fancy vimrc
   copy:
     src: files/vimrc
     dest: /etc/vim/vimrc
+
+- name: configure $editor
+  alternatives:
+    name: editor
+    path: /usr/bin/vim.basic
