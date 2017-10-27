@@ -1,0 +1,1 @@
+{{ icinga_user }} ALL=NOPASSWD: /usr/lib/nagios/plugins/check_git -g *
