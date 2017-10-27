@@ -32,17 +32,6 @@
     name: git
     state: present
 
-- name: install check_git on icinga-host
-  copy:
-    src: files/check_git
-    dest: /usr/local/bin/check_git
-    mode: 0755
-
-- name: install sudo file for check_git on icinga-host
-  template:
-    dest: /etc/sudoers.d/icinga2_check_git
-    src: templates/icinga2_check_git
-
 - name: declare git repo
   # Warn: successives "blockinfile" in the same file require using differents markers
   blockinfile:

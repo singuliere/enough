@@ -8,6 +8,7 @@
 
   roles:
     - role: icinga2_client
+    - role: icinga2_common
 
     - role: monitoring-bind
       bind_zone_name: '{{ domain }}'
