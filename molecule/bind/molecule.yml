@@ -18,6 +18,10 @@ provisioner:
     name: ansible-lint
   env:
     ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../icinga/roles
+  inventory:
+    host_vars:
+      external-host:
+        not_monitored: true
 scenario:
   name: bind
   test_sequence:

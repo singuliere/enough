@@ -1,11 +1,4 @@
 ---
-- import_playbook: ../sexy-debian/sexy-debian-playbook.yml
-- import_playbook: bind-playbook.yml
-- import_playbook: bind-client-playbook.yml
-- import_playbook: ../icinga/icinga-playbook.yml
-- import_playbook: ../icinga/test-icinga-playbook.yml
-- import_playbook: bind-monitoring-playbook.yml
-- import_playbook: test-bind-client-playbook.yml
 
 - name: open port 5665 on firewall for tests
   hosts: localhost
@@ -14,3 +7,10 @@
   roles:
     - role: firewall
       os_security_group_tcp_external: [ 5665 ]
+
+- import_playbook: ../sexy-debian/sexy-debian-playbook.yml
+- import_playbook: bind-playbook.yml
+- import_playbook: bind-client-playbook.yml
+- import_playbook: ../icinga/icinga-playbook.yml
+- import_playbook: bind-monitoring-playbook.yml
+- import_playbook: test-bind-client-playbook.yml

@@ -6,7 +6,5 @@
 
   roles:
     - { role: ansible-role-docker, docker_install_compose: true }
-    - { role: icinga2_client }
-    - { role: icinga2_common }
     - { role: weblate }
   become: True

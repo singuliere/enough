@@ -1,12 +1,4 @@
 ---
-- import_playbook: ../sexy-debian/sexy-debian-playbook.yml
-- import_playbook: icinga-playbook.yml
-
-- name: deploy dummy monitoring object in molecule environment
-  hosts: monitoring-client-host
-  become: true
-  roles:
-    - role: deploy_dummy_monitoring_objects
 
 - name: open port 5665 on firewall for tests
   hosts: localhost
@@ -15,3 +7,12 @@
   roles:
     - role: firewall
       os_security_group_tcp_external: [ 5665 ]
+
+- import_playbook: ../sexy-debian/sexy-debian-playbook.yml
+- import_playbook: icinga-playbook.yml
+
+- name: deploy dummy monitoring object in molecule environment
+  hosts: monitoring-client-host
+  become: true
+  roles:
+    - role: deploy_dummy_monitoring_objects
