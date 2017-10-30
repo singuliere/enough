@@ -16,15 +16,6 @@ provisioner:
     name: ansible-lint
   env:
     ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles
-  inventory:
-    group_vars:
-      all:
-        monitoring_master: icinga-host
-        domain: securedrop.club
-    host_vars:
-      icinga-host:
-        icingaadmins_email: icingaadmins@{{ domain }}
-        vhost_fqdn: _
 scenario:
   name: icinga
   test_sequence:
