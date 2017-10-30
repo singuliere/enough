@@ -1,0 +1,7 @@
+---
+
+- name: deploy dummy monitoring object in molecule environment
+  hosts: monitoring-client-host
+  become: true
+  roles:
+    - role: deploy_dummy_monitoring_objects
