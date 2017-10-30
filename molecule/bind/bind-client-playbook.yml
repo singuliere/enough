@@ -7,9 +7,9 @@
     domain: 'securedrop.club'
 
   roles:
-    - role: jdauphant.dns
+    - role: Oefenweb.ansible-dns
       dns_nameservers: ['{{ hostvars["bind-host"]["ansible_host"] }}']
-      dns_searchs: ['{{ domain }}']
+      dns_searches: ['{{ domain }}']
       dns_domain: '{{ domain }}'
 
   tasks:

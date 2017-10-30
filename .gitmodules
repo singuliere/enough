@@ -16,9 +16,9 @@
 [submodule "roles/bertvv.bind"]
 	path = molecule/bind/roles/bertvv.bind
 	url = https://github.com/dachary/ansible-role-bind
-[submodule "roles/jdauphant.dns"]
-	path = molecule/bind/roles/jdauphant.dns
-	url = https://github.com/jdauphant/ansible-role-dns
 [submodule "molecule/postfix/roles/ansible-opendkim"]
 	path = molecule/postfix/roles/debops.opendkim
 	url = https://github.com/debops/ansible-opendkim
+[submodule "molecule/bind/roles/Oefenweb.ansible-dns"]
+	path = molecule/bind/roles/Oefenweb.ansible-dns
+	url = https://github.com/Oefenweb/ansible-dns
