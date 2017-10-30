@@ -11,6 +11,20 @@ For most of the service definitions, they are based on predefined
 commands which are documented
 `here <https://www.icinga.com/docs/icinga2/latest/doc/10-icinga-template-library/#plugin-check-commands-for-monitoring-plugins>`__.
 
+Monitoring deployment
+---------------------
+
+Monitoring is deployed as long as the playbook
+``molecule/icinga/icinga-playbook.yml`` has been imported. The Icinga2 master
+is defined by the variable ``monitoring_master`` and set to ``icinga-host`` in
+``group_vars/all/infrastructure.yml``. See also
+``host_vars/icinga-host/monitoring.yml`` for specific monitoring attributes.
+
+Each host is monitored by default.
+
+To disable monitoring for some host, you have to define a host variable
+``not_monitored``.
+
 Base system monitoring
 ----------------------
 
