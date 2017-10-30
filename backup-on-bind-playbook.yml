@@ -1,0 +1,7 @@
+---
+- name: setup backup
+  hosts: bind-host
+  become: true
+
+  roles:
+    - backup
