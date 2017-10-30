@@ -19,9 +19,9 @@ This has the benefits that configuration objects may be pushed from
 master to clients, so you can absolutely forget the ugly "NRPE commands"
 files.
 
-Our master server deploiement is defined in ``molecule/icinga/roles/icinga2``.
+Our master server deployment is defined in ``molecule/icinga/roles/icinga2``.
 
-Our client deploiement is defined in ``molecule/icinga/roles/icinga2_client``.
+Our client deployment is defined in ``molecule/icinga/roles/icinga2_client``.
 
 By the way, executables checks are still managed locally on each computer, as
 well as required sudo perms. To deploy it, a common role is defined in
@@ -59,12 +59,12 @@ By doing this, you roughly define manually one service for each check you will
 enable.
 
 Adding a new check means copy/pasting a service, which is not terribly
-aesthetic (think about how does looks like the conf for one hundred of http
+aesthetic (think about how does looks like the configuration for one hundred of http
 vhosts). Moreover it is not very clever: think about monitoring a http host.
 Maybe you would like to monitor (at least) an answer on :80, another on :443,
 and also the validity of the certificate. Doing this Nagios in the Nagios way
 means that you will copy/paste 3 times the same-but-not-exactly service (again,
-think about how does looks like the conf for one hundred vhosts). And by doing
+think about how does looks like the configuration for one hundred vhosts). And by doing
 this, each extra check will bloat your configuration.
 
 Automation could help us to manage this kind of stuff. But I would not be
@@ -116,7 +116,7 @@ with an host which simply contains this kind of declaration:
       }
 
 Well, fortunately the description may add a list of some attended
-strings at some given uri, and any other parameter of your choice,
+strings at some given URI, and any other parameter of your choice,
 provided that you write the code which will exploit it.
 
 The main monitoring configuration for securedrop.club is available in

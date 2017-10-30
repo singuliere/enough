@@ -2,8 +2,8 @@ Monitoring howto
 ================
 
 As explained in "Object logic style vs Apply logic style" we
-follow an "apply logic style" for icinga 2 configuration, with is
-pretty well suited for generic monitoring setup on homogenous clusters.
+follow an "apply logic style" for Icinga 2 configuration, with is
+pretty well suited for generic monitoring setup on homogeneous clusters.
 Fortunately it does not disallow adding isolated services (à la Nagios),
 so future exceptions to the rules may be handled this way.
 
@@ -28,21 +28,21 @@ To disable monitoring for some host, you have to define a host variable
 Base system monitoring
 ----------------------
 
-For each host we: 
+For each host we:
 
--  check ping (default host check in icinga) 
--  check ssh 
--  check apt 
+-  check ping (default host check in Icinga)
+-  check ssh
+-  check apt
 -  check etckeeper
--  check icinga 
--  check load 
--  check procs 
--  check swap when ``vars.swap`` is defined 
--  check users 
--  check run\_kernel (check if it run the most up-to-date kernel) 
+-  check icinga
+-  check load
+-  check procs
+-  check swap when ``vars.swap`` is defined
+-  check users
+-  check run\_kernel (check if it run the most up-to-date kernel)
 -  check fail2ban process
--  check sshd process 
--  check rsyslogd process 
+-  check sshd process
+-  check rsyslogd process
 -  check icinga2 process
 -  check cron process
 
@@ -132,9 +132,9 @@ A host can declare hosting web at a given fqdn:
         http_string = "devops discussions"
       }
 
--  Each fqdn is processed via ``check_http`` from icinga master and
+-  Each fqdn is processed via ``check_http`` from Icinga master and
    should provide ``http_string`` in answer's body.
--  Each fqdn is processed via ``check_http`` from icinga master and
+-  Each fqdn is processed via ``check_http`` from Icinga master and
    should *not* provide some strings in the answer. It is useful to
    prevent from accidentally deploy spywares. For now, spywares checked
    are:
