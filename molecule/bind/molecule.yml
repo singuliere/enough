@@ -23,9 +23,6 @@ provisioner:
       # Path is relative to .molecule folder
       group_vars: ../../../group_vars
       host_vars:  ../../../host_vars
-    host_vars:
-      external-host:
-        not_monitored: true
 scenario:
   name: bind
   test_sequence:
