@@ -23,7 +23,7 @@ def sloppy_get(url, headers={}, auth=None):
     s.auth = auth
     s.headers.update(headers)
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    r = s.get(url, verify=False)
+    r = s.get(url, verify=False, timeout=5)
     r.raise_for_status()
     return r
 
