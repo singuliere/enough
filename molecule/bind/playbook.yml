@@ -6,3 +6,11 @@
 - import_playbook: ../icinga/test-icinga-playbook.yml
 - import_playbook: bind-monitoring-playbook.yml
 - import_playbook: test-bind-client-playbook.yml
+
+- name: open port 5665 on firewall for tests
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - role: firewall
+      os_security_group_tcp_external: [ 5665 ]

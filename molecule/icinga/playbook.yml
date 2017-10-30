@@ -7,3 +7,11 @@
   become: true
   roles:
     - role: deploy_dummy_monitoring_objects
+
+- name: open port 5665 on firewall for tests
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - role: firewall
+      os_security_group_tcp_external: [ 5665 ]
