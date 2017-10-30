@@ -35,8 +35,8 @@ def test_icinga_api_hosts(host):
             get_auth(host),
             )
     answer = r.json()
-    assert len(answer['results']) == 2
-    assert set([h['name'] for h in answer['results']]) == set(['icinga-host', 'monitoring-client-host'])
+    assert len(answer['results']) == 3
+    assert set([h['name'] for h in answer['results']]) == set(['icinga-host', 'monitoring-client-host', 'monitoring-client2-host'])
 
 def test_icinga_api_services (host):
     address = get_master_address(host)
@@ -46,4 +46,4 @@ def test_icinga_api_services (host):
             get_auth(host),
             )
     answer = r.json()
-    assert len(answer['results']) > 30
+    assert len(answer['results']) > 40
