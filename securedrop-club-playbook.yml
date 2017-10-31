@@ -2,7 +2,7 @@
 - import_playbook: molecule/sexy-debian/sexy-debian-playbook.yml
 - import_playbook: molecule/bind/bind-playbook.yml
 - import_playbook: molecule/bind/bind-client-playbook.yml
-- import_playbook: molecule/authorized_keys/playbook.yml
+- import_playbook: molecule/authorized_keys/authorized-keys-playbook.yml
 - import_playbook: backup-on-bind-playbook.yml
 - import_playbook: molecule/icinga/icinga-playbook.yml
 - import_playbook: molecule/bind/bind-monitoring-playbook.yml
