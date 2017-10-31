@@ -12,7 +12,7 @@
   # blockinfile rely on unique markers to not squeeze multiple blocks
   blockinfile:
     content: "{{ item.stdout }}"
-    path: /var/cache/bind/securedrop.club
+    path: "/var/cache/bind/{{ domain }}"
     marker: ";; {mark} {{ item.stdout|regex_search('----- (DKIM key.*)$') }}"
   with_items: "{{ output.results }}"
   delegate_to: bind-host
