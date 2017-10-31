@@ -24,10 +24,10 @@ def test_icingaweb2_login_screen(host):
     s = requests.Session()
     r = s.get('https://{address}/icingaweb2/authentication/login'.format(
         address=address,
-    ))
+    ), timeout=5)
     cookies= dict(r.cookies)
     r = s.get('https://{address}/icingaweb2/authentication/login?_checkCookie=1'.format(
         address=address,
-    ), cookies=cookies)
+    ), cookies=cookies, timeout=5)
     r.raise_for_status()
     assert 'Icinga Web 2 Login' in r.text

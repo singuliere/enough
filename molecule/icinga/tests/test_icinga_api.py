@@ -23,7 +23,7 @@ def sloppy_get(url, headers={}, auth=None):
     s.auth = auth
     s.headers.update(headers)
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    r = s.get(url, verify=False)
+    r = s.get(url, verify=False, timeout=5)
     r.raise_for_status()
     return r
 
@@ -35,8 +35,8 @@ def test_icinga_api_hosts(host):
             get_auth(host),
             )
     answer = r.json()
-    assert len(answer['results']) == 2
-    assert set([h['name'] for h in answer['results']]) == set(['icinga-host', 'monitoring-client-host'])
+    assert len(answer['results']) == 3
+    assert set([h['name'] for h in answer['results']]) == set(['icinga-host', 'monitoring-client-host', 'monitoring-client2-host'])
 
 def test_icinga_api_services (host):
     address = get_master_address(host)
@@ -46,4 +46,4 @@ def test_icinga_api_services (host):
             get_auth(host),
             )
     answer = r.json()
-    assert len(answer['results']) > 30
+    assert len(answer['results']) > 40

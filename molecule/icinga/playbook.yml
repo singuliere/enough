@@ -1,5 +1,6 @@
 ---
+
 - import_playbook: ../sexy-debian/sexy-debian-playbook.yml
 - import_playbook: icinga-playbook.yml
 - import_playbook: test-icinga-playbook.yml
-- import_playbook: test-icinga-client-playbook.yml
+- import_playbook: test-monitoring-deployment-playbook.yml

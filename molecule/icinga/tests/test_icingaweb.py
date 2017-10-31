@@ -27,8 +27,8 @@ def test_icingaweb2_login_screen(host):
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         proto_srv= "http://{address}".format(address=get_master_address(host))
     s = requests.Session()
-    r = s.get(proto_srv+'/icingaweb2/authentication/login')
+    r = s.get(proto_srv+'/icingaweb2/authentication/login', timeout=5)
     cookies= dict(r.cookies)
-    r = s.get(proto_srv+'/icingaweb2/authentication/login?_checkCookie=1', cookies=cookies)
+    r = s.get(proto_srv+'/icingaweb2/authentication/login?_checkCookie=1', cookies=cookies, timeout=5)
     r.raise_for_status()
     assert 'Icinga Web 2 Login' in r.text
