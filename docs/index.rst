@@ -1,12 +1,20 @@
-Welcome to SecureDropClub's documentation!
-==========================================
+securedrop.club documentation
+=============================
 
-Everything you always wanted to know about the `securedrop.club infrastructure <http://lab.securedrop.club/main/securedrop-club>`__ (but were afraid to ask).
+The `securedrop.club infrastructure
+<http://lab.securedrop.club/main/securedrop-club>`_ supports the
+development of `SecureDrop <https://securedrop.org>`_. It is
+maintained by a :doc:`community of individuals <team>` organized
+:doc:`horizontaly <contribute>`. 
 
 .. toctree::
-  :caption: Monitoring
-  :name: Monitoring
+  :caption: securedrop.club
+  :name: securedrop.club
   :maxdepth: 2
   
+  contribute
+  team
+  DNS
+  hosting
   monitoring_architecture
   monitoring_howto
