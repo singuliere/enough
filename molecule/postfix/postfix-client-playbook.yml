@@ -1,0 +1,27 @@
+---
+- name: install postfix clients
+  hosts: "{{ groups['all'] | difference(['postfix-host']) }}"
+  become: True
+
+  environment: '{{ inventory__environment | d({})
+                   | combine(inventory__group_environment | d({}))
+                   | combine(inventory__host_environment  | d({})) }}'
+  roles:
+
+    - role: debops.postfix/env
+
+    - role: debops.secret
+      secret__directories:
+        - '{{ postfix__secret__directories     | d([])}}'
+
+    - role: debops.postfix
+      postfix__mailname: '{{ domain }}'
+      postfix__fqdn: '{{ inventory_hostname }}.{{ domain }}'
+      postfix__relayhost: '[{{ hostvars["postfix-host"]["ansible_default_ipv4"]["address"] }}]:465'
+      postfix__maincf:
+        - name: 'smtp_tls_security_level'
+          value: 'encrypt'
+          section: 'smtp-tls'
+        - name: 'smtp_tls_wrappermode'
+          value: 'yes'
+          section: 'smtp-tls'
