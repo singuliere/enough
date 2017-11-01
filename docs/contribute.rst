@@ -24,3 +24,77 @@ Resources
 * License: AGPLv3
 * :doc:`Who's who <team>`
 * Requirements: integration tests
+
+Getting started
+---------------
+
+* git submodule update --init
+* apt-get install virtualenv
+* deactivate || true ; source bootstrap
+* # get OpenStack credentials and store then in openrc.sh
+* source openrc.sh
+* openstack server list # should successfully return nothing on a new tenant
+* cp clouds.yml.example clouds.yml
+* molecule converge -s bind # run ansible
+* molecule verify -s bind # run tests
+* molecule login -s bind --host bind-host # should ssh to the machine
+* molecule destroy -s bind # destroy the virtual machine and cleanup the tenant
+
+Ansible repository layout
+-------------------------
+
+The `ansible repository
+<http://lab.securedrop.club/main/securedrop-club/>`_ groups playbooks
+and roles in separate directories to reduce the number of files a to
+consider when working on improving a playbook or a role service.
+
+* `molecule/authorized_keys`: distribute SSH public keys
+* `molecule/backup`: daily VMs snapshots
+* `molecule/bind`: DNS server and client
+* `molecule/icinga`: resources monitoring
+* `molecule/infrastructure`: VMs creation and firewalling
+* `molecule/postfix`: outgoing mail relay for all VMs
+* `molecule/sexy-debian`: optional tools that debian users like to work with
+* `molecule/weblate`: `weblate <https://weblate.org/>`_ for
+  `securedrop.club <https://weblate.securedrop.club>`_
+
+The toplevel directory contains the `playbook that applies to the
+securedrop.club production environment
+<http://lab.securedrop.club/main/securedrop-club/blob/master/securedrop-club-playbook.yml>`_. It
+is a list of playbooks imported from each of the subdirectories listed
+above.
+
+Integration testing
+-------------------
+
+Unit tests are welcome, integration tests are mandatory. When
+modifying a role or a playbook in the directory `molecule/ABC` one is
+expected to add a test for the new behavior and verify it runs
+successfully:
+
+* molecule test -s ABC
+
+Ansible being declarative for the most part, unit tests are only
+beneficial to verify loops and conditionals work as expected. For
+instance by checking a file is created only if **--tag something** is
+provided.  An integration test is necessary to checks if the service
+is actually working. For instance the integration tests for weblate
+trigger request that the weblate server sends a mail and verify it is
+relayed by the postfix mail server.
+
+When possible integration tests should be created as icinga monitoring
+checks so they can be run on a regular basis in the production
+environment to verify it keeps working.
+
+After all tests pass, integration with online services must be
+verified manually with:
+
+* molecule create -s weblate
+* edit the :doc:`gandi zone <bind>` to set ns1-test to the IP of the bind-host VM
+* wait 1h for DNS propagation
+* ansible-playbook --private-key id_rsa \
+                   --user debian -i openstack.py \
+                   -e domain=test.securedrop.club \
+                   securedrop-club-playbook.yml
+* manually verify `weblate.test.securedrop.club` etc. integration with
+  online services such as GitHub authentication
