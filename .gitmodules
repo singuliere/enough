@@ -13,9 +13,6 @@
 [submodule "roles/debops.ansible_plugins"]
 	path = molecule/postfix/roles/debops.ansible_plugins
 	url = https://github.com/debops/ansible-ansible_plugins
-[submodule "roles/bertvv.bind"]
-	path = molecule/bind/roles/bertvv.bind
-	url = https://github.com/dachary/ansible-role-bind
 [submodule "molecule/postfix/roles/ansible-opendkim"]
 	path = molecule/postfix/roles/debops.opendkim
 	url = https://github.com/debops/ansible-opendkim

@@ -14,71 +14,82 @@
 
   vars:
     domain: 'securedrop.club'
-    bind_zone_hosts_dynamic: |
-      [
-        {% for host, info in hostvars.items() %}
-        {
-          'name': '{{ host }}',
-          'ip': '{{ info.ansible_host }}',
-          'aliases': ['{{ host|replace("-host","") }}'],
-        },
-        {% endfor %}
-      ]
-    bind_zone_hosts_static:
-      - name: ns1
-        ip: '{{ hostvars["bind-host"]["ansible_host"] }}'
-      - name: ns1-test
-        ip: 1.2.3.4
-      - name: ansible
-        ip: 54.36.113.45
-      - name: lab
-        ip: 145.239.15.86
-      - name: demo
-        ip: 147.135.193.226
-        aliases: [ 'journalist.demo', 'source.demo' ]
-      - name: i18n
-        ip: 54.36.52.252
-        aliases: [ 'journalist.i18n', 'source.i18n' ]
-      - name: '@'
-        ip: 217.182.87.182
-      - name: forum
-        ip: 217.182.87.182
-        aliases: [ 'www' ]
-      - name: relay.mail.gandi.net.
-        aliases: [ 'smtp' ]
-      - name: access.mail.gandi.net.
-        aliases: [ 'pop', 'imap' ]
-
   roles:
-    - role: bertvv.bind
-      bind_allow_query:
-        - any
-      bind_listen_ipv4:
-        - any
-      bind_recursion: true
-      bind_allow_recursion: |
-        [
+    - role: bind
+      bind_zone_name: "{{ domain }}"
+      bind_master:
+        - |
+          options {
+            directory "/var/cache/bind";
+            auth-nxdomain no;    # conform to RFC1035
+            listen-on-v6 { any; };
+            allow-query { any; };
+            recursion yes;
+            allow-recursion {
+              {% for host, info in hostvars.items() %}
+              {% if host != 'external-host' %}
+              {{ info.ansible_host }}; # {{ host }}
+              {% endif %}
+              {% endfor %}
+            };
+            allow-transfer  {
+              217.70.177.40/32; # ns6.gandi.net
+            };
+          };
+
+          include "/etc/bind/named.conf.default-zones";
+
+          zone "{{ domain }}" IN {
+            type master;
+            file "{{ domain }}";
+            notify yes;
+            allow-update { none; };
+          };
+
+      bind_zone:
+        - |
+          $ORIGIN {{ domain }}.
+          $TTL 1W
+
+          @ IN SOA ns1.{{ domain }}. hostmaster.{{ domain }}. (
+          {{ bind_timestamp.stdout }}
+          1D
+          1H
+          1W
+          1D )
+
+                     IN  NS     ns1.{{ domain }}.
+                     IN  NS     ns6.gandi.net.
+
+          @ 1800 IN A 217.182.87.182
+          ns1 1800 IN A {{ hostvars[inventory_hostname].ansible_host }}
+
+          ansible 1800 IN A 54.36.113.45
+
+          demo 1800 IN A 147.135.193.226
+          journalist.demo 1800 IN CNAME demo
+          source.demo 1800 IN CNAME demo
+
+          i18n 1800 IN A 54.36.52.252
+          source.i18n 1800 IN CNAME i18n
+          journalist.i18n 1800 IN CNAME i18n
+
+          forum 1800 IN A 217.182.87.182
+          www 1800 IN CNAME forum
+
+          lab 1800 IN A 145.239.15.86
+
+          ns1-test 1800 IN A 54.37.76.14
+          test 1800 IN NS ns1-test.securedrop.club.
+
+          imap 1800 IN CNAME access.mail.gandi.net.
+          pop 1800 IN CNAME access.mail.gandi.net.
+          smtp 1800 IN CNAME relay.mail.gandi.net.
+
+          @ 1800 IN MX 50 fb.mail.gandi.net.
+          @ 1800 IN MX 10 spool.mail.gandi.net.
+
           {% for host, info in hostvars.items() %}
-          {% if host != 'external-host' %}
-          '{{ info.ansible_host }}',
-          {% endif %}
+          {{ host }} 1800 IN A {{ info.ansible_host }}
+          {{ host|replace("-host","") }} 1800 IN CNAME {{ host }}
           {% endfor %}
-        ]
-      bind_zone_name: '{{ domain }}'
-      bind_zone_master_server_ip: '{{ hostvars["bind-host"]["ansible_host"] }}'
-      bind_zone_name_servers:
-        - ns1
-      bind_zone_hosts: '{{ bind_zone_hosts_dynamic + bind_zone_hosts_static }}'
-      bind_zone_delegate:
-        - zone: test
-          dns: ns1-test.securedrop.club.
-      bind_zone_mail_servers:
-        - name: fb.mail.gandi.net.
-          preference: 50
-        - name: spool.mail.gandi.net.
-          preference: 10
-      bind_zone_text:
-        - name: '@'
-          text: 'v=spf1 mx ?all'
-        - name: '_dmarc'
-          text: 'v=DMARC1; p=none;'

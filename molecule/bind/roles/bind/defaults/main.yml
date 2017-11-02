@@ -1,0 +1,11 @@
+---
+bind_zone: []
+bind_master:
+  - |
+      options {
+         directory "/var/cache/bind";
+         auth-nxdomain no;    # conform to RFC1035
+         listen-on-v6 { any; };
+      };
+      include "/etc/bind/named.conf.default-zones";
+
