@@ -1,6 +1,6 @@
 ---
 - name: install postfix clients
-  hosts: "all:!postfix_relays"
+  hosts: "all:!postfix-host"
   become: True
 
   environment: '{{ inventory__environment | d({})
@@ -17,7 +17,7 @@
     - role: debops.postfix
       postfix__mailname: '{{ domain }}'
       postfix__fqdn: '{{ inventory_hostname }}.{{ domain }}'
-      postfix__relayhost: '[{{ hostvars[groups["postfix_relays"][0]]["ansible_default_ipv4"]["address"] }}]:465'
+      postfix__relayhost: '[{{ hostvars["postfix-host"]["ansible_default_ipv4"]["address"] }}]:465'
       postfix__maincf:
         - name: 'smtp_tls_security_level'
           value: 'encrypt'

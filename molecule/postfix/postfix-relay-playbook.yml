@@ -9,7 +9,7 @@
       os_security_group_tcp: [ 465 ]
 
 - name: install and configure postfix relay
-  hosts: 'postfix_relays'
+  hosts: 'postfix-host'
   become: True
 
   environment: '{{ inventory__environment | d({})
