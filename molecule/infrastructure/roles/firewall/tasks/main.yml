@@ -15,10 +15,8 @@
   os_security_group:
     <<: *os_auth
     state: "{{ state }}"
-    name: "{{ item }}"
+    name: securedrop-club
     description: security group for securedrop-club servers
-  with_items:
-    - [ securedrop-club, securedrop-club-external ]
 
 - block:
 
@@ -79,7 +77,7 @@
   - name: security group rule for ICMP (external)
     os_security_group_rule:
       <<: *os_auth
-      security_group: securedrop-club-external
+      security_group: securedrop-club
       protocol: icmp
       remote_ip_prefix: 0.0.0.0/0
     when: os_security_group_icmp
