@@ -27,18 +27,27 @@
     bind_zone_hosts_static:
       - name: ns1
         ip: '{{ hostvars["bind-host"]["ansible_host"] }}'
+      - name: ns1-test
+        ip: 1.2.3.4
+      - name: ansible
+        ip: 54.36.113.45
       - name: lab
         ip: 145.239.15.86
-
-    bind_zone_mail_servers: |
-      [
-        {% if "postfix-host" in hostvars.items() %}
-        {
-        name: "postfix-host",
-          preference: 10,
-        },
-        {% endif %}
-      ]
+      - name: demo
+        ip: 147.135.193.226
+        aliases: [ 'journalist.demo', 'source.demo' ]
+      - name: i18n
+        ip: 54.36.52.252
+        aliases: [ 'journalist.i18n', 'source.i18n' ]
+      - name: '@'
+        ip: 217.182.87.182
+      - name: forum
+        ip: 217.182.87.182
+        aliases: [ 'www' ]
+      - name: relay.mail.gandi.net.
+        aliases: [ 'smtp' ]
+      - name: access.mail.gandi.net.
+        aliases: [ 'pop', 'imap' ]
 
   roles:
     - role: bertvv.bind
@@ -60,6 +69,14 @@
       bind_zone_name_servers:
         - ns1
       bind_zone_hosts: '{{ bind_zone_hosts_dynamic + bind_zone_hosts_static }}'
+      bind_zone_delegate:
+        - zone: test
+          dns: ns1-test.securedrop.club.
+      bind_zone_mail_servers:
+        - name: fb.mail.gandi.net.
+          preference: 50
+        - name: spool.mail.gandi.net.
+          preference: 10
       bind_zone_text:
         - name: '@'
           text: 'v=spf1 mx ?all'
