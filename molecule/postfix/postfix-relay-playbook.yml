@@ -9,7 +9,7 @@
       os_security_group_tcp: [ 465 ]
 
 - name: install and configure postfix relay
-  hosts: postfix-host
+  hosts: 'postfix_relays'
   become: True
 
   environment: '{{ inventory__environment | d({})
@@ -69,7 +69,7 @@
 
     - role: debops.opendkim
       opendkim__domain: '{{ domain }}'
-      opendkim__fqdn: 'postfix-host.{{ domain }}'
+      opendkim__fqdn: '{{ inventory_hostname }}.{{ domain }}'
       opendkim__trusted_hosts: "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | list }}"
       opendkim__config:
         - name: 'SyslogSuccess'

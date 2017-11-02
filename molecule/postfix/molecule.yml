@@ -6,6 +6,8 @@ lint:
 platforms:
   - name: postfix-host
     flavor: "s1-2"
+    groups:
+      - "postfix_relays"
   - name: postfix-client-host
     flavor: "s1-2"
   - name: bind-host
