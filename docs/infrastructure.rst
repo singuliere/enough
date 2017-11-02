@@ -10,12 +10,12 @@ All virtual machines are in the OVH OpenStack cloud, under the user
 The following OpenStack projects have been defined:
 
 * **Contributors**
-   - Region **SBG3**: all manually created VMS, before Ansible was
+   - Region **GRA3**: all manually created VMS, before Ansible was
      introduced.
    - Region **DE1**: used for testing by Loïc Dachary
-   - Region **GRA3**: used for testing by François Poulain
+   - Region **SBG3**: used for testing by François Poulain
 
-.. note:: the **SBG3** region will eventually be empty when all
+.. note:: the **GRA3** region will eventually be empty when all
           resources are migrated to use Ansible
 
 * **SecureDrop**
