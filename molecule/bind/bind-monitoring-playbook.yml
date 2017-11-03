@@ -3,9 +3,6 @@
   hosts: bind-host
   become: True
 
-  vars:
-    domain: 'securedrop.club'
-
   roles:
     - role: monitoring-bind
       bind_zone_name: '{{ domain }}'

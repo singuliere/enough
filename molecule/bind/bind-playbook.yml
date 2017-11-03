@@ -13,8 +13,6 @@
   hosts: bind-host
   become: True
 
-  vars:
-    domain: 'securedrop.club'
   roles:
     - role: bind
       bind_zone_name: "{{ domain }}"
@@ -84,7 +82,7 @@
           lab 1800 IN A 145.239.15.86
 
           ns1-test 1800 IN A 54.37.76.14
-          test 1800 IN NS ns1-test.securedrop.club.
+          test 1800 IN NS ns1-test.{{ domain }}.
 
           imap 1800 IN CNAME access.mail.gandi.net.
           pop 1800 IN CNAME access.mail.gandi.net.
