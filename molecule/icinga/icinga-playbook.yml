@@ -14,27 +14,24 @@
 
 - name: install icinga master
 
-  hosts: all
+  hosts: icinga-host
   become: true
   tasks:
 
   - name: install icinga master
     include_role:
       name: icinga2
-    when:
-      - 'monitoring_master == inventory_hostname'
 
   - name: install letsencrypt
     include_role:
       name: certbot-nginx
     when:
-      - 'monitoring_master == inventory_hostname'
       - 'with_https is defined'
 
 
 
 - name: install icinga clients
-  hosts: all
+  hosts: 'all:!icinga-host'
   become: true
   tasks:
 
@@ -42,7 +39,6 @@
     include_role:
       name: icinga2_client
     when:
-      - 'monitoring_master != inventory_hostname'
       - 'not_monitored is undefined'
 
 
