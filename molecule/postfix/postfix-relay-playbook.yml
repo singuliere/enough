@@ -17,31 +17,10 @@
                    | combine(inventory__host_environment  | d({})) }}'
   roles:
 
-    - role: debops.etc_aliases/env
     - role: debops.postfix/env
-    - role: debops.opendkim/env
     - role: debops.secret
       secret__directories:
-        - '{{ etc_aliases__secret__directories | d([])}}'
         - '{{ postfix__secret__directories     | d([])}}'
-        - '{{ opendkim__secret__directories    | d([])}}'
-
-    - role: debops.etc_aliases
-      etc_aliases__recipients:
-
-        - admins: ['loic@dachary.org', 'fpoulain@metrodore.fr']
-
-        - icingaadmins: 'admins'
-        - root:         'admins'
-        - noc:          'admins'
-        - security:     'admins'
-        - abuse:        'admins'
-        - postmaster:   'admins'
-        - hostmaster:   'admins'
-        - webmaster:    'admins'
-
-        - devnull:      '/dev/null'
-        - noreply:      '/dev/null'
 
     - role: debops.postfix
       postfix__mailname: '{{ domain }}'
@@ -60,21 +39,4 @@
         - name: 'mynetworks'
           value:
             - name: '0.0.0.0/0'
-        - mydestination: [ "{{ domain }}" ]
       postfix__restrictions_maincf: []
-
-      postfix__dependent_maincf:
-        - role: 'opendkim'
-          config: '{{ opendkim__postfix__dependent_maincf }}'
-
-    - role: debops.opendkim
-      opendkim__domain: '{{ domain }}'
-      opendkim__fqdn: '{{ inventory_hostname }}.{{ domain }}'
-      opendkim__trusted_hosts: "{{ groups['all'] | map('extract', hostvars, ['ansible_host']) | list }}"
-      opendkim__config:
-        - name: 'SyslogSuccess'
-          comment: 'Needed by molecule verify'
-          value: 'Yes'
-          state: "present"
-
-    - role: install_dkim_keys
