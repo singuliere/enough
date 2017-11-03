@@ -45,6 +45,7 @@ any securedrop.club's administrator to setup new preproduction testing
 subdomains. Exemple:
 
 ::
+
   \ SD / debian@bind-host:~$ nsupdate <<EOF
   server localhost
   zone test.securedrop.club
