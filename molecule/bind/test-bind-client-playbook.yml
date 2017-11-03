@@ -1,6 +1,6 @@
 ---
-- name: prepare test client
-  hosts: bind-client-host
+- name: prepare test clients
+  hosts: [ bind-client-host, external-host ]
   become: True
 
   tasks:
