@@ -15,22 +15,34 @@ hosted at Gandi and is used as the primary contact for all
 `securedrop.club` resources (hosting etc.). In case a password is lost
 this is the mail receiving the link to reset the password etc.
 
-Zone
-----
+Zones
+-----
+
+securedrop.club
+```````````````
 
 The `securedrop.club` zone is managed on a dedicated virtual machine
 `ns1.securedrop.club`. It is generated via `the bind playbook
 <http://lab.securedrop.club/main/securedrop-club/blob/master/molecule/bind/bind-playbook.yml>`_.
 
-.. note:: as of November 2017 the zone is still hosted on the
-          gandi.net servers and the migration is in progress.
 
 * The port udp/53 is open to all but recursion is only allowed for IPs
   of the securedrop-club VMs
 * An **A** record is created for all existing VM names
 * A **CNAME** record is created for all VM names without the `-host` suffix
 * Manually maintained records are added to `the bind playbook <http://lab.securedrop.club/main/securedrop-club/blob/master/molecule/bind/bind-playbook.yml>`_.
-* The `dmarc` and `SPF` **TXT** records help :doc:`send mail <postfix>` successfully.
+* The `SPF` **TXT** record help :doc:`send mail <postfix>` successfully.
+
+test.securedrop.club
+````````````````````
+
+The `test.securedrop.club` zone is managed on the same dedicated virtual machine
+`ns1.securedrop.club`. It is generated via `the bind playbook
+<http://lab.securedrop.club/main/securedrop-club/blob/master/molecule/bind/bind-playbook.yml>`_.
+
+It can be updated locally by the ``debian`` user via ``nsupdate``. This allow
+any securedrop.club's administrator to setup new preproduction testing
+subdomains.
 
 VMs resolvers
 -------------
