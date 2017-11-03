@@ -42,7 +42,17 @@ The `test.securedrop.club` zone is managed on the same dedicated virtual machine
 
 It can be updated locally by the ``debian`` user via ``nsupdate``. This allow
 any securedrop.club's administrator to setup new preproduction testing
-subdomains.
+subdomains. Exemple:
+
+::
+  \ SD / debian@bind-host:~$ nsupdate <<EOF
+  server localhost
+  zone test.securedrop.club
+  update add bling.test.securedrop.club. 1800 TXT "Updated by nsupdate"
+  show
+  send
+  quit
+  EOF
 
 VMs resolvers
 -------------
