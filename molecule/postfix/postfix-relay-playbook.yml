@@ -41,4 +41,4 @@
             - name: '0.0.0.0/0'
       postfix__restrictions_maincf: []
 
-    - role: install_dkim_keys
+    - role: install_dns_mail_records
