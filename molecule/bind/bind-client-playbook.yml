@@ -3,9 +3,6 @@
   hosts: [ 'all' ]
   become: True
 
-  vars:
-    domain: 'securedrop.club'
-
   roles:
     - role: Oefenweb.ansible-dns
       dns_nameservers: ['{{ hostvars["bind-host"]["ansible_host"] }}']
