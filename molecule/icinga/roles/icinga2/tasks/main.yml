@@ -1,7 +1,4 @@
 ---
-- set_fact:
-    icingaweb2_user:      "icingaadmin"
-    icingaweb2_user_pass: "zoR9thie6Phud4mooYoo"
 
 - name: apt-get install icinga2 and friends
   apt:
