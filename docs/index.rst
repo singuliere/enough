@@ -26,3 +26,4 @@ All resources are deployed and maintained via :doc:`ansible <ansible>`.
   monitoring_architecture
   monitoring_howto
   weblate
+  gitlab

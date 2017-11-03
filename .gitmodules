@@ -1,5 +1,5 @@
 [submodule "roles/ansible-role-docker"]
-	path = molecule/weblate/roles/ansible-role-docker
+	path = molecule/infrastructure/roles/ansible-role-docker
 	url = https://github.com/geerlingguy/ansible-role-docker
 [submodule "roles/debops.etc_aliases"]
 	path = molecule/postfix/roles/debops.etc_aliases

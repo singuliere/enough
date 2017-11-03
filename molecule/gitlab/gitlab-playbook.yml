@@ -1,0 +1,9 @@
+---
+- name: install gitlab
+  hosts: gitlab-host
+  gather_facts: False
+
+  roles:
+    - { role: ansible-role-docker, docker_install_compose: false }
+    - { role: gitlab }
+  become: True

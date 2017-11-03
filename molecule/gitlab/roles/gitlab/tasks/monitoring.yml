@@ -1,0 +1,20 @@
+- name: declare http vhost on {{ inventory_hostname }}
+  blockinfile:
+    block: |
+        vars.http_vhosts["GitLab"] = {
+          http_vhost = "gitlab.{{ domain }}"
+          http_uri = "/"
+          http_ssl = true
+          http_string = "GitLab"
+        }
+    insertafter: 'Define httpd services and attributes'
+    path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+    marker: "/* {mark} GitLab */"
+  delegate_to: icinga-host
+
+- name: reload icinga2 configuration
+  systemd:
+    name: icinga2
+    state: reloaded
+  changed_when: False
+  delegate_to: icinga-host
