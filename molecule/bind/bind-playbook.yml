@@ -7,6 +7,7 @@
   roles:
     - role: firewall
       os_security_group_udp_external: [ 53 ]
+      os_security_group_tcp_external: [ 53 ]
 
 - name: setup DNS server
   hosts: bind-host
@@ -33,7 +34,10 @@
               {% endfor %}
             };
             allow-transfer  {
-              217.70.177.40/32; # ns6.gandi.net
+              217.70.177.40; # ns6.gandi.net
+              {% if 'external-host' in hostvars %}
+              {{ hostvars['external-host'].ansible_host }};
+              {% endif %}
             };
           };
 
