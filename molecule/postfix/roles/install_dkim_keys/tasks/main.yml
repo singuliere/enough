@@ -1,27 +1,9 @@
 ---
 
-- name: dump domainkeys in zone format
-  script: secret/opendkim/lib/extract-domainkey-zone {{ item.src }}
-  register: output
-  with_filetree: "secret/opendkim/domainkeys"
-  when: item.state == 'file'
-  delegate_to: localhost
-  become: False
-
-- name: install domainkeys in domain zone
-  # blockinfile rely on unique markers to not squeeze multiple blocks
-  blockinfile:
-    content: "{{ item.stdout }}"
-    path: "/var/cache/bind/{{ domain }}"
-    marker: ";; {mark} {{ item.stdout|regex_search('----- (DKIM key.*)$') }}"
-  with_items: "{{ output.results }}"
-  delegate_to: bind-host
-
 - name: install DNS mail txt records
   blockinfile:
     content: |
       @ 1800 IN TXT "v=spf1 mx ip4:{{ hostvars['postfix-host']['ansible_host'] }} ~all"
-      _dmarc 1800 IN TXT "v=DMARC1; p=none;"
     path: "/var/cache/bind/{{ domain }}"
     marker: ";; {mark} postfix TXT records"
   delegate_to: bind-host
