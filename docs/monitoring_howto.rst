@@ -15,8 +15,8 @@ Monitoring deployment
 ---------------------
 
 Monitoring is deployed as long as the playbook
-``molecule/icinga/icinga-playbook.yml`` has been imported. The Icinga2 master
-is ``icinga-host``. See also ``host_vars/icinga-host/monitoring.yml`` for
+`molecule/icinga/icinga-playbook.yml` has been imported. The Icinga2 master
+is `icinga-host`. See also `host_vars/icinga-host/monitoring.yml` for
 specific deployment attributes: icingaweb credentials, https, virtualhost fqdn.
 
 Each host is monitored by default.
@@ -49,7 +49,7 @@ Git repos monitoring
 --------------------
 
 A host can declare a git repo to be checked (designed originally for
-``etckeeper``):
+`etckeeper`):
 
 ::
 
@@ -59,7 +59,7 @@ A host can declare a git repo to be checked (designed originally for
 
 The git check command is sudoed.
 
-Example of use in a role: ``molecule/icinga/roles/deploy_dummy_monitoring_objects/tasks/main.yml``.
+Example of use in a role: `molecule/icinga/roles/deploy_dummy_monitoring_objects/tasks/main.yml`.
 
 Disk and partitions monitoring
 ------------------------------
@@ -92,7 +92,7 @@ A host can declare any process presence to be checked:
         procs_critical = "1:1"
       }
 
-Example of use in a role: ``molecule/icinga/roles/deploy_dummy_monitoring_objects/tasks/main.yml``.
+Example of use in a role: `molecule/icinga/roles/deploy_dummy_monitoring_objects/tasks/main.yml`.
 
 Mail sending monitoring
 -----------------------
@@ -157,7 +157,7 @@ processes check are executed.
 It is probably easily feasible to associate a list of scripts to each
 fqdn for more advanced checks (check result of a POST, etc.) if needed.
 
-Example of use in a role: ``molecule/weblate/roles/weblate/tasks/monitoring.yml``.
+Example of use in a role: `molecule/weblate/roles/weblate/tasks/monitoring.yml`.
 
 DNS service monitoring
 ----------------------
@@ -175,7 +175,7 @@ expiration):
         view = "external"
       }
 
-Example of use in a role: ``molecule/bind/roles/monitoring-bind/tasks/main.yml``.
+Example of use in a role: `molecule/bind/roles/monitoring-bind/tasks/main.yml`.
 
 Maybe we could add a check dig on the A and NS records, and eventually
 use ``zonemaster`` or a webservice providing ``zonemaster`` results.

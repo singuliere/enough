@@ -40,7 +40,7 @@ The `test.securedrop.club` zone is managed on the same dedicated virtual machine
 `ns1.securedrop.club`. It is generated via `the bind playbook
 <http://lab.securedrop.club/main/securedrop-club/blob/master/molecule/bind/bind-playbook.yml>`_.
 
-It can be updated locally by the ``debian`` user via ``nsupdate``. This allow
+It can be updated locally by the `debian` user via ``nsupdate``. This allow
 any securedrop.club's administrator to setup new preproduction testing
 subdomains. Exemple:
 

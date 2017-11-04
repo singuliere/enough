@@ -19,13 +19,13 @@ This has the benefits that configuration objects may be pushed from
 master to clients, so you can absolutely forget the ugly "NRPE commands"
 files.
 
-Our master server deployment is defined in ``molecule/icinga/roles/icinga2``.
+Our master server deployment is defined in `molecule/icinga/roles/icinga2`.
 
-Our client deployment is defined in ``molecule/icinga/roles/icinga2_client``.
+Our client deployment is defined in `molecule/icinga/roles/icinga2_client`.
 
 By the way, executables checks are still managed locally on each computer, as
 well as required sudo perms. To deploy it, a common role is defined in
-``molecule/icinga/roles/icinga2_common``.
+`molecule/icinga/roles/icinga2_common`.
 
 Last but not least, Icinga2 define "zones", which is a way to control
 information sharing over the monitoring infrastructure. Usually we
@@ -42,7 +42,7 @@ distribute only needed stuffs).
 Molecule test environment
 -------------------------
 
-In ``molecule/icinga``, we define a test environment with a master and a client.
+In `molecule/icinga`, we define a test environment with a master and a client.
 
 Now we have a correct set up for Icinga master and clients, NginX, Icingaweb2
 and Let's Encrypt. Some tests are checking that the playbook is well executed.
@@ -120,7 +120,7 @@ strings at some given URI, and any other parameter of your choice,
 provided that you write the code which will exploit it.
 
 The main monitoring configuration for securedrop.club is available in
-``molecule/icinga/roles/icinga2/files/services/`` and deployed in the
+`molecule/icinga/roles/icinga2/files/services/` and deployed in the
 global Icinga zone, thus available to all the cluster.
 
 By doing so, with a very concise configuration at host level, and a little bit
