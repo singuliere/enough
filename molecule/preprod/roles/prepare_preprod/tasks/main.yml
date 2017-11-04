@@ -1,0 +1,26 @@
+---
+
+- name: generate subdomain
+  shell: date +%S%M%H%d | base64
+  register: cmd
+
+- set_fact:
+    new_domain: "{{ cmd.stdout|lower }}.test.{{ domain }}"
+
+- name: create NS record in test zone
+  shell: |
+    ssh debian@bind-host.{{ domain }} nsupdate <<EOF
+    server localhost
+    zone test.{{ domain }}
+    update add ns-{{ new_domain }}. 1800 A {{ hostvars["bind-host"].ansible_host }}
+    update add {{ new_domain }}. 1800 NS ns-{{ new_domain }}.
+    show
+    send
+    quit
+    EOF
+  become: false
+
+- name: save locally domain for spoofing
+  copy:
+    content: "{{ new_domain }}"
+    dest: "/tmp/testing-domain-for-{{ domain }}"

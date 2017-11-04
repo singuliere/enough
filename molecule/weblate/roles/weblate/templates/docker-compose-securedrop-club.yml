@@ -57,9 +57,9 @@ services:
     restart: always
     environment:
       DOMAINS: '{{ vhost_fqdn }} -> http://{{ vhost_fqdn }}:8000'
-  {% if with_fake_LE is undefined %}
+{% if with_fake_LE is undefined %}
       STAGE: production
-  {% endif %}
+{% endif %}
 {% endif %}
 volumes:
   weblate-data: {}

@@ -19,6 +19,10 @@ def get_master_address(host):
     address = inventory['all']['hosts']['icinga-host']['ansible_host']
     return address
 
+def get_inventory_host_list (host):
+    inventory = yaml.load(open(host.backend.ansible_inventory))
+    return inventory['all']['hosts']
+
 def sloppy_get(url, headers={}, auth=None):
     s = requests.Session()
     s.auth = auth
@@ -28,28 +32,22 @@ def sloppy_get(url, headers={}, auth=None):
     r.raise_for_status()
     return r
 
-def test_zone_monitoring(host):
-    domain = host.run("hostname -d").stdout.strip()
+def test_icinga_api_hosts(host):
     address = get_master_address(host)
     r = sloppy_get(
-            'https://{address}:5665/v1/objects/services?host=bind-host'.format(address=address),
+            'https://{address}:5665/v1/objects/hosts'.format(address=address),
             {'Accept': 'application/json'},
             get_auth(host),
             )
     answer = r.json()
-    assert len([s for s in answer['results'] if ('bind-host!Zone ' + domain) in s['name']]) == 1
+    assert len(answer['results']) == len(get_inventory_host_list (host))
 
-
-
-def test_test_zone_monitoring(host):
-    domain = host.run("hostname -d").stdout.strip()
+def test_icinga_api_services (host):
     address = get_master_address(host)
     r = sloppy_get(
-            'https://{address}:5665/v1/objects/services?host=bind-host'.format(address=address),
+            'https://{address}:5665/v1/objects/services'.format(address=address),
             {'Accept': 'application/json'},
             get_auth(host),
             )
     answer = r.json()
-    assert len([s for s in answer['results'] if ('bind-host!Zone test.' + domain) in s['name']]) == 1
-
-
+    assert len(answer['results']) > 10 * len(get_inventory_host_list (host))

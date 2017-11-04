@@ -1,0 +1,24 @@
+---
+
+- import_playbook: ../icinga/test-icinga-playbook.yml
+- import_playbook: preprod-playbook.yml
+
+- name: assert testing domain has been set for all hosts
+  hosts: 'all:localhost'
+  tasks:
+    - name: test spoofing
+      debug:
+        var: domain
+
+    - assert:
+        that:
+          - '".test." in domain'
+        msg: "{{ domain }} doesn't looks like a preprod testing domain."
+
+- import_playbook: ../../securedrop-club-playbook.yml
+
+- name: recall testing domain name
+  hosts: localhost
+  tasks:
+    - debug:
+        var: domain

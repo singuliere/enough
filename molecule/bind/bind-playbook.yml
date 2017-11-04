@@ -15,6 +15,24 @@
 
   roles:
     - role: bind
+      bind_zone_name: "test.{{ domain }}"
+
+      bind_zone:
+        - |
+          $ORIGIN test.{{ domain }}.
+          $TTL 1W
+
+          @ IN SOA test.{{ domain }}. hostmaster.{{ domain }}. (
+          {{ bind_timestamp.stdout }}
+          1D
+          1H
+          1W
+          1D )
+
+                     IN  NS     ns1.{{ domain }}.
+          @ 1800 IN A {{ hostvars[inventory_hostname].ansible_host }}
+
+    - role: bind
       bind_zone_name: "{{ domain }}"
       bind_master:
         - |
@@ -46,6 +64,13 @@
             file "{{ domain }}";
             notify yes;
             allow-update { none; };
+          };
+
+          zone "test.{{ domain }}" IN {
+            type master;
+            file "test.{{ domain }}";
+            allow-update { localhost; };
+            allow-transfer { "none"; };
           };
 
       bind_zone:
@@ -81,8 +106,7 @@
 
           lab 1800 IN A 145.239.15.86
 
-          ns1-test 1800 IN A 54.37.76.14
-          test 1800 IN NS ns1-test.{{ domain }}.
+          test 1800 IN NS ns1.{{ domain }}.
 
           imap 1800 IN CNAME access.mail.gandi.net.
           pop 1800 IN CNAME access.mail.gandi.net.

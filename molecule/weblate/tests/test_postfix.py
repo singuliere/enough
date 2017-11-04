@@ -4,7 +4,7 @@ import testinfra
 
 testinfra_hosts = ['weblate-host']
 
-def test_weblate(host):
+def test_weblate_send_mail(host):
 
     weblate_host = host
     postfix_host = testinfra.host.Host.get_host(

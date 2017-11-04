@@ -1,0 +1,29 @@
+---
+- name: prepare testing domain
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  roles:
+    - role: prepare_preprod
+
+- name: spoof domain
+  hosts: 'all:localhost'
+
+  tasks:
+    - set_fact:
+        domain_file: "/tmp/testing-domain-for-{{ domain }}"
+
+    - name: deploy domain file on all hosts
+      copy:
+        src: "{{ domain_file }}"
+        dest: "{{ domain_file }}"
+
+    - name: load domain for spoofing
+      set_fact:
+        domain: "{{ lookup ('file', '{{ domain_file }}') }}"
+
+    - name: clean
+      file:
+        path: "{{ domain_file }}"
+        state: absent

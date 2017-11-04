@@ -6,3 +6,5 @@
   roles:
     - role: monitoring-bind
       bind_zone_name: '{{ domain }}'
+    - role: monitoring-bind
+      bind_zone_name: 'test.{{ domain }}'
