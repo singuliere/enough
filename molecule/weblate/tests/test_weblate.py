@@ -1,30 +1,18 @@
+import urllib3
+import re
+import requests
 import pytest
-import time
-import testinfra
+import yaml
 
-testinfra_hosts = ['weblate-host']
+def get_weblate_address(host):
+    inventory = yaml.load(open(host.backend.ansible_inventory))
+    address = inventory['all']['hosts']['weblate-host']['ansible_host']
+    return address
 
-def test_weblate(host):
-
-    weblate_host = host
-    postfix_host = testinfra.host.Host.get_host(
-        'ansible://postfix-host',
-        ansible_inventory=host.backend.ansible_inventory)
-
-    cmd = weblate_host.run("""
-    cd /srv/weblate
-    sudo docker-compose -f docker-compose-securedrop-club.yml exec -T weblate weblate sendtestemail loic+doomtofail@dachary.org
-    """)
-    print(cmd.stdout)
-    print(cmd.stderr)
-    assert 0 == cmd.rc
-
-    check = ("grep -q 'connection established to spool.mail.gandi.net' "
-             "/var/log/mail.log")
-    for _ in range(300):
-        print(check)
-        cmd = postfix_host.run(check)
-        if cmd.rc == 0:
-            break
-        time.sleep(1)
-    assert 0 == postfix_host.run(check).rc
+def test_weblate (host):
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    s = requests.Session()
+    print('http://{}'.format(get_weblate_address (host)))
+    r = s.get('http://{}'.format(get_weblate_address (host)), timeout=5)
+    r.raise_for_status()
+    assert 'Weblate' in r.text

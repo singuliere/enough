@@ -10,7 +10,11 @@ services:
     volumes:
       - weblate-data:/app/data
     ports:
+{% if with_https is defined %}
       - '8000:80'
+{% else %}
+      - '80:80'
+{% endif %}
     env_file:
       - ./environment
     restart: always
@@ -28,7 +32,9 @@ services:
       - WEBLATE_ADMIN_EMAIL={{ WEBLATE_ADMIN_EMAIL }}
       - WEBLATE_ADMIN_PASSWORD={{ WEBLATE_ADMIN_PASSWORD }}
       - WEBLATE_ALLOWED_HOSTS=*
+{% if with_https is defined %}
       - WEBLATE_ENABLE_HTTPS=1
+{% endif %}
       - WEBLATE_REGISTRATION_OPEN=1
       - WEBLATE_SOCIAL_AUTH_GITHUB_KEY=ccd2a029302c4258d5fd
       - WEBLATE_SOCIAL_AUTH_GITHUB_SECRET=eec7c91a552bdda745f8a5108738a4afbf888533
@@ -42,6 +48,7 @@ services:
   cache:
     image: memcached:1.5-alpine
     restart: always
+{% if with_https is defined %}
   https-portal:
     image: steveltn/https-portal:1
     ports:
@@ -49,8 +56,11 @@ services:
       - '443:443'
     restart: always
     environment:
-      DOMAINS: 'weblate.{{ domain }} -> http://weblate.{{ domain }}:8000'
+      DOMAINS: '{{ vhost_fqdn }} -> http://{{ vhost_fqdn }}:8000'
+  {% if with_fake_LE is undefined %}
       STAGE: production
+  {% endif %}
+{% endif %}
 volumes:
   weblate-data: {}
   postgres-data: {}
