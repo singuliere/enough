@@ -87,14 +87,20 @@ checks so they can be run on a regular basis in the production
 environment to verify it keeps working.
 
 After all tests pass, integration with online services must be
-verified manually with:
+verified manually inside the preproduction environment.
 
-* molecule create -s weblate
-* edit the :doc:`gandi zone <bind>` to set ns1-test to the IP of the bind-host VM
-* wait 1h for DNS propagation
-* ansible-playbook --private-key id_rsa \
-                   --user debian -i openstack.py \
-                   -e domain=test.securedrop.club \
-                   securedrop-club-playbook.yml
-* manually verify `weblate.test.securedrop.club` etc. integration with
-  online services such as GitHub authentication
+* `molecule create -s preprod`
+* `molecule converge -s preprod`
+* at end of converge you will get advertised about the testing subdomain:
+  ::
+
+        TASK [debug] *******************************************************************
+            ok: [localhost] => {
+            "domain": "ndi1nze0mdqk.test.securedrop.club"
+        }
+
+* `molecule verify -s preprod`
+* manually verify `weblate.ndi1nze0mdqk.test.securedrop.club`,
+  `icinga.ndi1nze0mdqk.test.securedrop.club`, etc. and integration with online
+  services such as GitHub authentication.
+* `molecule destroy -s preprod`
