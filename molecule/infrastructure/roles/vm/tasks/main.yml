@@ -39,7 +39,6 @@
         - systemctl restart ssh
     security_groups:
       - securedrop-club
-      - securedrop-club-external
   with_items: "{{ molecule_yml.platforms }}"
   register: server
 
