@@ -1,0 +1,4 @@
+all:
+  hosts:
+    gitlab-host:
+      ansible_port: 2222

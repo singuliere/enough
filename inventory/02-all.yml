@@ -1,0 +1,5 @@
+all:
+  children:
+#     bind_clients:
+#       hosts:
+#         icinga-host:

@@ -13,8 +13,17 @@ machine as follows:
 
    ansible-playbook --private-key infrastructure_key \
                     --user debian \
-                    -i openstack.py \
+                    -i inventory \
                     securedrop-club-playbook.yml
+
+Inventory
+---------
+
+The ansible inventory is created by the
+``molecule/infrastructure/create.yml`` playbook and stored in the
+``hosts.yml`` file every time the ``molecule create`` command runs.
+The inventory is read from the ``hosts-base.yml`` file, the IP address of each
+host is added and the result is written into ``hosts.yml``.
 
 Updating
 --------
