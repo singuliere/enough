@@ -12,6 +12,11 @@ provisioner:
     name: ansible-lint
   env:
     ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles
+  inventory:
+    links:
+      # Path is relative to .molecule folder
+      group_vars: ../../../group_vars
+      host_vars:  ../../../host_vars
 scenario:
   name: sexy-debian
   test_sequence:
