@@ -90,6 +90,10 @@ environment to verify it keeps working.
 After all tests pass, integration with online services must be
 verified manually inside the preproduction environment.
 
+.. note:: the person running the following commands need their
+          personal ssh public key to give them access to
+          `debian@ns1.securedrop.club`.
+
 * ``molecule create -s preprod``
 * ``molecule converge -s preprod``
 * at end of converge you will get advertised about the testing subdomain:
