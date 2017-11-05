@@ -7,8 +7,8 @@
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
 #    secrets: "{{ lookup('file', '../../secrets.yml') | from_yaml }}"
   vars_files:
-    - ../../group_vars/all/clouds.yml
-    - ../../group_vars/all/secrets.yml
+    - ../../clouds.yml
+    - ../../private-key.yml
   roles:
     - { role: vm, state: absent }
     - { role: firewall, state: absent }

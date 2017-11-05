@@ -14,8 +14,6 @@ machine as follows:
    ansible-playbook --private-key infrastructure_key \
                     --user debian \
                     -i openstack.py \
-                    -e ssh_private_keyfile=$(pwd)/infrastructure_key \
-                    -e ssh_public_keyfile=$(pwd)/infrastructure_key.pub \
                     securedrop-club-playbook.yml
 
 Updating

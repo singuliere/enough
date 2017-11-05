@@ -16,7 +16,7 @@
     <<: *os_auth
     state: "{{ state }}"
     name: securedrop_key
-    public_key_file: "{{ ssh_public_keyfile }}"
+    public_key_file: "{{ ssh_private_keyfile }}.pub"
 
 - name: instances "{{ state }}"
   os_server:
@@ -44,7 +44,7 @@
   command: >
     ssh -oBatchMode=yes -oStrictHostKeyChecking=no
     -i {{ ssh_private_keyfile }}
-    debian@{{item.openstack.public_v4}} which python
+    debian@{{ item.openstack.public_v4 }} which python
   register: result
   until: result|success
   retries: 30

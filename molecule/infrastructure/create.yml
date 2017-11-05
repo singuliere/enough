@@ -11,8 +11,8 @@
     user: debian
     ssh_port: 22
   vars_files:
-    - ../../group_vars/all/clouds.yml
-    - ../../group_vars/all/secrets.yml
+    - ../../clouds.yml
+    - ../../private-key.yml
   roles:
     - { role: firewall, state: present, os_security_group_tcp_external: [ 22, 80, 443 ], os_security_group_icmp: true }
     - { role: vm, state: present }
