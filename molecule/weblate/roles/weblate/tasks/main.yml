@@ -1,3 +1,2 @@
 ---
 - import_tasks: weblate.yml
-- import_tasks: monitoring.yml
