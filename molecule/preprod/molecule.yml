@@ -24,7 +24,7 @@ provisioner:
   inventory:
     links:
       # Path is relative to .molecule folder
-      group_vars: ../../../group_vars
+      group_vars: ../../../inventory/group_vars
       host_vars:  ../host_vars
 scenario:
   name: preprod

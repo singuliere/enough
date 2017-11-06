@@ -19,8 +19,8 @@ provisioner:
   inventory:
     links:
       # Path is relative to .molecule folder
-      group_vars: ../../../group_vars
-      host_vars:  ../../../host_vars
+      group_vars: ../../../inventory/group_vars
+      host_vars:  ../../../inventory/host_vars
 scenario:
   name: icinga
   test_sequence:

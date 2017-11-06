@@ -16,7 +16,7 @@ Monitoring deployment
 
 Monitoring is deployed as long as the playbook
 `molecule/icinga/icinga-playbook.yml` has been imported. The Icinga2 master
-is `icinga-host`. See also `host_vars/icinga-host/monitoring.yml` for
+is `icinga-host`. See also `inventor/host_vars/icinga-host/monitoring.yml` for
 specific deployment attributes: icingaweb credentials, https, virtualhost fqdn.
 
 Each host is monitored by default.
