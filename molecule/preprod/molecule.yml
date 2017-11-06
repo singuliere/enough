@@ -12,6 +12,8 @@ platforms:
     flavor: "s1-2"
   - name: weblate-host
     flavor: "s1-4"
+  - name: gitlab-host
+    flavor: "s1-4"
 provisioner:
   name: ansible
   lint:

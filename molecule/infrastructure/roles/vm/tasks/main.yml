@@ -16,7 +16,7 @@
     <<: *os_auth
     state: "{{ state }}"
     name: securedrop_key
-    public_key_file: "{{ ssh_public_keyfile }}"
+    public_key_file: "{{ ssh_private_keyfile }}.pub"
 
 - name: instances "{{ state }}"
   os_server:
@@ -34,17 +34,20 @@
       packages:
         - python
       package_upgrade: true
+      runcmd:
+        - sed -i -e '/^#Port/s/^.*$/Port {% if item.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.name].ansible_port is defined %}{{ hosts_orig.all.hosts[item.name].ansible_port }}{% else %}22{% endif %}/' /etc/ssh/sshd_config
+        - systemctl restart ssh
     security_groups:
       - securedrop-club
-      - securedrop-club-external
   with_items: "{{ molecule_yml.platforms }}"
   register: server
 
 - name: Wait for python on the instances
   command: >
     ssh -oBatchMode=yes -oStrictHostKeyChecking=no
+    -p {% if item.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.openstack.name].ansible_port is defined %}{{ hosts_orig.all.hosts[item.openstack.name].ansible_port }}{% else %}22{% endif %}
     -i {{ ssh_private_keyfile }}
-    debian@{{item.openstack.public_v4}} which python
+    debian@{{ item.openstack.public_v4 }} which python
   register: result
   until: result|success
   retries: 30

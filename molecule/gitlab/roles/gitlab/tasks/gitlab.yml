@@ -1,0 +1,95 @@
+---
+- name: apt-get install virtualenv
+  apt:
+    name: virtualenv
+    state: present
+
+- name: apt-get install python-pip
+  apt:
+    name: python-pip
+    state: present
+
+- name: pip install setuptools
+  pip:
+    name: setuptools
+
+- name: pip install docker
+  pip:
+    name: docker
+
+- name: chown debian /opt
+  file:
+    path: /opt
+    owner: debian
+
+- name: start redis
+  docker_container:
+    name: redis
+    image: sameersbn/redis:latest
+    restart_policy: always
+    state: started
+
+- name: start postgresql
+  docker_container:
+    name: gitlab-postgresql
+    image: sameersbn/postgresql:9.5-3
+    restart_policy: always
+    env:
+      DB_NAME: gitlabhq_production
+      DB_USER: gitlab
+      DB_PASS: "{{ gitlab_password }}"
+      DB_EXTENSION: pg_trgm
+    volumes:
+      - /opt/postgresql:/var/lib/postgresql
+    state: started
+
+- name: start gitlab
+  docker_container:
+    name: gitlab
+    image: sameersbn/gitlab:8.13.2
+    restart_policy: always
+    links:
+      - gitlab-postgresql:postgresql
+      - redis:redisio
+    ports:
+      - "22:22"
+      - "{% if with_https is defined %}8080{% else %}80{% endif %}:80"
+    volumes:
+      - /var/run/docker.sock:/run/docker.sock
+      - /opt/gitlab/data:/home/git/data
+      - /usr/bin/docker:/bin/docker
+    env:
+      GITLAB_EMAIL: 'gitlab@{{ domain }}'
+      SMTP_ENABLED: 'true'
+      SMTP_DOMAIN: "{{ domain }}"
+      SMTP_USER: ''
+      SMTP_HOST: '172.17.0.1'
+      SMTP_PORT: '25'
+      SMTP_STARTTLS: 'false'
+      SMTP_OPENSSL_VERIFY_MODE: 'none'
+      SMTP_AUTHENTICATION: ':plain'
+      GITLAB_SIGNUP: 'true'
+      GITLAB_PORT: '80'
+      GITLAB_HOST: "lab.{{ domain }}"
+      OAUTH_ALLOW_SSO: 'github'
+      OAUTH_BLOCK_AUTO_CREATED_USERS: 'false'
+      OAUTH_GITHUB_API_KEY: "{{ gitlab_github_api_key }}"
+      OAUTH_GITHUB_APP_SECRET: "{{ gitlab_github_app_secret }}"
+      GITLAB_SSH_PORT: '22'
+      GITLAB_SECRETS_SECRET_KEY_BASE: "{{ gitlab_secrets_secret_key_base }}"
+      GITLAB_SECRETS_DB_KEY_BASE: "{{ gitlab_secrets_db_key_base }}"
+      GITLAB_SECRETS_OTP_KEY_BASE: "{{ gitlab_secrets_otp_key_base }}"
+      GITLAB_ROOT_PASSWORD: "{{ gitlab_password }}"
+
+- name: start https-portal
+  docker_container:
+    name: https-portal
+    image: steveltn/https-portal:1
+    restart_policy: always
+    ports:
+      - '80:80'
+      - '443:443'
+    env:
+      DOMAINS: 'gitlab.{{ domain }} -> http://gitlab.{{ domain }}:8080'
+      STAGE: production
+    state: "{% if with_https is defined %}started{% else %}absent{% endif %}"

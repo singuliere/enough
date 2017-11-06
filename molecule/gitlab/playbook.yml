@@ -6,4 +6,4 @@
 - import_playbook: ../bind/bind-client-playbook.yml
 - import_playbook: ../icinga/icinga-playbook.yml
 - import_playbook: ../postfix/postfix-playbook.yml
-- import_playbook: weblate-playbook.yml
+- import_playbook: gitlab-playbook.yml

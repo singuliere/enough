@@ -4,21 +4,30 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: debian-host
+  - name: bind-host
     flavor: "s1-2"
+  - name: postfix-host
+    flavor: "s1-2"
+  - name: icinga-host
+    flavor: "s1-2"
+  - name: gitlab-host
+    flavor: "s1-4"
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
+#  options:
+#    vvv: True
   env:
-    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles
+    # https://github.com/metacloud/molecule/issues/1008 for why ../../.. and ../ only
+    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles
   inventory:
     links:
       # Path is relative to .molecule folder
       group_vars: ../../../group_vars
       host_vars:  ../../../host_vars
 scenario:
-  name: sexy-debian
+  name: gitlab
   test_sequence:
     - destroy
     - create

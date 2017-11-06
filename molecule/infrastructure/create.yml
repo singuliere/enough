@@ -7,33 +7,47 @@
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
-#    secrets: "{{ lookup('file', '../secrets.yml') | from_yaml }}"
-    user: debian
-    ssh_port: 22
+    hosts_orig: "{{ lookup('file', '../../hosts-base.yml') | from_yaml }}"
   vars_files:
-    - ../../group_vars/all/clouds.yml
-    - ../../group_vars/all/secrets.yml
+    - ../../clouds.yml
+    - ../../private-key.yml
   roles:
-    - { role: firewall, state: present, os_security_group_tcp_external: [ 22, 80, 443 ], os_security_group_icmp: true }
+    - { role: firewall, state: present, os_security_group_tcp_external: [ 22, 80, 443, 2222 ], os_security_group_icmp: true }
     - { role: vm, state: present }
   tasks:
 
-    - name: Populate instance config dict
+    - name: instance configuration for molecule
       set_fact:
-        instance_conf_dict: {
-          'instance': "{{ item.openstack.name }}",
-          'address': "{{ item.openstack.accessIPv4 }}",
-          'user': "{{ user }}",
-          'port': "{{ ssh_port }}",
-          'identity_file': "{{ ssh_private_keyfile }}", }
-      with_items: "{{ server.results }}"
-      register: instance_config_dict
-#      when: server.changed | bool
+        instance_conf: |
+          [
+            {% for s in server.results %}
+            {
+               'instance': '{{ s.openstack.name }}',
+               'address': '{{ s.openstack.accessIPv4 }}',
+               'identity_file': '{{ ssh_private_keyfile }}',
+               'port': '{% if s.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[s.openstack.name].ansible_port is defined %}{{ hosts_orig.all.hosts[s.openstack.name].ansible_port }}{% else %}22{% endif %}',
+               'user': '{% if s.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[s.openstack.name].ansible_user is defined %}{{ hosts_orig.all.hosts[s.openstack.name].ansible_user }}{% else %}debian{% endif %}',
+            },
+            {% endfor %}
+          ]
 
-    - name: Convert instance config dict to a list
+    - name: hosts updates for inventory
       set_fact:
-        instance_conf: "{{ instance_config_dict.results | map(attribute='ansible_facts.instance_conf_dict') | list }}"
-#      when: server.changed | bool
+        hosts_updates: |
+          {
+           'all': {
+            'hosts': {
+             {% for s in server.results %}
+              '{{ s.openstack.name }}':
+                {
+                  'ansible_port': '{% if s.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[s.openstack.name].ansible_port is defined %}{{ hosts_orig.all.hosts[s.openstack.name].ansible_port }}{% else %}22{% endif %}',
+                  'ansible_host': '{{ s.openstack.accessIPv4 }}',
+                  'ansible_user': '{% if s.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[s.openstack.name].ansible_user is defined %}{{ hosts_orig.all.hosts[s.openstack.name].ansible_user }}{% else %}debian{% endif %}',
+                },
+             {% endfor %}
+            }
+           }
+          }
 
     - name: Dump instance config
       copy:
@@ -41,4 +55,8 @@
         #               https://github.com/ansible/ansible/issues/20885
         content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
         dest: "{{ molecule_instance_config }}"
-#      when: server.changed | bool
+
+    - name: Dump hosts_conf
+      copy:
+        content: "{{ hosts_orig | combine(hosts_updates, recursive=True) | to_yaml }}"
+        dest: "../../inventory/01-hosts.yml"
