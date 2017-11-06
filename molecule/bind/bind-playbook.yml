@@ -104,7 +104,7 @@
           forum 1800 IN A 217.182.87.182
           www 1800 IN CNAME forum
 
-          lab 1800 IN A 145.239.15.86
+          lab 1800 IN CNAME gitlab-host
 
           test 1800 IN NS ns1.{{ domain }}.
 
