@@ -7,3 +7,4 @@
 - import_playbook: bind-client-playbook.yml
 - import_playbook: bind-monitoring-playbook.yml
 - import_playbook: test-bind-client-playbook.yml
+- import_playbook: ../misc/commit_etc-playbook.yml

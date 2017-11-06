@@ -1,0 +1,7 @@
+---
+- name: commit etc
+  hosts: 'all'
+  become: true
+
+  roles:
+    - role: commit_etc

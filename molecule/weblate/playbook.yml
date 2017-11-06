@@ -7,3 +7,4 @@
 - import_playbook: ../icinga/icinga-playbook.yml
 - import_playbook: ../postfix/postfix-playbook.yml
 - import_playbook: weblate-playbook.yml
+- import_playbook: ../misc/commit_etc-playbook.yml

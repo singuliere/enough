@@ -4,3 +4,4 @@
 - import_playbook: icinga-playbook.yml
 - import_playbook: test-icinga-playbook.yml
 - import_playbook: test-monitoring-deployment-playbook.yml
+- import_playbook: ../misc/commit_etc-playbook.yml

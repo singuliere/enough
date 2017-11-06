@@ -1,0 +1,10 @@
+---
+
+- name: get git commit
+  shell: git log --oneline -n 1 || true
+  register: cmd
+  delegate_to: localhost
+
+- name: commit etc
+  shell: |
+    etckeeper commit -m 'Commit by playbook launched with rev "{{ cmd.stdout }}"'
