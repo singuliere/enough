@@ -1,0 +1,6 @@
+- name: reload icinga2
+  systemd:
+    name: icinga2
+    state: reloaded
+  changed_when: False
+  delegate_to: icinga-host
