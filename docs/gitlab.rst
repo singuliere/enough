@@ -8,6 +8,6 @@ the root of the repository. It can be copied from
 `molecule/gitlab/roles/gitlab/defaults/main.yml`.
 
 * `gitlab_password`: database password
-* `gitlab_github_api_key` and `gitlab_github_app_secret`: for :doc:`GitHub OAuth <github>`
+* `gitlab_github_api_key` and `gitlab_github_app_secret`: for GitHub OAuth
 * `gitlab_github_app_secret`, `gitlab_secrets_otp_key_base` and `gitlab_secrets_secret_key_base`: unique keys that can be generated with `pwgen -Bsv1 64`
 
