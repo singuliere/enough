@@ -5,3 +5,9 @@
   become: true
   roles:
     - role: deploy_dummy_monitoring_objects
+    - role: monitor_http_vhost
+      http_vhost_name: Secure Drop Forum
+      http_vhost_fqdn: "forum.{{ domain }}"
+      http_vhost_uri: /c/devops
+      with_https: true
+      http_vhost_string: "devops discussions"
