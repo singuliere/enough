@@ -119,3 +119,7 @@
           {{ host }} 1800 IN A {{ info.ansible_host }}
           {{ host|replace("-host","") }} 1800 IN CNAME {{ host }}
           {% endfor %}
+
+          @ IN CAA 0 issue "letsencrypt.org"
+
+    - role: install_ssh_records
