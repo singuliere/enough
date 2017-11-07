@@ -25,6 +25,9 @@
     validate: 'named-checkconf %s'
   notify: restart bind
 
+- name: dump dynamic zones to disk, and remove their journal files
+  shell: rndc sync -clean || true
+
 - name: BIND zone file
   template:
     src: zone.conf.j2

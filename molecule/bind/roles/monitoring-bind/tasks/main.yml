@@ -18,15 +18,9 @@
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
     marker: "/* {mark} Zone {{ bind_zone_name }} */"
   delegate_to: icinga-host
+  notify: reload icinga2
 
 - name: install sudo file for check named zone
   copy:
     dest: /etc/sudoers.d/icinga2_check_zone
     src: files/icinga2_check_zone
-
-- name: reload icinga2 configuration
-  systemd:
-    name: icinga2
-    state: reloaded
-  changed_when: False
-  delegate_to: icinga-host

@@ -18,7 +18,7 @@ provisioner:
     name: ansible-lint
   env:
     # https://github.com/metacloud/molecule/issues/1008 for why ../../.. and ../ only
-    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles
+    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../misc/roles
   inventory:
     links:
       # Path is relative to .molecule folder

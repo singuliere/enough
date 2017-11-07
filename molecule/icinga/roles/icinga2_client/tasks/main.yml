@@ -122,12 +122,7 @@
   template:
     src: templates/zones.conf.client
     dest: /etc/icinga2/zones.conf
-
-- name: restart icinga client
-  systemd:
-    name: icinga2
-    state: reloaded
-  changed_when: False
+  notify: reload icinga2 client
 
 - name: create zone directory on master
   file:
@@ -146,11 +141,4 @@
     src: templates/zones.conf.master
     dest: /etc/icinga2/zones.d/{{ inventory_hostname }}.conf
   delegate_to: icinga-host
-
-- name: reload icinga2 configuration
-  systemd:
-    name: icinga2
-    state: reloaded
-  changed_when: False
-  delegate_to: icinga-host
-
+  notify: reload icinga2

@@ -18,7 +18,7 @@ provisioner:
       group_vars: ../../../inventory/group_vars
       host_vars:  ../../../inventory/host_vars
 scenario:
-  name: sexy-debian
+  name: misc
   test_sequence:
     - destroy
     - create

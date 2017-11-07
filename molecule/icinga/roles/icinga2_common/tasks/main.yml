@@ -17,9 +17,3 @@
   template:
     dest: /etc/sudoers.d/icinga2_check_git
     src: templates/icinga2_check_git
-
-- name: reload icinga2 configuration
-  systemd:
-    name: icinga2
-    state: reloaded
-  changed_when: False

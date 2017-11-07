@@ -1,0 +1,11 @@
+- name: reload icinga2
+  systemd:
+    name: icinga2
+    state: reloaded
+  changed_when: False
+
+- name: reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
+  changed_when: False

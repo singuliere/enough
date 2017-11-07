@@ -159,6 +159,20 @@ fqdn for more advanced checks (check result of a POST, etc.) if needed.
 
 Example of use in a role: `molecule/weblate/roles/weblate/tasks/monitoring.yml`.
 
+Since monitoring `http vhosts` happens often in  `securedrop.club`, an Ansible
+role helps to declare it:
+
+::
+
+    - role: monitor_http_vhost
+      http_vhost_name: Secure Drop Forum
+      http_vhost_fqdn: "forum.{{ domain }}"
+      http_vhost_uri: /c/devops
+      http_vhost_string: "devops discussions"
+
+      # should be set at host or playbook level
+      with_https: true
+
 DNS service monitoring
 ----------------------
 

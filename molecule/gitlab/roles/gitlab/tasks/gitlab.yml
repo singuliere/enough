@@ -91,5 +91,5 @@
       - '443:443'
     env:
       DOMAINS: 'gitlab.{{ domain }} -> http://gitlab.{{ domain }}:8080, lab.{{ domain }} -> http://gitlab.{{ domain }}:8080'
-      STAGE: production
+      STAGE: "{% if with_fake_LE is undefined %}production{% else %}staging{% endif %}"
     state: "{% if with_https is defined %}started{% else %}absent{% endif %}"

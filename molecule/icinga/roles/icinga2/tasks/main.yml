@@ -146,12 +146,7 @@
   with_items:
     - command
     - ido-mysql
-
-- name: reload icinga2 configuration
-  systemd:
-    name: icinga2
-    state: reloaded
-  changed_when: False
+  notify: reload icinga2
 
 - name: apt-get install nginx, icingaweb2 and friends
   apt:
@@ -176,16 +171,17 @@
     dest: /etc/nginx/sites-available/{{ inventory_hostname }}
   changed_when: False
 
+- name: unset default nginx configuration
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
 - name: set up nginx configuration
   file:
     src:  /etc/nginx/sites-available/{{ inventory_hostname }}
     dest: /etc/nginx/sites-enabled/{{ inventory_hostname }}
     state: link
-
-- name: unset default nginx configuration
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
+  notify: reload nginx
 
 - name: 'hash icingaweb2 user password'
   shell: openssl passwd -1 "{{ icingaweb2_user_pass }}"
@@ -246,10 +242,4 @@
 
 - name: enable monitoring module
   command: icingacli module enable monitoring
-  changed_when: False
-
-- name: reload nginx
-  systemd:
-    name: nginx
-    state: reloaded
   changed_when: False

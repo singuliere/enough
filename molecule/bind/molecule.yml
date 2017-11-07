@@ -17,7 +17,7 @@ provisioner:
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../icinga/roles
+    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../icinga/roles:../misc/roles
   inventory:
     links:
       # Path is relative to .molecule folder

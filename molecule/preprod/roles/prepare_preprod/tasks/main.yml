@@ -18,7 +18,6 @@
     send
     quit
     EOF
-  become: false
 
 - name: save locally domain for spoofing
   copy:
