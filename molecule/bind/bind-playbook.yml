@@ -121,3 +121,5 @@
           {% endfor %}
 
           @ IN CAA 0 issue "letsencrypt.org"
+
+    - role: install_ssh_records

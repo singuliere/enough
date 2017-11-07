@@ -1,0 +1,20 @@
+---
+
+- name: generate SSHFP records
+  shell: |
+    {% for host, info in hostvars.items() %}
+    {% if host != 'external-host' %}
+      ssh-keygen -r {{ host }}
+    {% endif %}
+    {% endfor %}
+  delegate_to: bind-host
+  run_once: true
+  register: cmd
+
+- name: install SSHFP records
+  blockinfile:
+    content: "{{ cmd.stdout }}"
+    path: "/var/cache/bind/{{ domain }}"
+    marker: ";; {mark} SSHFP records"
+  delegate_to: bind-host
+  notify: reload bind
