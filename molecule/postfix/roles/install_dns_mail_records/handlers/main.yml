@@ -1,0 +1,6 @@
+- name: reload bind
+  systemd:
+    name: bind9
+    state: reloaded
+  changed_when: False
+  delegate_to: bind-host
