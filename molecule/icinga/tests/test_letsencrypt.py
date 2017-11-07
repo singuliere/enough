@@ -22,6 +22,7 @@ def test_icingaweb2_login_screen(host):
     address = get_master_fqdn(host)
     print ('https://{address}/icingaweb2/authentication/login'.format(address=address))
     s = requests.Session()
+    s.verify = '../../certs'
     r = s.get('https://{address}/icingaweb2/authentication/login'.format(
         address=address,
     ), timeout=5)
