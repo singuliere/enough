@@ -13,9 +13,5 @@ vhost_fqdn: _
 
 # with_https: true
 
-
 # available but un-needed options for let's encrypt
 # certbot_redirect: true
-# use fake LE
-# molecule verify will fail with it
-# certbot_test: true

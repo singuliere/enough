@@ -11,10 +11,3 @@ icingaadmins_email: icingaadmins@{{ domain }}
 vhost_fqdn: icinga.{{ domain }}
 
 with_https: true
-
-
-# available but un-needed options for let's encrypt
-# certbot_redirect: true
-# use fake LE
-# molecule verify will fail with it
-# certbot_test: true

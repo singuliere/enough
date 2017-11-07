@@ -1,1 +1,5 @@
 domain: securedrop.club
+
+# use Let's Encrypt staging environment
+# undef it to avoid
+with_fake_LE: true
