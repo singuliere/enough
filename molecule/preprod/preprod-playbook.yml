@@ -3,6 +3,7 @@
   hosts: localhost
   connection: local
   gather_facts: False
+  become: false
 
   roles:
     - role: prepare_preprod
