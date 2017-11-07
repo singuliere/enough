@@ -11,6 +11,7 @@
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
     marker: "/* {mark} Systemd login process */"
   delegate_to: icinga-host
+  notify: reload icinga2
 
 - name: install git
   apt:
@@ -34,9 +35,3 @@
     repo: 'https://github.com/jjethwa/icinga2'
     force: yes
     dest: /root/icinga2
-
-- name: reload icinga2 configuration
-  systemd:
-    name: icinga2
-    state: reloaded
-  changed_when: False
