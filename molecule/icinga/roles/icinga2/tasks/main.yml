@@ -91,6 +91,11 @@
     path: /etc/icinga2/zones.d/global-templates/services
     state: directory
 
+- name: fix mail-service-notification.sh
+  copy:
+    src:  files/scripts/mail-service-notification.sh
+    dest: /etc/icinga2/scripts/mail-service-notification.sh
+
 - name: deploy our global configuration
   copy:
     src:  files/{{ item }}.conf
@@ -112,7 +117,7 @@
     - services/volumes
 
 - name: deploy our templated configuration
-  copy:
+  template:
     src:  templates/{{ item }}.conf
     dest: /etc/icinga2/zones.d/global-templates/{{ item }}.conf
   with_items:
