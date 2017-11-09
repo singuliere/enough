@@ -3,6 +3,7 @@
 - name: get git commit
   shell: git log --oneline -n 1 || true
   register: cmd
+  become: false
   delegate_to: localhost
 
 - name: commit etc
