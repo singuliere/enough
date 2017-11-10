@@ -71,6 +71,7 @@
       GITLAB_SIGNUP: 'true'
       GITLAB_PORT: '80'
       GITLAB_HOST: "lab.{{ domain }}"
+      GITLAB_HTTPS: "{% if with_https is defined %}true{% else %}false{% endif %}"
       OAUTH_ALLOW_SSO: 'github'
       OAUTH_BLOCK_AUTO_CREATED_USERS: 'false'
       OAUTH_GITHUB_API_KEY: "{{ gitlab_github_api_key }}"
