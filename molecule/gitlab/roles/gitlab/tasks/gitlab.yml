@@ -69,7 +69,7 @@
       SMTP_OPENSSL_VERIFY_MODE: 'none'
       SMTP_AUTHENTICATION: ':plain'
       GITLAB_SIGNUP: 'true'
-      GITLAB_PORT: '80'
+      GITLAB_PORT: "{% if with_https is defined %}443{% else %}80{% endif %}"
       GITLAB_HOST: "lab.{{ domain }}"
       GITLAB_HTTPS: "{% if with_https is defined %}true{% else %}false{% endif %}"
       OAUTH_ALLOW_SSO: 'github'
