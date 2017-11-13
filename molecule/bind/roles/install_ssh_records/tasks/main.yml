@@ -5,10 +5,6 @@
       ssh-keygen -r {{ inventory_hostname }}
   register: cmd
 
-- name: debug test - hostvars
-  debug:
-    var: hostvars[item]['cmd']
-
 - name: install SSHFP records
   blockinfile:
     content: "{{ hostvars[item].cmd.stdout }}"
