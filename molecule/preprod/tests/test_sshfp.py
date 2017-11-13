@@ -1,0 +1,1 @@
+../../bind/tests/test_sshfp.py

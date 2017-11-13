@@ -9,7 +9,13 @@
     - role: monitor_http_vhost
       http_vhost_name: Gitlab
       http_vhost_fqdn: "gitlab.{{ domain }}"
-      http_vhost_uri: "/"
+      http_vhost_uri: "/users/sign_in"
+      http_vhost_string: "GitLab"
+
+    - role: monitor_http_vhost
+      http_vhost_name: Lab
+      http_vhost_fqdn: "lab.{{ domain }}"
+      http_vhost_uri: "/users/sign_in"
       http_vhost_string: "GitLab"
 
   become: True

@@ -2,19 +2,16 @@
 
 - name: generate SSHFP records
   shell: |
-    {% for host, info in hostvars.items() %}
-    {% if host != 'external-host' %}
-      ssh-keygen -r {{ host }}
-    {% endif %}
-    {% endfor %}
-  delegate_to: bind-host
-  run_once: true
+      ssh-keygen -r {{ inventory_hostname }}
   register: cmd
 
 - name: install SSHFP records
   blockinfile:
-    content: "{{ cmd.stdout }}"
+    content: "{{ hostvars[item].cmd.stdout }}"
     path: "/var/cache/bind/{{ domain }}"
-    marker: ";; {mark} SSHFP records"
+    marker: ";; {mark} SSHFP records for {{ item }}"
+    validate: 'named-checkzone -d {{ domain }} %s'
   delegate_to: bind-host
   notify: reload bind
+  with_items:
+    - "{{ ansible_play_batch }}"
