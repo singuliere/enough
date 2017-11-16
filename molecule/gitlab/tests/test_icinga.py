@@ -48,4 +48,4 @@ def test_icinga_api_services (host):
             )
     answer = r.json()
     assert len(answer['results']) > 10
-    assert len([s for s in answer['results'] if 'gitlab-host!GitLab' == s['name']]) == 1
+    assert len([s for s in answer['results'] if 'gitlab-host!Gitlab' == s['name']]) == 1
