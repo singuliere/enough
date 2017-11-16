@@ -46,7 +46,7 @@
 - name: start gitlab
   docker_container:
     name: gitlab
-    image: sameersbn/gitlab:8.13.2
+    image: sameersbn/gitlab:10.1.3
     restart_policy: always
     links:
       - gitlab-postgresql:postgresql
