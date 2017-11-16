@@ -10,4 +10,4 @@ the root of the repository. It can be copied from
 * `gitlab_password`: database password
 * `gitlab_github_api_key` and `gitlab_github_app_secret`: for GitHub OAuth
 * `gitlab_github_app_secret`, `gitlab_secrets_otp_key_base` and `gitlab_secrets_secret_key_base`: unique keys that can be generated with `pwgen -Bsv1 64`
-
+* `gitlab_os_*`: default to the OpenStack tenant variables. In production they should be set to a dedicated tenant, entirely separated from production, because it will be used by all commits pushed to the repository.

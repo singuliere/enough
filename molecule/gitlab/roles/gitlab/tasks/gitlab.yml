@@ -82,6 +82,12 @@
       GITLAB_SECRETS_OTP_KEY_BASE: "{{ gitlab_secrets_otp_key_base }}"
       GITLAB_ROOT_PASSWORD: "{{ gitlab_password }}"
 
+# to not block entropy
+- name: apt-get install haveged
+  apt:
+    name: haveged
+    state: present
+
 - name: start https-portal
   docker_container:
     name: https-portal

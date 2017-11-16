@@ -2,6 +2,9 @@
 - name: install gitlab
   hosts: gitlab-host
 
+  vars_files:
+    - ../../clouds.yml
+
   roles:
     - { role: ansible-role-docker, docker_install_compose: false }
     - { role: gitlab }

@@ -18,6 +18,8 @@ provisioner:
   name: ansible
   lint:
     name: ansible-lint
+  #options:
+  #  vvv: True
   env:
     # https://github.com/metacloud/molecule/issues/1008 for why ../../.. and ../ only
     ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles
