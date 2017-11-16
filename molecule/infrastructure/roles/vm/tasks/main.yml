@@ -23,7 +23,7 @@
     state: "{{ state }}"
     <<: *os_auth
     name: "{{ item.name }}"
-    image: Debian 9
+    image: "{% if item.image is defined %}{{ item.image }}{% else %}Debian 9{% endif %}"
     key_name: securedrop_key
     timeout: 600
     flavor: "{{ item.flavor }}"
@@ -47,7 +47,7 @@
     ssh -oBatchMode=yes -oStrictHostKeyChecking=no
     -p {% if item.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.openstack.name].ansible_port is defined %}{{ hosts_orig.all.hosts[item.openstack.name].ansible_port }}{% else %}22{% endif %}
     -i {{ ssh_private_keyfile }}
-    debian@{{ item.openstack.public_v4 }} which python
+    {% if item.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.openstack.name].ansible_user is defined %}{{ hosts_orig.all.hosts[item.openstack.name].ansible_user }}{% else %}debian{% endif %}@{{ item.openstack.public_v4 }} which python
   register: result
   until: result|success
   retries: 30
