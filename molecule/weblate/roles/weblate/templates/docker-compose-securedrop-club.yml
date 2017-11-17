@@ -31,7 +31,7 @@ services:
       - WEBLATE_ADMIN_NAME=admin
       - WEBLATE_ADMIN_EMAIL={{ WEBLATE_ADMIN_EMAIL }}
       - WEBLATE_ADMIN_PASSWORD={{ WEBLATE_ADMIN_PASSWORD }}
-      - WEBLATE_ALLOWED_HOSTS=*
+      - WEBLATE_ALLOWED_HOSTS={{ vhost_fqdn }}
 {% if with_https is defined %}
       - WEBLATE_ENABLE_HTTPS=1
 {% endif %}
