@@ -8,8 +8,8 @@ icingaweb2_user_pass: "zoR9thie6Phud4mooYoo"
 icingaadmins_email: icingaadmins@{{ domain }}
 
 
-# vhost_fqdn: icinga.{{ domain }}
-vhost_fqdn: _
+vhost_fqdn: icinga.{{ domain }}
+#vhost_fqdn: _
 
 # with_https: true
 
