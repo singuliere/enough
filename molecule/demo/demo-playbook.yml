@@ -6,3 +6,12 @@
   roles:
     - role: vagrand_libvirt
 
+- name: install securedrop
+  hosts: demo-host
+
+  environment:
+    VAGRANT_DEFAULT_PROVIDER: libvirt
+
+  roles:
+    - role: securedrop
+      debug_log: true

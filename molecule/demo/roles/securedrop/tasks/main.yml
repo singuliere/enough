@@ -1,0 +1,48 @@
+---
+
+- name: git clone https://lab.securedrop.club/main/securedrop.git
+  git:
+    repo: 'https://lab.securedrop.club/main/securedrop.git'
+    force: yes
+    dest: /srv/securedrop
+
+- name: install securedrop requirements
+  pip:
+    requirements: /srv/securedrop/securedrop/requirements/develop-requirements.txt
+
+- name: list vagrant boxes
+  command: vagrant box list
+  args:
+    chdir: /srv/securedrop
+  register: cmd
+
+- name: download bento/ubuntu-14.04 vagrant box
+  command: vagrant box add --provider virtualbox bento/ubuntu-14.04
+  args:
+    chdir: /srv/securedrop
+  when: '"bento/ubuntu-14.04 (virtualbox" not in cmd.stdout'
+
+- name: mutate bento/ubuntu-14.04 
+  command: vagrant mutate bento/ubuntu-14.04 libvirt
+  args:
+    chdir: /srv/securedrop
+  when: '"bento/ubuntu-14.04 (libvirt" not in cmd.stdout'
+
+- name: start vagrant developpement box
+  command: vagrant up development
+  args:
+    chdir: /srv/securedrop
+
+- name: retrieve box ip
+  shell: vagrant ssh-config development | awk '$1 == "HostName" {print $2}'
+  args:
+    chdir: /srv/securedrop
+  register: cmd
+  notify:
+    - stop securedrop servers
+    - start securedrop servers
+
+- set_fact:
+    box_ip: "{{ cmd.stdout }}"
+- debug:
+    var: box_ip
