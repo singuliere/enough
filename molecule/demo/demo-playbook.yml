@@ -15,3 +15,37 @@
   roles:
     - role: securedrop
       debug_log: true
+
+- name: install nginx frontend
+  hosts: demo-host
+  become: True
+  roles:
+    - role: jdauphant.nginx
+      nginx_http_params:
+        - access_log "/var/log/nginx/access.log"
+      nginx_sites:
+        default:
+          - listen 80
+          - server_name _
+          - access_log  "/var/log/nginx/demo.{{ domain }}.access.log"
+          - error_log   "/var/log/nginx/demo.{{ domain }}.error.log"
+          - root        /var/www/html/
+        source:
+          - listen 80
+          - server_name source.demo.{{ domain }}
+          - access_log  "/var/log/nginx/source.demo.{{ domain }}.access.log"
+          - error_log   "/var/log/nginx/source.demo.{{ domain }}.error.log"
+          - location /  { proxy_pass {{ box_ip }}:8080 ; }
+        journalist:
+          - listen 80
+          - server_name journalist.demo.{{ domain }}
+          - access_log  "/var/log/nginx/journalist.demo.{{ domain }}.access.log"
+          - error_log   "/var/log/nginx/journalist.demo.{{ domain }}.error.log"
+          - location /  { proxy_pass {{ box_ip }}:8081 ; }
+      nginx_configs:
+        proxy:
+          - proxy_set_header Proxy ""
+          - proxy_set_header Host $http_host
+          - proxy_set_header X-Real-IP  $remote_addr
+          - proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for
+          - proxy_set_header X-Forwarded-Proto $scheme
