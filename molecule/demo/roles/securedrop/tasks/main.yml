@@ -1,5 +1,23 @@
 ---
 
+- name: lookup lab.securedrop.club
+  command: getent hosts lab.securedrop.club
+  register: cmd
+  ignore_errors: True
+
+- name: lookup real lab.securedrop.club
+  command: getent hosts lab.securedrop.club
+  delegate_to: localhost
+  register: gitlab_ip
+  when: cmd|failed
+
+- name: hardcode lab.securedrop.club if needed
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ gitlab_ip.stdout }} lab.securedrop.club"
+  when: cmd|failed
+  become: True
+
 - name: git clone https://lab.securedrop.club/main/securedrop.git
   git:
     repo: 'https://lab.securedrop.club/main/securedrop.git'
