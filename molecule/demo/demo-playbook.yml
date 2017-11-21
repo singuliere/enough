@@ -1,0 +1,8 @@
+---
+- name: install demo
+  hosts: demo-host
+
+  roles:
+    - role: demo
+
+  become: True
