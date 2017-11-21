@@ -51,3 +51,21 @@
           - proxy_set_header X-Forwarded-Proto $scheme
 
     - role: demo_static_files
+
+    - role: monitor_http_vhost
+      http_vhost_name: Demo home
+      http_vhost_fqdn: "demo.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "Welcome to the SecureDrop demo"
+
+    - role: monitor_http_vhost
+      http_vhost_name: Demo source
+      http_vhost_fqdn: "source.demo.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "Submit documents"
+
+    - role: monitor_http_vhost
+      http_vhost_name: Demo journalist
+      http_vhost_fqdn: "journalist.demo.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "You should be redirected automatically to target URL"
