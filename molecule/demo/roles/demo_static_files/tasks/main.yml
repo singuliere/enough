@@ -1,0 +1,11 @@
+---
+
+- name: copy static files
+  copy:
+    src: "files/{{ item }}"
+    dest: /var/www/html
+    owner: www-data
+  with_items:
+    - index.html
+    - qr.png
+    - test_journalist_key.sec
