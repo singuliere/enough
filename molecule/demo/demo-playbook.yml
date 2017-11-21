@@ -1,8 +1,8 @@
 ---
-- name: install demo
+- name: setup vagrand libvirt provider
   hosts: demo-host
+  become: True
 
   roles:
-    - role: demo
+    - role: vagrand_libvirt
 
-  become: True

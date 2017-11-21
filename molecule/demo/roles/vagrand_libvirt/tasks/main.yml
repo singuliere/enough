@@ -1,0 +1,44 @@
+---
+- name: apt-get install vagrant libvirt pip ansible and friends
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - vagrant
+    - vagrant-libvirt
+    - vagrant-mutate
+    - libvirt-daemon-system
+    - qemu-kvm
+    - nfs-common
+    - nfs-kernel-server
+    - ebtables
+    - dnsmasq
+    - ansible
+    - rsync
+    - python-pip
+
+- name: add user to libvirt and kvm groups
+  user:
+    name: "{{ hostvars[inventory_hostname]['ansible_user'] }}"
+    groups: libvirt,kvm
+    append: yes
+  notify:
+    - reload kvm and kvm_intel
+    - reset ssh connection
+
+- name: install vagrant-libvirt
+  command: vagrant plugin install vagrant-libvirt
+  notify: restart libvirtd
+
+- name: setup libvirt as vagrant default provider
+  lineinfile:
+    path: /home/{{ hostvars[inventory_hostname]['ansible_user'] }}/.bashrc
+    line: VAGRANT_DEFAULT_PROVIDER=libvirt
+
+- name: Make sure /srv will be usable by local user
+  file:
+    dest: '/srv'
+    state: 'directory'
+    owner: "{{ hostvars[inventory_hostname]['ansible_user'] }}"
+    group: "{{ hostvars[inventory_hostname]['ansible_user'] }}"
+    mode: '0755'

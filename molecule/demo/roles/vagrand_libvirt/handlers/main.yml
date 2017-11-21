@@ -1,0 +1,17 @@
+- name: restart libvirtd
+  systemd:
+    name: libvirtd
+    state: restarted
+  changed_when: False
+
+- name: reset ssh connection
+  # ugly hack in replacement to
+  # meta: reset_connection
+  local_action:
+    module: file
+    path: "~/.ansible/cp/{{ hostvars[inventory_hostname]['ansible_host'] }}-{{ hostvars[inventory_hostname]['ansible_port'] }}-{{ hostvars[inventory_hostname]['ansible_user'] }}"
+    state: absent
+
+- name: reload kvm and kvm_intel
+  shell:
+    rmmod kvm_intel && rmmod kvm && modprobe kvm && modprobe kvm_intel
