@@ -1,5 +1,13 @@
 ---
 
+- name: apt-get install useful git etckeeper
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - git
+  - etckeeper
+
 - name: get git commit
   shell: git log --oneline -n 1 || true
   register: cmd
