@@ -1,10 +1,10 @@
 ---
-- name: setup vagrand libvirt provider
+- name: setup vagrant libvirt provider
   hosts: demo-host
   become: True
 
   roles:
-    - role: vagrand_libvirt
+    - role: vagrant_libvirt
 
 - name: install securedrop
   hosts: demo-host
