@@ -11,4 +11,5 @@
 - import_playbook: molecule/gitlab/gitlab-playbook.yml
 - import_playbook: molecule/gitlab/mirror-playbook.yml
 - import_playbook: molecule/packages/packages-playbook.yml
+- import_playbook: molecule/demo/demo-playbook.yml
 - import_playbook: molecule/misc/commit_etc-playbook.yml
