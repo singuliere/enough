@@ -11,3 +11,8 @@ the root of the repository. It can be copied from
 * `gitlab_github_api_key` and `gitlab_github_app_secret`: for GitHub OAuth
 * `gitlab_github_app_secret`, `gitlab_secrets_otp_key_base` and `gitlab_secrets_secret_key_base`: unique keys that can be generated with `pwgen -Bsv1 64`
 * `gitlab_os_*`: default to the OpenStack tenant variables. In production they should be set to a dedicated tenant, entirely separated from production, because it will be used by all commits pushed to the repository.
+
+The `freedomofpress` user at `lab.securedrop.club` is used to mirror repositories from https://github.com/freedomofpress/securedrop
+
+* `mirror_from_securedrop`: should be set to https://github.com/freedomofpress/securedrop
+* `mirror_bot_password`: password of the `freedomofpress` user
