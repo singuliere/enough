@@ -4,6 +4,8 @@ import requests
 import pytest
 import yaml
 
+testinfra_hosts = ['icinga-host']
+
 def get_master_address(host):
     inventory = yaml.load(open(host.backend.ansible_inventory))
     address = inventory['all']['hosts']['icinga-host']['ansible_host']
