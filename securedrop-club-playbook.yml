@@ -9,4 +9,5 @@
 - import_playbook: molecule/postfix/postfix-playbook.yml
 - import_playbook: molecule/weblate/weblate-playbook.yml
 - import_playbook: molecule/gitlab/gitlab-playbook.yml
+- import_playbook: molecule/gitlab/mirror-playbook.yml
 - import_playbook: molecule/misc/commit_etc-playbook.yml

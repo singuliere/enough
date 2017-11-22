@@ -1,0 +1,8 @@
+---
+- name: mirror repositories to gitlab
+  hosts: gitlab-host
+
+  roles:
+    - role: mirror
+      mirror_from_repository: "{{ mirror_securedrop }}"
+      mirror_to_repository: "http{% if with_https is defined %}s{% endif %}://{{ mirror_bot_user }}:{{ mirror_bot_password }}@gitlab.{{ domain }}/{{ mirror_bot_user }}/securedrop.git"

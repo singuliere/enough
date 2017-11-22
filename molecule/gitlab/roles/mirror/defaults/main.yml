@@ -1,0 +1,6 @@
+---
+mirror_bot_user: freedomofpress
+mirror_bot_password: Ind+GriazAj2
+mirror_securedrop: https://github.com/freedomofpress/securedrop-feedback.git
+# mirror_from_repository: https://github.com/freedomofpress/securedrop.git
+# mirror_to_repository: https://github.com/dachary/securedrop.git

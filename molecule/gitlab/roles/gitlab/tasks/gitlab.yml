@@ -97,6 +97,7 @@
       - '80:80'
       - '443:443'
     env:
+      CLIENT_MAX_BODY_SIZE: 0
       DOMAINS: 'gitlab.{{ domain }} -> http://gitlab.{{ domain }}:8080, lab.{{ domain }} -> http://gitlab.{{ domain }}:8080'
       STAGE: "{% if with_fake_LE is undefined %}production{% else %}staging{% endif %}"
     state: "{% if with_https is defined %}started{% else %}absent{% endif %}"
