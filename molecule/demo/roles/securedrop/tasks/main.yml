@@ -1,5 +1,13 @@
 ---
 
+# Note:
+# SecureDrop deployment require access to
+# lab.securedrop.club but it may be unknown by
+# securedrop.club's DNS resolver in molecule scenario.
+# Moreover, using lab's IP is not an option due to https.
+# So we hardcode it in hosts if needed. It should only
+# happen in tests scenarios.
+
 - name: lookup lab.securedrop.club
   command: getent hosts lab.securedrop.club
   register: cmd
@@ -17,6 +25,8 @@
     line: "{{ gitlab_ip.stdout }} lab.securedrop.club"
   when: cmd|failed
   become: True
+
+# End of Note
 
 - name: git clone https://lab.securedrop.club/main/securedrop.git
   git:

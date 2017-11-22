@@ -7,6 +7,8 @@
 - name: reset ssh connection
   # ugly hack in replacement to
   # meta: reset_connection
+  # The later fails in this way:
+  # https://github.com/ansible/ansible/issues/27520#issuecomment-321966784
   local_action:
     module: file
     path: "~/.ansible/cp/{{ hostvars[inventory_hostname]['ansible_host'] }}-{{ hostvars[inventory_hostname]['ansible_port'] }}-{{ hostvars[inventory_hostname]['ansible_user'] }}"

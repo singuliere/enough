@@ -25,6 +25,9 @@
   notify:
     - reload kvm and kvm_intel
     - reset ssh connection
+  # Resetting ssh connection is due to to allow user
+  # changes to affect 'current login user'. See
+  # http://docs.ansible.com/ansible/latest/meta_module.html
 
 - name: install vagrant-libvirt
   command: vagrant plugin install vagrant-libvirt
