@@ -35,10 +35,12 @@ def test_ci_runner(host, tmpdir):
                address=address,
                directory=str(tmpdir),
                scheme=scheme))
-    for _ in range(20):
+
+    success = False
+    for _ in range(40):
         if (host.file('/tmp/SERVERS').exists and
                 host.file('/tmp/SERVERS').contains('gitlab-host')):
+            success = True
             break
         time.sleep(5)
-    print(host.file('/tmp/SERVERS').content)
-    assert host.file('/tmp/SERVERS').contains('gitlab-host')
+    assert success
