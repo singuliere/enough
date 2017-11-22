@@ -56,6 +56,17 @@
     chdir: /srv/securedrop
   when: '"bento/ubuntu-14.04 (libvirt" not in cmd.stdout'
 
+- name: install control files
+  copy:
+    src: "files/{{ item }}"
+    dest: /usr/local/bin
+    mode: 0755
+  become: True
+  with_items:
+    - rebuild-securedrop-demo.sh
+    - start-securedrop-demo.sh
+    - stop-securedrop-demo.sh
+
 - name: start vagrant developpement box
   command: vagrant up development
   args:

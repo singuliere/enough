@@ -1,11 +1,5 @@
 - name: stop securedrop servers
-  # this is ugly, but maybe no more than using upstart
-  command: vagrant ssh -c 'pkill -P $(cat /var/run/securedrop.pid) && sudo rm -f /var/run/securedrop.pid'
-  args:
-    chdir: /srv/securedrop
+  command: /usr/local/bin/stop-securedrop-demo.sh
 
 - name: start securedrop servers
-  # this is ugly, but maybe no more than using upstart
-  command: vagrant ssh -c 'sudo start-stop-daemon -C --start --quiet --chuid vagrant:vagrant --make-pidfile --pidfile /var/run/securedrop.pid --background --chdir /vagrant/securedrop --startas /bin/bash -- -c "exec /vagrant/securedrop/manage.py run{% if debug_log is defined %} > /tmp/securedrop.log 2>&1 {% endif %}" && sleep 1'
-  args:
-    chdir: /srv/securedrop
+  command: /usr/local/bin/start-securedrop-demo.sh

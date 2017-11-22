@@ -14,7 +14,6 @@
 
   roles:
     - role: securedrop
-      debug_log: true
 
 - name: install nginx frontend
   hosts: demo-host
