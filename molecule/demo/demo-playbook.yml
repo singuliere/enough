@@ -23,6 +23,7 @@
     - role: jdauphant.nginx
       nginx_http_params:
         - access_log "/var/log/nginx/access.log"
+        - server_names_hash_bucket_size 128
       nginx_sites:
         default:
           - listen 80
