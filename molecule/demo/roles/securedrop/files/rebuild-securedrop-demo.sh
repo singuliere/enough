@@ -3,6 +3,9 @@
 cd /srv/securedrop
 
 vagrant destroy development
+
+git pull
+
 vagrant up development
 
 box_ip=$(vagrant ssh-config development | awk '$1 == "HostName" {print $2}')
