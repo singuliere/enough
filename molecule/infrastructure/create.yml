@@ -49,6 +49,12 @@
            }
           }
 
+    - name: set the default domain to securedrop.club
+      copy:
+        content: |
+          domain: securedrop.club
+        dest: "../../inventory/group_vars/all/domain.yml"
+
     - block:
 
       - name: generate subdomain
