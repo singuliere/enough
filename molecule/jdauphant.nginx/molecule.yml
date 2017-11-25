@@ -1,0 +1,36 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: nginx-host
+    flavor: "s1-2"
+provisioner:
+  name: ansible
+#  options:
+#    vvv: True
+  lint:
+    name: ansible-lint
+  env:
+    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles
+  inventory:
+    links:
+      # Path is relative to .molecule folder
+      group_vars: ../../../inventory/group_vars
+      host_vars:  ../../../inventory/host_vars
+scenario:
+  name: jdauphant.nginx
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: True
+    s: True
+  lint:
+    name: flake8

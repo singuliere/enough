@@ -19,3 +19,6 @@
 [submodule "molecule/bind/roles/Oefenweb.ansible-dns"]
 	path = molecule/bind/roles/Oefenweb.ansible-dns
 	url = https://github.com/Oefenweb/ansible-dns
+[submodule "molecule/jdauphant.nginx/roles/jdauphant.nginx"]
+	path = molecule/jdauphant.nginx/roles/jdauphant.nginx
+	url = https://github.com/jdauphant/ansible-role-nginx.git
