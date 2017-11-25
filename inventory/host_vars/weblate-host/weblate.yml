@@ -1,7 +1,2 @@
 ---
 vhost_fqdn: weblate.{{ domain }}
-
-# with_https: true
-
-# use fake LE:
-# with_fake_LE: true

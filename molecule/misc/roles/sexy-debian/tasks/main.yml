@@ -8,9 +8,7 @@
   - bsd-mailx
   - curl
   - dnsutils
-  - etckeeper
   - fail2ban
-  - git
   - htop
   - iftop
   - iotop

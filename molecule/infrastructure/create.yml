@@ -49,6 +49,41 @@
            }
           }
 
+    - name: set the default domain to securedrop.club
+      copy:
+        content: |
+          domain: securedrop.club
+        dest: "../../inventory/group_vars/all/domain.yml"
+
+    - block:
+
+      - name: generate subdomain
+        shell: date +%S%M%H%d | base64
+        register: cmd
+  
+      - set_fact:
+          domain: "{{ cmd.stdout|lower }}.test.securedrop.club"
+  
+      - name: create NS record in test zone (requires access to bind-host.securedrop.club)
+        shell: |
+          ssh debian@bind-host.securedrop.club nsupdate <<EOF
+          server localhost
+          zone test.securedrop.club
+          update add ns-{{ domain }}. 1800 A {{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }}
+          update add {{ domain }}. 1800 NS ns-{{ domain }}.
+          show
+          send
+          quit
+          EOF
+  
+      - name: save the test sub-domain
+        copy:
+          content: |
+            domain: {{ domain }}
+          dest: "../../inventory/group_vars/all/domain.yml"
+
+      when: hosts_updates['all']['hosts']['bind-host'] is defined and with_fake_LE is defined
+    
     - name: Dump instance config
       copy:
         # NOTE(retr0h): Workaround for Ansible 2.2.

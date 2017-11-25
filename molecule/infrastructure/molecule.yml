@@ -4,7 +4,7 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: infrastructure-host
+  - name: bind-host
     flavor: "s1-2"
 provisioner:
   name: ansible

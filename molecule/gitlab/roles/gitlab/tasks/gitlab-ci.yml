@@ -1,0 +1,104 @@
+---
+- name: get gitlab-runner installation script
+  get_url:
+    url: https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh
+    dest: /tmp/script.deb.sh
+
+- name: setup gitlab-runner repository
+  shell: |
+    bash -x /tmp/script.deb.sh
+
+- name: apt-get install gitlab-runner
+  apt:
+    name: gitlab-runner=10.1.0
+    state: present
+
+- name: get gitlab API token
+  uri:
+    url: "http{% if with_https is defined %}s{% endif %}://gitlab.{{ domain }}/api/v3/session"
+    method: POST
+    body: "login=root&password={{ gitlab_password | urlencode }}"
+    status_code: 201
+    body_format: json
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
+    validate_certs: "{% if with_fake_LE is undefined %}yes{% else %}no{% endif %}"
+  register: api_token
+  until: api_token|succeeded
+  retries: 20
+  delay: 30
+
+#
+# the runners registration token is not yet exposed via the API,
+# patch the API definition to add it. This will no longer be necessary
+# when the corresponding issue is fixed:
+#   https://gitlab.com/gitlab-org/gitlab-ce/issues/24030
+# and the role is updated to a version that contains the fix.
+#
+- name: check if runners_registration_token is exposed
+  command: docker exec gitlab grep -q runners_registration_token /home/git/gitlab/lib/api/v3/entities.rb
+  register: result
+  ignore_errors: True
+
+- name: expose runners_registration_token
+  shell: |
+    set -ex
+    docker exec gitlab sed -i -e '/password_authentication_enabled,/a \      expose :runners_registration_token, as: :runners_registration_token' /home/git/gitlab/lib/api/v3/entities.rb
+    docker restart gitlab
+  when: result|failed
+
+- name: get gitlab runner token
+  uri:
+    url: "http{% if with_https is defined %}s{% endif %}://gitlab.{{ domain }}/api/v3/application/settings"
+    method: GET
+    status_code: 200
+    body_format: json
+    headers:
+      PRIVATE-TOKEN: "{{ api_token['json']['private_token'] }}"
+    validate_certs: "{% if with_fake_LE is undefined %}yes{% else %}no{% endif %}"
+  register: runners_registration_token
+  until: runners_registration_token|succeeded
+  retries: 20
+  delay: 30
+
+- debug:
+    var: runners_registration_token
+
+- name: grep sd-runner /etc/gitlab-runner/config.toml
+  command: grep -q sd-runner /etc/gitlab-runner/config.toml
+  register: result
+  ignore_errors: True
+
+- name: apt-get install python-openstackclient
+  apt:
+    name: python-openstackclient
+    state: present
+
+- name: copy staging LE CA fakeleintermediatex1.pem
+  copy:
+    src: fakeleintermediatex1.pem
+    dest: /tmp/fakeleintermediatex1.pem
+  when: with_fake_LE is defined
+
+# so that the running is able to git clone https://lab.... because there is no
+# way to configure the runner to use a given CA for the clone operation. The
+# --tls-ca-file of git-runner is for when the runner registers, not for cloning.
+- name: add staging LE CA to known CA in /etc/ssl/certs/ca-certificates.crt
+  shell: |
+    cat /tmp/fakeleintermediatex1.pem >> /etc/ssl/certs/ca-certificates.crt
+  when: with_fake_LE is defined
+
+- name: register the runner
+  shell: |
+    gitlab-runner register \
+        --non-interactive \
+        --registration-token '{{ runners_registration_token['json']['runners_registration_token'] }}' \
+        --name 'sd-runner' \
+        --url http{% if with_https is defined %}s{% endif %}://gitlab.{{ domain }} \
+        --env OS_AUTH_URL={{ gitlab_os_auth_url }} \
+        --env OS_TENANT_NAME={{ gitlab_os_tenant_name }} \
+        --env OS_USERNAME={{ gitlab_os_username }} \
+        --env OS_PASSWORD={{ gitlab_os_password }} \
+        --env OS_REGION_NAME={{ gitlab_os_region_name }} \
+        --executor shell
+  when: result|failed
