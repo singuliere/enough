@@ -1,0 +1,41 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: bind-host
+    flavor: "s1-2"
+  - name: postfix-host
+    flavor: "s1-2"
+  - name: icinga-host
+    flavor: "s1-2"
+  - name: packages-host
+    flavor: "s1-2"
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  env:
+    # https://github.com/metacloud/molecule/issues/1008 for why ../../.. and ../ only
+    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../misc/roles:../jdauphant.nginx/roles
+  inventory:
+    links:
+      # Path is relative to .molecule folder
+      group_vars: ../../../inventory/group_vars
+      host_vars:  ../../../inventory/host_vars
+scenario:
+  name: packages
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: True
+    s: True
+  lint:
+    name: flake8

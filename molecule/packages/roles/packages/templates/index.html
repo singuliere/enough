@@ -1,0 +1,5 @@
+<pre>
+  wget http{% if with_https is defined %}s{% endif %}://{{ inventory_hostname }}.{{ domain }}/key.asc
+  sudo apt-key add key.asc
+  sudo apt-add-repository http{% if with_https is defined %}s{% endif %}://{{ inventory_hostname }}.{{ domain }}
+</pre>
