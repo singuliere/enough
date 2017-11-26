@@ -14,5 +14,5 @@ the root of the repository. It can be copied from
 
 The `freedomofpress` user at `lab.securedrop.club` is used to mirror repositories from https://github.com/freedomofpress/securedrop
 
-* `mirror_from_securedrop`: should be set to https://github.com/freedomofpress/securedrop
+* `mirror_securedrop`: should be set to https://github.com/freedomofpress/securedrop
 * `mirror_bot_password`: password of the `freedomofpress` user
