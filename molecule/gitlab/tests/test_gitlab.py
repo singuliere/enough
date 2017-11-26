@@ -23,7 +23,7 @@ def test_ci_runner(host, tmpdir):
     git init
     (
      echo 'jobs:'
-     echo '  script: openstack server list > /tmp/SERVERS 2>&1'
+     echo '  script: env > /srv/TEST 2>&1'
     ) > .gitlab-ci.yml
     git add .gitlab-ci.yml
     git commit -m 'test'
@@ -38,8 +38,8 @@ def test_ci_runner(host, tmpdir):
 
     success = False
     for _ in range(40):
-        if (host.file('/tmp/SERVERS').exists and
-                host.file('/tmp/SERVERS').contains('gitlab-host')):
+        if (host.file('/srv/TEST').exists and
+                host.file('/srv/TEST').contains('OS_TENANT_NAME')):
             success = True
             break
         time.sleep(5)
