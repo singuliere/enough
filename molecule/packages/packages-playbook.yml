@@ -1,18 +1,28 @@
 ---
-- name: install packages
+- name: install nginx
   hosts: packages-host
 
   roles:
-    - { role: ansible-role-docker, docker_install_compose: false }
-
     - role: jdauphant.nginx
       nginx_http_params:
-         - access_log "/var/log/nginx/access.log"
+        - access_log "/var/log/nginx/access.log"
       nginx_sites:
         default:
           - listen "{% if with_https is defined %}8080{% else %}80{% endif %}"
           - server_name _
           - root /var/www/html/
+
+  tasks:
+    - name: restart nginx
+      shell: systemctl restart nginx
+
+  become: True
+
+- name: install packages
+  hosts: packages-host
+
+  roles:
+    - { role: ansible-role-docker, docker_install_compose: false }
 
     - { role: packages }
 
