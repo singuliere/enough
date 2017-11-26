@@ -14,6 +14,8 @@ platforms:
     flavor: "s1-4"
   - name: gitlab-host
     flavor: "s1-4"
+  - name: packages-host
+    flavor: "s1-2"
 provisioner:
   name: ansible
   lint:
@@ -22,7 +24,7 @@ provisioner:
   #  vvv: True
   env:
     # https://github.com/metacloud/molecule/issues/1008 for why ../../.. and ../ only
-    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles
+    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles:../packages/roles:../jdauphant.nginx/roles
   inventory:
     links:
       # Path is relative to .molecule folder
