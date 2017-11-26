@@ -1,0 +1,140 @@
+---
+- name: apt-get install git
+  apt:
+    name: git
+    state: present
+
+- name: apt-get install virtualenv
+  apt:
+    name: virtualenv
+    state: present
+
+- name: apt-get install python-pip
+  apt:
+    name: python-pip
+    state: present
+
+- name: pip install setuptools
+  pip:
+    name: setuptools
+
+- name: pip install docker
+  pip:
+    name: docker
+
+- name: chown debian /srv
+  file:
+    path: /srv
+    owner: debian
+
+- name: git clone https://github.com/freedomofpress/securedrop
+  git:
+    repo: "{{ packages_securedrop_repo }}"
+    force: yes
+    dest: /srv/securedrop
+  become: False
+
+- name: Allow debian user to use docker without sudo
+  user:
+    name: debian
+    groups: docker
+
+- name: apt-get install haveged
+  apt:
+    name: haveged
+    state: present
+
+- name: GPG key creation batch
+  copy:
+    dest: /tmp/batch
+    content: |
+     %echo Generating a basic OpenPGP key
+     Key-Type: RSA
+     Key-Length: 4096
+     Subkey-Type: ELG-E
+     Subkey-Length: 4096
+     Name-Real: SecureDrop test packages
+     Name-Comment: with no passphrase
+     Name-Email: contact@securedrop.club
+     Expire-Date: 0
+     %no-protection
+     %commit
+
+- name: create GPG key
+  shell: |
+    gpg --batch --generate-key /tmp/batch
+  args:
+    creates: /home/debian/.gnupg/trustdb.gpg
+  become: False
+
+- name: /var/www/html is owned by debian
+  file:
+    path: /var/www/html
+    state: directory
+    owner: debian
+
+- name: /var/www/html/conf is owned by debian
+  file:
+    path: /var/www/html/conf
+    state: directory
+    owner: debian
+
+- name: expose the public GPG key
+  shell: |
+    gpg --export --armor > /var/www/html/key.asc
+  args:
+    creates: /var/www/html/key.asc
+  become: False
+
+- name: Copy index.html
+  template:
+    src: index.html
+    dest: /var/www/html/index.html
+    owner: debian
+    mode: "0644"
+
+- name: reprepro configuration
+  copy:
+    dest: /var/www/html/conf/distributions
+    content: |
+      Origin: Debian
+      Label: SecureDrop
+      Suite: stable
+      Codename: trusty
+      Architectures: amd64 source
+      Components: main
+      Description: SecureDrop
+      SignWith: yes
+
+- name: Copy update-packages.sh
+  template:
+    src: update-packages.sh
+    dest: /srv/update-packages.sh
+    owner: debian
+    mode: "0755"
+
+- name: Copy crontab
+  template:
+    src: crontab
+    dest: /srv/crontab
+    owner: debian
+    mode: "0600"
+  register: crontab
+
+- name: Activate crontab
+  shell: crontab /srv/crontab
+  when: crontab|changed
+  become: False
+
+- name: start https-portal
+  docker_container:
+    name: https-portal
+    image: steveltn/https-portal:1
+    restart_policy: always
+    ports:
+      - '80:80'
+      - '443:443'
+    env:
+      DOMAINS: 'packages.{{ domain }} -> http://packages.{{ domain }}:8080'
+      STAGE: "{% if with_fake_LE is undefined %}production{% else %}staging{% endif %}"
+    state: "{% if with_https is defined %}started{% else %}absent{% endif %}"

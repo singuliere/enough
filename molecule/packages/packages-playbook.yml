@@ -1,0 +1,25 @@
+---
+- name: install packages
+  hosts: packages-host
+
+  roles:
+    - { role: ansible-role-docker, docker_install_compose: false }
+
+    - role: jdauphant.nginx
+      nginx_http_params:
+         - access_log "/var/log/nginx/access.log"
+      nginx_sites:
+        default:
+          - listen "{% if with_https is defined %}8080{% else %}80{% endif %}"
+          - server_name _
+          - root /var/www/html/
+
+    - { role: packages }
+
+    - role: monitor_http_vhost
+      http_vhost_name: Packages
+      http_vhost_fqdn: "packages.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "apt-key"
+
+  become: True
