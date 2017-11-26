@@ -22,6 +22,7 @@ make build-debs
 
 sudo apt-get install -y reprepro
 reprepro -Vb /var/www/html includedeb trusty build/*.deb
+rm -fr /var/www/html/{pool,dists,db}
 
 git clean -fqqdx
 git rev-parse HEAD > /tmp/hash
