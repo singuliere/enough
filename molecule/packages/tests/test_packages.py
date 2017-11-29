@@ -17,7 +17,7 @@ def test_packages(host):
        echo 'RUN wget {url}/key.asc'
        echo 'RUN apt-key add key.asc'
        echo 'RUN apt-get install -y software-properties-common'
-       echo 'RUN apt-add-repository {url}'
+       echo 'RUN apt-add-repository {url}/develop'
        echo 'RUN apt-get update'
        echo 'RUN apt-get install -y securedrop-ossec-agent'
     ) > /tmp/packages-try/Dockerfile
