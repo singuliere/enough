@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+cd /srv/securedrop
+git fetch
+
+sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev dpkg-dev git rsync
+sudo apt-get install -y reprepro
+
+for branch in {{ packages_branches | join(' ') }} ; do
+
+    mkdir -p /tmp/$branch
+    
+    git clean -fqqdx
+    git reset --hard origin/$branch
+    
+    if test "$(cat /tmp/$branch/hash 2>/dev/null)" = "$(git rev-parse HEAD)" ; then
+        echo "Nothing to do for $branch"
+        continue
+    fi
+
+    (
+        rm -fr /srv/virtualenv
+        virtualenv /srv/virtualenv
+        source /srv/virtualenv/bin/activate
+        pip install -r securedrop/requirements/develop-requirements.txt
+        
+        make build-debs
+    )
+    rm -fr /var/www/html/$branch/{pool,dists,db}
+    reprepro -Vb /var/www/html/$branch includedeb trusty build/*.deb
+
+    git clean -fqqdx
+    git rev-parse HEAD > /tmp/$branch/hash
+done
