@@ -11,7 +11,7 @@
   # https://github.com/ansible/ansible/issues/27520#issuecomment-321966784
   local_action:
     module: file
-    path: "~/.ansible/cp/{{ hostvars[inventory_hostname]['ansible_host'] }}-{{ hostvars[inventory_hostname]['ansible_port'] }}-{{ hostvars[inventory_hostname]['ansible_user'] }}"
+    path: "~/.ansible/cp/{{ ansible_host }}-{{ ansible_port }}-{{ ansible_user }}"
     state: absent
 
 - name: reload kvm and kvm_intel
