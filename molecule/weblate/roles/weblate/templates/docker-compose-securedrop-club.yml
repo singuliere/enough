@@ -22,6 +22,7 @@ services:
       - database
       - cache
     environment:
+      - WEBLATE_DEBUG=0
       - WEBLATE_EMAIL_HOST={{ hostvars["postfix-host"]["ansible_host"] }}
       - WEBLATE_EMAIL_PORT=465
       - WEBLATE_EMAIL_USE_TLS=0
