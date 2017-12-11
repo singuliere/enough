@@ -22,7 +22,6 @@ services:
       - database
       - cache
     environment:
-      - WEBLATE_DEBUG=0
       - WEBLATE_EMAIL_HOST={{ hostvars["postfix-host"]["ansible_host"] }}
       - WEBLATE_EMAIL_PORT=465
       - WEBLATE_EMAIL_USE_TLS=0
@@ -32,9 +31,14 @@ services:
       - WEBLATE_ADMIN_NAME=admin
       - WEBLATE_ADMIN_EMAIL={{ WEBLATE_ADMIN_EMAIL }}
       - WEBLATE_ADMIN_PASSWORD={{ WEBLATE_ADMIN_PASSWORD }}
-      - WEBLATE_ALLOWED_HOSTS={{ vhost_fqdn }}
 {% if with_https is defined %}
+      - WEBLATE_DEBUG=0
       - WEBLATE_ENABLE_HTTPS=1
+      - WEBLATE_ALLOWED_HOSTS={{ vhost_fqdn }}
+{% else %}
+      - WEBLATE_DEBUG=1
+      - WEBLATE_ENABLE_HTTPS=0
+      - WEBLATE_ALLOWED_HOSTS=*
 {% endif %}
       - WEBLATE_REGISTRATION_OPEN=1
       - WEBLATE_SOCIAL_AUTH_GITHUB_KEY=ccd2a029302c4258d5fd
