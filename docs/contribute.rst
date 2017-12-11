@@ -1,6 +1,44 @@
 Contribute
 ==========
 
+This is the contribution guide to the `securedrop.club` infrastructure
+which is based on Ansible. If you're a seasoned Free Software
+contributor looking for a quick start, take a look at the `list of
+bugs and features
+<https://lab.securedrop.club/main/securedrop-club/issues>`__,
+otherwise keep reading.
+
+.. note:: If you want to contribute to the SecureDrop code base, take
+          a look at the `SecureDrop contribution guide <https://docs.securedrop.org/en/latest/development/getting_started.html>`__. 
+
+Resources
+---------
+
+* Repository and issue tracking: http://lab.securedrop.club/main/securedrop-club
+* Forum: https://forum.securedrop.club/c/devops
+* Instant messenging: https://gitter.im/freedomofpress/securedrop
+* License: `AGPLv3 <https://lab.securedrop.club/main/securedrop-club/blob/master/LICENSE>`__
+* :doc:`Who's who <team>`
+* Requirement: `Integration testing`_
+
+Bugs and features list
+----------------------
+
+Each service under the `securedrop.club` domain can be worked on
+independantly and have their own integration tests. There is no need
+to understand how `Weblate` is deployed if you're improving
+`Discourse`, for instance.
+
+* `Weblate <https://weblate.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Weblate>`__
+* `Discourse <https://forum.securedrop.club>`__ (no playbook yet) and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Discourse>`__
+* `GitLab <https://lab.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=GitLab>`__
+* `Packages <https://packages.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Packages>`__
+
+There are a few (and it must not grow too much) base services that
+also need work (bind, postfix etc.).
+
+* `Other elements of infrastructure <https://securedrop-club.readthedocs.io>`__ and their associated `playbooks <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Other>`__
+
 Organization
 ------------
 
@@ -14,16 +52,6 @@ organization or structure) and are expected to follow these rules:
 * Any person impacted by an action can call for a vote
 * People with access to an exclusive resource must register themselves
   in the :doc:`team directory <team>`
-
-Resources
----------
-
-* Repository and issue tracking: http://lab.securedrop.club/main/securedrop
-* Forum: https://forum.securedrop.club/c/devops
-* Instant messenging: https://gitter.im/freedomofpress/securedrop
-* License: AGPLv3
-* :doc:`Who's who <team>`
-* Requirements: integration tests
 
 Getting started
 ---------------
