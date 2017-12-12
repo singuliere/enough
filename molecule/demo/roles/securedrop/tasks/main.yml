@@ -28,9 +28,10 @@
 
 # End of Note
 
-- name: git clone https://lab.securedrop.club/main/securedrop.git
+- name: git clone https://lab.securedrop.club/freedomofpress/securedrop.git
   git:
-    repo: 'https://lab.securedrop.club/main/securedrop.git'
+    repo: 'https://lab.securedrop.club/freedomofpress/securedrop.git'
+    version: master
     force: yes
     dest: /srv/securedrop
 
