@@ -17,3 +17,9 @@
   template:
     dest: /etc/sudoers.d/icinga2_check_git
     src: templates/icinga2_check_git
+
+- name: install sudo file for check_running_kernel on ubuntu hosts
+  template:
+    dest: /etc/sudoers.d/icinga2_check_running_kernel
+    src: templates/icinga2_check_running_kernel
+  when: 'ansible_user == "ubuntu"'
