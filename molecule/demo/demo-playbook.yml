@@ -35,13 +35,13 @@
           - server_name source.demo.{{ domain }}
           - access_log  "/var/log/nginx/source.demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/source.demo.{{ domain }}.error.log"
-          - location /  { proxy_pass http://{{ box_ip }}:8080 ; }
+          - location /  { proxy_pass http://192.168.0.1:8080 ; }
         journalist:
           - listen 80
           - server_name journalist.demo.{{ domain }}
           - access_log  "/var/log/nginx/journalist.demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/journalist.demo.{{ domain }}.error.log"
-          - location /  { proxy_pass http://{{ box_ip }}:8081 ; }
+          - location /  { proxy_pass http://192.168.0.1:8081 ; }
       nginx_configs:
         proxy:
           - proxy_set_header Proxy ""
