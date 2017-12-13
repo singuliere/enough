@@ -82,8 +82,8 @@
       GITLAB_SECRETS_OTP_KEY_BASE: "{{ gitlab_secrets_otp_key_base }}"
       GITLAB_ROOT_PASSWORD: "{{ gitlab_password }}"
       # a worker is killed if it consumes between MIN and MAX
-      GITLAB_UNICORN_MEMORY_MIN: '800100100'
-      GITLAB_UNICORN_MEMORY_MAX: '900100100'
+      GITLAB_UNICORN_MEMORY_MIN: '700100100'
+      GITLAB_UNICORN_MEMORY_MAX: '800100100'
 
 # to not block entropy
 - name: apt-get install haveged
