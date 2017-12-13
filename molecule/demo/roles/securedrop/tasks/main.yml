@@ -68,21 +68,7 @@
     - start-securedrop-demo.sh
     - stop-securedrop-demo.sh
 
-- name: start vagrant developpement box
-  command: vagrant up development
-  args:
-    chdir: /srv/securedrop
-
-- name: retrieve box ip
-  shell: vagrant ssh-config development | awk '$1 == "HostName" {print $2}'
-  args:
-    chdir: /srv/securedrop
-  register: cmd
-  notify:
-    - stop securedrop servers
-    - start securedrop servers
-
-- set_fact:
-    box_ip: "{{ cmd.stdout }}"
-- debug:
-    var: box_ip
+- name: build asynchronously vagrant developpement box (fire and forget)
+  command: /usr/local/bin/rebuild-securedrop-demo.sh
+  async: 1000
+  poll: 0
