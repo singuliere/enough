@@ -65,8 +65,16 @@
   become: True
   with_items:
     - rebuild-securedrop-demo.sh
+    - reset-securedrop-demo.sh
     - start-securedrop-demo.sh
     - stop-securedrop-demo.sh
+
+- name: install demo credentials
+  copy:
+    src: "files/{{ item }}"
+    dest: /srv/securedrop
+  with_items:
+    - var-lib-securedrop.tar.gz
 
 - name: build asynchronously vagrant developpement box (fire and forget)
   command: /usr/local/bin/rebuild-securedrop-demo.sh
