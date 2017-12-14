@@ -9,6 +9,10 @@
     - qr.png
     - test_journalist_key.sec
     - jsOTP.js
+    - favicon.png
+    - logo.png
+    - source.css
+
 
 - name: copy templated static files
   template:
