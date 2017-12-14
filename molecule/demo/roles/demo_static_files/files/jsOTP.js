@@ -1,3 +1,11 @@
+/*
+* File combining 
+* (1) sha.js by Brian Turek 2008-2013 under BSD license
+* (2) and a modified js OTP implementation found on JSFiddle
+*
+* See https://github.com/jiangts/JS-OTP for more information
+*/
+
 (function() {
   var Hotp, Totp;
 
