@@ -6,6 +6,13 @@
     dest: /var/www/html
     owner: www-data
   with_items:
-    - index.html
     - qr.png
     - test_journalist_key.sec
+
+- name: copy templated static files
+  template:
+    src: "templates/{{ item }}"
+    dest: /var/www/html
+    owner: www-data
+  with_items:
+    - index.html
