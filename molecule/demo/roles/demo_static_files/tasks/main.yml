@@ -21,3 +21,4 @@
     owner: www-data
   with_items:
     - index.html
+    - error.html

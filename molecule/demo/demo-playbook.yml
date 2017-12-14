@@ -23,6 +23,7 @@
       nginx_http_params:
         - access_log "/var/log/nginx/access.log"
         - server_names_hash_bucket_size 128
+        - error_page 500 501 502 503 504 /error.html
       nginx_sites:
         default:
           - listen 80
@@ -36,12 +37,14 @@
           - access_log  "/var/log/nginx/source.demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/source.demo.{{ domain }}.error.log"
           - location /  { proxy_pass http://192.168.0.1:8080 ; }
+          - location /error.html { internal; root /var/www/html/; }
         journalist:
           - listen 80
           - server_name journalist.demo.{{ domain }}
           - access_log  "/var/log/nginx/journalist.demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/journalist.demo.{{ domain }}.error.log"
           - location /  { proxy_pass http://192.168.0.1:8081 ; }
+          - location /error.html { internal; root /var/www/html/; }
       nginx_configs:
         proxy:
           - proxy_set_header Proxy ""
