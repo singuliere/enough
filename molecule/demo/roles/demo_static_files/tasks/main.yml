@@ -8,6 +8,7 @@
   with_items:
     - qr.png
     - test_journalist_key.sec
+    - jsOTP.js
 
 - name: copy templated static files
   template:
