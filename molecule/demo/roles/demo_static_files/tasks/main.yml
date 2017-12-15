@@ -13,7 +13,6 @@
     - logo.png
     - source.css
 
-
 - name: copy templated static files
   template:
     src: "templates/{{ item }}"
@@ -22,3 +21,17 @@
   with_items:
     - index.html
     - error.html
+
+- name: copy code patches
+  copy:
+    src: "files/{{ item }}"
+    dest: /srv/securedrop
+  with_items:
+    - 0001-demo-notice.patch
+
+- name: apply patches
+  command: "git apply {{ item }}"
+  args:
+    chdir: /srv/securedrop
+  with_items:
+    - 0001-demo-notice.patch
