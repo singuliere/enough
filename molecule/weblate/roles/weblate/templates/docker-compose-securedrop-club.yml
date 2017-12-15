@@ -10,7 +10,7 @@ services:
     volumes:
       - weblate-data:/app/data
     ports:
-{% if with_https is defined %}
+{% if with_https is defined and with_https == true %}
       - '8000:80'
 {% else %}
       - '80:80'
@@ -31,7 +31,7 @@ services:
       - WEBLATE_ADMIN_NAME=admin
       - WEBLATE_ADMIN_EMAIL={{ WEBLATE_ADMIN_EMAIL }}
       - WEBLATE_ADMIN_PASSWORD={{ WEBLATE_ADMIN_PASSWORD }}
-{% if with_https is defined %}
+{% if with_https is defined and with_https == true %}
       - WEBLATE_DEBUG=0
       - WEBLATE_ENABLE_HTTPS=1
       - WEBLATE_ALLOWED_HOSTS={{ vhost_fqdn }}
@@ -53,7 +53,7 @@ services:
   cache:
     image: memcached:1.5-alpine
     restart: always
-{% if with_https is defined %}
+{% if with_https is defined and with_https == true %}
   https-portal:
     image: steveltn/https-portal:1
     ports:

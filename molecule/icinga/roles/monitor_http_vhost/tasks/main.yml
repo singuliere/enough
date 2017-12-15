@@ -6,7 +6,7 @@
         {% if http_vhost_uri is defined %}
           http_uri = "{{ http_vhost_uri }}"
         {% endif %}
-        {% if with_https is defined %}
+        {% if with_https is defined and with_https == true %}
           http_ssl = true
         {% endif %}
         {% if http_vhost_string is defined %}
