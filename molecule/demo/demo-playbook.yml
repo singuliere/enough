@@ -18,6 +18,9 @@
 - name: install nginx frontend
   hosts: demo-host
   become: True
+  vars:
+    with_https: false
+
   roles:
     - role: jdauphant.nginx
       nginx_http_params:
