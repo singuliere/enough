@@ -72,3 +72,15 @@
       http_vhost_fqdn: "journalist.demo.{{ domain }}"
       http_vhost_uri: "/"
       http_vhost_string: "You should be redirected automatically to target URL"
+
+    - role: monitor_http_vhost
+      http_vhost_name: Demo home sample notice
+      http_vhost_fqdn: "demo.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "This is a sample SecureDrop for demonstration purposes only."
+
+    - role: monitor_http_vhost
+      http_vhost_name: Demo source sample notice
+      http_vhost_fqdn: "source.demo.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "This is a sample SecureDrop for demonstration purposes only."
