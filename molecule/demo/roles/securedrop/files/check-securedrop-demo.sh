@@ -5,7 +5,7 @@ box_ip=$(vagrant ssh-config development | awk '$1 == "HostName" {print $2}')
 
 # test if curl didn't answered correctly
 
-if ! curl -s $box_ip:8080 2>&1 >> /dev/null
+if ! curl -s $box_ip:8080 2>&1 > /dev/null
 then
     echo should rebuild demo
     if pgrep -f rebuild-securedrop-demo >/dev/null
@@ -17,7 +17,7 @@ then
     exit
 fi
 
-if ! curl -s $box_ip:8081 2>&1 >> /dev/null
+if ! curl -s $box_ip:8081 2>&1 > /dev/null
 then
     echo should rebuild demo
     if pgrep -f rebuild-securedrop-demo >/dev/null
