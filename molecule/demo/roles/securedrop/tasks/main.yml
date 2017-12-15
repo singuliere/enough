@@ -68,6 +68,16 @@
     - reset-securedrop-demo.sh
     - start-securedrop-demo.sh
     - stop-securedrop-demo.sh
+    - check-securedrop-demo.sh
+
+- name: install cron file
+  cron:
+    name: check securedrop demo
+    job: /usr/local/bin/check-securedrop-demo.sh
+    minute: "*/15"
+    user: "{{ ansible_user }}"
+    cron_file: check-securedrop-demo
+  become: True
 
 - name: install demo credentials
   copy:
