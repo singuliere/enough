@@ -1,9 +1,10 @@
 version: '2'
 services:
   weblate:
-    # remove when the image containing the fix https://github.com/WeblateOrg/docker/pull/64
-    # is available on the docker hub
-    image: dachary/weblate
+    # right now 2.18 is :edge and that's what we want
+    # but we don't really want edge so... this should
+    # be something less bleeding-edge
+    image: weblate/weblate:edge
     links:
       - database
       - cache
