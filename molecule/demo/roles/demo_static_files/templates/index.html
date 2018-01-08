@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Welcome to the SecureDrop demo</title>
+    <script src='jsOTP.js'>
+    </script>
+    <link rel="stylesheet" href="source.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+h3 {
+  text-align: left;
+  color: #7985aa;
+}
+    </style>
+  </head>
+  <body>
+    <div class="warning" style="display: block;">
+      <p style="width: 80%;margin: auto auto">We're hosting a demonstration instance of SecureDrop so that anyone can see how it works.<br>It's been modified to run on a normal HTTPS website rather than Tor Hidden Services, which is not recommended for real instances in production.</p>
+    </div>
+    <div class="content">
+      <div class="flash important">
+        <p style="font-weight: bold; color: #F00">
+        WARNING: Do NOT submit any news tips or leaks here. This is a sample SecureDrop for demonstration purposes only.
+        </p>
+      </div>
+      <p style="margin: 2em auto; text-align: center;">SecureDrop consists of two interfaces: one for meant for sources, and another for journalists. Here are the links.</p>
+      <div class="grid">
+        <div class="index-wrap">
+          <div class="header">
+            <img src="logo.png" alt="SecureDrop">
+          </div>
+          <div class="index-row">
+            <div class="index-column index-left index-top">
+              <h2 class="welcome-text">Source Interface</h2>
+              <hr class="cut-out">
+            </div>
+            <div class="index-column index-top">
+              <h2 class="welcome-text">Journalist Interface</h2>
+              <hr class="cut-out">
+            </div>
+            <div class="index-column index-left">
+              Freely submit documents and check for journalist's feedback.
+            </div>
+            <div class="index-column">
+              A login is needed to access interface. See <a href="#credentials">below</a> for the credentials.
+            </div>
+            <div class="index-column index-left index-bottom">
+              <a class="sd-button btn alt" href="http://source.demo.{{ domain }}">SOURCE INTERFACE</a>
+            </div>
+            <div class="index-column index-bottom">
+              <a class="sd-button btn primary" href="http://journalist.demo.{{ domain }}">JOURNALIST INTERFACE</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:block; margin-top: 2em;" class="flash important">
+        <p>If you run into a problem with the demo or need to discuss more about what it does, please <a href="https://forum.securedrop.club/c/securedrop-demo">write a message in the forum</a>.</p>
+        <h2>About Journalist Interface</h2>
+        <h3 id="credentials">Credentials:</h3>
+        <p>
+        <strong>Username:</strong> journalist<br>
+        <strong>Password:</strong> WEjwn8ZyczDhQSK24YKM8C9a</p>
+        <p>You'll also need to scan the following QR code with the <a href="https://support.google.com/accounts/answer/1066447?hl=en">Google Authenticator</a> or the <a href="https://freeotp.github.io/">FreeOTP</a> smartphone app in order to generate the 6-digit codes needed for logging in.</p>
+        <h3>Time-based One-time Password</h3>
+        <div style="text-align: center">
+          <img alt="Base32 version of this QR Code: JHCO GO7V CER3 EJ4L" style="max-width:100%" src="qr.png">
+          <br>
+          Base32 version of this QR Code: JHCO GO7V CER3 EJ4L
+        </div>
+        <p>If you have no idea about getting done with Two-factor Code, you can login using the following 6-digit code:
+        <span style="font-weight: bold" id="code2fa">
+        </span>
+        (still valid for <span id="delay2fa">
+        </span>&nbsp;seconds).
+        </p>
+        <h3>GPG encryption</h3>
+        <p>Finally, all submissions are encrypted with a GPG private key, which you can download <a href="test_journalist_key.sec">here</a>.</p>
+      </div>
+    </div>
+    <script>
+function updateOtp() {
+  var totp = new jsOTP.totp();
+  var timeCode = totp.getOtp("JHCOGO7VCER3EJ4L");
+  document.getElementById("code2fa").textContent= timeCode;
+}
+function timer() {
+  var epoch = Math.round(new Date().getTime() / 1000.0);
+  var countDown = 30 - (epoch % 30);
+  if (epoch % 30 == 0) updateOtp();
+  document.getElementById("delay2fa").textContent= countDown;
+}
+updateOtp();
+timer();
+setInterval(timer, 1000);
+    </script>
+  </body>
+</html>

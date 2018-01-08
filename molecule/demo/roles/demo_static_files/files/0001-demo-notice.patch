@@ -1,0 +1,64 @@
+From a03e0c391e674b0f327dbb06eabe7c1abcef1b35 Mon Sep 17 00:00:00 2001
+From: Ubuntu <ubuntu@demo-host.securedrop.club>
+Date: Fri, 15 Dec 2017 10:22:19 +0000
+Subject: [PATCH] demo notice
+
+---
+ securedrop/journalist_templates/base.html | 6 ++++++
+ securedrop/source_templates/base.html     | 5 +++++
+ securedrop/source_templates/index.html    | 5 +++++
+ 3 files changed, 16 insertions(+)
+
+diff --git a/securedrop/journalist_templates/base.html b/securedrop/journalist_templates/base.html
+index a8f0c52f..2cbe0d87 100644
+--- a/securedrop/journalist_templates/base.html
++++ b/securedrop/journalist_templates/base.html
+@@ -53,7 +53,13 @@
+       <footer>
+         {{ gettext("Powered by <em>SecureDrop {version}</em>.").format(version=version)|safe }}
+       </footer>
++
+       {% endblock %}
++      <div class="flash important">
++        <p style="margin: 1em auto; font-weight: bold; color: #F00">
++        This is a sample SecureDrop for demonstration purposes only.
++        </p>
++      </div>
+     </div>
+   </body>
+ </html>
+diff --git a/securedrop/source_templates/base.html b/securedrop/source_templates/base.html
+index 6b6d4b1a..77fac2c9 100644
+--- a/securedrop/source_templates/base.html
++++ b/securedrop/source_templates/base.html
+@@ -43,6 +43,11 @@
+         {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }} {{ gettext('Powered by') }} SecureDrop {{ version }}.
+       </footer>
+       {% endblock %}
++      <div class="flash important">
++        <p style="margin: 1em auto; font-weight: bold; color: #F00">
++        This is a sample SecureDrop for demonstration purposes only.
++        </p>
++      </div>
+     </div>
+   </body>
+ </html>
+diff --git a/securedrop/source_templates/index.html b/securedrop/source_templates/index.html
+index 3efe965d..fa50f48f 100644
+--- a/securedrop/source_templates/index.html
++++ b/securedrop/source_templates/index.html
+@@ -83,6 +83,11 @@
+       <footer>
+         {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }} {{ gettext('Powered by') }} SecureDrop {{ version }}.
+       </footer>
++      <div class="flash important">
++        <p style="margin: 1em auto; font-weight: bold; color: #F00">
++        This is a sample SecureDrop for demonstration purposes only.
++        </p>
++      </div>
+     </div>
+ 
+     {# Warning bubble to help TB users disable Javascript with NoScript.
+-- 
+2.14.1
+

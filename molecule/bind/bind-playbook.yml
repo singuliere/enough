@@ -93,10 +93,6 @@
 
           ansible 1800 IN A 54.36.113.45
 
-          demo 1800 IN A 147.135.193.226
-          journalist.demo 1800 IN CNAME demo
-          source.demo 1800 IN CNAME demo
-
           i18n 1800 IN A 54.36.52.252
           source.i18n 1800 IN CNAME i18n
           journalist.i18n 1800 IN CNAME i18n
@@ -118,6 +114,10 @@
           {% for host, info in hostvars.items() %}
           {{ host }} 1800 IN A {{ info.ansible_host }}
           {{ host|replace("-host","") }} 1800 IN CNAME {{ host }}
+          {% if host == "demo-host" %}
+          journalist.demo 1800 IN CNAME demo
+          source.demo 1800 IN CNAME demo
+          {% endif %}
           {% endfor %}
 
           @ IN CAA 0 issue "letsencrypt.org"

@@ -1,0 +1,92 @@
+---
+
+# Note:
+# SecureDrop deployment require access to
+# lab.securedrop.club but it may be unknown by
+# securedrop.club's DNS resolver in molecule scenario.
+# Moreover, using lab's IP is not an option due to https.
+# So we hardcode it in hosts if needed. It should only
+# happen in tests scenarios.
+
+- name: lookup lab.securedrop.club
+  command: getent hosts lab.securedrop.club
+  register: cmd
+  ignore_errors: True
+
+- name: lookup real lab.securedrop.club
+  command: getent hosts lab.securedrop.club
+  delegate_to: localhost
+  register: gitlab_ip
+  when: cmd|failed
+
+- name: hardcode lab.securedrop.club if needed
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ gitlab_ip.stdout }} lab.securedrop.club"
+  when: cmd|failed
+  become: True
+
+# End of Note
+
+- name: git clone https://lab.securedrop.club/freedomofpress/securedrop.git
+  git:
+    repo: 'https://lab.securedrop.club/freedomofpress/securedrop.git'
+    version: master
+    force: yes
+    dest: /srv/securedrop
+
+- name: install securedrop requirements
+  pip:
+    requirements: /srv/securedrop/securedrop/requirements/develop-requirements.txt
+
+- name: list vagrant boxes
+  command: vagrant box list
+  args:
+    chdir: /srv/securedrop
+  register: cmd
+
+- name: download bento/ubuntu-14.04 vagrant box
+  command: vagrant box add --provider virtualbox bento/ubuntu-14.04
+  args:
+    chdir: /srv/securedrop
+  when: '"bento/ubuntu-14.04 (virtualbox" not in cmd.stdout'
+
+- name: mutate bento/ubuntu-14.04 
+  command: vagrant mutate bento/ubuntu-14.04 libvirt
+  args:
+    chdir: /srv/securedrop
+  when: '"bento/ubuntu-14.04 (libvirt" not in cmd.stdout'
+
+- name: install control files
+  copy:
+    src: "files/{{ item }}"
+    dest: /usr/local/bin
+    mode: 0755
+  become: True
+  with_items:
+    - rebuild-securedrop-demo.sh
+    - reset-securedrop-demo.sh
+    - start-securedrop-demo.sh
+    - stop-securedrop-demo.sh
+    - check-securedrop-demo.sh
+
+- name: install cron file
+  cron:
+    name: check securedrop demo
+    job: /usr/local/bin/check-securedrop-demo.sh
+    minute: "*/15"
+    user: "{{ ansible_user }}"
+    cron_file: check-securedrop-demo
+  become: True
+
+- name: install demo credentials
+  copy:
+    src: "files/{{ item }}"
+    dest: /srv/securedrop
+  with_items:
+    - var-lib-securedrop.tar.gz
+
+- name: build asynchronously vagrant developpement box (fire and forget)
+  command: /usr/local/bin/rebuild-securedrop-demo.sh
+  async: 1000
+  poll: 0

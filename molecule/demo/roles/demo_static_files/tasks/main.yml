@@ -1,0 +1,37 @@
+---
+
+- name: copy static files
+  copy:
+    src: "files/{{ item }}"
+    dest: /var/www/html
+    owner: www-data
+  with_items:
+    - qr.png
+    - test_journalist_key.sec
+    - jsOTP.js
+    - favicon.png
+    - logo.png
+    - source.css
+
+- name: copy templated static files
+  template:
+    src: "templates/{{ item }}"
+    dest: /var/www/html
+    owner: www-data
+  with_items:
+    - index.html
+    - error.html
+
+- name: copy code patches
+  copy:
+    src: "files/{{ item }}"
+    dest: /srv/securedrop
+  with_items:
+    - 0001-demo-notice.patch
+
+- name: apply patches
+  command: "git apply {{ item }}"
+  args:
+    chdir: /srv/securedrop
+  with_items:
+    - 0001-demo-notice.patch

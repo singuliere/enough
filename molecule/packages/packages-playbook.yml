@@ -8,7 +8,7 @@
         - access_log "/var/log/nginx/access.log"
       nginx_sites:
         default:
-          - listen "{% if with_https is defined %}8080{% else %}80{% endif %}"
+          - listen "{% if with_https is defined and with_https == true %}8080{% else %}80{% endif %}"
           - server_name _
           - root /var/www/html/
 

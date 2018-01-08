@@ -1,7 +1,7 @@
 ---
 - name: Set up multiple authorized keys
   authorized_key:
-    user: debian
+    user: "{{ ansible_user }}"
     state: present
     key: "{{ lookup('file', item) }}"
   with_fileglob: "{{ ssh_keys_directories }}"
