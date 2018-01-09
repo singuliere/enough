@@ -43,8 +43,8 @@ fi
 
 # test if upstream repo has been updated
 # if things go wrong, demo will be rebuilt at next run
-
-if git status -uno | grep -q "Votre branche est à jour avec 'origin/master'."
+git fetch
+if test "$(git log --oneline origin/master..)"
 then
     echo should pull and restart
     /usr/local/bin/stop-securedrop-demo.sh
