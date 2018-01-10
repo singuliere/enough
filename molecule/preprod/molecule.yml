@@ -17,7 +17,7 @@ platforms:
   - name: packages-host
     flavor: "s1-2"
   - name: demo-host
-    flavor: "s1-2"
+    flavor: "s1-4"
     image: "Ubuntu 17.10"
 provisioner:
   name: ansible
