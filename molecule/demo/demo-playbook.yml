@@ -39,14 +39,14 @@
           - server_name source.demo.{{ domain }}
           - access_log  "/var/log/nginx/source.demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/source.demo.{{ domain }}.error.log"
-          - location /  { proxy_pass http://192.168.0.1:8080 ; }
+          - location /  { proxy_pass http://127.0.0.1:8080 ; }
           - location /error.html { internal; root /var/www/html/; }
         journalist:
           - listen 80
           - server_name journalist.demo.{{ domain }}
           - access_log  "/var/log/nginx/journalist.demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/journalist.demo.{{ domain }}.error.log"
-          - location /  { proxy_pass http://192.168.0.1:8081 ; }
+          - location /  { proxy_pass http://127.0.0.1:8081 ; }
           - location /error.html { internal; root /var/www/html/; }
       nginx_configs:
         proxy:

@@ -1,5 +1,12 @@
 ---
 
+- name: create /var/www/html
+  file:
+    path: /var/www/html
+    state: directory
+    owner: www-data
+    mode: 0755
+
 - name: copy static files
   copy:
     src: "files/{{ item }}"

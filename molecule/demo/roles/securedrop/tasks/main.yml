@@ -87,6 +87,6 @@
     - var-lib-securedrop.tar.gz
 
 - name: build asynchronously vagrant developpement box (fire and forget)
-  command: /usr/local/bin/rebuild-securedrop-demo.sh
+  command: timeout 3600 flock /tmp/check-securedrop-demo.lock /usr/local/bin/check-securedrop-demo.sh > /tmp/check-securedrop-demo.log 2>&1
   async: 1000
   poll: 0
