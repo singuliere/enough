@@ -73,7 +73,7 @@
 - name: install cron file
   cron:
     name: check securedrop demo
-    job: /usr/local/bin/check-securedrop-demo.sh
+    job:  timeout 3600 flock /tmp/check-securedrop-demo.lock /usr/local/bin/check-securedrop-demo.sh > /tmp/check-securedrop-demo.log 2>&1
     minute: "*/15"
     user: "{{ ansible_user }}"
     cron_file: check-securedrop-demo
@@ -87,6 +87,6 @@
     - var-lib-securedrop.tar.gz
 
 - name: build asynchronously vagrant developpement box (fire and forget)
-  command: timeout 3600 flock /tmp/check-securedrop-demo.lock /usr/local/bin/check-securedrop-demo.sh > /tmp/check-securedrop-demo.log 2>&1
+  command: timeout 3600 flock /tmp/check-securedrop-demo.lock /usr/local/bin/check-securedrop-demo.sh
   async: 1000
   poll: 0
