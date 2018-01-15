@@ -3,7 +3,7 @@ cd /srv/securedrop
 
 git pull
 
-if vagrant status development |& grep running ; then
+if vagrant status development |& grep 'running (libvirt)' ; then
    sudo reboot
 else
    vagrant up development
