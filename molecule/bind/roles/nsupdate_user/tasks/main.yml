@@ -1,0 +1,17 @@
+- name: Install forced command
+  template:
+    src: templates/add_temp_record.sh.j2
+    dest: /usr/local/bin/add_temp_record.sh
+    mode: 0755
+
+- name: Create subdomain user
+  user:
+    name: subdomain
+
+- name: Set up multiple authorized keys
+  authorized_key:
+    user: subdomain
+    state: present
+    key: "{{ lookup('file', item) }}"
+    key_options: command="/usr/local/bin/add_temp_record.sh",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc
+  with_fileglob: "{{ ssh_keys_directories }}"

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+subdomain=$(date +%s | rev | base32 | tr -d =).test.{{ domain }}
+
+echo Creating $subdomain
+
+nsupdate <<EOF
+  server localhost
+  zone test.{{ domain }}
+  update add ns-$subdomain. 1800 A {{ hostvars['bind-host']['ansible_host'] }}
+  update add $subdomain. 1800 NS $subdomain.
+  show
+  send
+  quit
+EOF
