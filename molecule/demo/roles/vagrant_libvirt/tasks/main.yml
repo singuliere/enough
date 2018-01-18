@@ -45,3 +45,12 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0755'
+
+- name: Make git ignoring vagrant mess in /etc
+  lineinfile:
+    path: /etc/.gitignore
+    line: "{{ item }}"
+  with_items:
+    - exports
+    - libvirt/qemu/securedrop_development.xml
+    - apparmor.d/libvirt/libvirt*
