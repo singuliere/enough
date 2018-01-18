@@ -1,3 +1,4 @@
+import yaml
 testinfra_hosts = ['bind-client-host', 'external-host']
 
 def test_ns1_test(host):
@@ -50,3 +51,11 @@ def test_clean_update(host):
         EOF
         '''.format(domain, hostname, domain))
     assert 0 == cmd.rc
+
+def test_subdomain_creation (host):
+    inventory = yaml.load(open(host.backend.ansible_inventory))
+    address = inventory['all']['hosts']['bind-host']['ansible_host']
+    host= host.get_host('ansible://localhost', ansible_inventory=host.backend.ansible_inventory)
+    cmd = host.run('ssh -i ../../id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no subdomain@{}'.format(address))
+    assert 0 == cmd.rc
+    assert "Creating " in cmd.stdout.strip()
