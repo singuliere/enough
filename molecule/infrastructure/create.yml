@@ -58,7 +58,7 @@
     - block:
 
       - name: generate subdomain
-        shell: date +%S%M%H%d | base64
+        shell: date +%s | rev | base32 | tr -d =
         register: cmd
   
       - set_fact:
