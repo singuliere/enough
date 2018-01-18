@@ -9,7 +9,7 @@
 - import_playbook: test-bind-client-playbook.yml
 
 - name: commit etc
-  hosts: 'all:!external_host'
+  hosts: 'all:!external-host'
   become: true
 
   roles:
