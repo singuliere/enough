@@ -122,6 +122,8 @@
 
           @ IN CAA 0 issue "letsencrypt.org"
 
+    - role: nsupdate_user
+
 - name: Install SSHFP records
   hosts: all
   become: True
