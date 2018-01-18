@@ -8,3 +8,4 @@ pytestdebug.log
 docs/_build/
 inventory/01-hosts.yml
 private-key.yml
+*.pyc
