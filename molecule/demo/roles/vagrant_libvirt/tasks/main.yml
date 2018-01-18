@@ -46,6 +46,11 @@
     group: "{{ ansible_user }}"
     mode: '0755'
 
+- name: Make sure etckeeper is installed
+  apt:
+    name: etckeeper
+    state: present
+
 - name: Make git ignoring vagrant mess in /etc
   lineinfile:
     path: /etc/.gitignore
