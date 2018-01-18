@@ -45,3 +45,20 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0755'
+
+- name: Make sure etckeeper is installed
+  apt:
+    name: etckeeper
+    state: present
+
+- name: Untrack exports
+  command: git -C /etc rm --cached exports
+
+- name: Make git ignoring vagrant mess in /etc
+  lineinfile:
+    path: /etc/.gitignore
+    line: "{{ item }}"
+  with_items:
+    - exports
+    - libvirt/qemu/securedrop_development.xml
+    - apparmor.d/libvirt/libvirt*
