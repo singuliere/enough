@@ -193,3 +193,20 @@ Example of use in a role: `molecule/bind/roles/monitoring-bind/tasks/main.yml`.
 
 Maybe we could add a check dig on the A and NS records, and eventually
 use ``zonemaster`` or a webservice providing ``zonemaster`` results.
+
+Monitoring tweaking
+-------------------
+
+Service templates
+^^^^^^^^^^^^^^^^^
+
+A host can set a prefered service template, using the host variable
+``monitoring_service_template``.
+
+For now two templates are availables in
+`molecule/icinga/roles/icinga2/files/templates.conf`:
+
+- generic-service
+- delayed-notification-service
+
+Default is generic-service.
