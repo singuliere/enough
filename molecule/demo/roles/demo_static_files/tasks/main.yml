@@ -35,6 +35,7 @@
     dest: /srv/securedrop
   with_items:
     - 0001-demo-notice.patch
+  become: false
 
 - name: apply patches
   command: "git apply {{ item }} --3way"
@@ -42,3 +43,4 @@
     chdir: /srv/securedrop
   with_items:
     - 0001-demo-notice.patch
+  become: false
