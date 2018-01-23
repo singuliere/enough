@@ -1,0 +1,16 @@
+---
+- name: Install custom certificates
+  hosts: [ 'all' ]
+  become: true
+
+  tasks:
+
+  - name: install letsencrypt fakeroot when needed
+    include_role:
+      name: install_certs
+    vars:
+      certs:
+        - fakeleintermediatex1.pem
+        - fakelerootx1.pem
+    when:
+      - 'with_fake_LE is defined'

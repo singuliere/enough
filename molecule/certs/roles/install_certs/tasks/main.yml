@@ -1,0 +1,7 @@
+---
+- name: Install certs
+  copy:
+    src: "files/certs/{{ item }}"
+    dest: /etc/ssl/certs/
+  with_items: "{{ certs }}"
+  notify: rehash certs
