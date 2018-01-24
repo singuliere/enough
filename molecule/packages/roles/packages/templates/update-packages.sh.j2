@@ -12,7 +12,7 @@ for branch in {{ packages_branches | join(' ') }} ; do
 
     mkdir -p /tmp/$branch
     
-    git clean -fqqdx
+    git clean -ffqdx
     git reset --hard origin/$branch
     
     if test "$(cat /tmp/$branch/hash 2>/dev/null)" = "$(git rev-parse HEAD)" ; then
@@ -31,6 +31,6 @@ for branch in {{ packages_branches | join(' ') }} ; do
     rm -fr /var/www/html/$branch/{pool,dists,db}
     reprepro -Vb /var/www/html/$branch includedeb trusty build/*.deb
 
-    git clean -fqqdx
     git rev-parse HEAD > /tmp/$branch/hash
+    git clean -ffqdx
 done
