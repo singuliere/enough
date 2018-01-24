@@ -130,6 +130,17 @@
     mode: "0600"
   register: crontab
 
+- name: update-packages.sh log file
+  file:
+    path: /var/log/update-packages.log
+    state: touch
+    owner: debian
+
+- name: install /etc/logrotate.d/packages-logrotate
+  copy:
+    src: packages-logrotate
+    dest: /etc/logrotate.d/packages-logrotate
+
 - name: Activate crontab
   shell: crontab /srv/crontab
   when: crontab|changed
