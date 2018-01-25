@@ -39,6 +39,17 @@
     name: debian
     groups: docker
 
+- name: reset ssh connection to be in the docker group
+  # ugly hack in replacement to
+  # meta: reset_connection
+  # The later fails in this way:
+  # https://github.com/ansible/ansible/issues/27520#issuecomment-321966784
+  local_action:
+    module: file
+    path: "~/.ansible/cp/{{ ansible_host }}-{{ ansible_port }}-{{ ansible_user }}"
+    state: absent
+  become: False
+
 - name: apt-get install haveged
   apt:
     name: haveged
