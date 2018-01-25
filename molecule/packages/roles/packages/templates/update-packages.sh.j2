@@ -2,20 +2,24 @@
 
 set -e
 
+echo ======================================================================
+date
+echo ======================================================================
+
 cd /srv/securedrop
 git fetch
 
 sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev dpkg-dev git rsync
 sudo apt-get install -y reprepro
 
-for branch in {{ packages_branches | join(' ') }} ; do
+for branch in ${1:-{{ packages_branches | join(' ') }}} ; do
 
     mkdir -p /tmp/$branch
     
-    git clean -fqqdx
+    git clean -ffqdx
     git reset --hard origin/$branch
     
-    if test "$(cat /tmp/$branch/hash 2>/dev/null)" = "$(git rev-parse HEAD)" ; then
+    if test "$(cat /tmp/$branch/hash 2>/dev/null)" = "$(git rev-parse origin/$branch)" ; then
         echo "Nothing to do for $branch"
         continue
     fi
@@ -31,6 +35,6 @@ for branch in {{ packages_branches | join(' ') }} ; do
     rm -fr /var/www/html/$branch/{pool,dists,db}
     reprepro -Vb /var/www/html/$branch includedeb trusty build/*.deb
 
-    git clean -fqqdx
-    git rev-parse HEAD > /tmp/$branch/hash
+    git clean -ffqdx
+    git rev-parse origin/$branch > /tmp/$branch/hash
 done
