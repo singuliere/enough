@@ -13,6 +13,7 @@
     module: file
     path: "~/.ansible/cp/{{ ansible_host }}-{{ ansible_port }}-{{ ansible_user }}"
     state: absent
+  become: no
 
 - name: reload kvm and kvm_intel
   shell:
