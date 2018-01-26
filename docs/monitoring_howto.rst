@@ -25,7 +25,7 @@ To disable monitoring for some host, you have to define a host variable
 ``not_monitored``.
 
 Base system monitoring
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 For each host we:
 
@@ -46,7 +46,7 @@ For each host we:
 -  check cron process
 
 Git repos monitoring
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 A host can declare a git repo to be checked (designed originally for
 `etckeeper`):
@@ -62,7 +62,7 @@ The git check command is sudoed.
 Example of use in a role: `molecule/icinga/roles/deploy_dummy_monitoring_objects/tasks/main.yml`.
 
 Disk and partitions monitoring
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 A host can declare any partition to be checked:
 
@@ -81,7 +81,7 @@ A host can declare any partition to be checked:
       }
 
 Processes monitoring
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 A host can declare any process presence to be checked:
 
@@ -95,7 +95,7 @@ A host can declare any process presence to be checked:
 Example of use in a role: `molecule/icinga/roles/deploy_dummy_monitoring_objects/tasks/main.yml`.
 
 Mail sending monitoring
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 A host can declare any non-null value in ``vars.sendmail``. Then
 mailname, mail queue and process are checked.
@@ -118,7 +118,7 @@ send emails:
    the majors mails domains)
 
 Web services monitoring
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 A host can declare hosting web at a given fqdn:
 
@@ -174,7 +174,7 @@ role helps to declare it:
       with_https: true
 
 DNS service monitoring
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 A host can declare hosted zones files which can be checked via
 ``named-checkzone`` (syntax consistency) and ``check_whois`` (domain
@@ -193,3 +193,20 @@ Example of use in a role: `molecule/bind/roles/monitoring-bind/tasks/main.yml`.
 
 Maybe we could add a check dig on the A and NS records, and eventually
 use ``zonemaster`` or a webservice providing ``zonemaster`` results.
+
+Monitoring tweaking
+-------------------
+
+Service templates
+^^^^^^^^^^^^^^^^^
+
+A host can set a prefered service template, using the host variable
+``monitoring_service_template``.
+
+For now two templates are availables in
+`molecule/icinga/roles/icinga2/files/templates.conf`:
+
+- generic-service
+- delayed-notification-service
+
+Default is generic-service.

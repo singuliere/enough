@@ -1,0 +1,28 @@
+- name: open port 80 and 443 on firewall for tests
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+    - role: firewall
+      os_security_group_tcp_external: [ 80, 443 ]
+
+- name: install nginx frontend on tests hosts
+  hosts: all:!bind-host
+  become: True
+
+  roles:
+    - role: jdauphant.nginx
+      nginx_http_params:
+        - server_names_hash_bucket_size 128
+      nginx_sites:
+        "{{ inventory_hostname }}":
+          - listen 80
+          - server_name {{ inventory_hostname }}.{{ domain }}
+          - root        /var/www/html
+    - role: certbot-nginx
+      icingaadmins_email: devnull@securedrop.club
+      vhost_fqdn:         "{{ inventory_hostname }}.{{ domain }}"
+      certbot_redirect:   true
+      with_fake_LE:       true
+
+

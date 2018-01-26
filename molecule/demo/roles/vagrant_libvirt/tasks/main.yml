@@ -51,8 +51,8 @@
     name: etckeeper
     state: present
 
-- name: Untrack exports
-  command: git -C /etc rm --cached exports
+- name: Untrack exports if tracked
+  shell: git -C /etc rm --cached exports || true
 
 - name: Make git ignoring vagrant mess in /etc
   lineinfile:
