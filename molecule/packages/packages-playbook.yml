@@ -28,7 +28,7 @@
 
     - role: monitor_http_vhost
       http_vhost_name: Packages
-      http_vhost_fqdn: "packages.{{ domain }}"
+      http_vhost_fqdn: "{{ vhost_fqdn }}"
       http_vhost_uri: "/"
       http_vhost_string: "apt-key"
 
