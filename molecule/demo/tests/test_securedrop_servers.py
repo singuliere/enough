@@ -22,6 +22,7 @@ def test_source (host):
             time.sleep(10)
     assert cmd.rc == 0
     assert 'Submit documents' in cmd.stdout
+    assert '/?l=fr_FR' in cmd.stdout
 
 def test_journalist (host):
     for _ in range (100):
