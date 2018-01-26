@@ -1,5 +1,8 @@
 testinfra_hosts = ['packages-host']
 
+def try_if_letsencrypt(host):
+    with host.sudo():
+        return host.file("/etc/letsencrypt").exists
 
 def test_packages(host):
     host.ansible("file", "dest=/tmp/packages-try state=directory", check=False)
@@ -12,9 +15,9 @@ def test_packages(host):
     flock /tmp/update-packages \
           bash -x /srv/update-packages.sh develop \
           >> /var/log/update-packages.log 2>&1
-    sed -i -e "s|%%url%%|https://packages.$(hostname -d)|g" /tmp/packages-try/Dockerfile
+    sed -i -e "s|%%url%%|http{}://packages.$(hostname -d)|g" /tmp/packages-try/Dockerfile
     docker build --no-cache --tag packages-try /tmp/packages-try
-    """)
+    """.format('s' if try_if_letsencrypt(host) else ''))
     print(cmd.stdout)
     print(cmd.stderr)
     assert 0 == cmd.rc
