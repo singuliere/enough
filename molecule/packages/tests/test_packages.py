@@ -1,5 +1,3 @@
-import utils
-
 testinfra_hosts = ['packages-host']
 
 
@@ -14,9 +12,9 @@ def test_packages(host):
     flock /tmp/update-packages \
           bash -x /srv/update-packages.sh develop \
           >> /var/log/update-packages.log 2>&1
-    sed -i -e 's|%%url%%|{url}|g' /tmp/packages-try/Dockerfile
+    sed -i -e "s|%%url%%|https://packages.$(hostname -d)|g" /tmp/packages-try/Dockerfile
     docker build --no-cache --tag packages-try /tmp/packages-try
-    """.format(url=utils.get_address(host)))
+    """)
     print(cmd.stdout)
     print(cmd.stderr)
     assert 0 == cmd.rc
