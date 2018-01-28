@@ -10,8 +10,11 @@
 
 - name: apt-get install gitlab-runner
   apt:
-    name: gitlab-runner=10.1.0
+    name: gitlab-runner=10.4.0
     state: present
+
+- name: hold gitlab-runner
+  command: apt-mark hold gitlab-runner
 
 - name: get gitlab API token
   uri:
