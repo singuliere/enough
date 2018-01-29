@@ -1,2 +1,2 @@
 ---
-vhost_fqdn: weblate.{{ domain }}
+weblate_vhost_fqdn: weblate.{{ domain }}

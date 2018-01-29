@@ -1,11 +1,11 @@
 <h3>keys</h3>
 <pre>
-  wget http{% if with_https is defined and with_https == true %}s{% endif %}://{{ inventory_hostname }}.{{ domain }}/key.asc
+  wget http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}.{{ domain }}/key.asc
   sudo apt-key add key.asc
 </pre>
 {% for branch in packages_branches %}
 <h3>{{ branch }}</h3>
 <pre>
-  sudo apt-add-repository http{% if with_https is defined and with_https == true %}s{% endif %}://{{ inventory_hostname }}.{{ domain }}/{{ branch }}
+  sudo apt-add-repository http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}.{{ domain }}/{{ branch }}
 </pre>
 {% endfor %}

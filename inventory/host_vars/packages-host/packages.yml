@@ -1,0 +1,2 @@
+---
+packages_vhost_fqdn: packages.{{ domain }}
