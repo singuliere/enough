@@ -8,8 +8,7 @@ icingaweb2_user_pass: "zoR9thie6Phud4mooYoo"
 icingaadmins_email: icingaadmins@{{ domain }}
 
 
-vhost_fqdn: icinga.{{ domain }}
-#vhost_fqdn: _
+icinga_vhost_fqdn: icinga.{{ domain }}
 
 # available but un-needed options for let's encrypt
 # certbot_redirect: true

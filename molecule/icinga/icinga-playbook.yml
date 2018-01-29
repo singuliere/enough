@@ -25,6 +25,8 @@
   - name: install letsencrypt
     include_role:
       name: certbot-nginx
+    vars:
+      http_vhost: icinga_http_vhost
     when:
       - 'with_https is defined'
 
