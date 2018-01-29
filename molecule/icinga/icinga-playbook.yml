@@ -26,8 +26,8 @@
     include_role:
       name: certbot-nginx
     vars:
-      admins_email: icingaadmins_email
-      http_vhost: icinga_http_vhost
+      admins_email: "{{ icingaadmins_email }}"
+      vhost_fqdn: "{{ icinga_vhost_fqdn }}"
     when:
       - 'with_https is defined'
 
