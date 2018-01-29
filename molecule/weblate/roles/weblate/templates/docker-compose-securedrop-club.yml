@@ -35,7 +35,7 @@ services:
 {% if with_https is defined and with_https == true %}
       - WEBLATE_DEBUG=0
       - WEBLATE_ENABLE_HTTPS=1
-      - WEBLATE_ALLOWED_HOSTS={{ vhost_fqdn }}
+      - WEBLATE_ALLOWED_HOSTS={{ weblate_vhost_fqdn }}
 {% else %}
       - WEBLATE_DEBUG=1
       - WEBLATE_ENABLE_HTTPS=0
@@ -62,7 +62,7 @@ services:
       - '443:443'
     restart: always
     environment:
-      DOMAINS: '{{ vhost_fqdn }} -> http://{{ vhost_fqdn }}:8000'
+      DOMAINS: '{{ weblate_vhost_fqdn }} -> http://{{ weblate_vhost_fqdn }}:8000'
 {% if with_fake_LE is undefined %}
       STAGE: production
 {% endif %}
