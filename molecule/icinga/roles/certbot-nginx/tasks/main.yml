@@ -11,7 +11,7 @@
   shell: |
     certbot -n                                                   \
       --agree-tos                                                \
-      --email {{ icingaadmins_email }}                           \
+      --email {{ admins_email }}                                 \
       -d {{ vhost_fqdn }}                                        \
       --authenticator standalone --installer nginx               \
       --pre-hook  "systemctl stop nginx"                         \
