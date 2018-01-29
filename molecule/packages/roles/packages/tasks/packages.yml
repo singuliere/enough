@@ -166,6 +166,6 @@
       - '80:80'
       - '443:443'
     env:
-      DOMAINS: '{{ vhost_fqdn }} -> http://{{ vhost_fqdn }}:8080'
+      DOMAINS: '{{ packages_vhost_fqdn }} -> http://{{ packages_vhost_fqdn }}:8080'
       STAGE: "{% if with_fake_LE is undefined %}production{% else %}staging{% endif %}"
     state: "{% if with_https is defined and with_https == true %}started{% else %}absent{% endif %}"

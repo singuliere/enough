@@ -1,2 +1,2 @@
 ---
-vhost_fqdn: packages.{{ domain }}
+packages_vhost_fqdn: packages.{{ domain }}
