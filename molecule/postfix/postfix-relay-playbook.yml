@@ -35,7 +35,8 @@
 
       postfix__maincf:
         - name: 'smtpd_relay_restrictions'
-          state: 'absent'
+          value: "{% if with_fake_LE is defined or with_https is undefined %}check_recipient_access inline:{{'{'}}dachary.org=OK{{'}'}} defer{% endif %}"
+          state: "{% if with_fake_LE is defined or with_https is undefined %}present{% else %}absent{% endif %}"
         - name: 'mynetworks'
           value:
             - name: '0.0.0.0/0'
