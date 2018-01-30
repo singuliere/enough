@@ -1,0 +1,12 @@
+---
+- name: install gitlab runner
+  hosts: runner-host
+
+  vars_files:
+    - ../../clouds.yml
+
+  roles:
+    - { role: ansible-role-docker, docker_install_compose: false }
+    - { role: gitlab-ci }
+
+  become: True
