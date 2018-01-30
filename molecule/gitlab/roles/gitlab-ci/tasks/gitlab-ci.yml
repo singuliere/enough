@@ -90,5 +90,8 @@
         --executor docker \
         --docker-image debian:stretch \
         --docker-volumes /srv:/srv \
-        --docker-pull-policy always
+        --docker-volumes /var/run/docker.sock:/run/docker.sock \
+        --docker-volumes /usr/lib/x86_64-linux-gnu/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7 \
+        --docker-volumes $(which docker):/bin/docker \
+        --docker-pull-policy if-not-present
   when: result|failed
