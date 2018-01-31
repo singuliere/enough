@@ -183,6 +183,8 @@
 
 - name: generate strongers dhparams
   command: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+  args:
+    creates: /etc/nginx/dhparams.pem
 
 - name: setup gninx dhparams
   lineinfile:
