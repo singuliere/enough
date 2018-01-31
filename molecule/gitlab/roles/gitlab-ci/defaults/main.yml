@@ -1,0 +1,8 @@
+---
+gitlab_password: Ind+GriazAj2
+
+gitlab_os_auth_url: "{{ clouds.ovh.auth.auth_url }}"
+gitlab_os_tenant_name: "{{ clouds.ovh.auth.project_name }}"
+gitlab_os_username: "{{ clouds.ovh.auth.username }}"
+gitlab_os_password: "{{ clouds.ovh.auth.password }}"
+gitlab_os_region_name: "{{ clouds.ovh.region_name }}"

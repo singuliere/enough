@@ -5,9 +5,3 @@ gitlab_github_app_secret: 3bd7bdae691cb0d89d9ff8dd853b5661ae7f9399
 gitlab_secrets_db_key_base: PzHhJwWLbTgMFJKF7pMmWn9xfMvdqCTN9NVnPkwp97rFkpbCHL7KNMdwHFHkHRfs
 gitlab_secrets_otp_key_base: PzHhJwWLbTgMFJKF7pMmWn9xfMvdqCTN9NVnPkwp97rFkpbCHL7KNMdwHFHkHRfs
 gitlab_secrets_secret_key_base: PzHhJwWLbTgMFJKF7pMmWn9xfMvdqCTN9NVnPkwp97rFkpbCHL7KNMdwHFHkHRfs
-
-gitlab_os_auth_url: "{{ clouds.ovh.auth.auth_url }}"
-gitlab_os_tenant_name: "{{ clouds.ovh.auth.project_name }}"
-gitlab_os_username: "{{ clouds.ovh.auth.username }}"
-gitlab_os_password: "{{ clouds.ovh.auth.password }}"
-gitlab_os_region_name: "{{ clouds.ovh.region_name }}"
