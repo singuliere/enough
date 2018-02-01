@@ -4,10 +4,11 @@
   become: True
 
   roles:
-    - role: Oefenweb.ansible-dns
+    - role: dhclient
       dns_nameservers: ['{{ hostvars["bind-host"]["ansible_host"] }}']
-      dns_searches: ['{{ domain }}']
-      dns_domain: '{{ domain }}'
+      dns_search: "{{ domain }}"
+      dns_domain: "{{ domain }}"
+      nameservers_statement: "{% if with_fake_LE is defined or with_https is undefined %}supersede{% else %}prepend{% endif %}"
 
   tasks:
     - name: set hostname

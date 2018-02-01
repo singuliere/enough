@@ -14,6 +14,11 @@ def test_bind(host):
         assert 0 == cmd.rc
         assert address in cmd.stdout.strip()
         assert h + "." + domain in cmd.stdout.strip()
+        # try also with shortnames
+        cmd = host.run("getent hosts {}".format(h))
+        assert 0 == cmd.rc
+        assert address in cmd.stdout.strip()
+        assert h + "." + domain in cmd.stdout.strip()
 
 def test_recursion(host):
     cmd = host.run("getent hosts fsf.org")
