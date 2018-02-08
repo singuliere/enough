@@ -1,5 +1,4 @@
 ---
-monitoring_service_template: "delayed-notification-service"
 monitoring_host_vars:
   - "/* Enlarge delay before service notification */"
   - vars.service_template = "delayed-notification-service"
