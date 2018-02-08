@@ -77,5 +77,6 @@
         --docker-volumes /var/run/docker.sock:/run/docker.sock \
         --docker-volumes /usr/lib/x86_64-linux-gnu/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7 \
         --docker-volumes $(which docker):/bin/docker \
+        {% if with_fake_LE is defined %}--tls-ca-file /etc/ssl/certs/fakeleintermediatex1.pem{% endif %} \
         --docker-pull-policy if-not-present
   when: result|failed
