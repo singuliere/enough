@@ -1,2 +1,6 @@
 ---
-monitoring_service_template: "delayed-notification-service"
+monitoring_host_vars:
+  - "/* Enlarge delay before service notification */"
+  - vars.service_template = "delayed-notification-service"
+  - "/* Enlarge delay before host notification */"
+  - max_check_attempts = 15
