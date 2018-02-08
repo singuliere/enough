@@ -200,8 +200,8 @@ Monitoring tweaking
 Service templates
 ^^^^^^^^^^^^^^^^^
 
-A host can set a prefered service template, using the host variable
-``monitoring_service_template``.
+A host can set a prefered service template, using the icinga variable
+``vars.service_template``.
 
 For now two templates are availables in
 `molecule/icinga/roles/icinga2/files/templates.conf`:
@@ -210,3 +210,12 @@ For now two templates are availables in
 - delayed-notification-service
 
 Default is generic-service.
+
+Hosts vars
+^^^^^^^^^^
+
+A host can define a list of lines to be added to its icinga configuration,
+using the Ansible variable ``monitoring_host_vars``. Se e.g.
+``inventory/host_vars/demo-host/monitoring.yml`` for an example.
+
+Default is empty.
