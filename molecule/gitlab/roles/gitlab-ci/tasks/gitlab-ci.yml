@@ -25,7 +25,6 @@
     body_format: json
     headers:
       Content-Type: "application/x-www-form-urlencoded"
-    validate_certs: "{% if with_fake_LE is undefined %}yes{% else %}no{% endif %}"
   register: api_token
   until: api_token|succeeded
   retries: 20
@@ -40,7 +39,6 @@
     body_format: json
     headers:
       PRIVATE-TOKEN: "{{ api_token['json']['private_token'] }}"
-    validate_certs: "{% if with_fake_LE is undefined %}yes{% else %}no{% endif %}"
   register: runners_registration_token
   until: runners_registration_token|succeeded
   retries: 20
@@ -59,20 +57,6 @@
   apt:
     name: python-openstackclient
     state: present
-
-- name: copy staging LE CA fakeleintermediatex1.pem
-  copy:
-    src: fakeleintermediatex1.pem
-    dest: /tmp/fakeleintermediatex1.pem
-  when: with_fake_LE is defined
-
-# so that the running is able to git clone https://lab.... because there is no
-# way to configure the runner to use a given CA for the clone operation. The
-# --tls-ca-file of git-runner is for when the runner registers, not for cloning.
-- name: add staging LE CA to known CA in /etc/ssl/certs/ca-certificates.crt
-  shell: |
-    cat /tmp/fakeleintermediatex1.pem >> /etc/ssl/certs/ca-certificates.crt
-  when: with_fake_LE is defined
 
 - name: register the runner
   shell: |
@@ -93,5 +77,6 @@
         --docker-volumes /var/run/docker.sock:/run/docker.sock \
         --docker-volumes /usr/lib/x86_64-linux-gnu/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7 \
         --docker-volumes $(which docker):/bin/docker \
+        {% if with_fake_LE is defined %}--tls-ca-file /etc/ssl/certs/fakeleintermediatex1.pem{% endif %} \
         --docker-pull-policy if-not-present
   when: result|failed
