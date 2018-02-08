@@ -3,7 +3,6 @@
   lineinfile:
     path: /etc/dhcp/dhclient.conf
     line: "{{ nameservers_statement }} domain-name-servers {{ hostvars['bind-host']['ansible_host'] }};"
-  notify: reload dhclient
 
 - name: setup domain and search
   lineinfile:
@@ -14,4 +13,3 @@
       val: "{{dns_domain}}"
     - key: "domain-search"
       val: "{{dns_search}}"
-  notify: reload dhclient

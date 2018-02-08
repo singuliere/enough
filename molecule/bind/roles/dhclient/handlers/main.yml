@@ -1,3 +1,0 @@
----
-- name: reload dhclient
-  command: dhclient
