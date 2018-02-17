@@ -76,7 +76,7 @@
     recurse: yes
     state: directory
     owner: debian
-  with_items: "{{ packages_branches }}"
+  with_items: "{{ packages_refs }}"
 
 - name: reprepro configuration
   copy:
@@ -90,7 +90,7 @@
       Components: main
       Description: SecureDrop
       SignWith: yes
-  with_items: "{{ packages_branches }}"
+  with_items: "{{ packages_refs }}"
 
 - name: Copy update-packages.sh
   template:

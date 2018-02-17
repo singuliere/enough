@@ -12,7 +12,7 @@ git fetch
 sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev dpkg-dev git rsync
 sudo apt-get install -y reprepro
 
-for branch in ${1:-{{ packages_branches | join(' ') }}} ; do
+for branch in ${1:-{{ packages_refs | join(' ') }}} ; do
 
     mkdir -p /tmp/$branch
     
