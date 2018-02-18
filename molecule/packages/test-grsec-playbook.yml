@@ -1,0 +1,87 @@
+---
+- name: verify packages can be installed
+  hosts: trusty-host
+  become: yes
+  vars:
+    packages_url: "http{% if with_https is defined and with_https == true %}s{% endif %}://packages.{{ domain }}"
+
+  tasks:
+    - name: reset ssh connection in case it is stale
+      # ugly hack in replacement to
+      # meta: reset_connection
+      # The later fails in this way:
+      # https://github.com/ansible/ansible/issues/27520#issuecomment-321966784
+      local_action:
+        module: file
+        path: "~/.ansible/cp/{{ ansible_host }}-{{ ansible_port }}-{{ ansible_user }}"
+        state: absent
+      become: False
+
+    - name: trusty needs dhcp restart
+      shell: ifdown eth0 ; ifup eth0
+
+    - name: apt-key add {{ packages_url }}/key.asc
+      apt_key:
+        url: "{{ packages_url }}/key.asc"
+
+    - name: apt-add-repository https://packages.securedrop.club/
+      apt_repository:
+        repo: "deb {{ packages_url }}/develop trusty main"
+
+    - name: apt-add-repository --enable-source https://packages.securedrop.club/
+      apt_repository:
+        repo: "deb {{ packages_url }}/develop trusty main"
+
+    - name: apt-get install securedrop-ossec-agent
+      apt:
+        name: securedrop-ossec-agent
+      register: result
+      until: result|success
+      retries: 5
+      delay: 5
+
+    - name: modify grub for grsec
+      shell: |
+        sed -i \
+            -e 's/^.*GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="noapic"/' \
+            -e 's/^.*GRUB_DISABLE_LINUX_UUID=.*/GRUB_DISABLE_LINUX_UUID=true/' \
+            /etc/default/grub
+
+    - name: apt-get install linux-image-4.4.115-grsec
+      apt:
+        name: linux-image-4.4.115-grsec
+
+- name: reboot trusty-host with grsec kernel
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars_files:
+    - ../../clouds.yml
+    - ../../private-key.yml
+  tasks:
+    - name: touch /tmp/not_rebooted_yet
+      file:
+        path: /tmp/not_rebooted_yet
+        state: touch
+
+    - name: openstack server reboot --hard trusty-host
+      shell: |
+        openstack server reboot --hard trusty-host
+        sleep 60 # we need to wait a little for the reboot to happen
+      environment:
+        OS_AUTH_URL: "{{ clouds.ovh.auth.auth_url }}"
+        OS_USERNAME: "{{ clouds.ovh.auth.username }}"
+        OS_PASSWORD: "{{ clouds.ovh.auth.password }}"
+        OS_TENANT_NAME: "{{ clouds.ovh.auth.project_name }}"
+        OS_REGION_NAME: "{{ clouds.ovh.region_name }}"
+
+    - name: ! test -f /tmp/not_rebooted_yet
+      shell: |
+        timeout 10 ssh -oBatchMode=yes -oStrictHostKeyChecking=no \
+            -i {{ ssh_private_keyfile }} \
+            ubuntu@{{ hostvars["trusty-host"]["ansible_default_ipv4"]["address"] }} \
+            test ! -f /tmp/not_rebooted_yet
+      register: result
+      until: result|success
+      retries: 30
+      delay: 10

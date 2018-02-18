@@ -6,6 +6,11 @@ echo ======================================================================
 date
 echo ======================================================================
 
+cd /srv
+
+wget -c https://apt-test.freedom.press/pool/main/l/linux-source-3.14.79-grsec/linux-image-3.14.79-grsec_3.14.79-grsec-11.00.Custom_amd64.deb
+wget -c https://apt-test.freedom.press/pool/main/l/linux-source-3.14.79-grsec/linux-headers-3.14.79-grsec_3.14.79-grsec-11.00.Custom_amd64.deb
+
 cd /srv/securedrop
 git fetch
 
@@ -34,7 +39,15 @@ for branch in ${1:-{{ packages_refs | join(' ') }}} ; do
     )
     rm -fr /var/www/html/$branch/{pool,dists,db}
     reprepro -Vb /var/www/html/$branch includedeb trusty build/*.deb
-
+    # hack to be removed when kernel 3.14 is no longer distributed
+    reprepro -Vb /var/www/html/$branch includedeb trusty linux-*.deb
+    if test -d /home/debian/linux-packages ; then
+        (
+            cd /home/debian/linux-packages/opt
+            reprepro -Vb /var/www/html/$branch includedeb trusty *.deb
+            reprepro -Vb /var/www/html/$branch includedsc trusty linux-*.dsc
+        )
+    fi
     git clean -ffqdx
     git rev-parse origin/$branch > /tmp/$branch/hash
 done
