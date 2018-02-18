@@ -2,5 +2,7 @@ all:
   hosts:
     gitlab-host:
       ansible_port: 2222
+    trusty-host:
+      ansible_user: ubuntu
     ubuntu-host:
       ansible_user: ubuntu
