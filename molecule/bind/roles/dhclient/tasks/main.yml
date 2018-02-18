@@ -1,0 +1,15 @@
+---
+- name: setup nameservers
+  lineinfile:
+    path: /etc/dhcp/dhclient.conf
+    line: "{{ nameservers_statement }} domain-name-servers {{ hostvars['bind-host']['ansible_host'] }};"
+
+- name: setup domain and search
+  lineinfile:
+    path: /etc/dhcp/dhclient.conf
+    line: 'supersede {{ item.key }} "{{ item.val }}";'
+  with_items:
+    - key: "domain-name"
+      val: "{{dns_domain}}"
+    - key: "domain-search"
+      val: "{{dns_search}}"
