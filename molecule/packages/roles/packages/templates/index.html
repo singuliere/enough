@@ -1,3 +1,7 @@
+<h3>Notes</h3>
+
+These Debian GNU/Linux repositories are created from a VM provisioned with <a href="https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/packages">an Ansible playbook</a>.
+
 <h3>keys</h3>
 <pre>
   wget http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}/key.asc
@@ -6,6 +10,6 @@
 {% for branch in packages_refs %}
 <h3>{{ branch }}</h3>
 <pre>
-  sudo apt-add-repository http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}/{{ branch }}
+  sudo apt-add-repository --enable-source http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}/{{ branch }}
 </pre>
 {% endfor %}
