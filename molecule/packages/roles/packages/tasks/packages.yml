@@ -1,4 +1,9 @@
 ---
+- name: apt-get install rsync
+  apt:
+    name: rsync
+    state: present
+
 - name: apt-get install git
   apt:
     name: git
