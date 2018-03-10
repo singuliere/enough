@@ -1,16 +1,14 @@
 ---
-- name: setup vagrant libvirt provider
+- name: install docker
   hosts: demo-host
   become: True
 
   roles:
-    - role: vagrant_libvirt
+    - { role: ansible-role-docker, docker_install_compose: false }
+    - { role: docker }
 
 - name: install securedrop
   hosts: demo-host
-
-  environment:
-    VAGRANT_DEFAULT_PROVIDER: libvirt
 
   roles:
     - role: securedrop

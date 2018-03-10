@@ -4,17 +4,10 @@ import time
 
 testinfra_hosts = ['demo-host']
 
-def get_box_address(host):
-    cmd = host.run('''
-    cd /srv/securedrop
-    vagrant ssh-config development | awk '$1 == "HostName" {print $2}'
-    ''')
-    return cmd.stdout
-
 def test_source (host):
     for _ in range (100):
         try:
-            cmd = host.run('curl http://{}:8080'.format(get_box_address (host)))
+            cmd = host.run('curl http://127.0.0.1:8080')
             if cmd.rc != 0:
                 raise ValueError ('curl returned non null error code')
             break
@@ -27,7 +20,7 @@ def test_source (host):
 def test_journalist (host):
     for _ in range (100):
         try:
-            cmd = host.run('curl http://{}:8081'.format(get_box_address (host)))
+            cmd = host.run('curl http://127.0.0.1:8081')
             if cmd.rc != 0:
                 raise ValueError ('curl returned non null error code')
             break

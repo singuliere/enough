@@ -3,14 +3,8 @@ cd /srv/securedrop
 
 git pull
 
-if vagrant status development |& grep 'running (libvirt)' ; then
-   sudo reboot
-else
-   vagrant up development
+/usr/local/bin/stop-securedrop-demo.sh
 
-   /usr/local/bin/reset-securedrop-demo.sh
+/usr/local/bin/start-securedrop-demo.sh
 
-   /usr/local/bin/start-securedrop-demo.sh
-
-   sudo systemctl reload nginx
-fi
+sudo systemctl reload nginx || true
