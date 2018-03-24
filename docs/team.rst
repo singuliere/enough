@@ -9,29 +9,29 @@ will be given credentials.
 Contact
 -------
 
-The `contact mail <contact@securedrop.club>`_ alias is forwarded to:
+The `contact mail <contact@securedrop.club>`__ alias is forwarded to:
 
-* `Loïc Dachary <loic@dachary.org>`_
+* `Loïc Dachary <loic@dachary.org>`__
 
 Infrastructure
 --------------
 
 :doc:`bind`, :doc:`infrastructure`
 
-* `François Poulain <fpoulain@metrodore.fr>`_
-* `Conor Schaefer <conor@freedom.press>`_
-* `Loïc Dachary <loic@dachary.org>`_ (pays the bills)
+* `François Poulain <fpoulain@metrodore.fr>`__
+* `Conor Schaefer <conor@freedom.press>`__
+* `Loïc Dachary <loic@dachary.org>`__
 
 Weblate
 -------
 
-* `Jennifer Helsby <redshiftzero@freedom.press>`_
-* `heartsucker <heartsucker@autistici.org>`_
-* `Loïc Dachary <loic@dachary.org>`_
+* `Jennifer Helsby <redshiftzero@freedom.press>`__
+* `heartsucker <heartsucker@autistici.org>`__
+* `Loïc Dachary <loic@dachary.org>`__
 
 Readthedocs
 -----------
 
-The `readthedocs <https://readthedocs.org/>`_ user is `securedrop-club`.
+The `readthedocs <https://readthedocs.org/>`__ user is `securedrop-club`.
 
-* `Loïc Dachary <loic@dachary.org>`_
+* `Loïc Dachary <loic@dachary.org>`__
