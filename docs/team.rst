@@ -13,6 +13,14 @@ The `contact mail <contact@securedrop.club>`__ alias is forwarded to:
 
 * `Loïc Dachary <loic@dachary.org>`__
 
+Funding
+-------
+
+:doc:`funding`
+
+* `Allan Nordhøy <epost@anotheragency.no>`__
+* `Loïc Dachary <loic@dachary.org>`__
+
 Infrastructure
 --------------
 
