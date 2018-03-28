@@ -31,8 +31,7 @@ diff --git a/securedrop/source_templates/base.html b/securedrop/source_templates
 index 6b6d4b1a..77fac2c9 100644
 --- a/securedrop/source_templates/base.html
 +++ b/securedrop/source_templates/base.html
-@@ -43,6 +43,11 @@
-         {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }} {{ gettext('Powered by') }} SecureDrop {{ version }}.
+@@ -42,5 +42,10 @@
        </footer>
        {% endblock %}
 +      <div class="flash important">
@@ -47,9 +46,7 @@ diff --git a/securedrop/source_templates/index.html b/securedrop/source_template
 index 3efe965d..fa50f48f 100644
 --- a/securedrop/source_templates/index.html
 +++ b/securedrop/source_templates/index.html
-@@ -83,6 +83,11 @@
-       <footer>
-         {{ gettext('Like all software, SecureDrop may contain security bugs. Use at your own risk.') }} {{ gettext('Powered by') }} SecureDrop {{ version }}.
+@@ -83,2 +83,7 @@
        </footer>
 +      <div class="flash important">
 +        <p style="margin: 1em auto; font-weight: bold; color: #F00">
@@ -57,8 +54,6 @@ index 3efe965d..fa50f48f 100644
 +        </p>
 +      </div>
      </div>
- 
-     {# Warning bubble to help TB users disable Javascript with NoScript.
 -- 
 2.14.1
 
