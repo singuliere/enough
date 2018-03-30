@@ -53,6 +53,8 @@ organization or structure) and are expected to follow these rules:
 * People with access to an exclusive resource must register themselves
   in the :doc:`team directory <team>`
 
+.. _getting_started:
+
 Getting started
 ---------------
 
