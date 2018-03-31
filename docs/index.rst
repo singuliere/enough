@@ -21,6 +21,7 @@ All resources are deployed and maintained via :doc:`ansible <ansible>`.
   ansible
   documentation
   infrastructure
+  extending
   bind
   authorized_keys
   backup
