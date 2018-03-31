@@ -1,3 +1,5 @@
+.. _postfix:
+
 Postfix mail server
 ===================
 

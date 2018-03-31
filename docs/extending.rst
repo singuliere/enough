@@ -60,8 +60,8 @@ First we create directories:
 
  mkdir -p molecule/dummy/roles molecule/dummy/tests
 
-Then we select a scenario to get inspiration from. The misc scenario is a good starting
-point.
+Then we select a scenario to get inspiration from. The misc scenario is a good
+starting point.
 
 ::
 
@@ -89,18 +89,6 @@ Next, edit `molecule/dummy/molecule.yml`. You should at least:
     - name: external-host
       flavor: "s1-2"
 
-We do not use groups and each hostname matches the service it provides:
-`securedrop.club` infrastructure use `service`-host as naming convention.
-Each given host (e.g. `postfix-host`) is attached to a given service`
-(e.g.  "infrastructure's mail relay").
-
-So:
-
-- if you need to choose a hostname, derive it from the service,
-
-- by adding an already defined host, you will be able to deploy its (already
-  defined) services.
-
 The flavor refers to `OVH OpenStack provisionned ressources <https://docs.ovh.com/au/en/public-cloud/faq-how-to-understand-the-new-flavor-naming-rules-for-the-2017-range/>`_.
 
 At this point you should be able to:
@@ -118,6 +106,20 @@ At this point you should be able to:
   ::
 
    molecule destroy -s dummy
+
+About hostnames
+"""""""""""""""
+
+We do not use groups and each hostname matches the service it provides:
+`securedrop.club` infrastructure use `service`-host as naming convention.
+Each given host (e.g. `postfix-host`) is attached to a given service`
+(e.g.  "infrastructure's mail relay").
+
+So:
+
+- if you need to choose a hostname, derive it from the service,
+- by adding an already defined host, you will be able to deploy its (already
+  defined) services.
 
 Adding playbooks
 ^^^^^^^^^^^^^^^^
@@ -167,7 +169,7 @@ Testing is not monitoring. You are kindly invited to setup
 monitoring for your services and to test via testinfra than monitoring has
 been setup as you wish.
 
-Finally, you can launch a destroy, create, converge, verify, destroy cycle by
+Finally, you can launch a `destroy, create, converge, verify, destroy` cycle by
 launching
 
  ::
@@ -177,9 +179,9 @@ launching
 Interaction with others scenarios
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Most services rely on bind, postfix and monitoring. To enable them you have to
-add the corresponding hosts in your molecule scenario and to include their playbook in your
-scenario playbook.
+Most services rely on :ref:`bind`, :ref:`emails <postfix>` and :ref:`monitoring
+<monitoring>`. To enable them you have to add the corresponding hosts in your
+molecule scenario and to include their playbook in your scenario playbook.
 
 You will also be interested by:
 
@@ -190,11 +192,11 @@ You will also be interested by:
 - `molecule/misc/commit_etc-playbook.yml` for committing `/etc/` at the end of
   your playbook.
 
-
 Documentation
 ^^^^^^^^^^^^^
 
-You are kindly invited to document your scenario in `docs`.
+You are kindly invited to document your scenario in `docs`. Most playbooks are
+documented in a dedicated file included from `docs/index.rst`.
 
 Tweaking hosts
 ^^^^^^^^^^^^^^
