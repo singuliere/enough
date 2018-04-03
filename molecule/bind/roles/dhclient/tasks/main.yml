@@ -13,3 +13,8 @@
       val: "{{dns_domain}}"
     - key: "domain-search"
       val: "{{dns_search}}"
+
+- name: write /etc/resolv.conf once so it does not have to wait until the next dhclient update
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
