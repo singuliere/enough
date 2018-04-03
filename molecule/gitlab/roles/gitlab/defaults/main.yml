@@ -1,5 +1,6 @@
 ---
 gitlab_password: Ind+GriazAj2
+gitlab_shared_runners_registration_token: 67ubD8XznZ7X4hv4hj9t
 gitlab_github_api_key: d129112480ab9471ab33
 gitlab_github_app_secret: 3bd7bdae691cb0d89d9ff8dd853b5661ae7f9399
 gitlab_secrets_db_key_base: PzHhJwWLbTgMFJKF7pMmWn9xfMvdqCTN9NVnPkwp97rFkpbCHL7KNMdwHFHkHRfs
