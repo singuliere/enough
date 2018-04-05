@@ -5,4 +5,5 @@
 - import_playbook: ../bind/bind-playbook.yml
 - import_playbook: ../bind/bind-client-playbook.yml
 - import_playbook: ../icinga/icinga-playbook.yml
+- import_playbook: ../gitlab/test-real-gitlab-playbook.yml
 - import_playbook: demo-playbook.yml
