@@ -89,6 +89,7 @@
                      IN  NS     ns6.gandi.net.
 
           {% if 'website-host' in hostvars %}@ 1800 IN A {{ hostvars['website-host'].ansible_host }}{% endif %}
+
           ns1 1800 IN A {{ hostvars[inventory_hostname].ansible_host }}
 
           ansible 1800 IN A 54.36.113.45
