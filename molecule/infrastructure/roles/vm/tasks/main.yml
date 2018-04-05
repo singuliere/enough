@@ -54,3 +54,16 @@
   delay: 10
   with_items: "{{ server.results }}"
   when: state == "present"
+
+- name: Wait for cloud-init ending on the instances
+  shell: >
+    ssh -oBatchMode=yes -oStrictHostKeyChecking=no
+    -p {% if item.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.openstack.name].ansible_port is defined %}{{ hosts_orig.all.hosts[item.openstack.name].ansible_port }}{% else %}22{% endif %}
+    -i {{ ssh_private_keyfile }}
+    {% if item.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.openstack.name].ansible_user is defined %}{{ hosts_orig.all.hosts[item.openstack.name].ansible_user }}{% else %}debian{% endif %}@{{ item.openstack.public_v4 }} systemctl list-units --quiet --state=exited | grep -q cloud-final.service
+  register: result
+  until: result|success
+  retries: 30
+  delay: 10
+  with_items: "{{ server.results }}"
+  when: state == "present"
