@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+echo ======================================================================
+date
+echo ======================================================================
+
+cd /srv/website
+git fetch
+
+git pull
+hugo --baseURL="https://{{ website_vhost_fqdn }}/"
+rsync -av --delete public/ /var/www/html/
