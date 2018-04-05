@@ -21,14 +21,17 @@ def get_password():
         '../../molecule/gitlab/roles/gitlab/defaults/main.yml'))
     return variables['gitlab_password']
 
-
-def get_private_token(url):
-    r = requests.post(url + '/session', data={
-        'login': 'root',
+#
+# https://docs.gitlab.com/ce/api/oauth2.html#resource-owner-password-credentials
+#
+def get_token(url):
+    r = requests.post(url + '/oauth/token', json={
+        'username': 'root',
         'password': get_password(),
+        'grant_type': 'password',
     }, verify='../../certs')
     r.raise_for_status()
-    return r.json()['private_token']
+    return 'Bearer ' + r.json()['access_token']
 
 
 def get_user(url, headers, user):

@@ -16,9 +16,10 @@ def test_ci_runner(host, tmpdir):
 
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     (scheme, address) = gitlab_utils.get_address(lab_host)
-    url = scheme + '://' + address + '/api/v3'
-    headers = {'PRIVATE-TOKEN': gitlab_utils.get_private_token(url)}
-    gitlab_utils.recreate_test_project(url, headers, 'root', 'testproject')
+    url = scheme + '://' + address
+    headers = {'Authorization': gitlab_utils.get_token(url)}
+    api = url + '/api/v3'
+    gitlab_utils.recreate_test_project(api, headers, 'root', 'testproject')
     runner_host.run("rm -f /tmp/*.out")
     os.system("""
     set -ex

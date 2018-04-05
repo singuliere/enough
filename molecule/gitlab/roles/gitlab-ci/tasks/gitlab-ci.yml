@@ -16,37 +16,16 @@
 - name: hold gitlab-runner
   command: apt-mark hold gitlab-runner
 
-- name: get gitlab API token
+- name: wait for the gitlab API to be ready, in case we reached this point and GitLab is not finished bootstraping itself
   uri:
-    url: "http{% if with_https is defined and with_https == true %}s{% endif %}://gitlab.{{ domain }}/api/v3/session"
-    method: POST
-    body: "login=root&password={{ gitlab_password | urlencode }}"
-    status_code: 201
-    body_format: json
-    headers:
-      Content-Type: "application/x-www-form-urlencoded"
-  register: api_token
-  until: api_token|succeeded
-  retries: 20
-  delay: 30
-  delegate_to: gitlab-host
-
-- name: get gitlab runner token
-  uri:
-    url: "http{% if with_https is defined and with_https == true %}s{% endif %}://gitlab.{{ domain }}/api/v3/application/settings"
+    url: "http{% if with_https is defined and with_https == true %}s{% endif %}://gitlab.{{ domain }}/api/v4/projects"
     method: GET
     status_code: 200
-    body_format: json
-    headers:
-      PRIVATE-TOKEN: "{{ api_token['json']['private_token'] }}"
-  register: runners_registration_token
-  until: runners_registration_token|succeeded
+  register: api_projects
+  until: api_projects|succeeded
   retries: 20
   delay: 30
   delegate_to: gitlab-host
-
-- debug:
-    var: runners_registration_token
 
 - name: grep sd-runner /etc/gitlab-runner/config.toml
   command: grep -q sd-runner /etc/gitlab-runner/config.toml
@@ -62,7 +41,7 @@
   shell: |
     gitlab-runner register \
         --non-interactive \
-        --registration-token '{{ runners_registration_token['json']['runners_registration_token'] }}' \
+        --registration-token '{{ gitlab_shared_runners_registration_token }}' \
         --name 'sd-runner' \
         --url http{% if with_https is defined and with_https == true %}s{% endif %}://gitlab.{{ domain }} \
         --env OS_AUTH_URL={{ gitlab_os_auth_url }} \

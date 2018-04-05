@@ -1,3 +1,2 @@
 ---
 - import_tasks: gitlab.yml
-- import_tasks: gitlab-ci.yml
