@@ -88,7 +88,7 @@
                      IN  NS     ns1.{{ domain }}.
                      IN  NS     ns6.gandi.net.
 
-          @ 1800 IN A 217.182.87.182
+          {% if 'website-host' in hostvars %}@ 1800 IN A {{ hostvars['website-host'].ansible_host }}{% endif %}
           ns1 1800 IN A {{ hostvars[inventory_hostname].ansible_host }}
 
           ansible 1800 IN A 54.36.113.45
@@ -98,7 +98,7 @@
           journalist.i18n 1800 IN CNAME i18n
 
           forum 1800 IN A 217.182.87.182
-          www 1800 IN CNAME forum
+          www 1800 IN CNAME {{ domain }}.
 
           lab 1800 IN CNAME gitlab-host
 
