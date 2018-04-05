@@ -12,7 +12,6 @@ machine as follows:
 .. code::
 
    ansible-playbook --private-key infrastructure_key \
-                    --user debian \
                     -i inventory \
                     securedrop-club-playbook.yml
 
