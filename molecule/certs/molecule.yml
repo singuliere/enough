@@ -22,7 +22,7 @@ provisioner:
     links:
       # Path is relative to .molecule folder
       group_vars: ../group_vars
-      host_vars:  ../../../inventory/host_vars
+      host_vars:  ../host_vars
 scenario:
   name: certs
   test_sequence:

@@ -1,0 +1,7 @@
+---
+- name: Uninstall certs
+  file:
+    path: "/etc/ssl/certs/{{ item }}"
+    state: absent
+  with_items: "{{ certs }}"
+  notify: rehash certs
