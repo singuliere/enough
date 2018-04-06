@@ -10,35 +10,22 @@ platforms:
     flavor: "s1-2"
   - name: icinga-host
     flavor: "s1-2"
-  - name: weblate-host
-    flavor: "s1-4"
-  - name: gitlab-host
-    flavor: "s1-4"
-  - name: runner-host
-    flavor: "s1-4"
-  - name: packages-host
-    flavor: "s1-2"
   - name: website-host
     flavor: "s1-2"
-  - name: demo-host
-    flavor: "s1-4"
-    image: "Ubuntu 17.10"
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
-  #options:
-  #  vvv: True
   env:
     # https://github.com/metacloud/molecule/issues/1008 for why ../../.. and ../ only
     ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles:../packages/roles:../jdauphant.nginx/roles
   inventory:
     links:
       # Path is relative to .molecule folder
-      group_vars: ../group_vars
+      group_vars: ../../../inventory/group_vars
       host_vars:  ../../../inventory/host_vars
 scenario:
-  name: preprod
+  name: website
   test_sequence:
     - destroy
     - create

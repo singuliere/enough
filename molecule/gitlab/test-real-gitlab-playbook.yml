@@ -1,0 +1,21 @@
+# SecureDrop deployment require access to
+# lab.securedrop.club but it may be unknown by
+# securedrop.club's DNS resolver in molecule scenario.
+# Moreover, using lab's IP is not an option due to https.
+# So we hardcode it in hosts if needed. It should only
+# happen in tests scenarios.
+
+- name: ensure access to the real lab.securedrop.club
+  hosts: all
+
+  tasks:
+    - name: lookup real lab.securedrop.club
+      command: getent hosts lab.securedrop.club
+      delegate_to: localhost
+      register: gitlab_ip
+
+    - name: hardcode lab.securedrop.club if needed
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ gitlab_ip.stdout }} lab.securedrop.club"
+      become: True

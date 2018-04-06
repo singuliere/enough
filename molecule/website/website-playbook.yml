@@ -1,0 +1,35 @@
+---
+- name: install nginx
+  hosts: website-host
+
+  roles:
+    - role: jdauphant.nginx
+      nginx_http_params:
+        - access_log "/var/log/nginx/access.log"
+      nginx_sites:
+        default:
+          - listen "{% if with_https is defined and with_https == true %}8080{% else %}80{% endif %}"
+          - server_name _
+          - root /var/www/html/
+
+  tasks:
+    - name: restart nginx
+      shell: systemctl restart nginx
+
+  become: True
+
+- name: install website
+  hosts: website-host
+
+  roles:
+    - { role: ansible-role-docker, docker_install_compose: false }
+
+    - { role: website }
+
+    - role: monitor_http_vhost
+      http_vhost_name: Website
+      http_vhost_fqdn: "{{ website_vhost_fqdn }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "SecureDrop"
+
+  become: True
