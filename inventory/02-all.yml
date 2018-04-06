@@ -1,5 +1,8 @@
-all:
-  children:
-#     bind_clients:
-#       hosts:
-#         icinga-host:
+#
+# Machines in the pets groups are long lived and contains data that
+# needs to be saved.
+#
+pets:
+  hosts:
+    gitlab-host:
+    weblate-host:
