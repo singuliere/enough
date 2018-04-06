@@ -4,10 +4,20 @@ Funding
 Introduction
 ------------
 
-Funding is `collected via Liberapay <https://liberapay.com/>`__ by the `SecureDrop team <https://liberapay.com/SecureDrop>`__. The `SecureDropCommunity user <https://liberapay.com/SecureDropCommunity>`__ is controlled by the people from the :doc:`funding team <team>`, via the admin@securedrop.club email. All expenses are proposed and approved as follows:
+Funding is `collected via Liberapay <https://liberapay.com/>`__ by the `SecureDrop Community <https://liberapay.com/SecureDrop>`__.
+
+Advertisement and call for proposals
+------------------------------------
+
+#. The total amount of money in the `SecureDrop Community <https://liberapay.com/SecureDrop>`__ fund is announced every other month in the `in the forum
+   <https://forum.securedrop.club/c/funding>`__.
+#. The announcement must include a call for ideas to spend the fund. This is less formal that a request and encourages participation from people who are not active volunteers. It is made clear the volunteers are not expected to followup to avoid any kind of disapointment.
+#. After two weeks the thread is summarized by a member :doc:`funding team <team>` and closed.
 
 Workflow
 --------
+
+All expenses are proposed and approved as follows:
 
 #. Someone posts a message `in the forum
    <https://forum.securedrop.club/c/funding>`__ asking for funds to be released.
