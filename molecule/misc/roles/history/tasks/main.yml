@@ -1,0 +1,21 @@
+---
+
+- name: Ensure /etc/securedrop-club/ exists
+  file:
+    path: /etc/securedrop-club/
+    state: directory
+
+- name: Put hosts vars in /etc/securedrop-club/hosts_vars
+  copy:
+    content: '{{ hostvars | to_nice_yaml(indent=2) }}'
+    dest: /etc/securedrop-club/hosts_vars
+
+- name: Get git log
+  command: git log --oneline
+  register: cmd
+  delegate_to: localhost
+
+- name: Put git log in /etc/securedrop-club/history
+  copy:
+    content: '{{ cmd.stdout }}'
+    dest: /etc/securedrop-club/history

@@ -1,0 +1,7 @@
+---
+- name: Keep track of ansible history
+  hosts: [ 'all' ]
+  become: true
+
+  roles:
+    - role: history
