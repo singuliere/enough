@@ -22,7 +22,7 @@
     - xz-utils
 
 - name: retrieve the process user name
-  shell: ps -o'user' `pgrep icinga2` | tail -n 1
+  shell: awk -F= '"ICINGA2_USER" == $1 {print $2}' /usr/lib/icinga2/icinga2
   register: command_output
   changed_when: False
 
@@ -30,7 +30,7 @@
     icinga_user: "{{ command_output.stdout }}"
 
 - name: retrieve the process group name
-  shell: ps -o'group' `pgrep icinga2` | tail -n 1
+  shell: awk -F= '"ICINGA2_GROUP" == $1 {print $2}' /usr/lib/icinga2/icinga2
   register: command_output
   changed_when: False
 
