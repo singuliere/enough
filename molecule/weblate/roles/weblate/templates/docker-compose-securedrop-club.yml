@@ -56,7 +56,7 @@ services:
     restart: always
 {% if with_https is defined and with_https == true %}
   https-portal:
-    image: steveltn/https-portal:1
+    image: steveltn/https-portal:1.2.4
     ports:
       - '80:80'
       - '443:443'
@@ -66,6 +66,7 @@ services:
 {% if with_fake_LE is undefined %}
       STAGE: production
 {% endif %}
+      SERVER_NAMES_HASH_BUCKET_SIZE: 128
 {% endif %}
 volumes:
   weblate-data: {}
