@@ -1,18 +1,21 @@
 ---
-- name: setup nameservers
+- name: cleanup old nameservers config
   lineinfile:
     path: /etc/dhcp/dhclient.conf
-    line: "{{ nameservers_statement }} domain-name-servers {{ hostvars['bind-host']['ansible_host'] }};"
+    line: "prepend domain-name-servers {{ hostvars['bind-host']['ansible_host'] }};"
+    state: absent
 
 - name: setup domain and search
   lineinfile:
     path: /etc/dhcp/dhclient.conf
-    line: 'supersede {{ item.key }} "{{ item.val }}";'
+    line: 'supersede {{ item.key }} {{ item.val }};'
   with_items:
     - key: "domain-name"
-      val: "{{dns_domain}}"
+      val: '"{{dns_domain}}"'
     - key: "domain-search"
-      val: "{{dns_search}}"
+      val: '"{{dns_search}}"'
+    - key: "domain-name-servers"
+      val: "{{hostvars['bind-host']['ansible_host']}}"
 
 - name: write /etc/resolv.conf once so it does not have to wait until the next dhclient update
   template:
