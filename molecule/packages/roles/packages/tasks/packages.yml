@@ -160,7 +160,7 @@
 - name: start https-portal
   docker_container:
     name: https-portal
-    image: steveltn/https-portal:1
+    image: steveltn/https-portal:1.2.4
     restart_policy: always
     ports:
       - '80:80'
@@ -168,4 +168,5 @@
     env:
       DOMAINS: '{{ packages_vhost_fqdn }} -> http://{{ packages_vhost_fqdn }}:8080'
       STAGE: "{% if with_fake_LE is undefined %}production{% else %}staging{% endif %}"
+      SERVER_NAMES_HASH_BUCKET_SIZE: 128
     state: "{% if with_https is defined and with_https == true %}started{% else %}absent{% endif %}"
