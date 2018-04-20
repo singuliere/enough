@@ -17,7 +17,5 @@
     - key: "domain-name-servers"
       val: "{{hostvars['bind-host']['ansible_host']}}"
 
-- name: write /etc/resolv.conf once so it does not have to wait until the next dhclient update
-  template:
-    src: resolv.conf.j2
-    dest: /etc/resolv.conf
+- name: restart all interfaces to reload dhclient.conf and update /etc/resolv.conf
+  shell: "ifdown -a ; ifup -a"
