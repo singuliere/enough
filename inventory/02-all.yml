@@ -1,8 +1,9 @@
 #
-# Machines in the pets groups are long lived and contains data that
+# Machines in the pets groups are long lived and contain data that
 # needs to be saved.
 #
 pets:
   hosts:
     gitlab-host:
     weblate-host:
+    packages-host:
