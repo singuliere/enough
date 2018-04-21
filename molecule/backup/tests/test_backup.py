@@ -1,9 +1,11 @@
 import pytest
 
+testinfra_hosts = ['backup-host']
+
 def expected_backups(host, count):
     cmd = host.run("""
     source /usr/lib/backup/openrc.sh
-    openstack image list | grep -c $(hostname)
+    openstack image list | grep -c weblate-host
     """)
     assert count == cmd.stdout
     print(cmd.stderr)

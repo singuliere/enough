@@ -6,6 +6,8 @@ lint:
 platforms:
   - name: backup-host
     flavor: "s1-2"
+  - name: weblate-host
+    flavor: "s1-2"
     groups:
       - pets
 provisioner:

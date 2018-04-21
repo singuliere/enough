@@ -1,6 +1,6 @@
 ---
 - name: setup backup
-  hosts: pets
+  hosts: backup-host
   become: true
 
   roles:
