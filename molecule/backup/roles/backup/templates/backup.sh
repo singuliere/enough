@@ -6,12 +6,12 @@ function backup() {
     local host=$1
     local backup=$2
 
-    openstack server image create --name $backup $host > /tmp/$host.log 2>&1 < /dev/null &
+    openstack ${OS_INSECURE} server image create --name $backup $host > /tmp/$host.log 2>&1 < /dev/null &
 }
 
 function image_active() {
     local backup=$1
-    openstack image list --private -c Name -c Status -f value | grep -q "$backup active"
+    openstack ${OS_INSECURE} image list --private -c Name -c Status -f value | grep -q "$backup active"
 }
 
 function wait_for_backup() {
@@ -32,9 +32,8 @@ function wait_for_backup() {
 }
 
 DEFAULT_HOSTNAMES=""
-{% for host in hostvars %}
-{%   set vars = hostvars[host|string] %}
-DEFAULT_HOSTNAMES+="{{ vars.ansible_hostname }} "
+{% for host in groups['pets'] %}
+DEFAULT_HOSTNAMES+="{{ host }} "
 {% endfor %}
 
 HOSTNAMES=${1:-$DEFAULT_HOSTNAMES}
