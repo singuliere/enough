@@ -94,10 +94,6 @@
 
           ansible 1800 IN A 54.36.113.45
 
-          i18n 1800 IN A 54.36.52.252
-          source.i18n 1800 IN CNAME i18n
-          journalist.i18n 1800 IN CNAME i18n
-
           forum 1800 IN A 217.182.87.182
           www 1800 IN CNAME {{ domain }}.
 
@@ -118,6 +114,9 @@
           {% if host == "demo-host" %}
           journalist.demo 1800 IN CNAME demo
           source.demo 1800 IN CNAME demo
+          i18n 1800 IN CNAME demo
+          journalist.i18n 1800 IN CNAME demo
+          source.i18n 1800 IN CNAME demo
           {% endif %}
           {% endfor %}
 

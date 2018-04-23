@@ -1,5 +1,0 @@
-- name: stop securedrop servers
-  command: /usr/local/bin/stop-securedrop-demo.sh
-
-- name: start securedrop servers
-  command: /usr/local/bin/start-securedrop-demo.sh

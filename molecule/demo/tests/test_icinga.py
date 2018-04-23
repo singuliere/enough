@@ -51,3 +51,6 @@ def test_icinga_api_services (host):
     assert len([s for s in answer['results'] if 'demo-host!Demo source' == s['name']]) == 1
     assert len([s for s in answer['results'] if 'demo-host!Demo journalist' == s['name']]) == 1
     assert len([s for s in answer['results'] if 'demo-host!Demo home' == s['name']]) == 1
+    assert len([s for s in answer['results'] if 'demo-host!I18n source' == s['name']]) == 1
+    assert len([s for s in answer['results'] if 'demo-host!I18n journalist' == s['name']]) == 1
+    assert len([s for s in answer['results'] if 'demo-host!I18n home' == s['name']]) == 1
