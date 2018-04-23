@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+cd /srv/securedrop
+for i in *.sh ; do
+    timeout 1800 flock /tmp/$i.lock ./$i check_demo > /tmp/$i.log 2>&1 &
+done

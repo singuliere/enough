@@ -12,6 +12,16 @@
 
   roles:
     - role: securedrop
+      demo_name: demo
+      base_port: 8000
+      repository: https://lab.securedrop.club/main/securedrop
+      branch: release/0.6
+
+    - role: securedrop
+      demo_name: i18n
+      base_port: 9000
+      repository: https://lab.securedrop.club/bot/securedrop
+      branch: i18n
 
 - name: install nginx frontend
   hosts: demo-host
@@ -31,21 +41,41 @@
           - server_name _
           - access_log  "/var/log/nginx/demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/demo.{{ domain }}.error.log"
-          - root        /var/www/html/
+          - root        /var/www/demo/
         source:
           - listen 80
           - server_name source.demo.{{ domain }}
           - access_log  "/var/log/nginx/source.demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/source.demo.{{ domain }}.error.log"
           - location /  { proxy_pass http://127.0.0.1:8080 ; }
-          - location /error.html { internal; root /var/www/html/; }
+          - location /error.html { internal; root /var/www/demo/; }
         journalist:
           - listen 80
           - server_name journalist.demo.{{ domain }}
           - access_log  "/var/log/nginx/journalist.demo.{{ domain }}.access.log"
           - error_log   "/var/log/nginx/journalist.demo.{{ domain }}.error.log"
           - location /  { proxy_pass http://127.0.0.1:8081 ; }
-          - location /error.html { internal; root /var/www/html/; }
+          - location /error.html { internal; root /var/www/demo/; }
+        i18n:
+          - listen 80
+          - server_name i18n.{{ domain }}
+          - access_log  "/var/log/nginx/i18n.{{ domain }}.access.log"
+          - error_log   "/var/log/nginx/i18n.{{ domain }}.error.log"
+          - root        /var/www/i18n/
+        i18n_source:
+          - listen 80
+          - server_name source.i18n.{{ domain }}
+          - access_log  "/var/log/nginx/source.i18n.{{ domain }}.access.log"
+          - error_log   "/var/log/nginx/source.i18n.{{ domain }}.error.log"
+          - location /  { proxy_pass http://127.0.0.1:9080 ; }
+          - location /error.html { internal; root /var/www/i18n/; }
+        i18n_journalist:
+          - listen 80
+          - server_name journalist.i18n.{{ domain }}
+          - access_log  "/var/log/nginx/journalist.i18n.{{ domain }}.access.log"
+          - error_log   "/var/log/nginx/journalist.i18n.{{ domain }}.error.log"
+          - location /  { proxy_pass http://127.0.0.1:9081 ; }
+          - location /error.html { internal; root /var/www/i18n/; }
       nginx_configs:
         proxy:
           - proxy_set_header Proxy ""
@@ -55,6 +85,10 @@
           - proxy_set_header X-Forwarded-Proto $scheme
 
     - role: demo_static_files
+      demo_name: demo
+
+    - role: demo_static_files
+      demo_name: i18n
 
     - role: monitor_http_vhost
       http_vhost_name: Demo home
@@ -83,5 +117,35 @@
     - role: monitor_http_vhost
       http_vhost_name: Demo source sample notice
       http_vhost_fqdn: "source.demo.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "This is a sample SecureDrop for demonstration purposes only."
+
+    - role: monitor_http_vhost
+      http_vhost_name: I18n home
+      http_vhost_fqdn: "i18n.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "Welcome to the SecureDrop demo"
+
+    - role: monitor_http_vhost
+      http_vhost_name: I18n source
+      http_vhost_fqdn: "source.i18n.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "Submit documents"
+
+    - role: monitor_http_vhost
+      http_vhost_name: I18n journalist
+      http_vhost_fqdn: "journalist.i18n.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "You should be redirected automatically to target URL"
+
+    - role: monitor_http_vhost
+      http_vhost_name: I18n home sample notice
+      http_vhost_fqdn: "i18n.{{ domain }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "This is a sample SecureDrop for demonstration purposes only."
+
+    - role: monitor_http_vhost
+      http_vhost_name: I18n source sample notice
+      http_vhost_fqdn: "source.i18n.{{ domain }}"
       http_vhost_uri: "/"
       http_vhost_string: "This is a sample SecureDrop for demonstration purposes only."

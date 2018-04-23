@@ -2,29 +2,23 @@ import requests
 import pytest
 import time
 
+import demo_utils
+
 testinfra_hosts = ['demo-host']
 
-def test_source (host):
-    for _ in range (100):
-        try:
-            cmd = host.run('curl http://127.0.0.1:8080')
-            if cmd.rc != 0:
-                raise ValueError ('curl returned non null error code')
-            break
-        except:
-            time.sleep(10)
+def run_curl(host, port):
+    demo_utils.check_demo(host)
+    cmd = host.run('curl http://127.0.0.1:{port}'.format(port=port))
     assert cmd.rc == 0
-    assert 'Submit documents' in cmd.stdout
-    assert '/?l=fr_FR' in cmd.stdout
+    return cmd.stdout
 
-def test_journalist (host):
-    for _ in range (100):
-        try:
-            cmd = host.run('curl http://127.0.0.1:8081')
-            if cmd.rc != 0:
-                raise ValueError ('curl returned non null error code')
-            break
-        except:
-            time.sleep(10)
-    assert cmd.rc == 0
-    assert 'You should be redirected automatically to target URL' in cmd.stdout
+def test_source(host):
+    for port in ('8080', '9080'):
+        out = run_curl(host, port)
+        assert 'for the first time' in out
+        assert '/?l=fr_FR' in out
+
+def test_journalist(host):
+    for port in ('8081', '9081'):
+        out = run_curl(host, port)
+        assert 'You should be redirected automatically to target URL' in out

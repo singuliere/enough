@@ -1,8 +1,8 @@
 ---
 
-- name: create /var/www/html
+- name: create /var/www/{{ demo_name }}
   file:
-    path: /var/www/html
+    path: "/var/www/{{ demo_name }}"
     state: directory
     owner: www-data
     mode: 0755
@@ -10,7 +10,7 @@
 - name: copy static files
   copy:
     src: "files/{{ item }}"
-    dest: /var/www/html
+    dest: "/var/www/{{ demo_name }}"
     owner: www-data
   with_items:
     - qr.png
@@ -23,7 +23,7 @@
 - name: copy templated static files
   template:
     src: "templates/{{ item }}"
-    dest: /var/www/html
+    dest: "/var/www/{{ demo_name }}"
     owner: www-data
   with_items:
     - index.html
@@ -32,7 +32,7 @@
 - name: copy code patches
   copy:
     src: "files/{{ item }}"
-    dest: /srv/securedrop
+    dest: "/srv/securedrop/{{ demo_name }}"
   with_items:
     - 0001-demo-notice.patch
   become: false
@@ -40,7 +40,7 @@
 - name: apply patches
   command: "git apply {{ item }} --3way"
   args:
-    chdir: /srv/securedrop
+    chdir: "/srv/securedrop/{{ demo_name }}"
   with_items:
     - 0001-demo-notice.patch
   become: false

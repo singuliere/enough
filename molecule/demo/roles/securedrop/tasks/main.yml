@@ -5,35 +5,37 @@
     owner: debian
   become: True
 
-- name: git clone https://lab.securedrop.club/freedomofpress/securedrop.git
-  git:
-    repo: 'https://lab.securedrop.club/freedomofpress/securedrop.git'
-    version: release/0.6
-    force: yes
-    dest: /srv/securedrop
+- name: mkdir /srv/securedrop
+  file:
+    state: directory
+    path: /srv/securedrop
+    owner: debian
+  become: True
 
-- name: install control files
+- name: git clone -b {{ branch }} {{ repository }}
+  git:
+    repo: "{{ repository }}"
+    version: "{{ branch }}"
+    force: yes
+    dest: "/srv/securedrop/{{ demo_name }}"
+
+- name: install script
+  template:
+    src: check-securedrop-demo.sh
+    dest: "/srv/securedrop/check-{{ demo_name }}.sh"
+    mode: 0755
+
+- name: install cron
   copy:
-    src: "files/{{ item }}"
-    dest: /usr/local/bin
+    src: "files/cronscript"
+    dest: /usr/local/bin/cronscript
+    owner: "{{ ansible_user }}"
     mode: 0755
   become: True
-  with_items:
-    - rebuild-securedrop-demo.sh
-    - start-securedrop-demo.sh
-    - stop-securedrop-demo.sh
-    - check-securedrop-demo.sh
 
-- name: install cron file
+- name: install cron job
   cron:
     name: check securedrop demo
-    job:  timeout 1800 flock /tmp/check-securedrop-demo.lock /usr/local/bin/check-securedrop-demo.sh > /tmp/check-securedrop-demo.log 2>&1
     minute: "*/5"
+    job:  /usr/local/bin/cronscript
     user: "{{ ansible_user }}"
-    cron_file: check-securedrop-demo
-  become: True
-
-- name: build asynchronously vagrant developpement box (fire and forget)
-  command: timeout 1800 flock /tmp/check-securedrop-demo.lock /usr/local/bin/check-securedrop-demo.sh
-  async: 1000
-  poll: 0
