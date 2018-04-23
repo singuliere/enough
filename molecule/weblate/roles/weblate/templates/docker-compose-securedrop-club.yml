@@ -1,10 +1,7 @@
 version: '2'
 services:
   weblate:
-    # right now 2.18 is :edge and that's what we want
-    # but we don't really want edge so... this should
-    # be something less bleeding-edge
-    image: weblate/weblate:edge
+    image: weblate/weblate:2.20-1
     links:
       - database
       - cache
