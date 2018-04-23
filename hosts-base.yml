@@ -4,5 +4,3 @@ all:
       ansible_port: 2222
     ubuntu-host:
       ansible_user: ubuntu
-    demo-host:
-      ansible_user: ubuntu
