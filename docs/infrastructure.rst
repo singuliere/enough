@@ -32,6 +32,8 @@ The following OpenStack projects have been defined:
 * `Login as a customer <https://www.ovh.com/auth/>`_
 * `OpenStack OVH management <https://www.ovh.com/manager/cloud/>`_
 
+.. _firewall:
+
 Security groups
 ---------------
 
