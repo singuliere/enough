@@ -21,8 +21,8 @@ provisioner:
   inventory:
     links:
       # Path is relative to .molecule folder
-      group_vars: ../group_vars
-      host_vars:  ../host_vars
+      group_vars: ../certs_group_vars
+      host_vars:  ../certs_host_vars
 scenario:
   name: certs
   test_sequence:
