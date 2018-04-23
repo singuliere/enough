@@ -14,6 +14,7 @@
   command: git log --oneline
   register: cmd
   delegate_to: localhost
+  become: False
 
 - name: Put git log in /etc/securedrop-club/history
   copy:
