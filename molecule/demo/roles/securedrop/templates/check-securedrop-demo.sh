@@ -5,6 +5,7 @@ set -e
 : ${NAME:={{ demo_name }}}
 : ${SOURCE_PORT:={{ base_port + 80 }}}
 : ${JOURNALIST_PORT:={{ base_port + 81 }}}
+: ${USER:={{ ansible_user }}}
 
 cd ${NAME}
 
