@@ -14,11 +14,15 @@ function stop_demo() {
 }
 
 function start_demo() {
-    if test -f i18n_tool.py ; then
-        securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-messages --compile
+    local i18n_tool
+    if test -f securedrop/i18n_tool.py ; then
+        i18n_tool=i18n_tool
+    else
+        i18n_tool=manage
     fi
     sed -i -e "s/securedrop-test/securedrop-${NAME}/" securedrop/bin/dev-shell
     DOCKER_RUN_ARGUMENTS="-d --name=securedrop-${NAME} -p${SOURCE_PORT}:8080 -p${JOURNALIST_PORT}:8081" securedrop/bin/dev-shell ./bin/run
+    securedrop/bin/dev-shell ./$i18n_tool.py --verbose translate-messages --compile
     git checkout securedrop/bin/dev-shell
     docker exec securedrop-${NAME} sudo apt-get install sqlite3
     git apply 0001-demo-notice.patch --3way
