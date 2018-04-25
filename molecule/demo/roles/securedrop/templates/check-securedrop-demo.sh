@@ -21,11 +21,13 @@ function start_demo() {
     DOCKER_RUN_ARGUMENTS="-d --name=securedrop-${NAME} -p${SOURCE_PORT}:8080 -p${JOURNALIST_PORT}:8081" securedrop/bin/dev-shell ./bin/run
     git checkout securedrop/bin/dev-shell
     docker exec securedrop-${NAME} sudo apt-get install sqlite3
+    git apply 0001-demo-notice.patch --3way
     sudo chown -R ${USER} .
     get_credentials_sum > credentials-sum-${NAME}.txt
 }
 
 function rebuild_demo() {
+    git reset --hard
     git pull
     stop_demo
     start_demo
