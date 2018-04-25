@@ -26,11 +26,17 @@ function start_demo() {
     git checkout securedrop/bin/dev-shell
     docker exec securedrop-${NAME} sudo apt-get install sqlite3
     git apply 0001-demo-notice.patch --3way
+    #
+    # We want all known languages for the demo, no matter how incomplete they are
+    #
+    local sl=$(ls securedrop/translations/ | grep -v messages.pot | while read l ; do echo -n "'$l', " ; done)
+    sed -i -e "s/^SUPPORTED_LOCALES.*/SUPPORTED_LOCALES = [$sl 'en_US']/" securedrop/config.py
     sudo chown -R ${USER} .
     get_credentials_sum > credentials-sum-${NAME}.txt
 }
 
 function rebuild_demo() {
+    sudo git clean -qffdx securedrop
     git reset --hard
     git pull
     stop_demo
