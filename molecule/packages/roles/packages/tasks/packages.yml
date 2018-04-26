@@ -68,13 +68,6 @@
     creates: /var/www/html/key.asc
   become: False
 
-- name: Copy index.html
-  template:
-    src: index.html
-    dest: /var/www/html/index.html
-    owner: debian
-    mode: "0644"
-
 - name: per branch directory for packages
   file:
     path: "/var/www/html/{{ item }}/conf"

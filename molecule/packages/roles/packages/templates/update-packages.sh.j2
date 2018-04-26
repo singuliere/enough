@@ -51,3 +51,25 @@ for branch in ${1:-{{ packages_refs | join(' ') }}} ; do
     git clean -ffqdx
     git rev-parse origin/$branch > /tmp/$branch/hash
 done
+
+(
+    cat <<EOF
+<h3>Notes</h3>
+
+These Debian GNU/Linux repositories are created from a VM provisioned with <a href="https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/packages">an Ansible playbook</a>.
+
+<h3>keys</h3>
+<pre>
+  wget http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}/key.asc
+  sudo apt-key add key.asc
+</pre>
+EOF
+    ls /srv/stamps | while read $ref ; do
+        cat <<EOF
+<h3>$ref</h3>
+<pre>
+  sudo apt-add-repository --enable-source http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}/$ref
+</pre>
+EOF
+    done
+) > /var/www/html/index.html
