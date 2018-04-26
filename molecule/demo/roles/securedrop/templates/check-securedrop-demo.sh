@@ -14,18 +14,30 @@ function stop_demo() {
 }
 
 function start_demo() {
-    if test -f i18n_tool.py ; then
-        securedrop/bin/dev-shell ./i18n_tool.py --verbose translate-messages --compile
+    local i18n_tool
+    if test -f securedrop/i18n_tool.py ; then
+        i18n_tool=i18n_tool
+    else
+        i18n_tool=manage
     fi
     sed -i -e "s/securedrop-test/securedrop-${NAME}/" securedrop/bin/dev-shell
     DOCKER_RUN_ARGUMENTS="-d --name=securedrop-${NAME} -p${SOURCE_PORT}:8080 -p${JOURNALIST_PORT}:8081" securedrop/bin/dev-shell ./bin/run
+    securedrop/bin/dev-shell ./$i18n_tool.py --verbose translate-messages --compile
     git checkout securedrop/bin/dev-shell
     docker exec securedrop-${NAME} sudo apt-get install sqlite3
+    git apply 0001-demo-notice.patch --3way
+    #
+    # We want all known languages for the demo, no matter how incomplete they are
+    #
+    local sl=$(ls securedrop/translations/ | grep -v messages.pot | while read l ; do echo -n "'$l', " ; done)
+    sed -i -e "s/^SUPPORTED_LOCALES.*/SUPPORTED_LOCALES = [$sl 'en_US']/" securedrop/config.py
     sudo chown -R ${USER} .
     get_credentials_sum > credentials-sum-${NAME}.txt
 }
 
 function rebuild_demo() {
+    sudo git clean -qffdx securedrop
+    git reset --hard
     git pull
     stop_demo
     start_demo
