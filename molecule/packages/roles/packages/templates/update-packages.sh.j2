@@ -18,15 +18,19 @@ git fetch
 sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev dpkg-dev git rsync
 sudo apt-get install -y reprepro
 
-for branch in ${1:-{{ packages_refs | join(' ') }}} ; do
+OLDEST_TAG=0.6
+DEFAULT_REFS=$(git tag | while read v ; do dpkg --compare-versions $v ge $OLDEST_TAG && echo $v ; done)
+REFS=${1:-$DEFAULT_REFS}
 
-    mkdir -p /tmp/$branch
-    
+for ref in $REFS ; do
+
+    mkdir -p /srv/stamps/$ref
+
     git clean -ffqdx
-    git reset --hard origin/$branch
-    
-    if test "$(cat /tmp/$branch/hash 2>/dev/null)" = "$(git rev-parse origin/$branch)" ; then
-        echo "Nothing to do for $branch"
+    git reset --hard $ref
+
+    if test "$(cat /srv/stamps/$ref/hash 2>/dev/null)" = "$(git rev-parse $ref)" ; then
+        echo "$ref is up to date"
         continue
     fi
 
@@ -35,22 +39,22 @@ for branch in ${1:-{{ packages_refs | join(' ') }}} ; do
         virtualenv /srv/virtualenv
         source /srv/virtualenv/bin/activate
         pip install -r securedrop/requirements/develop-requirements.txt
-        
+
         make build-debs
     )
-    rm -fr /var/www/html/$branch/{pool,dists,db}
-    reprepro -Vb /var/www/html/$branch includedeb trusty build/*.deb
+    rm -fr /var/www/html/$ref/{pool,dists,db}
+    reprepro -Vb /var/www/html/$ref includedeb trusty build/*.deb
     # hack to be removed when kernel 3.14 is no longer distributed
-    reprepro -Vb /var/www/html/$branch includedeb trusty linux-*.deb
+    reprepro -Vb /var/www/html/$ref includedeb trusty /srv/linux-*.deb
     if test -d /home/debian/linux-packages ; then
         (
             cd /home/debian/linux-packages/opt
-            reprepro -Vb /var/www/html/$branch includedeb trusty *.deb
-            reprepro -Vb /var/www/html/$branch includedsc trusty linux-*.dsc
+            reprepro -Vb /var/www/html/$ref includedeb trusty *.deb
+            reprepro -Vb /var/www/html/$ref includedsc trusty linux-*.dsc
         )
     fi
     git clean -ffqdx
-    git rev-parse origin/$branch > /tmp/$branch/hash
+    git rev-parse $ref > /srv/stamps/$ref/hash
 done
 
 (
