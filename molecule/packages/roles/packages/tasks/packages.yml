@@ -68,28 +68,6 @@
     creates: /var/www/html/key.asc
   become: False
 
-- name: per branch directory for packages
-  file:
-    path: "/var/www/html/{{ item }}/conf"
-    recurse: yes
-    state: directory
-    owner: debian
-  with_items: "{{ packages_refs }}"
-
-- name: reprepro configuration
-  copy:
-    dest: "/var/www/html/{{ item }}/conf/distributions"
-    content: |
-      Origin: Debian
-      Label: SecureDrop
-      Suite: stable
-      Codename: trusty
-      Architectures: amd64 source
-      Components: main
-      Description: SecureDrop
-      SignWith: yes
-  with_items: "{{ packages_refs }}"
-
 - name: Copy update-packages.sh
   template:
     src: update-packages.sh.j2

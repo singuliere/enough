@@ -43,6 +43,17 @@ for ref in $REFS ; do
         make build-debs
     )
     rm -fr /var/www/html/$ref/{pool,dists,db}
+    mkdir -p /var/www/html/$ref/conf
+    cat > /var/www/html/$ref/conf/distributions <<EOF
+Origin: Debian
+Label: SecureDrop
+Suite: stable
+Codename: trusty
+Architectures: amd64 source
+Components: main
+Description: SecureDrop
+SignWith: yes
+EOF
     reprepro -Vb /var/www/html/$ref includedeb trusty build/*.deb
     # hack to be removed when kernel 3.14 is no longer distributed
     reprepro -Vb /var/www/html/$ref includedeb trusty /srv/linux-*.deb
