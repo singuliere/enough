@@ -22,9 +22,6 @@
         ansible_ssh_user: debian
         ansible_host: "{{ server.results[0].openstack.accessIPv4 }}"
 
-    - debug:
-        var: hostvars
-
 - name: create grsec deb packages from source
   hosts: grsec
 
