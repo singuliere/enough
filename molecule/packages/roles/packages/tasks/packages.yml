@@ -14,7 +14,7 @@
     path: /srv
     owner: debian
 
-- name: git clone https://github.com/freedomofpress/securedrop
+- name: git clone https://lab.securedrop.club/main/securedrop
   git:
     repo: "{{ packages_securedrop_repo }}"
     force: yes

@@ -7,6 +7,7 @@
 - import_playbook: ../bind/bind-client-playbook.yml
 - import_playbook: ../icinga/icinga-playbook.yml
 - import_playbook: ../postfix/postfix-playbook.yml
+- import_playbook: ../gitlab/test-real-gitlab-playbook.yml
 - import_playbook: packages-playbook.yml
 - import_playbook: grsec-playbook.yml
 - import_playbook: test-grsec-playbook.yml
