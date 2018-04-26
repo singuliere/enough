@@ -8,8 +8,9 @@ echo ======================================================================
 
 cd /srv
 
-wget -c https://apt-test.freedom.press/pool/main/l/linux-source-3.14.79-grsec/linux-image-3.14.79-grsec_3.14.79-grsec-11.00.Custom_amd64.deb
-wget -c https://apt-test.freedom.press/pool/main/l/linux-source-3.14.79-grsec/linux-headers-3.14.79-grsec_3.14.79-grsec-11.00.Custom_amd64.deb
+# hack to be removed when kernel 3.14 is no longer distributed
+wget -c https://apt.freedom.press/pool/main/l/linux-source-3.14.79-grsec/linux-image-3.14.79-grsec_3.14.79-grsec-11.00.Custom_amd64.deb
+wget -c https://apt.freedom.press/pool/main/l/linux-source-3.14.79-grsec/linux-headers-3.14.79-grsec_3.14.79-grsec-11.00.Custom_amd64.deb
 
 cd /srv/securedrop
 git fetch
