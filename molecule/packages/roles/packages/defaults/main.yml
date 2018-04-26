@@ -1,3 +1,0 @@
----
-packages_securedrop_repo: https://github.com/freedomofpress/securedrop
-packages_refs: [ 'develop', 'release/0.5.2' ]

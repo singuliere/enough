@@ -16,7 +16,7 @@
 
 - name: git clone https://lab.securedrop.club/main/securedrop
   git:
-    repo: "{{ packages_securedrop_repo }}"
+    repo: https://lab.securedrop.club/main/securedrop
     force: yes
     dest: /srv/securedrop
   become: False
