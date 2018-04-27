@@ -80,7 +80,7 @@ These Debian GNU/Linux repositories are created from a VM provisioned with <a hr
   sudo apt-key add key.asc
 </pre>
 EOF
-    ls /srv/stamps | while read $ref ; do
+    ls -r /srv/stamps | while read ref ; do
         cat <<EOF
 <h3>$ref</h3>
 <pre>
