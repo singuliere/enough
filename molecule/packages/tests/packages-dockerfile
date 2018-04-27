@@ -1,8 +1,0 @@
-FROM ubuntu:14.04
-RUN apt-get update && apt-get install -y wget apt-transport-https software-properties-common
-RUN cd /etc/ssl/certs && wget https://letsencrypt.org/certs/fakeleintermediatex1.pem && wget https://letsencrypt.org/certs/fakelerootx1.pem && c_rehash
-RUN wget %%url%%/key.asc && apt-key add key.asc
-RUN echo 'Acquire::https { Verify-Peer "false"; Verify-Host "false"; }' > /etc/apt/apt.conf.d/01https
-RUN apt-add-repository %%url%%/develop
-RUN apt-get update
-RUN apt-get install -y securedrop-ossec-agent

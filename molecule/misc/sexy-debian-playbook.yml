@@ -1,6 +1,6 @@
 ---
 - name: configure Debian as we love
-  hosts: [ 'all' ]
+  hosts: 'all:!trusty-host'
   become: true
 
   roles:

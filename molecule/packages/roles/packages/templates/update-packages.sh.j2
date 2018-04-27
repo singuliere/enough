@@ -6,21 +6,31 @@ echo ======================================================================
 date
 echo ======================================================================
 
+cd /srv
+
+# hack to be removed when kernel 3.14 is no longer distributed
+wget -c https://apt.freedom.press/pool/main/l/linux-source-3.14.79-grsec/linux-image-3.14.79-grsec_3.14.79-grsec-11.00.Custom_amd64.deb
+wget -c https://apt.freedom.press/pool/main/l/linux-source-3.14.79-grsec/linux-headers-3.14.79-grsec_3.14.79-grsec-11.00.Custom_amd64.deb
+
 cd /srv/securedrop
 git fetch
 
 sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev dpkg-dev git rsync
 sudo apt-get install -y reprepro
 
-for branch in ${1:-{{ packages_branches | join(' ') }}} ; do
+OLDEST_TAG=0.6
+DEFAULT_REFS=$(git tag | while read v ; do dpkg --compare-versions $v ge $OLDEST_TAG && echo $v ; done)
+REFS=${1:-$DEFAULT_REFS}
 
-    mkdir -p /tmp/$branch
-    
+for ref in $REFS ; do
+
+    mkdir -p /srv/stamps/$ref
+
     git clean -ffqdx
-    git reset --hard origin/$branch
-    
-    if test "$(cat /tmp/$branch/hash 2>/dev/null)" = "$(git rev-parse origin/$branch)" ; then
-        echo "Nothing to do for $branch"
+    git reset --hard $ref
+
+    if test "$(cat /srv/stamps/$ref/hash 2>/dev/null)" = "$(git rev-parse $ref)" ; then
+        echo "$ref is up to date"
         continue
     fi
 
@@ -29,12 +39,53 @@ for branch in ${1:-{{ packages_branches | join(' ') }}} ; do
         virtualenv /srv/virtualenv
         source /srv/virtualenv/bin/activate
         pip install -r securedrop/requirements/develop-requirements.txt
-        
+
         make build-debs
     )
-    rm -fr /var/www/html/$branch/{pool,dists,db}
-    reprepro -Vb /var/www/html/$branch includedeb trusty build/*.deb
-
+    rm -fr /var/www/html/$ref/{pool,dists,db}
+    mkdir -p /var/www/html/$ref/conf
+    cat > /var/www/html/$ref/conf/distributions <<EOF
+Origin: Debian
+Label: SecureDrop
+Suite: stable
+Codename: trusty
+Architectures: amd64 source
+Components: main
+Description: SecureDrop
+SignWith: yes
+EOF
+    reprepro -Vb /var/www/html/$ref includedeb trusty build/*.deb
+    # hack to be removed when kernel 3.14 is no longer distributed
+    reprepro -Vb /var/www/html/$ref includedeb trusty /srv/linux-*.deb
+    if test -d /home/debian/linux-packages ; then
+        (
+            cd /home/debian/linux-packages/opt
+            reprepro -Vb /var/www/html/$ref includedeb trusty *.deb
+            reprepro -Vb /var/www/html/$ref includedsc trusty linux-*.dsc
+        )
+    fi
     git clean -ffqdx
-    git rev-parse origin/$branch > /tmp/$branch/hash
+    git rev-parse $ref > /srv/stamps/$ref/hash
 done
+
+(
+    cat <<EOF
+<h3>Notes</h3>
+
+These Debian GNU/Linux repositories are created from a VM provisioned with <a href="https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/packages">an Ansible playbook</a>.
+
+<h3>keys</h3>
+<pre>
+  wget http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}/key.asc
+  sudo apt-key add key.asc
+</pre>
+EOF
+    ls /srv/stamps | while read $ref ; do
+        cat <<EOF
+<h3>$ref</h3>
+<pre>
+  sudo apt-add-repository --enable-source http{% if with_https is defined and with_https == true %}s{% endif %}://{{ packages_vhost_fqdn }}/$ref
+</pre>
+EOF
+    done
+) > /var/www/html/index.html

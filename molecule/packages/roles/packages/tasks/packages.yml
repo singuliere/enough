@@ -1,4 +1,9 @@
 ---
+- name: apt-get install rsync
+  apt:
+    name: rsync
+    state: present
+
 - name: apt-get install git
   apt:
     name: git
@@ -9,9 +14,9 @@
     path: /srv
     owner: debian
 
-- name: git clone https://github.com/freedomofpress/securedrop
+- name: git clone https://lab.securedrop.club/main/securedrop
   git:
-    repo: "{{ packages_securedrop_repo }}"
+    repo: https://lab.securedrop.club/main/securedrop
     force: yes
     dest: /srv/securedrop
   become: False
@@ -62,35 +67,6 @@
   args:
     creates: /var/www/html/key.asc
   become: False
-
-- name: Copy index.html
-  template:
-    src: index.html
-    dest: /var/www/html/index.html
-    owner: debian
-    mode: "0644"
-
-- name: per branch directory for packages
-  file:
-    path: "/var/www/html/{{ item }}/conf"
-    recurse: yes
-    state: directory
-    owner: debian
-  with_items: "{{ packages_branches }}"
-
-- name: reprepro configuration
-  copy:
-    dest: "/var/www/html/{{ item }}/conf/distributions"
-    content: |
-      Origin: Debian
-      Label: SecureDrop
-      Suite: stable
-      Codename: trusty
-      Architectures: amd64 source
-      Components: main
-      Description: SecureDrop
-      SignWith: yes
-  with_items: "{{ packages_branches }}"
 
 - name: Copy update-packages.sh
   template:

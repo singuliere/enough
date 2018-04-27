@@ -1,0 +1,62 @@
+---
+- name: create temporary host to build deb packages
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars_files:
+    - ../../clouds.yml
+    - ../../private-key.yml
+  roles:
+    - role: vm
+      vms:
+        - name: grsec
+          flavor: s1-8
+      state: present
+
+  tasks:
+
+    - name: add grsec host
+      add_host:
+        name: grsec
+        ansible_ssh_private_key_file: "{{ ssh_private_keyfile }}"
+        ansible_ssh_user: debian
+        ansible_host: "{{ server.results[0].openstack.accessIPv4 }}"
+
+- name: create grsec deb packages from source
+  hosts: grsec
+
+  roles:
+    - role: ansible-role-docker
+      docker_install_compose: false
+      become: yes
+    - role: grsec
+
+- name: destroy temporary host to build deb packages
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars_files:
+    - ../../clouds.yml
+    - ../../private-key.yml
+  roles:
+    - role: vm
+      vms:
+        - name: grsec
+          flavor: s1-8
+      state: absent
+
+  tasks:
+    - name: remove grsec host
+      meta: refresh_inventory
+
+- name: copy grsec linux packages to packages-host
+  hosts: packages-host
+
+  tasks:
+    - name: rsync linux*.deb packages-host
+      synchronize:
+        src: linux-packages/
+        dest: /home/debian/linux-packages/
+        recursive: yes
+        delete: yes
+        mode: push
