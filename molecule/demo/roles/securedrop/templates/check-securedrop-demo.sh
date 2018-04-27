@@ -22,7 +22,7 @@ function start_demo() {
     fi
     sed -i -e "s/securedrop-test/securedrop-${NAME}/" securedrop/bin/dev-shell
     DOCKER_RUN_ARGUMENTS="-d --name=securedrop-${NAME} -p${SOURCE_PORT}:8080 -p${JOURNALIST_PORT}:8081" securedrop/bin/dev-shell ./bin/run
-    securedrop/bin/dev-shell ./$i18n_tool.py --verbose translate-messages --compile
+    DOCKER_RUN_ARGUMENTS="--interactive=false" securedrop/bin/dev-shell ./$i18n_tool.py --verbose translate-messages --compile
     git checkout securedrop/bin/dev-shell
     docker exec securedrop-${NAME} sudo apt-get install sqlite3
     git apply 0001-demo-notice.patch --3way
