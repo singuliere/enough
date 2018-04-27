@@ -46,8 +46,8 @@ function rebuild_demo() {
 }
 
 function check_ports() {
-    timeout 30 curl -s 127.0.0.1:${SOURCE_PORT} &&
-        timeout 30 curl -s 127.0.0.1:${JOURNALIST_PORT}
+    timeout 30 curl -s 127.0.0.1:${SOURCE_PORT} > /dev/null &&
+        timeout 30 curl -s 127.0.0.1:${JOURNALIST_PORT} > /dev/null
 }
 
 function repo_up_to_date() {
