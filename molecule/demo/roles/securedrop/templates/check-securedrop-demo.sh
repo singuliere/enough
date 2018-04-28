@@ -6,6 +6,7 @@ set -e
 : ${SOURCE_PORT:={{ base_port + 80 }}}
 : ${JOURNALIST_PORT:={{ base_port + 81 }}}
 : ${USER:={{ ansible_user }}}
+: ${BRANCH:={{ branch }}}
 
 cd ${NAME}
 
@@ -45,8 +46,13 @@ function rebuild_demo() {
 }
 
 function check_ports() {
-    timeout 30 curl -s 127.0.0.1:${SOURCE_PORT} &&
-        timeout 30 curl -s 127.0.0.1:${JOURNALIST_PORT}
+    timeout 30 curl -s 127.0.0.1:${SOURCE_PORT} > /dev/null &&
+        timeout 30 curl -s 127.0.0.1:${JOURNALIST_PORT} > /dev/null
+}
+
+function repo_up_to_date() {
+    git fetch
+    git diff --quiet origin/${BRANCH}..
 }
 
 function wait_ports() {
@@ -68,11 +74,10 @@ function check_credentials() {
 }
 
 function check_demo() {
-    if ! check_ports || ! check_credentials ; then
+    if ! repo_up_to_date || ! check_ports || ! check_credentials ; then
         rebuild_demo
         wait_ports || return 1
     fi
 }
 
 ${1:-check_demo}
-
