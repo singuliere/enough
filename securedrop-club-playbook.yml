@@ -16,5 +16,7 @@
 - import_playbook: molecule/packages/packages-playbook.yml
 - import_playbook: molecule/packages/grsec-playbook.yml
 - import_playbook: molecule/demo/demo-playbook.yml
+- import_playbook: molecule/bots/bots-playbook.yml
+- import_playbook: molecule/bots/sd-helper-playbook.yml
 - import_playbook: molecule/website/website-playbook.yml
 - import_playbook: molecule/misc/commit_etc-playbook.yml

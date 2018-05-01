@@ -1,0 +1,8 @@
+---
+- name: run sd-helper
+  hosts: bots-host
+
+  roles:
+    - { role: sd-helper }
+
+  become: True
