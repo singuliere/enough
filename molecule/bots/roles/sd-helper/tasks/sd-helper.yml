@@ -12,7 +12,6 @@
 - name: git clone https://lab.securedrop.club/main/sd-helper
   git:
     repo: https://lab.securedrop.club/main/sd-helper
-    version: origin/wip-docker
     force: yes
     dest: /srv/sd-helper
   become: False
