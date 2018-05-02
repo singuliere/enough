@@ -7,3 +7,4 @@ pets:
     gitlab-host:
     weblate-host:
     packages-host:
+    chat-host:
