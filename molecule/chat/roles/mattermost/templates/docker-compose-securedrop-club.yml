@@ -28,9 +28,11 @@ services:
         - PUID=1000
         - PGID=1000
     restart: unless-stopped
-{% if with_https is not defined or with_https == false %}
     ports:
+{% if with_https is not defined or with_https == false %}
       - "80:8000"
+{% else %}
+      - "8000:8000"
 {% endif %}
     volumes:
       - ./volumes/app/mattermost/config:/mattermost/config:rw
@@ -54,6 +56,7 @@ services:
     restart: always
     environment:
       DOMAINS: '{{ chat_vhost_fqdn }} -> http://{{ chat_vhost_fqdn }}:8000'
+      WEBSOCKET: 'true'
 {% if with_fake_LE is undefined %}
       STAGE: production
 {% endif %}
