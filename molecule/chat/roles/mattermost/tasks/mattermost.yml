@@ -1,0 +1,36 @@
+---
+- name: apt-get install git
+  apt:
+    name: git
+    state: present
+
+- name: chown debian /srv
+  file:
+    path: /srv
+    owner: debian
+
+- name: git clone https://github.com/mattermost/mattermost-docker.git
+  git:
+    repo: https://github.com/mattermost/mattermost-docker.git
+    force: yes
+    dest: /srv/mattermost
+  become: False
+
+- name: cleanup docker leftovers
+  shell: docker system prune --force
+  become: False
+
+- name: create mattermost directories
+  shell: |
+    mkdir -p /srv/mattermost/volumes/app/mattermost/{data,config,logs}
+    chown -R debian:debian /srv/mattermost/volumes/app
+
+- name: Copy docker-compose-securedrop-club.yml
+  template:
+    src: docker-compose-securedrop-club.yml
+    dest: /srv/mattermost/docker-compose-securedrop-club.yml
+    owner: debian
+    mode: "0600"
+  notify:
+    - recreate mattermost
+  become: False

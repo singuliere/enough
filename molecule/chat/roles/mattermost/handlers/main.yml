@@ -1,0 +1,7 @@
+---
+- name: recreate mattermost
+  docker_service:
+    files: docker-compose-securedrop-club.yml
+    project_src: /srv/mattermost
+    state: present
+  become: False

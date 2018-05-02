@@ -1,0 +1,16 @@
+---
+- name: prepare chat environment
+  hosts: chat-host
+
+  roles:
+    - { role: ansible-role-docker }
+    - { role: docker }
+    - { role: mattermost }
+
+    - role: monitor_http_vhost
+      http_vhost_name: Chat
+      http_vhost_fqdn: "{{ chat_vhost_fqdn }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "Mattermost"
+
+  become: True
