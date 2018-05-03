@@ -1,0 +1,2 @@
+---
+cloud_vhost_fqdn: cloud.{{ domain }}
