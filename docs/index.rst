@@ -30,4 +30,5 @@ All resources are deployed and maintained via :doc:`ansible <ansible>`.
   monitoring_howto
   weblate
   gitlab
+  mattermost
   demo
