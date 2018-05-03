@@ -37,6 +37,12 @@ Weblate
 * `heartsucker <heartsucker@autistici.org>`__
 * `Loïc Dachary <loic@dachary.org>`__
 
+Mattermost
+----------
+
+* `François Poulain <fpoulain@metrodore.fr>`__
+* `Loïc Dachary <loic@dachary.org>`__
+
 Readthedocs
 -----------
 
