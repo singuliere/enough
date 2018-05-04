@@ -1,7 +1,12 @@
 ---
+- name: ensure that /usr/local/share/ca-certificates/securedrop.club exists
+  file:
+    path: /usr/local/share/ca-certificates/securedrop.club
+    state: directory
+
 - name: Install certs
   copy:
     src: "files/certs/{{ item }}"
-    dest: /etc/ssl/certs/
+    dest: "/usr/local/share/ca-certificates/securedrop.club/{{ item | replace('.pem', '.crt') }}"
   with_items: "{{ certs }}"
-  notify: rehash certs
+  notify: update certs

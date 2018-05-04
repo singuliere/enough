@@ -17,10 +17,11 @@
     - role: debops.postfix
       postfix__mailname: '{{ domain }}'
       postfix__fqdn: '{{ inventory_hostname }}.{{ domain }}'
-      postfix__relayhost: '[{{ hostvars["postfix-host"]["ansible_default_ipv4"]["address"] }}]:465'
+      postfix__relayhost: '[postfix-host.{{ domain }}]:465'
       postfix__maincf:
         - name: 'mynetworks'
           value: ['172.17.0.0/16']
+          comment: Set docker net in mynetworks
         - name: 'smtp_tls_security_level'
           value: 'encrypt'
           section: 'smtp-tls'

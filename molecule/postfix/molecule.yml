@@ -20,7 +20,7 @@ provisioner:
   inventory:
     links:
       # Path is relative to .molecule folder
-      group_vars: ../../../inventory/group_vars
+      group_vars: ../postfix_group_vars
       host_vars:  ../../../inventory/host_vars
 scenario:
   name: postfix
