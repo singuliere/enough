@@ -1,7 +1,7 @@
 ---
 - name: Uninstall certs
   file:
-    path: "/etc/ssl/certs/{{ item }}"
+    path: "/usr/local/share/ca-certificates/securedrop.club/{{ item | replace('.pem', '.crt') }}"
     state: absent
   with_items: "{{ certs }}"
-  notify: rehash certs
+  notify: update certs
