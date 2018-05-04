@@ -20,6 +20,15 @@ def test_sendmail(host):
     print(cmd.stderr)
     assert 0 == cmd.rc
 
+    check = ("grep -q 'Trusted TLS connection established to postfix-host' "
+             "/var/log/mail.log")
+    for _ in range(300):
+        print(check)
+        cmd = postfix_client_host.run(check)
+        if cmd.rc == 0:
+            break
+        time.sleep(1)
+
     check = ("grep -q 'connection established to spool.mail.gandi.net' "
              "/var/log/mail.log")
     for _ in range(300):
