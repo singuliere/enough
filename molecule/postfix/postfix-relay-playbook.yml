@@ -44,14 +44,31 @@
             - smtpd_sasl_auth_enable: False
             - name: 'smtpd_relay_restrictions'
               state: 'comment'
-
-      postfix__maincf:
+      base__maincf:
         - name: 'smtpd_relay_restrictions'
           value: "{% if with_fake_LE is defined or with_https is undefined %}check_recipient_access inline:{{'{'}}dachary.org=OK{{'}'}} defer{% endif %}"
           state: "{% if with_fake_LE is defined or with_https is undefined %}present{% else %}absent{% endif %}"
         - name: 'mynetworks'
           value:
             - name: '0.0.0.0/0'
+      TLS__maincf:
+        - name: 'smtpd_tls_security_level'
+          value: 'encrypt'
+          comment: |
+            This enforce TLS usage.
+            According to RFC 2487 this MUST NOT be applied in case
+            of a publicly-referenced Postfix SMTP server.
+          section: 'smtpd-tls'
+        - name: 'smtpd_tls_cert_file'
+          value: '/etc/letsencrypt/live/postfix-host.{{ domain }}/cert.pem'
+          section: 'smtpd-tls'
+        - name: 'smtpd_tls_key_file'
+          value: '/etc/letsencrypt/live/postfix-host.{{ domain }}/privkey.pem'
+          section: 'smtpd-tls'
+        - name: 'smtpd_tls_CAfile'
+          value: '/etc/letsencrypt/live/postfix-host.{{ domain }}/chain.pem'
+          section: 'smtpd-tls'
+      postfix__maincf: "{% if with_https is defined %}{{ base__maincf + TLS__maincf }}{% else %}{{ base__maincf }}{% endif %}"
       postfix__restrictions_maincf: []
 
     - role: install_dns_mail_records
