@@ -21,6 +21,7 @@
       postfix__maincf:
         - name: 'mynetworks'
           value: ['172.17.0.0/16']
+          comment: Set docker net in mynetworks
         - name: 'smtp_tls_security_level'
           value: 'encrypt'
           section: 'smtp-tls'
