@@ -8,6 +8,18 @@
     - role: firewall
       os_security_group_tcp: [ 465 ]
 
+- name: install letsencrypt certificate if needed
+
+  hosts: 'postfix-host'
+  become: true
+  tasks:
+
+  - name: install certbot and issue certificate
+    include_role:
+      name: certbot-postfix
+    when:
+      - 'with_https is defined'
+
 - name: install and configure postfix relay
   hosts: 'postfix-host'
   become: True

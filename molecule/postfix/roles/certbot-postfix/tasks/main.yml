@@ -1,0 +1,17 @@
+---
+- name: apt-get install certbot
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - certbot
+
+- name: call let's encrypt on vhost_fqdn
+  shell: |
+    certbot -n                                                   \
+      certonly                                                   \
+      --standalone                                               \
+      --agree-tos                                                \
+      --email devnull@securedrop.club                            \
+      -d postfix-host.{{ domain }}                               \
+      {% if with_fake_LE is defined %}--test-cert{% endif %}
