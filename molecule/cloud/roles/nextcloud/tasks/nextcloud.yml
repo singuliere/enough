@@ -1,0 +1,38 @@
+---
+- name: apt-get install git
+  apt:
+    name: git
+    state: present
+
+- name: chown debian /srv
+  file:
+    path: /srv
+    owner: debian
+
+- name: git clone https://github.com/nextcloud/docker/
+  git:
+    repo: https://github.com/nextcloud/docker/
+    version: 13.0.2
+    force: yes
+    dest: /srv/nextcloud
+  become: False
+
+- name: cleanup docker leftovers
+  shell: docker system prune --force
+  become: False
+
+- name: docker build apache-cron
+  shell: docker build -t nextcloud:apache-cron .examples/dockerfiles/cron/apache
+  args:
+    chdir: /srv/nextcloud
+  become: False
+
+- name: Copy docker-compose-securedrop-club.yml
+  template:
+    src: docker-compose-securedrop-club.yml
+    dest: /srv/nextcloud/.examples/docker-compose/with-nginx-proxy/postgres/apache/docker-compose-securedrop-club.yml
+    owner: debian
+    mode: "0600"
+  notify:
+    - recreate nextcloud
+  become: False

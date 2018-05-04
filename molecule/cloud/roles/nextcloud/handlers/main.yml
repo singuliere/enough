@@ -1,0 +1,7 @@
+---
+- name: recreate nextcloud
+  docker_service:
+    files: docker-compose-securedrop-club.yml
+    project_src: /srv/nextcloud/.examples/docker-compose/with-nginx-proxy/postgres/apache
+    state: present
+  become: False
