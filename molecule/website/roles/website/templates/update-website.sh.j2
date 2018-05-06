@@ -11,6 +11,6 @@ git fetch
 
 git pull
 git submodule sync
-git submodule update --init --recursive --remote
+git submodule update --init --recursive
 hugo --baseURL="https://{{ website_vhost_fqdn }}/"
 rsync -av --delete public/ /var/www/html/
