@@ -55,9 +55,19 @@
     name: rsync
     state: present
 
-- apt_repository:
-    repo: deb http://deb.debian.org/debian/ testing main
+- name: add buster repo and update cache
+  apt_repository:
+    repo: deb http://deb.debian.org/debian/ buster main
     state: present
+
+- name: setup apt pinning
+  # it should be better to use backports; but hugo isn't available there
+  copy:
+    src:  apt-preferences.d/{{ item }}
+    dest: /etc/apt/preferences.d/{{ item }}
+  with_items:
+    - default
+    - hugo
 
 - name: apt-get install hugo
   apt:

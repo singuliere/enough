@@ -1,0 +1,3 @@
+Package: hugo
+Pin: release n=buster
+Pin-Priority: 942
