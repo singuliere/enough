@@ -18,13 +18,9 @@
     name: securedrop_key
     public_key_file: "{{ ssh_private_keyfile }}.pub"
 
-- name: create volumes
-  os_volume:
-    state: present
-    <<: *os_auth
-    display_name: "{{ item.name }}"
-    size: "{{ item.size }}"
-  with_items: |
+- name: make a list of volumes
+  set_fact:
+    volumes_description: |-
       {% if molecule_yml is defined -%}
         {% for p in molecule_yml.platforms -%}
           {% if p.volumes is defined -%}
@@ -32,7 +28,19 @@
           {%- endif %}
         {%- endfor %}
       {%- endif %}
-  when: state == "present"
+
+- name: display the volumes_description var
+  debug:
+    msg: "volumes_description: {{ volumes_description }}"
+
+- name: create volumes
+  os_volume:
+    state: present
+    <<: *os_auth
+    display_name: "{{ item.name }}"
+    size: "{{ item.size }}"
+  with_items: "{{ volumes_description }}"
+  when: state == "present" and volumes_description != ''
 
 - name: instances "{{ state }}"
   os_server:
@@ -63,9 +71,9 @@
   os_volume:
     state: absent
     <<: *os_auth
-    display_name: "{{ item }}"
-  with_items: "{% if molecule_yml is defined %}{{ molecule_yml | json_query('platforms[].volumes[].name') }}{% endif %}"
-  when: state == "absent"
+    display_name: "{{ item.name }}"
+  with_items: "{{ volumes_description }}"
+  when: state == "absent" and volumes_description != ''
 
 - name: Wait for python on the instances
   command: >
