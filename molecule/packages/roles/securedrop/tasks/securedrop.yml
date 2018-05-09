@@ -1,0 +1,34 @@
+---
+- name: git clone https://lab.securedrop.club/main/securedrop
+  git:
+    repo: https://lab.securedrop.club/main/securedrop
+    force: yes
+    dest: /srv/securedrop
+  become: False
+
+- name: /var/www/html/conf is owned by debian
+  file:
+    path: /var/www/html/conf
+    state: directory
+    owner: debian
+
+- name: expose the public GPG key
+  shell: |
+    gpg --export --armor > /var/www/html/key.asc
+  args:
+    creates: /var/www/html/key.asc
+  become: False
+
+- name: Copy update-packages.sh
+  template:
+    src: update-packages.sh.j2
+    dest: /srv/securedrop-update-packages.sh
+    owner: debian
+    mode: "0755"
+
+- name: Run securedrop-update-packages.sh every 5 minutes
+  cron:
+    name: "Update securedrop"
+    minute: "*/5"
+    job: "flock /tmp/update-packages /srv/securedrop-update-packages.sh >> /var/log/update-packages.log 2>&1"
+  become: False
