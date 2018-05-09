@@ -1,0 +1,38 @@
+---
+- name: /srv/enough is owned by debian
+  file:
+    path: /srv/enough
+    state: directory
+    owner: debian
+
+- name: /srv/enough/docker is owned by debian
+  file:
+    path: /srv/enough/docker
+    state: directory
+    owner: debian
+
+- name: git clone https://lab.securedrop.club/enough/android
+  git:
+    repo: "https://lab.securedrop.club/enough/android"
+    force: yes
+    dest: /srv/android
+  become: False
+
+- name: keytool -keystore Enough.keystore
+  command: docker run --rm --volume /srv:/srv --workdir /srv runmymind/docker-android-sdk keytool -genkey -noprompt -alias Enough -dname "CN=, OU=, O=Enough, L=, S=, C=" -keystore Enough.keystore -storepass "{{APK_PASSWORD}}" -keypass "{{APK_PASSWORD}}" -keyalg RSA -keysize 2048 -validity 10000
+  args:
+    creates: /srv/Enough.keystore
+
+- name: Copy update-packages.sh
+  template:
+    src: update-packages.sh.j2
+    dest: /srv/enough-android-update-packages.sh
+    owner: debian
+    mode: "0755"
+
+- name: Run securedrop-update-packages.sh every 5 minutes
+  cron:
+    name: "Update enough-android"
+    minute: "*/5"
+    job: "flock /tmp/update-packages /srv/enough-android-update-packages.sh >> /var/log/update-packages.log 2>&1"
+  become: False

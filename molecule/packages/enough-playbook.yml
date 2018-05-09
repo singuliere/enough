@@ -1,0 +1,8 @@
+---
+- name: install Enough packages builders
+  hosts: packages-host
+
+  roles:
+    - { role: enough-android }
+
+  become: True
