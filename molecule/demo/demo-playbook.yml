@@ -130,7 +130,7 @@
       http_vhost_name: I18n source
       http_vhost_fqdn: "source.i18n.{{ domain }}"
       http_vhost_uri: "/"
-      http_vhost_string: "Submit documents"
+      http_vhost_string: "SUBMIT DOCUMENTS"
 
     - role: monitor_http_vhost
       http_vhost_name: I18n journalist

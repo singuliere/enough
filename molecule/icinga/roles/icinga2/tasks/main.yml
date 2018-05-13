@@ -113,7 +113,6 @@
     - services/disks
     - services/dns
     - services/http
-    - services/mail
     - services/volumes
 
 - name: deploy our templated configuration
@@ -122,6 +121,7 @@
     dest: /etc/icinga2/zones.d/global-templates/{{ item }}.conf
   with_items:
     - users
+    - services/mail
 
 - name: retrieve generated DB credentials
   shell: |

@@ -72,3 +72,4 @@
       postfix__restrictions_maincf: []
 
     - role: install_dns_mail_records
+    - role: postfix_relay_monitoring
