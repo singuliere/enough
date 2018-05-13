@@ -12,6 +12,6 @@
       http_vhost_name: Cloud
       http_vhost_fqdn: "{{ cloud_vhost_fqdn }}"
       http_vhost_uri: "/login"
-      http_vhost_string: "Nextcloud"
+      http_vhost_string: "Forgot password"
 
   become: True
