@@ -16,7 +16,6 @@
   git:
     repo: "{{ repository }}"
     version: "{{ branch }}"
-    force: yes
     dest: "/srv/securedrop/{{ demo_name }}"
 
 - name: install script
