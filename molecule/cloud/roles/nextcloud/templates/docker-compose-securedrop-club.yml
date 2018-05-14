@@ -14,8 +14,8 @@ services:
     restart: always
     volumes:
       - nextcloud:/var/www/html
-{% if with_https is not defined or with_https == false %}
     ports:
+{% if with_https is not defined or with_https == false %}
       - 80:80
 {% else %}
       - 8080:80
