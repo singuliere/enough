@@ -33,6 +33,8 @@ If the virtual machine is a pet
 * Edit ``inventory/01-hosts.yml`` and replace the IP of the broken machine with the IP of the new machine
 * Clear the ansible cache ``rm -fr ~/.ansible``
 * :doc:`Run ansible <ansible>` so the DNS updates with the IP of the newly created VM
+* Reboot the machine, in case it had IPs from before the DNS was updated by ansible
+* :doc:`Run ansible <ansible>` so the DNS updates with the IP of the newly created VM
 
 Disaster recover exercize
 -------------------------
