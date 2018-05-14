@@ -2,7 +2,6 @@
 
 - import_playbook: ../misc/history-playbook.yml
 - import_playbook: ../misc/sexy-debian-playbook.yml
-- import_playbook: ../misc/sshd-playbook.yml
 - import_playbook: icinga-playbook.yml
 - import_playbook: test-icinga-playbook.yml
 - import_playbook: test-monitoring-deployment-playbook.yml
