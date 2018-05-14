@@ -8,7 +8,7 @@ platforms:
     flavor: "s1-2"
   - name: volume-host
     volumes:
-      - name: vol1
+      - name: vol1=/dev/sdb
         size: 2
     flavor: "s1-2"
 provisioner:
