@@ -29,7 +29,7 @@ platforms:
   - name: cloud-host
     flavor: "s1-2"
     volumes:
-      - name: cloud-volume=/dev/sdb
+      - name: cloud-volume
         size: 100
   - name: trusty-host
     flavor: "s1-2"
