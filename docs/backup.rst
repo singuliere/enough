@@ -13,5 +13,38 @@ The VMs are cheap and do not provide any kind of guarantee and all
 data can be lost. To recover a lost production VM:
 
 * login debian@ansible.securedrop.club and get OpenStack credentials from `~/openrc.sh` or :doc:`ask a team member <team>`.
-* login to `the horizon panel <https://horizon.cloud.ovh.net/>`_ and boot the latest snapshot
-* :doc:`run ansible <ansible>` so the DNS updates with the IP of the newly created VM
+* cd /srv/checkout
+
+If the virtual machine is cattle
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Delete the broken machine if it is still around, e.g. ``openstack server delete website-host``
+* Create the machine again ``rm molecule/preprod/.molecule/state.yml ; molecule create -s preprod``
+* Remove the test hosts ``openstack server delete trusty-host``
+* :doc:`Run ansible <ansible>` so the DNS updates with the IP of the newly created VM
+
+If the virtual machine is a pet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Get the name of the latest backup with ``openstack image list --private``
+* Rename the broken machine if it is still around, e.g. ``openstack server set --name packages-destroyed packages-host``
+* Get the flavor for the machine from ``molecule/preprod/molecule.yml``
+* Create a new machine from the backup, e.g. ``openstack server create --flavor s1-2 --image 2018-05-14-packages-host --wait packages-host``
+* Edit ``inventory/01-hosts.yml`` and replace the IP of the broken machine with the IP of the new machine
+* Clear the ansible cache ``rm -fr ~/.ansible``
+* :doc:`Run ansible <ansible>` so the DNS updates with the IP of the newly created VM
+
+Disaster recover exercize
+-------------------------
+
+If the virtual machine is cattle
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Remove the machine, e.g. ``openstack server delete website-host``
+
+If the virtual machine is a pet
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Rename the machine, e.g. ``openstack server set --name packages-destroyed packages-host``
+* Suspend, e.g. ``openstack server suspend packages-destroyed``
+* Remove the machine when the recovery is successfull, e.g. ``openstack server remove packages-destroyed``
