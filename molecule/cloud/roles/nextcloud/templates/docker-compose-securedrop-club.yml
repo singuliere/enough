@@ -17,6 +17,8 @@ services:
 {% if with_https is not defined or with_https == false %}
     ports:
       - 80:80
+{% else %}
+      - 8080:80
 {% endif %}
     environment:
       - VIRTUAL_HOST={{ cloud_vhost_fqdn }}

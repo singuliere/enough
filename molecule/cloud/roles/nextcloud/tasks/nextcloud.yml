@@ -36,3 +36,32 @@
   notify:
     - recreate nextcloud
   become: False
+
+- name: apt-get install tor
+  apt:
+    name: tor
+    state: present
+
+- name: mkdir /var/lib/tor/services
+  file:
+    state: directory
+    dest: /var/lib/tor/services
+    owner: debian-tor
+    group: debian-tor
+    mode: "0700"
+
+- name: mkdir /var/lib/tor/services/cloud
+  file:
+    state: directory
+    dest: /var/lib/tor/services/cloud
+    owner: debian-tor
+    group: debian-tor
+    mode: "0700"
+
+- name: Copy /etc/tor/torrc
+  template:
+    src: torrc
+    dest: /etc/tor/torrc
+    mode: "0644"
+  notify:
+    - restart tor
