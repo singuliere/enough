@@ -14,6 +14,7 @@
 
 - name: git clone -b {{ branch }} {{ repository }}
   git:
+    update: no
     repo: "{{ repository }}"
     version: "{{ branch }}"
     dest: "/srv/securedrop/{{ demo_name }}"
