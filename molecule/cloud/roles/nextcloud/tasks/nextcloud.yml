@@ -1,4 +1,5 @@
 ---
+
 - name: apt-get install git
   apt:
     name: git
@@ -27,14 +28,58 @@
     chdir: /srv/nextcloud
   become: False
 
+- name: set_fact app_sh & app_dir
+  set_fact:
+    app_dir: "/srv/nextcloud/.examples/docker-compose/with-nginx-proxy/postgres/apache"
+    app_sh: "docker-compose -f docker-compose-securedrop-club.yml exec -T -u www-data app"
+
 - name: Copy docker-compose-securedrop-club.yml
   template:
     src: docker-compose-securedrop-club.yml
-    dest: /srv/nextcloud/.examples/docker-compose/with-nginx-proxy/postgres/apache/docker-compose-securedrop-club.yml
+    dest: "{{ app_dir }}/docker-compose-securedrop-club.yml"
     owner: debian
     mode: "0600"
-  notify:
-    - recreate nextcloud
+  become: False
+
+- name: (re)create nextcloud
+  docker_service:
+    files: docker-compose-securedrop-club.yml
+    project_src: "{{ app_dir }}"
+    state: present
+  become: False
+
+- name: wait for nextcloud to be ready
+  uri:
+    url: "http{% if with_https is defined and with_https == true %}s{% endif %}://cloud.{{ domain }}"
+    method: GET
+    status_code: 200
+  register: nextcloud_wget
+  until: nextcloud_wget|succeeded
+  retries: 30
+  delay: 5
+
+- name: test -f config/config.php
+  shell: |
+    {{ app_sh }} grep installed config/config.php
+  args:
+    chdir: "{{ app_dir }}"
+  register: nextcloud_config
+  ignore_errors: True
+
+- name: occ maintenance:install
+  shell: |
+    {{ app_sh }} bash -c 'php -f occ maintenance:install --database-host=$POSTGRES_HOST --database-name=$POSTGRES_DB --database-user=$POSTGRES_USER --admin-user {{ NEXTCLOUD_ADMIN_USER }} --admin-pass {{ NEXTCLOUD_ADMIN_PASS }} --database pgsql --database-pass=$POSTGRES_PASSWORD'
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+  when: nextcloud_config.rc == 1
+
+- name: occ config:system:set trusted_domains
+  shell: |
+    {{ app_sh }} php -f occ config:system:set trusted_domains 0 --value cloud.{{ domain }}
+    {{ app_sh }} php -f occ config:system:set trusted_domains 1 --value {{ ansible_host }} # for test purposes only
+  args:
+    chdir: "{{ app_dir }}"
   become: False
 
 - name: apt-get install tor
