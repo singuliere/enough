@@ -7,11 +7,16 @@
     - torsocks
   delegate_to: icinga-host
 
+- name: retrieve tor_http_vhost_fqdn
+  shell: "cat {{ tor_hostname_file }}"
+  register: output
+  changed_when: False
+
 - name: declare tor http vhost on {{ inventory_hostname }}
   blockinfile:
     block: |
-        vars.tor_http_vhosts["{{ tor_http_vhost_name }}"] = {
-          http_vhost = "{{ tor_http_vhost_fqdn }}"
+        vars.tor_http_vhosts["{{ tor_http_vhost_name }} over Tor"] = {
+          http_vhost = "{{ hostvars[item].output.stdout }}"
         {% if tor_http_vhost_uri is defined %}
           http_uri = "{{ tor_http_vhost_uri }}"
         {% endif %}
@@ -24,6 +29,8 @@
         }
     insertafter: 'Define tor services and attributes'
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
-    marker: "/* {mark} {{ tor_http_vhost_name }} tor http vhost */"
+    marker: "/* {mark} {{ tor_http_vhost_name }} tor http vhost on {{ item }} */"
   delegate_to: icinga-host
   notify: reload icinga2
+  with_items:
+  - "{{ ansible_play_batch }}"

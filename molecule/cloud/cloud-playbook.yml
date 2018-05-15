@@ -16,8 +16,8 @@
 
     - role: monitor_tor_http_vhost
       with_https: false
-      tor_http_vhost_name: Cloud over Tor
-      tor_http_vhost_fqdn: "rjrdsaj4jemwrui6.onion"
+      tor_hostname_file: /var/lib/tor/services/cloud/hostname
+      tor_http_vhost_name: Cloud
       tor_http_vhost_uri: "/login"
       tor_http_vhost_string: "Forgot password"
 
