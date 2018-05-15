@@ -1,3 +1,4 @@
 ---
 - import_playbook: history-playbook.yml
 - import_playbook: sexy-debian-playbook.yml
+- import_playbook: sshd-playbook.yml
