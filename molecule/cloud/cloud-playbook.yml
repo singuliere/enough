@@ -14,4 +14,11 @@
       http_vhost_uri: "/login"
       http_vhost_string: "Forgot password"
 
+    - role: monitor_tor_http_vhost
+      with_https: false
+      tor_http_vhost_name: Cloud over Tor
+      tor_http_vhost_fqdn: "rjrdsaj4jemwrui6.onion"
+      tor_http_vhost_uri: "/login"
+      tor_http_vhost_string: "Forgot password"
+
   become: True
