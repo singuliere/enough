@@ -6,6 +6,12 @@ def test_nextcloud(host):
     d=/dev/sdb
     test -e /dev/sdb || d=/dev/vda
     mount | grep $d | grep /var/lib/docker
+    for d in 2 4 8 16 32 64 128 256 512 ; do
+      if curl --silent http://127.0.0.1/ | grep --quiet -i nextcloud ; then
+        break
+      fi
+      sleep $d
+    done
     curl --silent http://127.0.0.1/ | grep --quiet -i nextcloud
     """)
     print(cmd.stdout)
