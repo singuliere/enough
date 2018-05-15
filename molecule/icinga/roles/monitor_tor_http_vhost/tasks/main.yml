@@ -7,10 +7,14 @@
     - torsocks
   delegate_to: icinga-host
 
+- name: restart tor
+  service:
+    name: tor
+    state: restarted
+
 - name: retrieve tor_http_vhost_fqdn
   shell: "cat {{ tor_hostname_file }}"
   register: output
-  changed_when: False
 
 - name: declare tor http vhost on {{ inventory_hostname }}
   blockinfile:
