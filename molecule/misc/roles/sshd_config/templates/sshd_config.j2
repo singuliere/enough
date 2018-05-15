@@ -10,6 +10,9 @@ UsePAM yes
 X11Forwarding no
 PrintMotd no
 
+# Needed by ansible
+Subsystem sftp  /usr/lib/openssh/sftp-server
+
 # Specific securedrop.club settings
 
 AcceptEnv LANG LC_* GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL
