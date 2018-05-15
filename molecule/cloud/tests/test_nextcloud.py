@@ -3,7 +3,9 @@ testinfra_hosts = ['cloud-host']
 def test_nextcloud(host):
     cmd = host.run("""
     set -xe
-    mount | grep /dev/sdb | grep /var/lib/docker
+    d=/dev/sdb
+    test -e /dev/sdb || d=/dev/vda
+    mount | grep $d | grep /var/lib/docker
     curl --silent http://127.0.0.1/ | grep --quiet -i nextcloud
     """)
     print(cmd.stdout)

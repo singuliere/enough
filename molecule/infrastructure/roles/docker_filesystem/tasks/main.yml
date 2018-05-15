@@ -1,12 +1,19 @@
 ---
-- name: mkfs.ext4 {{ var_lib_docker }}
+- name: find the name of the attached disk
+  shell: |
+    for d in /dev/vda /dev/sdb ; do
+       test -e $d && echo -n $d && exit 0
+    done
+  register: var_lib_docker
+
+- name: mkfs.ext4 {{ var_lib_docker.stdout }}
   filesystem:
     fstype: ext4
-    dev: "{{ var_lib_docker }}"
+    dev: "{{ var_lib_docker.stdout }}"
 
-- name: mount {{ var_lib_docker }} /var/lib/docker
+- name: mount {{ var_lib_docker.stdout }} /var/lib/docker
   mount:
     path: /var/lib/docker
-    src: "{{ var_lib_docker }}"
+    src: "{{ var_lib_docker.stdout }}"
     fstype: ext4
     state: mounted
