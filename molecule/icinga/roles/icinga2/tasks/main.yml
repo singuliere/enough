@@ -113,6 +113,7 @@
     - services/disks
     - services/dns
     - services/http
+    - services/tor
     - services/volumes
 
 - name: deploy our templated configuration

@@ -56,3 +56,5 @@ def test_icinga_api_services(host):
     assert len(answer['results']) > 10
     assert len([s for s in answer['results']
                 if 'cloud-host!Cloud' == s['name']]) == 1
+    assert len([s for s in answer['results']
+                if 'cloud-host!Cloud over Tor' == s['name']]) == 1

@@ -1,0 +1,40 @@
+- name: install tor for check_tor_http
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - tor
+    - torsocks
+  delegate_to: icinga-host
+
+- name: restart tor
+  service:
+    name: tor
+    state: restarted
+
+- name: retrieve tor_http_vhost_fqdn
+  shell: "cat {{ tor_hostname_file }}"
+  register: output
+
+- name: declare tor http vhost on {{ inventory_hostname }}
+  blockinfile:
+    block: |
+        vars.tor_http_vhosts["{{ tor_http_vhost_name }} over Tor"] = {
+          http_vhost = "{{ hostvars[item].output.stdout }}"
+        {% if tor_http_vhost_uri is defined %}
+          http_uri = "{{ tor_http_vhost_uri }}"
+        {% endif %}
+        {% if with_https is defined and with_https == true %}
+          http_ssl = true
+        {% endif %}
+        {% if tor_http_vhost_string is defined %}
+          http_string = "{{ tor_http_vhost_string }}"
+        {% endif %}
+        }
+    insertafter: 'Define tor services and attributes'
+    path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
+    marker: "/* {mark} {{ tor_http_vhost_name }} tor http vhost on {{ item }} */"
+  delegate_to: icinga-host
+  notify: reload icinga2
+  with_items:
+  - "{{ ansible_play_batch }}"
