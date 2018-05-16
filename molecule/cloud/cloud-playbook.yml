@@ -3,7 +3,7 @@
   hosts: cloud-host
 
   roles:
-    - { role: docker_filesystem, var_lib_docker: /dev/sdb }
+    - { role: docker_filesystem }
     - { role: ansible-role-docker }
     - { role: docker }
     - { role: nextcloud }
