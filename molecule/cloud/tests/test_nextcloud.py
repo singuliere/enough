@@ -18,7 +18,7 @@ def test_nextcloud_via_tor(host):
     sudo apt-get install -y torsocks
     for d in 2 4 8 16 32 64 128 256 512 ; do
       hostname=$(sudo cat /var/lib/tor/services/cloud/hostname)
-      torify curl --silent http://$hostname/ | grep --quiet -i nextcloud && break
+      torsocks curl --silent http://$hostname/ | grep --quiet -i nextcloud && break
       sleep $d
     done
     torify curl --silent http://$hostname/ | grep --quiet -i nextcloud
