@@ -89,3 +89,6 @@ EOF
 EOF
     done
 ) > /var/www/html/index.html
+
+# finally, deduplicate packages via hardlinks:
+jdupes -r /var/www/html -L
