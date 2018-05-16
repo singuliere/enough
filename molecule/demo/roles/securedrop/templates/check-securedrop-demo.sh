@@ -24,6 +24,8 @@ function start_demo() {
     sed -i -e "s/securedrop-test/securedrop-${NAME}/" securedrop/bin/dev-shell
     DOCKER_RUN_ARGUMENTS="-d --name=securedrop-${NAME} -p${SOURCE_PORT}:8080 -p${JOURNALIST_PORT}:8081" securedrop/bin/dev-shell ./bin/run
     DOCKER_RUN_ARGUMENTS="--interactive=false" securedrop/bin/dev-shell ./$i18n_tool.py --verbose translate-messages --compile
+    # remove this line once https://github.com/freedomofpress/securedrop/pull/3398/files is in the stable release i.e. after 0.8.0 is published
+    DOCKER_RUN_ARGUMENTS="--interactive=false" securedrop/bin/dev-shell mkdir -p /var/lib/securedrop/tmp
     git checkout securedrop/bin/dev-shell
     docker exec securedrop-${NAME} sudo apt-get install sqlite3
     git apply 0001-demo-notice.patch --3way

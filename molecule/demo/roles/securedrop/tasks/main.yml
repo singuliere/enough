@@ -33,9 +33,17 @@
     mode: 0755
   become: True
 
-- name: install cron job
+- name: cron job to check demo every 5mn
   cron:
     name: check securedrop demo
     minute: "*/5"
     job:  /usr/local/bin/cronscript
+    user: "{{ ansible_user }}"
+
+- name: cron job to restart the {{ demo_name }} every 24h
+  cron:
+    name: "reboot securedrop {{ demo_name }}"
+    minute: "59"
+    hour: "2"
+    job:  "docker rm -f securedrop-{{ demo_name }}"
     user: "{{ ansible_user }}"
