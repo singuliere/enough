@@ -175,6 +175,24 @@ role helps to declare it:
       # should be set at host or playbook level
       with_https: true
 
+Torified Web services monitoring
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Similarly to `http_vhosts`, a host can declare a `tor_http_vhosts` dictionnary.
+The main difference is that it is not a `fqdn` which is transmitted, but the
+path of the service hostname. An Ansible role helps to declare it:
+
+::
+
+    - role: monitor_tor_http_vhost
+      with_https: false
+      tor_hostname_file: /var/lib/tor/services/cloud/hostname
+      tor_http_vhost_name: Cloud
+      tor_http_vhost_uri: "/login"
+      tor_http_vhost_string: "Forgot password"
+
+.. note:: For now the only handled case concerns plain http over tor. TLS hasn't yet been defined.
+
 DNS service monitoring
 ^^^^^^^^^^^^^^^^^^^^^^
 
