@@ -1,4 +1,4 @@
-ssh public keys
+SSH public keys
 ===============
 
 Each :doc:`team <team>` member with access to the infrastructure
