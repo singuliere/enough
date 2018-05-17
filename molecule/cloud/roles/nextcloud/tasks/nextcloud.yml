@@ -53,8 +53,8 @@
     url: "http{% if with_https is defined and with_https == true %}s{% endif %}://cloud.{{ domain }}"
     method: GET
     status_code: 200
-  register: nextcloud_wget
-  until: nextcloud_wget|succeeded
+  register: nextcloud_get
+  until: nextcloud_get|succeeded
   retries: 30
   delay: 5
 
@@ -74,7 +74,7 @@
   become: False
   when: nextcloud_config.rc == 1
 
-- name: occ config:system:set trusted_domains
+- name: occ config:system:set trusted_domains cloud.{{ domain }}
   shell: |
     {{ app_sh }} php -f occ config:system:set trusted_domains 0 --value cloud.{{ domain }}
     {{ app_sh }} php -f occ config:system:set trusted_domains 1 --value {{ ansible_host }} # for test purposes only
@@ -85,6 +85,11 @@
 - name: apt-get install tor
   apt:
     name: tor
+    state: present
+
+- name: apt-get install torsocks
+  apt:
+    name: torsocks
     state: present
 
 - name: mkdir /var/lib/tor/services
@@ -108,5 +113,30 @@
     src: torrc
     dest: /etc/tor/torrc
     mode: "0644"
-  notify:
-    - restart tor
+
+- name: restart tor
+  service:
+    name: tor
+    state: restarted
+
+- name: wait for nextcloud .onion to be ready
+  shell: |
+    set -e
+    url=$(cat /var/lib/tor/services/cloud/hostname)
+    torsocks curl --silent http://$url/login > /dev/null
+  register: tor_nextcloud_curl
+  until: tor_nextcloud_curl|succeeded
+  retries: 30
+  delay: 10
+
+- name: get the .onion URL
+  shell: |
+    echo -n $(cat /var/lib/tor/services/cloud/hostname)
+  register: nextcloud_onion
+
+- name: occ config:system:set trusted_domains {{ nextcloud_onion.stdout }}
+  shell: |
+    {{ app_sh }} php -f occ config:system:set trusted_domains 2 --value {{ nextcloud_onion.stdout }}
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
