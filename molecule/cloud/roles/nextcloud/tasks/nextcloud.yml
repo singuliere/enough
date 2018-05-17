@@ -23,9 +23,9 @@
   become: False
 
 - name: docker build apache-cron
-  shell: docker build -t nextcloud:apache-cron .examples/dockerfiles/cron/apache
+  shell: docker build -t nextcloud:apache-cron .
   args:
-    chdir: /srv/nextcloud
+    chdir: /srv/nextcloud/.examples/dockerfiles/cron/apache
   become: False
 
 - name: set_fact app_sh & app_dir
@@ -78,6 +78,27 @@
   shell: |
     {{ app_sh }} php -f occ config:system:set trusted_domains 0 --value cloud.{{ domain }}
     {{ app_sh }} php -f occ config:system:set trusted_domains 1 --value {{ ansible_host }} # for test purposes only
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
+- name: occ app:{install,enable} twofactor_totp
+  shell: |
+    {{ app_sh }} php -f occ app:install twofactor_totp
+    {{ app_sh }} php -f occ app:enable twofactor_totp
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
+- name: git clone https://lab.securedrop.club/enough/app/
+  git:
+    repo: https://lab.securedrop.club/enough/app/
+    force: yes
+    dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/enough
+
+- name: occ app:enable enough
+  shell: |
+    {{ app_sh }} php -f occ app:enable enough
   args:
     chdir: "{{ app_dir }}"
   become: False
