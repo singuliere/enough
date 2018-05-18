@@ -28,6 +28,7 @@
   with_items:
     - index.html
     - error.html
+    - not_found.html
 
 - name: copy code patches
   copy:
