@@ -1,4 +1,5 @@
 ---
+
 - name: apt-get install git
   apt:
     name: git
@@ -22,24 +23,94 @@
   become: False
 
 - name: docker build apache-cron
-  shell: docker build -t nextcloud:apache-cron .examples/dockerfiles/cron/apache
+  shell: docker build -t nextcloud:apache-cron .
   args:
-    chdir: /srv/nextcloud
+    chdir: /srv/nextcloud/.examples/dockerfiles/cron/apache
   become: False
+
+- name: set_fact app_sh & app_dir
+  set_fact:
+    app_dir: "/srv/nextcloud/.examples/docker-compose/with-nginx-proxy/postgres/apache"
+    app_sh: "docker-compose -f docker-compose-securedrop-club.yml exec -T -u www-data app"
 
 - name: Copy docker-compose-securedrop-club.yml
   template:
     src: docker-compose-securedrop-club.yml
-    dest: /srv/nextcloud/.examples/docker-compose/with-nginx-proxy/postgres/apache/docker-compose-securedrop-club.yml
+    dest: "{{ app_dir }}/docker-compose-securedrop-club.yml"
     owner: debian
     mode: "0600"
-  notify:
-    - recreate nextcloud
+  become: False
+
+- name: (re)create nextcloud
+  docker_service:
+    files: docker-compose-securedrop-club.yml
+    project_src: "{{ app_dir }}"
+    state: present
+  become: False
+
+- name: wait for nextcloud to be ready
+  uri:
+    url: "http{% if with_https is defined and with_https == true %}s{% endif %}://cloud.{{ domain }}"
+    method: GET
+    status_code: 200
+  register: nextcloud_get
+  until: nextcloud_get|succeeded
+  retries: 30
+  delay: 5
+
+- name: test -f config/config.php
+  shell: |
+    {{ app_sh }} grep installed config/config.php
+  args:
+    chdir: "{{ app_dir }}"
+  register: nextcloud_config
+  ignore_errors: True
+
+- name: occ maintenance:install
+  shell: |
+    {{ app_sh }} bash -c 'php -f occ maintenance:install --database-host=$POSTGRES_HOST --database-name=$POSTGRES_DB --database-user=$POSTGRES_USER --admin-user {{ NEXTCLOUD_ADMIN_USER }} --admin-pass {{ NEXTCLOUD_ADMIN_PASS }} --database pgsql --database-pass=$POSTGRES_PASSWORD'
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+  when: nextcloud_config.rc == 1
+
+- name: occ config:system:set trusted_domains cloud.{{ domain }}
+  shell: |
+    {{ app_sh }} php -f occ config:system:set trusted_domains 0 --value cloud.{{ domain }}
+    {{ app_sh }} php -f occ config:system:set trusted_domains 1 --value {{ ansible_host }} # for test purposes only
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
+- name: occ app:{install,enable} twofactor_totp
+  shell: |
+    {{ app_sh }} php -f occ app:install twofactor_totp
+    {{ app_sh }} php -f occ app:enable twofactor_totp
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
+- name: git clone https://lab.securedrop.club/enough/app/
+  git:
+    repo: https://lab.securedrop.club/enough/app/
+    force: yes
+    dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/enough
+
+- name: occ app:enable enough
+  shell: |
+    {{ app_sh }} php -f occ app:enable enough
+  args:
+    chdir: "{{ app_dir }}"
   become: False
 
 - name: apt-get install tor
   apt:
     name: tor
+    state: present
+
+- name: apt-get install torsocks
+  apt:
+    name: torsocks
     state: present
 
 - name: mkdir /var/lib/tor/services
@@ -63,5 +134,30 @@
     src: torrc
     dest: /etc/tor/torrc
     mode: "0644"
-  notify:
-    - restart tor
+
+- name: restart tor
+  service:
+    name: tor
+    state: restarted
+
+- name: wait for nextcloud .onion to be ready
+  shell: |
+    set -e
+    url=$(cat /var/lib/tor/services/cloud/hostname)
+    torsocks curl --silent http://$url/login > /dev/null
+  register: tor_nextcloud_curl
+  until: tor_nextcloud_curl|succeeded
+  retries: 30
+  delay: 10
+
+- name: get the .onion URL
+  shell: |
+    echo -n $(cat /var/lib/tor/services/cloud/hostname)
+  register: nextcloud_onion
+
+- name: occ config:system:set trusted_domains {{ nextcloud_onion.stdout }}
+  shell: |
+    {{ app_sh }} php -f occ config:system:set trusted_domains 2 --value {{ nextcloud_onion.stdout }}
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
