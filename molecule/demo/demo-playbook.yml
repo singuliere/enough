@@ -15,7 +15,7 @@
       demo_name: demo
       base_port: 8000
       repository: https://lab.securedrop.club/main/securedrop
-      branch: release/0.6
+      branch: release/0.7
 
     - role: securedrop
       demo_name: i18n
