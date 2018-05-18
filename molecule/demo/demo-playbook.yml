@@ -103,7 +103,7 @@
       http_vhost_name: Demo source
       http_vhost_fqdn: "source.demo.{{ domain }}"
       http_vhost_uri: "/"
-      http_vhost_string: "Submit documents"
+      http_vhost_string: "SUBMIT DOCUMENTS"
 
     - role: monitor_http_vhost
       http_vhost_name: Demo journalist
