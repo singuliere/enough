@@ -1,4 +1,9 @@
 ---
+- name: apt-get install haveged
+  apt:
+    name: haveged
+    state: present
+
 - name: chown debian /srv
   file:
     path: /srv
