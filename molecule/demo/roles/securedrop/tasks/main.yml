@@ -3,6 +3,7 @@
   apt:
     name: haveged
     state: present
+  become: True
 
 - name: chown debian /srv
   file:
