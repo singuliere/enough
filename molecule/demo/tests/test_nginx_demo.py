@@ -26,7 +26,7 @@ def test_source (host):
     s.headers.update({'host': 'source.demo.{}'.format(domain)})
     r = s.get('http://{}'.format(get_demo_address (host)), timeout=5)
     r.raise_for_status()
-    assert 'Submit documents' in r.text
+    assert 'SUBMIT DOCUMENTS' in r.text
 
 def test_journalist (host):
     demo_utils.check_demo(host)
