@@ -38,10 +38,22 @@ function start_demo() {
     get_credentials_sum > credentials-sum-${NAME}.txt
 }
 
+function setup_entropy() {
+    # securedrop/source_app/main.py::submit needs get_entropy_estimate() > 2400
+    # haveged can provide that quickly but it will only wake up when
+    # /proc/sys/kernel/random/entropy_avail drops below
+    # /proc/sys/kernel/random/write_wakeup_threshold. By setting
+    # /proc/sys/kernel/random/write_wakeup_threshold to a value greater than
+    # 2400 we ensure there will always be more than 2400 in
+    # /proc/sys/kernel/random/entropy_avail thanks to haveged
+    sudo bash -c "echo 4096 > /proc/sys/kernel/random/write_wakeup_threshold"
+}
+
 function rebuild_demo() {
     sudo git clean -qffdx securedrop
     git reset --hard
     git pull
+    setup_entropy
     stop_demo
     start_demo
     sudo systemctl reload nginx
