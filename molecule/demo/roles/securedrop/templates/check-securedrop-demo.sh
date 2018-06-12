@@ -45,8 +45,10 @@ function setup_entropy() {
     # /proc/sys/kernel/random/write_wakeup_threshold. By setting
     # /proc/sys/kernel/random/write_wakeup_threshold to a value greater than
     # 2400 we ensure there will always be more than 2400 in
-    # /proc/sys/kernel/random/entropy_avail thanks to haveged
-    sudo bash -c "echo 4096 > /proc/sys/kernel/random/write_wakeup_threshold"
+    # /proc/sys/kernel/random/entropy_avail thanks to haveged.
+    # The value must not be too high otherwise it will consume a lot of CPU power.
+    # Experience shows 4096 requires a CPU core at all times.
+    sudo bash -c "echo 3000 > /proc/sys/kernel/random/write_wakeup_threshold"
 }
 
 function rebuild_demo() {
