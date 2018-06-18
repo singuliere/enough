@@ -48,3 +48,5 @@ def test_icinga_api_services (host):
     answer = r.json()
     assert len(answer['results']) > 40
     assert host.backend.host != "monitoring-client-host" or len([s for s in answer['results'] if 'monitoring-client-host!Secure Drop Forum' == s['name']]) == 1
+    assert len([s for s in answer['results'] if 'icinga-host!Manhack Securedrop instance over Tor' == s['name']]) == 1
+    assert len([s for s in answer['results'] if 'icinga-host!Titanium Securedrop instance over Tor' == s['name']]) == 1
