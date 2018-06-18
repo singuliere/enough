@@ -8,6 +8,7 @@
 - import_playbook: molecule/authorized_keys/authorized-keys-playbook.yml
 - import_playbook: molecule/preprod/backup-on-bind-playbook.yml
 - import_playbook: molecule/icinga/icinga-playbook.yml
+- import_playbook: molecule/icinga/monitor-external-ressources-playbook.yml
 - import_playbook: molecule/bind/bind-monitoring-playbook.yml
 - import_playbook: molecule/postfix/postfix-playbook.yml
 - import_playbook: molecule/weblate/weblate-playbook.yml

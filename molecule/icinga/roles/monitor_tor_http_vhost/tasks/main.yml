@@ -15,12 +15,17 @@
 - name: retrieve tor_http_vhost_fqdn
   shell: "cat {{ tor_hostname_file }}"
   register: output
+  when: tor_http_vhost_fqdn is undefined
 
 - name: declare tor http vhost on {{ inventory_hostname }}
   blockinfile:
     block: |
         vars.tor_http_vhosts["{{ tor_http_vhost_name }} over Tor"] = {
+        {% if tor_http_vhost_fqdn is defined %}
+          http_vhost = "{{ tor_http_vhost_fqdn }}"
+        {% else %}
           http_vhost = "{{ hostvars[item].output.stdout }}"
+        {% endif %}
         {% if tor_http_vhost_uri is defined %}
           http_uri = "{{ tor_http_vhost_uri }}"
         {% endif %}
