@@ -1,0 +1,8 @@
+---
+- name: install SecureDrop packages builders
+  hosts: packages-host
+
+  roles:
+    - { role: securedrop }
+
+  become: True

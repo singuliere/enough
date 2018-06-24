@@ -1,1 +1,0 @@
-*/5 * * * * flock /tmp/update-packages /srv/update-packages.sh >> /var/log/update-packages.log 2>&1

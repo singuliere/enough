@@ -13,13 +13,6 @@
     path: /srv
     owner: debian
 
-- name: git clone https://lab.securedrop.club/main/securedrop
-  git:
-    repo: https://lab.securedrop.club/main/securedrop
-    force: yes
-    dest: /srv/securedrop
-  become: False
-
 - name: apt-get install haveged
   apt:
     name: haveged
@@ -54,34 +47,6 @@
     state: directory
     owner: debian
 
-- name: /var/www/html/conf is owned by debian
-  file:
-    path: /var/www/html/conf
-    state: directory
-    owner: debian
-
-- name: expose the public GPG key
-  shell: |
-    gpg --export --armor > /var/www/html/key.asc
-  args:
-    creates: /var/www/html/key.asc
-  become: False
-
-- name: Copy update-packages.sh
-  template:
-    src: update-packages.sh.j2
-    dest: /srv/update-packages.sh
-    owner: debian
-    mode: "0755"
-
-- name: Copy crontab
-  template:
-    src: crontab
-    dest: /srv/crontab
-    owner: debian
-    mode: "0600"
-  register: crontab
-
 - name: update-packages.sh log file
   file:
     path: /var/log/update-packages.log
@@ -92,11 +57,6 @@
   copy:
     src: packages-logrotate
     dest: /etc/logrotate.d/packages-logrotate
-
-- name: Activate crontab
-  shell: crontab /srv/crontab
-  when: crontab|changed
-  become: False
 
 - name: start https-portal
   docker_container:

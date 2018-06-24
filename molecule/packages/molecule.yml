@@ -11,7 +11,7 @@ platforms:
   - name: icinga-host
     flavor: "s1-2"
   - name: packages-host
-    flavor: "s1-2"
+    flavor: "s1-4"
   - name: trusty-host
     flavor: "s1-2"
     image: "Ubuntu 14.04"

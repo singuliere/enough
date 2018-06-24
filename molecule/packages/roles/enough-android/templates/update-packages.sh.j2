@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+echo ======================================================================
+echo -n "$0: " ; date
+echo ======================================================================
+
+cd /srv/android
+
+if ! test -f /var/www/html/enough.apk || ! git pull --ff-only | grep -q up-to-date ; then
+  DOCKER_OPTIONS="--rm "
+  DOCKER_OPTIONS+="--volume $(pwd):$(pwd) --workdir $(pwd) "
+  DOCKER_OPTIONS+="--volume /srv/gradle-caches:/root/.gradle/caches "
+  DOCKER_OPTIONS+="--add-host lab.securedrop.club:$(getent hosts lab.securedrop.club | cut -f1 -d' ') "
+  DOCKER_OPTIONS+="--volume /srv/Enough.keystore:$(pwd)/Enough.keystore "
+  DOCKER_OPTIONS+="--env PASSWORD={{APK_PASSWORD}} "
+  docker run $DOCKER_OPTIONS runmymind/docker-android-sdk ./gradlew build -x findBugs -x pmd -x test
+  cp build/outputs/apk/generic/release/generic-release-10000099.apk /var/www/html/enough.apk
+fi
