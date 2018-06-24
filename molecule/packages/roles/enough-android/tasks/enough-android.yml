@@ -19,7 +19,7 @@
   become: False
 
 - name: keytool -keystore Enough.keystore
-  command: docker run --rm --volume /srv:/srv --workdir /srv runmymind/docker-android-sdk keytool -genkey -noprompt -alias Enough -dname "CN=, OU=, O=Enough, L=, S=, C=" -keystore Enough.keystore -storepass "{{APK_PASSWORD}}" -keypass "{{APK_PASSWORD}}" -keyalg RSA -keysize 2048 -validity 10000
+  command: docker run --rm --volume /srv:/srv --workdir /srv runmymind/docker-android-sdk keytool -genkey -noprompt -alias Enough -dname "CN=, OU=, O=Enough, L=, S=, C=" -keystore Enough.keystore -storepass "{{packages_apk_password}}" -keypass "{{packages_apk_password}}" -keyalg RSA -keysize 2048 -validity 10000
   args:
     creates: /srv/Enough.keystore
 
