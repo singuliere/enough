@@ -40,7 +40,9 @@ for ref in $REFS ; do
         source /srv/virtualenv/bin/activate
         pip install -r securedrop/requirements/develop-requirements.txt
 
-        make build-debs
+        molecule destroy -s builder
+        molecule converge -s builder
+        molecule destroy -s builder
     )
     rm -fr /var/www/html/$ref/{pool,dists,db}
     mkdir -p /var/www/html/$ref/conf
