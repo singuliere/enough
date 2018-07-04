@@ -26,13 +26,12 @@ def test_securedrop(host):
     set -xe
 
     sudo ifdown eth0 ; sudo ifup eth0 # setup resolv.conf
-    echo 'Acquire::https { Verify-Peer "false"; Verify-Host "false"; }' > /etc/apt/apt.conf.d/01https
-    sudo apt-get install dpkg-dev
+    echo 'Acquire::https {{ Verify-Peer "false"; Verify-Host "false"; }}' | sudo tee /etc/apt/apt.conf.d/01https
+    sudo apt-get install -y dpkg-dev
     domain=$(hostname -d)
     sudo apt-add-repository --enable-source http{s}://packages.$domain/0.6
     wget http{s}://packages.$domain/key.asc
     sudo apt-key add key.asc
-    sudo apt-get source linux-image-4.4.135-grsec
     sudo apt-get install -y securedrop-ossec-agent
     """.format(s=('s' if try_if_letsencrypt(host) else '')))
     print(cmd.stdout)
