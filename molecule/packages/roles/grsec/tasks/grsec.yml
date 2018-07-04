@@ -44,18 +44,21 @@
     owner: debian
   become: yes
 
-- name: wget https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.115.tar.xz
+- name: wget https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.135.tar.xz
   get_url:
-    dest: /opt/linux-4.4.115.tar.xz
-    url: https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.115.tar.xz
-    # verified with https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.115.tar.sign
-    sha256sum: 58f48ca8898f972c418166d0e387526cbb4d2a0f1cd0f7d1245000924026b5df
+    dest: /opt/linux-4.4.135.tar.xz
+    url: https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.135.tar.xz
+    # wget https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.134.tar.xz
+    # xz -d linux-4.4.135.tar.xz
+    # wget https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.135.tar.sign
+    # gpg --no-options --keyid-format 0xlong --verify linux-4.4.135.tar.sign linux-4.4.135.tar
+    sha256sum: 03ccb008824e363d9f83245676b9e0602f604c880dd10577653f3328c37781dc
 
-- name: tar Jxf linux-4.4.115.tar.xz
-  shell: tar Jxf linux-4.4.115.tar.xz
+- name: tar Jxf linux-4.4.135.tar.xz
+  shell: tar Jxf linux-4.4.135.tar.xz
   args:
     chdir: /opt
-    creates: linux-4.4.115
+    creates: linux-4.4.135
 
 #
 # Instructions to get the diff
@@ -64,22 +67,23 @@
 #
 #   https://github.com/freedomofpress/securedrop/blob/develop/SOURCE_OFFER
 #
-# and download linux-4.4.115-grsec_4.4.115-grsec.orig.tar.gz from the
+# and download linux-4.4.135-grsec_4.4.135-grsec.orig.tar.gz from the
 # location specified in the mail answering the request.
+# gpg --no-options --keyid-format 0xlong --verify linux-4.4.135-grsec_4.4.135-grsec.orig.tar.gz.gpg linux-4.4.135-grsec_4.4.135-grsec.orig.tar.gz
 #
-# tar zxvf linux-4.4.115-grsec_4.4.115-grsec.orig.tar.gz
-# wget https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.115.tar.xz
-# tar Jxf linux-4.4.115.tar.xz
-# git diff linux-4.4.115 linux-4.4.115-grsec > grsec-4.4.115.diff
+# tar zxvf linux-4.4.135-grsec_4.4.135-grsec.orig.tar.gz
+# wget https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.135.tar.xz
+# tar xf linux-4.4.135.tar
+# git diff linux-4.4.135 linux-4.4.135-grsec > grsec-4.4.135.diff
 #
-- name: copy grsec-4.4.115.diff
+- name: copy grsec-4.4.135.diff
   copy:
-    src: grsec-4.4.115.diff
-    dest: /opt/grsec-4.4.115.diff
+    src: grsec-4.4.135.diff
+    dest: /opt/grsec-4.4.135.diff
 
 - name: patch < grsec-*.diff
   shell: |
-    cat grsec-4.4.115.diff | ( cd linux-4.4.115 && patch -p2 ) && touch patch.done
+    cat grsec-4.4.135.diff | ( cd linux-4.4.135 && patch -p2 ) && touch patch.done
   args:
     chdir: /opt
     creates: patch.done
@@ -94,29 +98,29 @@
     src: Dockerfile
     dest: docker/Dockerfile
 
-- name: build trusty image
-  shell: docker build -t trusty-builder docker
+- name: create the Docker image to build the kernel
+  shell: docker build -t kernel-builder docker
   become: yes
 
-- name: check existence of /opt/linux-4.4.115-grsec_4.4.115-grsec-1.dsc
-  shell: test -e /opt/linux-4.4.115-grsec_4.4.115-grsec-1.dsc
+- name: check existence of /opt/linux-4.4.135-grsec_4.4.135-grsec-1.dsc
+  shell: test -e /opt/linux-4.4.135-grsec_4.4.135-grsec-1.dsc
   register: packages_exist
   ignore_errors: yes
 
 - name: get rid of any build container leftover
   docker_container:
-    name: trusty-builder
+    name: kernel-builder
     state: absent
   become: yes
   when: packages_exist.rc != 0
 
 - name: build linux packages
   docker_container:
-    name: trusty-builder
-    image: trusty-builder
+    name: kernel-builder
+    image: kernel-builder
     volumes:
       - /opt:/opt
-    working_dir: /opt/linux-4.4.115
+    working_dir: /opt/linux-4.4.135
     restart_policy: false
     detach: no
   become: yes
@@ -135,7 +139,7 @@
 #
 - name: remove the build container
   docker_container:
-    name: trusty-builder
+    name: kernel-builder
     state: absent
   become: yes
   when: packages_exist.rc != 0
@@ -144,11 +148,10 @@
   synchronize:
     src: /opt
     dest: linux-packages
-    delete: yes
     recursive: yes
     rsync_opts:
-      - --exclude=linux-4.4.115
-      - --exclude=linux-4.4.115.tar.xz
-      - --exclude=grsec-4.4.115.diff
+      - --exclude=linux-4.4.135
+      - --exclude=linux-4.4.135.tar.xz
+      - --exclude=grsec-4.4.135.diff
       - --exclude=patched.done
     mode: pull

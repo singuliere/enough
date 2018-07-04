@@ -47,9 +47,9 @@
             -e 's/^.*GRUB_DISABLE_LINUX_UUID=.*/GRUB_DISABLE_LINUX_UUID=true/' \
             /etc/default/grub
 
-    - name: apt-get install linux-image-4.4.115-grsec
+    - name: apt-get install linux-image-4.4.135-grsec
       apt:
-        name: linux-image-4.4.115-grsec
+        name: linux-image-4.4.135-grsec
 
 - name: reboot trusty-host with grsec kernel
   hosts: localhost
