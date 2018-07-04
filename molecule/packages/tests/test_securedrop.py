@@ -32,7 +32,7 @@ def test_securedrop(host):
     sudo apt-add-repository --enable-source http{s}://packages.$domain/0.6
     wget http{s}://packages.$domain/key.asc
     sudo apt-key add key.asc
-    sudo apt-get source linux-image-4.4.115-grsec
+    sudo apt-get source linux-image-4.4.135-grsec
     sudo apt-get install -y securedrop-ossec-agent
     """.format(s=('s' if try_if_letsencrypt(host) else '')))
     print(cmd.stdout)
