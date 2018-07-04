@@ -148,7 +148,6 @@
   synchronize:
     src: /opt
     dest: linux-packages
-    delete: yes
     recursive: yes
     rsync_opts:
       - --exclude=linux-4.4.135
