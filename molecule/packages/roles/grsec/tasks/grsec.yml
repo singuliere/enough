@@ -98,8 +98,8 @@
     src: Dockerfile
     dest: docker/Dockerfile
 
-- name: build trusty image
-  shell: docker build -t trusty-builder docker
+- name: create the Docker image to build the kernel
+  shell: docker build -t kernel-builder docker
   become: yes
 
 - name: check existence of /opt/linux-4.4.135-grsec_4.4.135-grsec-1.dsc
@@ -109,15 +109,15 @@
 
 - name: get rid of any build container leftover
   docker_container:
-    name: trusty-builder
+    name: kernel-builder
     state: absent
   become: yes
   when: packages_exist.rc != 0
 
 - name: build linux packages
   docker_container:
-    name: trusty-builder
-    image: trusty-builder
+    name: kernel-builder
+    image: kernel-builder
     volumes:
       - /opt:/opt
     working_dir: /opt/linux-4.4.135
@@ -139,7 +139,7 @@
 #
 - name: remove the build container
   docker_container:
-    name: trusty-builder
+    name: kernel-builder
     state: absent
   become: yes
   when: packages_exist.rc != 0
