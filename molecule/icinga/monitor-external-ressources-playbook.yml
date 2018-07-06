@@ -7,13 +7,13 @@
     - role: monitor_tor_http_vhost
       with_https: false
       tor_http_vhost_fqdn: 27e6kjxasneumnhl.onion
-      tor_http_vhost_name: Manhack Securedrop instance
+      tor_http_vhost_name: Titanium Securedrop instance
       tor_http_vhost_uri: "/"
       tor_http_vhost_string: "<title>SecureDrop | Protecting Journalists and Sources</title>"
 
     - role: monitor_tor_http_vhost
       with_https: false
       tor_http_vhost_fqdn: 32qfx2skzcifeyg7.onion
-      tor_http_vhost_name: Titanium Securedrop instance
+      tor_http_vhost_name: Manhack Securedrop instance
       tor_http_vhost_uri: "/"
       tor_http_vhost_string: "<title>SecureDrop | Protecting Journalists and Sources</title>"
