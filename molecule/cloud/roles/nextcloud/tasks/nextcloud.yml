@@ -31,19 +31,19 @@
 - name: set_fact app_sh & app_dir
   set_fact:
     app_dir: "/srv/nextcloud/.examples/docker-compose/with-nginx-proxy/postgres/apache"
-    app_sh: "docker-compose -f docker-compose-securedrop-club.yml exec -T -u www-data app"
+    app_sh: "docker-compose -f docker-compose-infrastructure.yml exec -T -u www-data app"
 
-- name: Copy docker-compose-securedrop-club.yml
+- name: Copy docker-compose-infrastructure.yml
   template:
-    src: docker-compose-securedrop-club.yml
-    dest: "{{ app_dir }}/docker-compose-securedrop-club.yml"
+    src: docker-compose-infrastructure.yml
+    dest: "{{ app_dir }}/docker-compose-infrastructure.yml"
     owner: debian
     mode: "0600"
   become: False
 
 - name: (re)create nextcloud
   docker_service:
-    files: docker-compose-securedrop-club.yml
+    files: docker-compose-infrastructure.yml
     project_src: "{{ app_dir }}"
     state: present
   become: False
@@ -90,9 +90,9 @@
     chdir: "{{ app_dir }}"
   become: False
 
-- name: git clone https://lab.securedrop.club/enough/app/
+- name: git clone https://lab.{{ domain }}/enough/app/
   git:
-    repo: https://lab.securedrop.club/enough/app/
+    repo: "https://lab.{{ domain }}/enough/app/"
     force: yes
     dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/enough
 
