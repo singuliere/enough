@@ -8,11 +8,3 @@ clouds:
       username: "XXXXXX" # OS_USERNAME
       password: "XXXXXX" # OS_PASSWORD
     region_name: "XXXXXX" # OS_REGION_NAME
-#
-# By default the OpenStack inventory will use UUIDs but we
-# prefer to use hostnames
-# https://github.com/openstack-infra/shade/blob/master/shade/inventory.py#L36
-# https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/openstack.py
-#
-ansible:
-  use_hostnames: True
