@@ -1,7 +1,7 @@
 version: '2'
 services:
   weblate:
-    image: weblate/weblate:2.20-1
+    image: weblate/weblate:3.0.1-4
     links:
       - database
       - cache
@@ -39,8 +39,6 @@ services:
       - WEBLATE_ALLOWED_HOSTS=*
 {% endif %}
       - WEBLATE_REGISTRATION_OPEN=1
-      - WEBLATE_SOCIAL_AUTH_GITHUB_KEY=ccd2a029302c4258d5fd
-      - WEBLATE_SOCIAL_AUTH_GITHUB_SECRET=eec7c91a552bdda745f8a5108738a4afbf888533
   database:
     image: postgres:9.6-alpine
     env_file:
@@ -49,8 +47,11 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: always
   cache:
-    image: memcached:1.5-alpine
+    image: redis:4-alpine
     restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
 {% if with_https is defined and with_https == true %}
   https-portal:
     image: steveltn/https-portal:1.2.4
@@ -65,6 +66,8 @@ services:
 {% endif %}
       SERVER_NAMES_HASH_BUCKET_SIZE: 128
 {% endif %}
+      PROXY_READ_TIMEOUT: 3600
 volumes:
   weblate-data: {}
   postgres-data: {}
+  redis-data: {}

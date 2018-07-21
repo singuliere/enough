@@ -38,10 +38,10 @@
     dest: /srv/weblate
   become: False
 
-- name: Copy docker-compose-securedrop-club.yml
+- name: Copy docker-compose-infrastructure.yml
   template:
-    src: docker-compose-securedrop-club.yml
-    dest: /srv/weblate/docker-compose-securedrop-club.yml
+    src: docker-compose-infrastructure.yml
+    dest: /srv/weblate/docker-compose-infrastructure.yml
     owner: debian
     mode: "0600"
   notify:

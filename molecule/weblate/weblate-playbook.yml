@@ -12,10 +12,4 @@
       http_vhost_uri: "/"
       http_vhost_string: "Weblate"
 
-    - role: monitor_http_vhost
-      http_vhost_name: Weblate projects
-      http_vhost_fqdn: "weblate.{{ domain }}"
-      http_vhost_uri: "/projects/"
-      http_vhost_string: '<th><a href=\"/projects/securedrop/\">SecureDrop</a></th>'
-
   become: True
