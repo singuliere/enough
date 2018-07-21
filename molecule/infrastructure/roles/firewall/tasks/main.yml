@@ -15,15 +15,15 @@
   os_security_group:
     <<: *os_auth
     state: "{{ state }}"
-    name: securedrop-club
-    description: security group for securedrop-club servers
+    name: infrastructure
+    description: security group for infrastructure servers
 
 - block:
 
   - name: security group rule for TCP ports (define rule_tcp)
     os_security_group_rule: &rule_tcp
       <<: *os_auth
-      security_group: securedrop-club
+      security_group: infrastructure
       protocol: tcp
       port_range_min: "{{ item }}"
       port_range_max: "{{ item }}"
@@ -32,7 +32,7 @@
   - name: security group rule for TCP ports (internal)
     os_security_group_rule:
       <<: *rule_tcp
-      remote_group: securedrop-club
+      remote_group: infrastructure
     with_items:
       - "{{ os_security_group_tcp }}"
 
@@ -46,7 +46,7 @@
   - name: security group rule for UDP ports (define rule_udp)
     os_security_group_rule: &rule_udp
       <<: *os_auth
-      security_group: securedrop-club
+      security_group: infrastructure
       protocol: udp
       port_range_min: "{{ item }}"
       port_range_max: "{{ item }}"
@@ -55,7 +55,7 @@
   - name: security group rule for UDP ports (internal)
     os_security_group_rule:
       <<: *rule_udp
-      remote_group: securedrop-club
+      remote_group: infrastructure
     with_items:
       - "{{ os_security_group_udp }}"
 
@@ -69,15 +69,15 @@
   - name: security group rule for ICMP (internal)
     os_security_group_rule:
       <<: *os_auth
-      security_group: securedrop-club
+      security_group: infrastructure
       protocol: icmp
-      remote_group: securedrop-club
+      remote_group: infrastructure
     when: os_security_group_icmp
 
   - name: security group rule for ICMP (external)
     os_security_group_rule:
       <<: *os_auth
-      security_group: securedrop-club
+      security_group: infrastructure
       protocol: icmp
       remote_ip_prefix: 0.0.0.0/0
     when: os_security_group_icmp

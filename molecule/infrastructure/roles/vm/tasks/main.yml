@@ -15,7 +15,7 @@
   os_keypair:
     <<: *os_auth
     state: "{{ state }}"
-    name: securedrop_key
+    name: infrastructure_key
     public_key_file: "{{ ssh_private_keyfile }}.pub"
 
 - name: make a list of volumes
@@ -48,7 +48,7 @@
     <<: *os_auth
     name: "{{ item.name }}"
     image: "{% if item.image is defined %}{{ item.image }}{% else %}Debian 9{% endif %}"
-    key_name: securedrop_key
+    key_name: infrastructure_key
     timeout: 600
     flavor: "{{ item.flavor }}"
     auto_ip: yes
@@ -63,7 +63,7 @@
         - sed -i -e '/^#Port/s/^.*$/Port {% if hosts_orig is defined and item.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.name].ansible_port is defined %}{{ hosts_orig.all.hosts[item.name].ansible_port }}{% else %}22{% endif %}/' /etc/ssh/sshd_config
         - systemctl restart ssh
     security_groups:
-      - securedrop-club
+      - infrastructure
   with_items: "{% if molecule_yml is defined %}{{ molecule_yml.platforms }}{% endif %}{% if vms is defined %}{{ vms }}{% endif %}"
   register: server
 

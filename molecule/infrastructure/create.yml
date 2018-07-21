@@ -49,10 +49,10 @@
            }
           }
 
-    - name: set the default domain to securedrop.club
+    - name: set the default domain to enough.community
       copy:
         content: |
-          domain: securedrop.club
+          domain: enough.community
         dest: "../../inventory/group_vars/all/domain.yml"
 
     - block:
@@ -62,13 +62,13 @@
         register: cmd
   
       - set_fact:
-          domain: "{{ cmd.stdout|lower }}.test.securedrop.club"
+          domain: "{{ cmd.stdout|lower }}.test.enough.community"
   
-      - name: create NS record in test zone (requires access to bind-host.securedrop.club)
+      - name: create NS record in test zone (requires access to bind-host.enough.community)
         shell: |
-          ssh debian@bind-host.securedrop.club nsupdate <<EOF
+          ssh debian@bind-host.enough.community nsupdate <<EOF
           server localhost
-          zone test.securedrop.club
+          zone test.enough.community
           update add ns-{{ domain }}. 1800 A {{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }}
           update add {{ domain }}. 1800 NS ns-{{ domain }}.
           show
