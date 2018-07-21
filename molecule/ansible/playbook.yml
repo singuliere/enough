@@ -1,6 +1,0 @@
----
-- name: Ansible host
-  hosts: ansible-host
-  sudo: yes
-  roles:
-    - { role: ansible }

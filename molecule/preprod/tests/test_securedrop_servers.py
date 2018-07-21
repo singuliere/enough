@@ -1,1 +1,0 @@
-../../../molecule/demo/tests/test_securedrop_servers.py

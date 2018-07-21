@@ -1,9 +1,0 @@
----
-- name: prepare bots enviornment
-  hosts: bots-host
-
-  roles:
-    - { role: ansible-role-docker, docker_install_compose: false }
-    - { role: docker }
-
-  become: True

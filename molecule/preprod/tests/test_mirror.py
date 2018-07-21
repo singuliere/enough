@@ -1,1 +1,0 @@
-../../../molecule/gitlab/tests/test_mirror.py
