@@ -34,7 +34,7 @@
 
 
 - name: install icinga clients
-  hosts: 'all:!icinga-host:!trusty-host'
+  hosts: 'all:!icinga-host'
   become: true
   tasks:
 
@@ -47,7 +47,7 @@
 
 
 - name: install icinga monitoring capabilities
-  hosts: 'all:!trusty-host'
+  hosts: 'all'
   become: true
   tasks:
 

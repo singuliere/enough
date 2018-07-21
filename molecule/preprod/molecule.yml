@@ -31,9 +31,6 @@ platforms:
     volumes:
       - name: cloud-volume
         size: 100
-  - name: trusty-host
-    flavor: "s1-2"
-    image: "Ubuntu 14.04"
 provisioner:
   name: ansible
   lint:

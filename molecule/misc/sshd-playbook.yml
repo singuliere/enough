@@ -1,6 +1,6 @@
 ---
 - name: install sshd config
-  hosts: 'all:!trusty-host'
+  hosts: 'all'
   become: true
 
   roles:
