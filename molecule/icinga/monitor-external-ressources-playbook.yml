@@ -1,6 +1,6 @@
 ---
 
-- name: deploy monitoring for ressources outside securedrop.club
+- name: deploy monitoring for ressources outside {{ domain }}
   hosts: icinga-host
   become: true
   roles:
