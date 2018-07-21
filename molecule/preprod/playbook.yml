@@ -1,7 +1,7 @@
 ---
 
 - import_playbook: ../icinga/test-icinga-playbook.yml
-- import_playbook: ../../securedrop-club-playbook.yml
+- import_playbook: ../../enough-community-playbook.yml
 
 - name: display domain name
   hosts: localhost
