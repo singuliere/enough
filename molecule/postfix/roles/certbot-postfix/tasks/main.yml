@@ -12,6 +12,6 @@
       certonly                                                   \
       --standalone                                               \
       --agree-tos                                                \
-      --email devnull@securedrop.club                            \
+      --email devnull@{{ domain }}                               \
       -d postfix-host.{{ domain }}                               \
       {% if with_fake_LE is defined %}--test-cert{% endif %}
