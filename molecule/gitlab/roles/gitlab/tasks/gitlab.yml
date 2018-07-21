@@ -25,7 +25,8 @@
 - name: start redis
   docker_container:
     name: redis
-    image: sameersbn/redis:latest
+    image: sameersbn/redis:4.0.9
+    command: --appendonly yes --protected-mode no
     restart_policy: always
     state: started
 
@@ -46,7 +47,7 @@
 - name: start gitlab
   docker_container:
     name: gitlab
-    image: sameersbn/gitlab:10.5.6
+    image: sameersbn/gitlab:11.0.4
     restart_policy: always
     links:
       - gitlab-postgresql:postgresql
@@ -72,10 +73,7 @@
       GITLAB_PORT: "{% if with_https is defined and with_https == true %}443{% else %}80{% endif %}"
       GITLAB_HOST: "lab.{{ domain }}"
       GITLAB_HTTPS: "{% if with_https is defined and with_https == true %}true{% else %}false{% endif %}"
-      OAUTH_ALLOW_SSO: 'github'
       OAUTH_BLOCK_AUTO_CREATED_USERS: 'false'
-      OAUTH_GITHUB_API_KEY: "{{ gitlab_github_api_key }}"
-      OAUTH_GITHUB_APP_SECRET: "{{ gitlab_github_app_secret }}"
       GITLAB_SSH_PORT: '22'
       GITLAB_SECRETS_SECRET_KEY_BASE: "{{ gitlab_secrets_secret_key_base }}"
       GITLAB_SECRETS_DB_KEY_BASE: "{{ gitlab_secrets_db_key_base }}"
