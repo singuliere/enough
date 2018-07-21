@@ -25,10 +25,10 @@
     mkdir -p /srv/mattermost/volumes/app/mattermost/{data,config,logs}
     chown -R debian:debian /srv/mattermost/volumes/app
 
-- name: Copy docker-compose-securedrop-club.yml
+- name: Copy docker-compose-infrastructure.yml
   template:
-    src: docker-compose-securedrop-club.yml
-    dest: /srv/mattermost/docker-compose-securedrop-club.yml
+    src: docker-compose-infrastructure.yml
+    dest: /srv/mattermost/docker-compose-infrastructure.yml
     owner: debian
     mode: "0600"
   notify:
