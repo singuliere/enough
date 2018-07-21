@@ -1,6 +1,6 @@
-ansible
+ansible==2.4.0
 pip-tools
-molecule
+molecule==2.16.0
 shade
 sphinx
 # we need 1.7.1 otherwise it fails but ... molecule wants 1.6.3 so we need
