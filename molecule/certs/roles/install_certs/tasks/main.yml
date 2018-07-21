@@ -1,12 +1,12 @@
 ---
-- name: ensure that /usr/local/share/ca-certificates/securedrop.club exists
+- name: ensure that /usr/local/share/ca-certificates/infrastructure exists
   file:
-    path: /usr/local/share/ca-certificates/securedrop.club
+    path: /usr/local/share/ca-certificates/infrastructure
     state: directory
 
 - name: Install certs
   copy:
     src: "files/certs/{{ item }}"
-    dest: "/usr/local/share/ca-certificates/securedrop.club/{{ item | replace('.pem', '.crt') }}"
+    dest: "/usr/local/share/ca-certificates/infrastructure/{{ item | replace('.pem', '.crt') }}"
   with_items: "{{ certs }}"
   notify: update certs

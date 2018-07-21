@@ -1,7 +1,7 @@
 ---
 - name: Uninstall certs
   file:
-    path: "/usr/local/share/ca-certificates/securedrop.club/{{ item | replace('.pem', '.crt') }}"
+    path: "/usr/local/share/ca-certificates/infrastructure/{{ item | replace('.pem', '.crt') }}"
     state: absent
   with_items: "{{ certs }}"
   notify: update certs
