@@ -20,10 +20,6 @@ platforms:
     flavor: "s1-4"
   - name: website-host
     flavor: "s1-2"
-  - name: demo-host
-    flavor: "s1-2"
-  - name: bots-host
-    flavor: "s1-2"
   - name: chat-host
     flavor: "s1-2"
   - name: cloud-host
