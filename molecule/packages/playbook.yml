@@ -10,8 +10,5 @@
 - import_playbook: ../postfix/postfix-playbook.yml
 - import_playbook: ../gitlab/test-real-gitlab-playbook.yml
 - import_playbook: packages-playbook.yml
-- import_playbook: grsec-playbook.yml
-- import_playbook: test-grsec-playbook.yml
-- import_playbook: securedrop-playbook.yml
 - import_playbook: enough-playbook.yml
 - import_playbook: ../misc/commit_etc-playbook.yml
