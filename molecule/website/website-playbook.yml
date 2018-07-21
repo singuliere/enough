@@ -30,6 +30,6 @@
       http_vhost_name: Website
       http_vhost_fqdn: "{{ website_vhost_fqdn }}"
       http_vhost_uri: "/"
-      http_vhost_string: "SecureDrop"
+      http_vhost_string: "Enough"
 
   become: True

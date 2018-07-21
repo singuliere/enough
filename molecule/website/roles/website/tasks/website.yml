@@ -27,9 +27,9 @@
     path: /srv
     owner: debian
 
-- name: git clone https://lab.securedrop.club/main/website
+- name: git clone https://lab.{{ domain }}/main/website
   git:
-    repo: "https://lab.securedrop.club/main/website"
+    repo: "https://lab.{{ domain }}/main/website"
     force: yes
     dest: /srv/website
   become: False

@@ -6,7 +6,7 @@ def test_website(host):
     flock /tmp/update-website \
           bash -x /srv/update-website.sh \
           >> /var/log/update-website.log 2>&1
-    grep --quiet -i securedrop /var/www/html/index.html
+    grep --quiet -i enough /var/www/html/index.html
     """)
     print(cmd.stdout)
     print(cmd.stderr)
