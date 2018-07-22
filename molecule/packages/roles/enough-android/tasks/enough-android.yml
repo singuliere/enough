@@ -11,9 +11,9 @@
     state: directory
     owner: debian
 
-- name: git clone https://lab.securedrop.club/enough/android
+- name: git clone https://lab.enough.community/main/android
   git:
-    repo: "https://lab.securedrop.club/enough/android"
+    repo: "https://lab.enough.community/main/android"
     force: yes
     dest: /srv/android
   become: False
@@ -30,7 +30,7 @@
     owner: debian
     mode: "0755"
 
-- name: Run securedrop-update-packages.sh every 5 minutes
+- name: Run enough-android-update-packages.sh every 5 minutes
   cron:
     name: "Update enough-android"
     minute: "*/5"
