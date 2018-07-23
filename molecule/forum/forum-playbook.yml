@@ -11,7 +11,7 @@
     - role: docker
 
     - role: discourse
-      forum_name: SecureDrop
+      forum_name: Enough
       repository: https://github.com/discourse/discourse_docker
       branch: master
 
@@ -19,6 +19,6 @@
       http_vhost_name: Forum
       http_vhost_fqdn: "{{ forum_vhost_fqdn }}"
       http_vhost_uri: "/"
-      http_vhost_string: "All things related to the SecureDrop whistleblower submission system"
+      http_vhost_string: "Enough"
 
   become: True
