@@ -15,18 +15,6 @@
     dest: "/srv/forum/{{ forum_name }}"
   become: false
 
-- name: copy code patche
-  copy:
-    src: files/0001-open-json-unlimited-rate-access.patch
-    dest: "/srv/forum/{{ forum_name }}"
-  become: false
-
-- name: apply patch
-  command: git apply 0001-open-json-unlimited-rate-access.patch --3way
-  args:
-    chdir: "/srv/forum/{{ forum_name }}"
-  become: false
-
 - name: deploy configuration
   template:
     src: "templates/app.yml.j2"
