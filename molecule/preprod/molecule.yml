@@ -29,9 +29,6 @@ platforms:
         size: 100
   - name: forum-host
     flavor: "s1-4"
-    volumes:
-      - name: cloud-volume
-        size: 20
 provisioner:
   name: ansible
   lint:

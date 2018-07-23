@@ -3,8 +3,6 @@
   hosts: forum-host
 
   roles:
-    - role: docker_filesystem
-
     - role: ansible-role-docker
       docker_install_compose: false
 
