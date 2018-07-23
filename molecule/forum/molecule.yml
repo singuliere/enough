@@ -10,43 +10,24 @@ platforms:
     flavor: "s1-2"
   - name: icinga-host
     flavor: "s1-2"
-  - name: weblate-host
-    flavor: "s1-4"
-  - name: gitlab-host
-    flavor: "s1-4"
-  - name: runner-host
-    flavor: "s1-4"
-  - name: packages-host
-    flavor: "s1-4"
-  - name: website-host
-    flavor: "s1-2"
-  - name: chat-host
-    flavor: "s1-2"
-  - name: cloud-host
-    flavor: "s1-2"
-    volumes:
-      - name: cloud-volume
-        size: 100
   - name: forum-host
-    flavor: "s1-4"
+    flavor: "s1-2"
     volumes:
       - name: cloud-volume
-        size: 20
+        size: 10
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
-  #options:
-  #  vvv: True
   env:
     ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles:../packages/roles:../jdauphant.nginx/roles
   inventory:
     links:
-      # Path is relative to .molecule folder
-      group_vars: preprod_group_vars
+      # Path is relative to directory in which this molecule.yml file resides
+      group_vars: forum_group_vars
       host_vars:  ../../inventory/host_vars
 scenario:
-  name: preprod
+  name: forum
   test_sequence:
     - destroy
     - create

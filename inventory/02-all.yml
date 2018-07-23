@@ -8,3 +8,5 @@ pets:
     weblate-host:
     packages-host:
     chat-host:
+    forum-host:
+

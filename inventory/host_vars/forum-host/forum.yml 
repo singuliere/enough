@@ -1,0 +1,2 @@
+---
+forum_vhost_fqdn: forum.{{ domain }}
