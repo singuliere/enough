@@ -90,9 +90,9 @@
     chdir: "{{ app_dir }}"
   become: False
 
-- name: git clone https://lab.{{ domain }}/enough/app/
+- name: git clone https://lab.{{ domain }}/main/app/
   git:
-    repo: "https://lab.{{ domain }}/enough/app/"
+    repo: "https://lab.{{ domain }}/main/app/"
     force: yes
     dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/enough
 
