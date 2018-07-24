@@ -21,8 +21,8 @@ services:
       - 8080:80
 {% endif %}
     environment:
-      - VIRTUAL_HOST={{ cloud_vhost_fqdn }}
-      - LETSENCRYPT_HOST={{ cloud_vhost_fqdn }}
+      - VIRTUAL_HOST={{ vhost_fqdn }}
+      - LETSENCRYPT_HOST={{ vhost_fqdn }}
       - LETSENCRYPT_EMAIL=admin@securedrop.club
       - POSTGRES_HOST=db
     env_file:

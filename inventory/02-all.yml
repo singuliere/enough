@@ -10,3 +10,6 @@ pets:
     chat-host:
     forum-host:
 
+enough:
+  hosts:
+    cloud-host:
