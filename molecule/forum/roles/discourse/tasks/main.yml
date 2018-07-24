@@ -7,7 +7,7 @@
     owner: debian
   become: true
 
-- name: git clone -b {{ branch }} {{ repository }}
+- name: git clone master {{ repository }}
   git:
     update: no
     repo: "{{ repository }}"
