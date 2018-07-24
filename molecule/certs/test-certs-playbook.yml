@@ -20,7 +20,7 @@
           - server_name {{ inventory_hostname }}.{{ domain }}
           - root        /var/www/html
     - role: certbot-nginx
-      admins_email:       devnull@infrastructure
+      admins_email:       devnull@{{ domain }}
       vhost_fqdn:         "{{ inventory_hostname }}.{{ domain }}"
       certbot_redirect:   true
       with_fake_LE:       true
