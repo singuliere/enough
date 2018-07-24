@@ -3,22 +3,6 @@
   hosts: cloud-host
 
   roles:
-    - { role: docker_filesystem }
-    - { role: ansible-role-docker }
-    - { role: docker }
-    - { role: nextcloud }
-
-    - role: monitor_http_vhost
-      http_vhost_name: Cloud
-      http_vhost_fqdn: "{{ cloud_vhost_fqdn }}"
-      http_vhost_uri: "/login"
-      http_vhost_string: "Forgot password"
-
-    - role: monitor_tor_http_vhost
-      with_https: false
-      tor_hostname_file: /var/lib/tor/services/cloud/hostname
-      tor_http_vhost_name: Cloud
-      tor_http_vhost_uri: "/login"
-      tor_http_vhost_string: "Forgot password"
+    - { role: cloud }
 
   become: True

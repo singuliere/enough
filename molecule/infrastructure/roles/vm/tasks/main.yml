@@ -24,10 +24,10 @@
       {% if molecule_yml is defined -%}
         {% for p in molecule_yml.platforms -%}
           {% if p.volumes is defined -%}
-             {{ p.volumes }}
+             {{ p.volumes }} +
           {%- endif %}
         {%- endfor %}
-      {%- endif %}
+      {%- endif %}[]
 
 - name: display the volumes_description var
   debug:
@@ -40,7 +40,7 @@
     display_name: "{{ item.name }}"
     size: "{{ item.size }}"
   with_items: "{{ volumes_description }}"
-  when: state == "present" and volumes_description != ''
+  when: state == "present"
 
 - name: instances "{{ state }}"
   os_server:
@@ -73,7 +73,7 @@
     <<: *os_auth
     display_name: "{{ item.name }}"
   with_items: "{{ volumes_description }}"
-  when: state == "absent" and volumes_description != ''
+  when: state == "absent"
 
 - name: Wait for python on the instances
   command: >

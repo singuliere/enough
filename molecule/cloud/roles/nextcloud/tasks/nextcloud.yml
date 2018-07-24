@@ -13,7 +13,7 @@
 - name: git clone https://github.com/nextcloud/docker/
   git:
     repo: https://github.com/nextcloud/docker/
-    version: 13.0.2
+    version: 13.0.4
     force: yes
     dest: /srv/nextcloud
   become: False
@@ -50,7 +50,7 @@
 
 - name: wait for nextcloud to be ready
   uri:
-    url: "http{% if with_https is defined and with_https == true %}s{% endif %}://cloud.{{ domain }}"
+    url: "http{% if with_https is defined and with_https == true %}s{% endif %}://{{ vhost_fqdn }}"
     method: GET
     status_code: 200
   register: nextcloud_get
@@ -74,9 +74,9 @@
   become: False
   when: nextcloud_config.rc == 1
 
-- name: occ config:system:set trusted_domains cloud.{{ domain }}
+- name: occ config:system:set trusted_domains {{ vhost_fqdn }}
   shell: |
-    {{ app_sh }} php -f occ config:system:set trusted_domains 0 --value cloud.{{ domain }}
+    {{ app_sh }} php -f occ config:system:set trusted_domains 0 --value {{ vhost_fqdn }}
     {{ app_sh }} php -f occ config:system:set trusted_domains 1 --value {{ ansible_host }} # for test purposes only
   args:
     chdir: "{{ app_dir }}"
@@ -155,7 +155,7 @@
     echo -n $(cat /var/lib/tor/services/cloud/hostname)
   register: nextcloud_onion
 
-- name: occ config:system:set trusted_domains {{ nextcloud_onion.stdout }}
+- name: occ config:system:set trusted_domains *.onion
   shell: |
     {{ app_sh }} php -f occ config:system:set trusted_domains 2 --value {{ nextcloud_onion.stdout }}
   args:

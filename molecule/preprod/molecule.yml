@@ -27,6 +27,11 @@ platforms:
     volumes:
       - name: cloud-volume
         size: 100
+  - name: wereport-host
+    flavor: "s1-2"
+    volumes:
+      - name: wereport-volume
+        size: 10
   - name: forum-host
     flavor: "s1-4"
 provisioner:
