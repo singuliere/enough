@@ -13,7 +13,7 @@
 - name: git clone https://github.com/nextcloud/docker/
   git:
     repo: https://github.com/nextcloud/docker/
-    version: 13.0.2
+    version: 13.0.4
     force: yes
     dest: /srv/nextcloud
   become: False
