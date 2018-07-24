@@ -11,7 +11,7 @@
   git:
     update: no
     repo: "{{ repository }}"
-    version: "{{ branch }}"
+    version: master
     dest: "/srv/forum/{{ forum_name }}"
   become: false
 
