@@ -13,3 +13,4 @@ pets:
 enough:
   hosts:
     cloud-host:
+    wereport-host:

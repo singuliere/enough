@@ -19,6 +19,7 @@
 - import_playbook: molecule/chat/chat-playbook.yml
 - import_playbook: molecule/cloud/enough-playbook.yml
 - import_playbook: molecule/cloud/cloud-playbook.yml
+- import_playbook: molecule/cloud/wereport-playbook.yml
 - import_playbook: molecule/website/website-playbook.yml
 - import_playbook: molecule/forum/forum-playbook.yml
 - import_playbook: molecule/misc/commit_etc-playbook.yml
