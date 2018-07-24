@@ -1,0 +1,30 @@
+---
+
+- name: mkdir /srv/forum
+  file:
+    state: directory
+    path: /srv/forum
+    owner: debian
+  become: true
+
+- name: git clone master {{ repository }}
+  git:
+    update: no
+    repo: "{{ repository }}"
+    version: "{{ branch }}"
+    dest: "/srv/forum/{{ forum_name }}"
+  become: false
+
+- name: deploy configuration
+  template:
+    src: "templates/app.yml.j2"
+    dest: "/srv/forum/{{ forum_name }}/containers/app.yml"
+  become: false
+  register: app_config
+
+- name: rebuild and launch discourse
+  command: ./launcher rebuild app
+  args:
+    chdir: "/srv/forum/{{ forum_name }}"
+  become: false
+  when: app_config|changed

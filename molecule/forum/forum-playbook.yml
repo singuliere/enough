@@ -1,0 +1,21 @@
+---
+- name: install Discourse forum
+  hosts: forum-host
+
+  roles:
+    - role: ansible-role-docker
+      docker_install_compose: false
+
+    - role: docker
+
+    - role: discourse
+      forum_name: Enough
+      repository: https://github.com/discourse/discourse_docker
+
+    - role: monitor_http_vhost
+      http_vhost_name: Forum
+      http_vhost_fqdn: "{{ forum_vhost_fqdn }}"
+      http_vhost_uri: "/"
+      http_vhost_string: "Enough"
+
+  become: True

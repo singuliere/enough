@@ -1,0 +1,73 @@
+templates:
+  - "templates/postgres.template.yml"
+  - "templates/redis.template.yml"
+  - "templates/web.template.yml"
+  - "templates/web.ratelimited.template.yml"
+{% if with_https is defined and with_https == true %}
+  - "templates/web.ssl.template.yml"
+  - "templates/web.letsencrypt.ssl.template.yml"
+{% endif %}
+
+expose:
+  - "80:80"   # http
+  - "443:443" # https
+
+params:
+  db_default_text_search_config: "pg_catalog.english"
+  version: stable
+
+env:
+  LANG: en_US.UTF-8
+
+  ## How many concurrent web requests are supported? Depends on memory and CPU cores.
+  ## will be set automatically by bootstrap based on detected CPUs, or you can override
+  UNICORN_WORKERS: 2
+
+  ## The domain name this Discourse instance will respond to
+  DISCOURSE_HOSTNAME: '{{ forum_vhost_fqdn }}'
+
+  ## Uncomment if you want the container to be started with the same
+  ## hostname (-h option) as specified above (default "$hostname-$config")
+  DOCKER_USE_HOSTNAME: true
+
+  ## List of comma delimited emails that will be made admin and developer
+  ## on initial signup example 'user1@example.com,user2@example.com'
+  DISCOURSE_DEVELOPER_EMAILS: admin@{{ domain }}
+
+  ## The SMTP mail server used to validate new accounts and send notifications
+  DISCOURSE_SMTP_ADDRESS: 127.0.0.1
+  DISCOURSE_SMTP_PORT: 25
+  DISCOURSE_SMTP_USER_NAME: false
+  DISCOURSE_SMTP_AUTHENTICATION: false
+  DISCOURSE_SMTP_OPENSSL_VERIFY_MODE: none
+  DISCOURSE_SMTP_PASSWORD: false
+  DISCOURSE_SMTP_ENABLE_START_TLS: false
+
+  ## If you added the Lets Encrypt template, uncomment below to get a free SSL certificate
+  LETSENCRYPT_ACCOUNT_EMAIL: admin@{{ domain }}
+
+## The Docker container is stateless; all data is stored in /shared
+volumes:
+  - volume:
+      host: /srv/forum/{{ forum_name }}/shared/standalone
+      guest: /shared
+  - volume:
+      host: /srv/forum/{{ forum_name }}/shared/standalone/log/var-log
+      guest: /var/log
+
+## Plugins go here
+## see https://meta.discourse.org/t/19157 for details
+hooks:
+  after_code:
+    - exec:
+        cd: $home/plugins
+        cmd:
+          - git clone https://github.com/discourse/docker_manager.git
+          - git clone https://github.com/discourse/discourse-chat-integration.git
+          - git clone https://github.com/angusmcleod/discourse-events.git
+          - git clone https://github.com/angusmcleod/discourse-locations.git
+
+## Any custom commands to run after building
+run:
+  - exec: echo "Beginning of custom commands"
+  - exec: echo "End of custom commands"

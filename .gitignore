@@ -10,3 +10,4 @@ private-key.yml
 *.pyc
 infrastructure_key*
 secret
+inventory/group_vars/all/domain.yml
