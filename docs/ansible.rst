@@ -86,7 +86,6 @@ The `/srv/checkout` directory is a clone of the `ansible repository
 
 .. code::
 
-   git fetch ; git rebase
 
 Testing a production upgrade
 ----------------------------
@@ -103,3 +102,4 @@ Using an empty tenant:
 * git checkout master # version under test
 * molecule verify # previous-version-tag -> master
 * molecule tests # nothing -> master
+   git pull --rebase
