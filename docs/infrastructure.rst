@@ -7,27 +7,21 @@ OpenStack at OVH
 ----------------
 
 All virtual machines are in the OVH OpenStack cloud, under the user
-**-ovh** using the `enough.community admin mail <admin@enough.community>`_.
+**ce188933-ovh** bound to the `enough.community admin mail <admin@enough.community>`_.
 
 The following OpenStack projects have been defined:
 
 * **Contributors**
-   - Region **GRA3**: all manually created VMS, before Ansible was
-     introduced.
    - Region **DE1**: used for testing by Loïc Dachary
-   - Region **SBG3**: used for testing by François Poulain
-
-.. note:: the **GRA3** region will eventually be empty when all
-          resources are migrated to use Ansible
+   - Region **SBG5**: used for testing by François Poulain
 
 * **CI**
-
-   - Region **???**
+   - Region **DE1**: GitLab runner
 
 * **Production**
-    - Region **GRA5**: all Ansible maintained production VMs
-    - Region **SBG5**: the VM running ansible to control production VMs
-      in the **GRA5** region.
+   - Region **GRA5**: all Ansible maintained production VMs
+   - Region **SBG5**: the VM running ansible to control production VMs
+     in the **GRA5** region.
 
 * `Login as a customer <https://www.ovh.com/auth/>`_
 * `OpenStack OVH management <https://www.ovh.com/manager/cloud/>`_
