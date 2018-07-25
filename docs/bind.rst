@@ -59,13 +59,13 @@ The `test.enough.community` zone is managed on the same dedicated virtual machin
 `ns1.enough.community`. It is generated via `the bind playbook
 <http://lab.enough.community/main/enough-community/blob/master/molecule/bind/bind-playbook.yml>`_.
 
-It can be updated locally by the `debian` user via ``nsupdate``. This allow
+It can be updated locally by the `debian` user via ``nsupdate``. This enables
 any enough.community's administrator to setup new preproduction testing
 subdomains. Exemple:
 
 ::
 
-  \ SD / debian@bind-host:~$ nsupdate <<EOF
+  - E - debian@bind-host:~$ nsupdate <<EOF
   server localhost
   zone test.enough.community
   update add bling.test.enough.community. 1800 TXT "Updated by nsupdate"

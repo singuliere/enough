@@ -1,7 +1,7 @@
-Nextcloud
-=========
+Enough
+======
 
-`cloud.enough.community <http://lab.enough.community/main/infrastructure/tree/master/molecule/cloud/roles/nextcloud>`_ is installed `with docker <https://github.com/nextcloud/docker>`_.
+`cloud.enough.community <http://lab.enough.community/main/infrastructure/tree/master/molecule/enough/roles/nextcloud>`_ is installed `with docker <https://github.com/nextcloud/docker>`_.
 
 The ``/var/lib/docker`` directory is mounted on a 3 replica volume and
 should be manually backup from time to time to keep the history. If
