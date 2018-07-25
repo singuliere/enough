@@ -32,14 +32,8 @@ to understand how `Weblate` is deployed if you're improving
 Organization
 ------------
 
-All contributors are organized horizontally (i.e. there is no
-organization or structure) and are expected to follow these rules:
+All contributors are `organized horizontally <https://enough.community/blog/2018/07/20/manifesto/>`__
 
-* An action that has no impact on others can be carried out without
-  asking for permission
-* An action impacting others is advertised in advance and carried out
-  if there is a consensus
-* Any person impacted by an action can call for a vote
 * People with access to an exclusive resource must register themselves
   in the :doc:`team directory <team>`
 
@@ -51,7 +45,7 @@ Getting started
 * ``git submodule update --init``
 * ``apt install virtualenv``
 * ``deactivate || true ; source bootstrap``
-* get OpenStack credentials and store then in `openrc.sh`
+* get OpenStack credentials (ask :doc:`anyone in the <team>`) and store then in `openrc.sh`
 * ``source openrc.sh``
 * ``openstack server list``: should successfully return nothing on a new tenant
 * ``cp clouds.yml.example clouds.yml``
@@ -65,25 +59,30 @@ Ansible repository layout
 
 The `ansible repository
 <http://lab.enough.community/main/infrastructure/>`_ groups playbooks
-and roles in separate directories to reduce the number of files a to
-consider when working on improving a playbook or a role service.
+and roles in separate directories to reduce the number of files to
+consider when working on improving a playbook or a service.
 
 * ``molecule/authorized_keys``: distribute SSH public keys
 * ``molecule/backup``: daily VMs snapshots
 * ``molecule/bind``: DNS server and client
+* ``molecule/certs``: certs files for testing
 * ``molecule/icinga``: resources monitoring
 * ``molecule/infrastructure``: VMs creation and firewalling
+* ``molecule/misc/roles/commit_etc``: keep track of changes in /etc
+* ``molecule/misc/roles/history``: keep track of Ansible runs
+* ``molecule/misc/roles/sexy-debian``: non essential Debian specific convenience tweaks
+* ``molecule/misc/roles/sshd_config``: /etc/ssh/sshd_config shared by all VMs
 * ``molecule/postfix``: outgoing mail relay for all VMs
 * ``molecule/preprod``: full preproduction environment. See `Integration testing`_.
 * ``molecule/sexy-debian``: optional tools that debian users like to work with
-* ``molecule/weblate``: `weblate <https://weblate.org/>`_ for
-  `enough.community <https://weblate.enough.community>`_
+
+The other scenarii found in the `molecule` directory are services such
+as `weblate <https://weblate.org/>`_ or `discourse <https://discourse.org/>`_.
 
 The toplevel directory contains the `playbook that applies to the
 enough.community production environment
-<http://lab.enough.community/main/infrastructure/blob/master/infrastructure-playbook.yml>`_. It
-is a list of playbooks imported from each of the subdirectories listed
-above.
+<http://lab.enough.community/main/infrastructure/blob/master/enough-community-playbook.yml>`_. It
+imports playbooks found in the `molecule` directory.
 
 Integration testing
 -------------------
@@ -98,10 +97,10 @@ successfully:
 Ansible being declarative for the most part, unit tests are only
 beneficial to verify loops and conditionals work as expected. For
 instance by checking a file is created only if **--tag something** is
-provided.  An integration test is necessary to checks if the service
-is actually working. For instance the integration tests for weblate
-trigger request that the weblate server sends a mail and verify it is
-relayed by the postfix mail server.
+provided. An integration test is necessary to checks if the service is
+actually doing anything useful. For instance the integration tests for
+weblate request that the weblate server sends a mail and
+verify it is relayed by the postfix server.
 
 When possible integration tests should be created as icinga monitoring
 checks so they can be run on a regular basis in the production
