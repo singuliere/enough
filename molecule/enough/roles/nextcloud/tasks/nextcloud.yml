@@ -98,6 +98,20 @@
     chdir: "{{ app_dir }}"
   become: False
 
+- name: occ config:system:set mail
+  shell: |
+    {{ app_sh }} php -f occ config:system:set mail_domain --value=enough.community --type string
+    {{ app_sh }} php -f occ config:system:set mail_from_address --value=noreply --type string
+    {{ app_sh }} php -f occ config:system:set mail_smtpauth --value=0 --type int
+    {{ app_sh }} php -f occ config:system:set mail_smtphost --value=postfix-host.enough.community --type string
+    {{ app_sh }} php -f occ config:system:set mail_smtpmode --value=smtp --type string
+    {{ app_sh }} php -f occ config:system:set mail_smtpport --value=465 --type int
+    {{ app_sh }} php -f occ config:system:set mail_smtpsecure --value=ssl --type string
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
+- name: occ app:enable activity
 - name: git clone https://lab.{{ domain }}/main/app/
   git:
     repo: "https://lab.{{ domain }}/main/app/"
