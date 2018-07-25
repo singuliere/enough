@@ -12,6 +12,8 @@ Contact
 The `contact mail <contact@enough.community>`__ alias is forwarded to:
 
 * `Loïc Dachary <loic@dachary.org>`__
+* `François Poulain <fpoulain@metrodore.fr>`__
+* `Louis Vanhaelewyn <louis.vanhaelewyn@free.fr>`__
 
 Funding
 -------
@@ -27,6 +29,7 @@ Infrastructure
 
 * `François Poulain <fpoulain@metrodore.fr>`__
 * `Loïc Dachary <loic@dachary.org>`__
+* `Louis Vanhaelewyn <louis.vanhaelewyn@free.fr>`__
 
 Weblate
 -------
@@ -38,6 +41,7 @@ Mattermost
 
 * `François Poulain <fpoulain@metrodore.fr>`__
 * `Loïc Dachary <loic@dachary.org>`__
+* `Louis Vanhaelewyn <louis.vanhaelewyn@free.fr>`__
 
 Readthedocs
 -----------
