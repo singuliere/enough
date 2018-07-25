@@ -90,6 +90,14 @@
     chdir: "{{ app_dir }}"
   become: False
 
+- name: occ app:enable encryption
+  shell: |
+    {{ app_sh }} php -f occ app:enable encryption
+    {{ app_sh }} php -f occ config:app:set --value=yes core encryption_enabled
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
 - name: git clone https://lab.{{ domain }}/main/app/
   git:
     repo: "https://lab.{{ domain }}/main/app/"
