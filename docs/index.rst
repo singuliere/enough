@@ -31,5 +31,5 @@ All resources are deployed and maintained via :doc:`ansible <ansible>`.
   weblate
   gitlab
   mattermost
-  cloud
+  enough
   demo
