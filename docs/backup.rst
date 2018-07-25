@@ -9,8 +9,8 @@ Each VM is `snapshoted daily <http://lab.enough.community/main/infrastructure/bl
 Disaster recovery
 -----------------
 
-The VMs are cheap and do not provide any kind of guarantee and all
-data can be lost. To recover a lost production VM:
+The VMs are cheap and do not provide any kind of guarantee: all
+data they contain can be lost. To recover a lost production VM:
 
 * login debian@ansible.enough.community and get OpenStack credentials from `~/openrc.sh` or :doc:`ask a team member <team>`.
 * cd /srv/checkout
