@@ -1,5 +1,5 @@
 ---
-- name: prepare wereport environment
+- name: prepare cloud environment
   hosts: wereport-host
 
   roles:

@@ -10,12 +10,12 @@ platforms:
     flavor: "s1-2"
   - name: icinga-host
     flavor: "s1-2"
-  - name: cloud-host
+  - name: wereport-host
     flavor: "s1-2"
     groups:
       - enough
     volumes:
-      - name: cloud-volume
+      - name: wereport-volume
         size: 10
 provisioner:
   name: ansible
@@ -28,7 +28,7 @@ provisioner:
       group_vars: ../../inventory/group_vars
       host_vars:  ../../inventory/host_vars
 scenario:
-  name: cloud
+  name: wereport
   test_sequence:
     - destroy
     - create
