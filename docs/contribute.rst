@@ -5,7 +5,7 @@ This is the contribution guide to the `enough.community` infrastructure
 which is based on Ansible. If you're a seasoned Free Software
 contributor looking for a quick start, take a look at the `list of
 bugs and features
-<https://lab.enough.community/main/securedrop-club/issues>`__,
+<https://lab.enough.community/main/infrastructure/issues>`__,
 otherwise keep reading.
 
 .. note:: If you want to contribute to the SecureDrop code base, take
@@ -14,10 +14,10 @@ otherwise keep reading.
 Resources
 ---------
 
-* Repository and issue tracking: http://lab.enough.community/main/securedrop-club
+* Repository and issue tracking: http://lab.enough.community/main/infrastructure
 * Forum: https://forum.enough.community/c/devops
 * Instant messenging: https://gitter.im/freedomofpress/securedrop
-* License: `AGPLv3 <https://lab.enough.community/main/securedrop-club/blob/master/LICENSE>`__
+* License: `AGPLv3 <https://lab.enough.community/main/infrastructure/blob/master/LICENSE>`__
 * :doc:`Who's who <team>`
 * Requirement: `Integration testing`_
 
@@ -29,15 +29,15 @@ independantly and have their own integration tests. There is no need
 to understand how `Weblate` is deployed if you're improving
 `Discourse`, for instance.
 
-* `Weblate <https://weblate.enough.community>`__ and its `playbook <https://lab.enough.community/main/securedrop-club/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=Weblate>`__
-* `Discourse <https://forum.enough.community>`__ (no playbook yet) and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=Discourse>`__
-* `GitLab <https://lab.enough.community>`__ and its `playbook <https://lab.enough.community/main/securedrop-club/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=GitLab>`__
-* `Packages <https://packages.enough.community>`__ and its `playbook <https://lab.enough.community/main/securedrop-club/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=Packages>`__
+* `Weblate <https://weblate.enough.community>`__ and its `playbook <https://lab.enough.community/main/infrastructure/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=Weblate>`__
+* `Discourse <https://forum.enough.community>`__ (no playbook yet) and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=Discourse>`__
+* `GitLab <https://lab.enough.community>`__ and its `playbook <https://lab.enough.community/main/infrastructure/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=GitLab>`__
+* `Packages <https://packages.enough.community>`__ and its `playbook <https://lab.enough.community/main/infrastructure/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=Packages>`__
 
 There are a few (and it must not grow too much) base services that
 also need work (bind, postfix etc.).
 
-* `Other elements of infrastructure <https://securedrop-club.readthedocs.io>`__ and their associated `playbooks <https://lab.enough.community/main/securedrop-club/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=Other>`__
+* `Other elements of infrastructure <https://infrastructure.readthedocs.io>`__ and their associated `playbooks <https://lab.enough.community/main/infrastructure/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=Other>`__
 
 Organization
 ------------
@@ -74,7 +74,7 @@ Ansible repository layout
 -------------------------
 
 The `ansible repository
-<http://lab.enough.community/main/securedrop-club/>`_ groups playbooks
+<http://lab.enough.community/main/infrastructure/>`_ groups playbooks
 and roles in separate directories to reduce the number of files a to
 consider when working on improving a playbook or a role service.
 
@@ -91,7 +91,7 @@ consider when working on improving a playbook or a role service.
 
 The toplevel directory contains the `playbook that applies to the
 enough.community production environment
-<http://lab.enough.community/main/securedrop-club/blob/master/securedrop-club-playbook.yml>`_. It
+<http://lab.enough.community/main/infrastructure/blob/master/infrastructure-playbook.yml>`_. It
 is a list of playbooks imported from each of the subdirectories listed
 above.
 

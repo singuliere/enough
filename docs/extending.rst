@@ -8,7 +8,7 @@ Overview
 --------
 
 The `enough.community` infrastructure is developed and deployed using ansible.
-The main playbook is `securedrop-club-playbook.yml`.
+The main playbook is `infrastructure-playbook.yml`.
 
 The development, tuning and corrections of the playbook is done in a separate
 environment with automated testing. `Molecule <http://molecule.readthedocs.io>`_
@@ -130,7 +130,7 @@ include all playbooks used for the scenario, i.e.:
 - others scenarios playbooks, like `molecule/icinga/icinga-playbook.yml` or
   `molecule/postfix/postfix-playbook.yml`
 - the `target` scenario playbook, here `molecule/icinga/dummy-playbook.yml`,
-  which is intended to be included in   `securedrop-club-playbook.yml`. This
+  which is intended to be included in   `infrastructure-playbook.yml`. This
   playbook may possibly include children playbooks.
 - possibly tests specific playbooks, prepended by `test`, like
   `molecule/icinga/test-dummy-playbook.yml`.

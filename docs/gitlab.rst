@@ -1,7 +1,7 @@
 GitLab
 ======
 
-`lab.enough.community <http://lab.enough.community/main/securedrop-club/tree/master/molecule/gitlab/roles/gitlab>`_ is installed `with docker <https://hub.docker.com/r/sameersbn/gitlab/>`_ with the `https-portal letsencrypt reverse proxy <https://github.com/WeblateOrg/docker/blob/master/docker-compose-https.yml>`_.
+`lab.enough.community <http://lab.enough.community/main/infrastructure/tree/master/molecule/gitlab/roles/gitlab>`_ is installed `with docker <https://hub.docker.com/r/sameersbn/gitlab/>`_ with the `https-portal letsencrypt reverse proxy <https://github.com/WeblateOrg/docker/blob/master/docker-compose-https.yml>`_.
 
 The configuration variables are set in `inventory/host_vars/gitlab-host.yml` at
 the root of the repository. It can be copied from
