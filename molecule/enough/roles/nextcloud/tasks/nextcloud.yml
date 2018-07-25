@@ -118,6 +118,15 @@
     force: yes
     dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/enough
 
+- name: occ config:app:set theming
+  shell: |
+    {{ app_sh }} php -f occ config:app:set --value='communicate securely and privately' theming slogan
+    {{ app_sh }} php -f occ config:app:set --value=http://enough.community theming url
+    {{ app_sh }} php -f occ config:app:set --value=Enough theming name
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
 - name: occ app:enable enough
   shell: |
     {{ app_sh }} php -f occ app:enable enough
