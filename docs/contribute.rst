@@ -29,16 +29,6 @@ independently and have their own integration tests. There is no need
 to understand how `Weblate` is deployed if you're improving
 `Discourse`, for instance.
 
-* `Weblate <https://weblate.enough.community>`__ and its `playbook <https://lab.enough.community/main/infrastructure/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=Weblate>`__
-* `Discourse <https://forum.enough.community>`__ (no playbook yet) and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=Discourse>`__
-* `GitLab <https://lab.enough.community>`__ and its `playbook <https://lab.enough.community/main/infrastructure/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=GitLab>`__
-* `Packages <https://packages.enough.community>`__ and its `playbook <https://lab.enough.community/main/infrastructure/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=Packages>`__
-
-There are a few (and it must not grow too much) base services that
-also need work (bind, postfix etc.).
-
-* `Other elements of infrastructure <https://infrastructure.readthedocs.io>`__ and their associated `playbooks <https://lab.enough.community/main/infrastructure/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.enough.community/main/infrastructure/issues?label_name[]=Other>`__
-
 Organization
 ------------
 
