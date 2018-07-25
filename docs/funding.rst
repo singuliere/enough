@@ -39,8 +39,3 @@ All expenses are proposed and approved as follows:
      done before they can be released.
 
 #. The thread is closed.
-
-Freedom of the Press Foundation
--------------------------------
-
-The `Freedom of the Press Foundation <https://freedom.press>`__ also runs a `Enough fundraiser <https://freedom.press/crowdfunding/securedrop/>`__ and decides how the collected funds are spent.

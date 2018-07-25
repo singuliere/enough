@@ -8,15 +8,15 @@ bugs and features
 <https://lab.enough.community/main/infrastructure/issues>`__,
 otherwise keep reading.
 
-.. note:: If you want to contribute to the SecureDrop code base, take
-          a look at the `SecureDrop contribution guide <https://docs.securedrop.org/en/latest/development/getting_started.html>`__. 
+.. note:: If you want to contribute to the Enoug code base, take
+          a look at `the repository <https://lab.enough.community/main/app>`__. 
 
 Resources
 ---------
 
 * Repository and issue tracking: http://lab.enough.community/main/infrastructure
-* Forum: https://forum.enough.community/c/devops
-* Instant messenging: https://gitter.im/freedomofpress/securedrop
+* Forum: https://forum.enough.community/
+* Instant messenging: https://chat.enough.community/enough/
 * License: `AGPLv3 <https://lab.enough.community/main/infrastructure/blob/master/LICENSE>`__
 * :doc:`Who's who <team>`
 * Requirement: `Integration testing`_
