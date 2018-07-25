@@ -2,5 +2,5 @@ Documentation
 =============
 
 The documentation for `enough.community` is published at
-https://infrastructure.readthedocs.io
+https://enough-community.readthedocs.io
 
