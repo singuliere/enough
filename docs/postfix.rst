@@ -3,7 +3,7 @@
 Postfix mail server
 ===================
 
-Each VM installed via ansible is able to send emails from the `securedrop.club`
+Each VM installed via ansible is able to send emails from the `enough.community`
 domain.
 
 Postfix mail relay

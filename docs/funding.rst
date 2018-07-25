@@ -4,13 +4,13 @@ Funding
 Introduction
 ------------
 
-Funding is `collected via Liberapay <https://liberapay.com/>`__ by the `SecureDrop Community <https://liberapay.com/SecureDrop>`__.
+Funding sources are to be defined
 
 Advertisement and call for proposals
 ------------------------------------
 
-#. The total amount of money in the `SecureDrop Community <https://liberapay.com/SecureDrop>`__ fund is announced every other month in the `in the forum
-   <https://forum.securedrop.club/c/funding>`__.
+#. The total amount of money in the `Enough Community` fund is announced every other month in the `in the forum
+   <https://forum.enough.community/c/funding>`__.
 #. The announcement must include a call for ideas to spend the fund. This is less formal that a request and encourages participation from people who are not active volunteers. It is made clear the volunteers are not expected to followup to avoid any kind of disapointment.
 #. After two weeks the thread is summarized by a member :doc:`funding team <team>` and closed.
 
@@ -20,11 +20,11 @@ Workflow
 All expenses are proposed and approved as follows:
 
 #. Someone posts a message `in the forum
-   <https://forum.securedrop.club/c/funding>`__ asking for funds to be released.
+   <https://forum.enough.community/c/funding>`__ asking for funds to be released.
 #. The request is discussed by active volunteers. A volunteer is an
    individual who does not receive any monetary compensation, either
-   directly or indirectly for the work done on SecureDrop. A volunteer
-   is active if they contributed in a quantifiable way to SecureDrop
+   directly or indirectly for the work done on Enough. A volunteer
+   is active if they contributed in a quantifiable way to Enough
    in the past six months.
 #. Ideally there is a consensus between the volunteers. If at least
    one volunteer asks for a vote, it is organized in the form of a yes
@@ -43,4 +43,4 @@ All expenses are proposed and approved as follows:
 Freedom of the Press Foundation
 -------------------------------
 
-The `Freedom of the Press Foundation <https://freedom.press>`__ also runs a `SecureDrop fundraiser <https://freedom.press/crowdfunding/securedrop/>`__ and decides how the collected funds are spent.
+The `Freedom of the Press Foundation <https://freedom.press>`__ also runs a `Enough fundraiser <https://freedom.press/crowdfunding/securedrop/>`__ and decides how the collected funds are spent.

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# SecureDrop documentation build configuration file, created by
+# Enough documentation build configuration file, created by
 # sphinx-quickstart on Tue Oct 13 12:08:52 2015.
 #
 # This file is execfile()d with the current directory set to its
@@ -50,9 +50,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SecureDrop'
-copyright = u'2018, SecureDrop community'
-author = u'SecureDrop community'
+project = u'Enough'
+copyright = u'2018, Enough community'
+author = u'Enough community'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -219,7 +219,7 @@ else:
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'SecureDropdoc'
+htmlhelp_basename = 'Enoughdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -241,7 +241,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'SecureDrop.tex', u'SecureDrop Documentation',
+  (master_doc, 'Enough.tex', u'Enough Documentation',
    author, 'manual'),
 ]
 
@@ -271,7 +271,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'securedrop', u'SecureDrop Documentation',
+    (master_doc, 'securedrop', u'Enough Documentation',
      [author], 1)
 ]
 
@@ -285,8 +285,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'SecureDrop', u'SecureDrop Documentation',
-   author, 'SecureDrop', 'One line description of project.',
+  (master_doc, 'Enough', u'Enough Documentation',
+   author, 'Enough', 'One line description of project.',
    'Miscellaneous'),
 ]
 

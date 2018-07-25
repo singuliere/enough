@@ -1,6 +1,6 @@
 Documentation
 =============
 
-The documentation for `securedrop.club` is published at
+The documentation for `enough.community` is published at
 https://securedrop-club.readthedocs.io
 

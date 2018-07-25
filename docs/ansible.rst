@@ -82,7 +82,7 @@ Updating
 --------
 
 The `/srv/checkout` directory is a clone of the `ansible repository
-<http://lab.enough.community/main/securedrop-club/>`_ and can be updated with:
+<http://lab.enough.community/main/infrastructure/>`_ and can be updated with:
 
 .. code::
 

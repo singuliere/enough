@@ -1,11 +1,11 @@
 Contribute
 ==========
 
-This is the contribution guide to the `securedrop.club` infrastructure
+This is the contribution guide to the `enough.community` infrastructure
 which is based on Ansible. If you're a seasoned Free Software
 contributor looking for a quick start, take a look at the `list of
 bugs and features
-<https://lab.securedrop.club/main/securedrop-club/issues>`__,
+<https://lab.enough.community/main/securedrop-club/issues>`__,
 otherwise keep reading.
 
 .. note:: If you want to contribute to the SecureDrop code base, take
@@ -14,30 +14,30 @@ otherwise keep reading.
 Resources
 ---------
 
-* Repository and issue tracking: http://lab.securedrop.club/main/securedrop-club
-* Forum: https://forum.securedrop.club/c/devops
+* Repository and issue tracking: http://lab.enough.community/main/securedrop-club
+* Forum: https://forum.enough.community/c/devops
 * Instant messenging: https://gitter.im/freedomofpress/securedrop
-* License: `AGPLv3 <https://lab.securedrop.club/main/securedrop-club/blob/master/LICENSE>`__
+* License: `AGPLv3 <https://lab.enough.community/main/securedrop-club/blob/master/LICENSE>`__
 * :doc:`Who's who <team>`
 * Requirement: `Integration testing`_
 
 Bugs and features list
 ----------------------
 
-Each service under the `securedrop.club` domain can be worked on
+Each service under the `enough.community` domain can be worked on
 independantly and have their own integration tests. There is no need
 to understand how `Weblate` is deployed if you're improving
 `Discourse`, for instance.
 
-* `Weblate <https://weblate.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Weblate>`__
-* `Discourse <https://forum.securedrop.club>`__ (no playbook yet) and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Discourse>`__
-* `GitLab <https://lab.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=GitLab>`__
-* `Packages <https://packages.securedrop.club>`__ and its `playbook <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Packages>`__
+* `Weblate <https://weblate.enough.community>`__ and its `playbook <https://lab.enough.community/main/securedrop-club/tree/master/molecule/weblate>`__ and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=Weblate>`__
+* `Discourse <https://forum.enough.community>`__ (no playbook yet) and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=Discourse>`__
+* `GitLab <https://lab.enough.community>`__ and its `playbook <https://lab.enough.community/main/securedrop-club/tree/master/molecule/gitlab>`__ and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=GitLab>`__
+* `Packages <https://packages.enough.community>`__ and its `playbook <https://lab.enough.community/main/securedrop-club/tree/master/molecule/packages>`__ and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=Packages>`__
 
 There are a few (and it must not grow too much) base services that
 also need work (bind, postfix etc.).
 
-* `Other elements of infrastructure <https://securedrop-club.readthedocs.io>`__ and their associated `playbooks <https://lab.securedrop.club/main/securedrop-club/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.securedrop.club/main/securedrop-club/issues?label_name[]=Other>`__
+* `Other elements of infrastructure <https://securedrop-club.readthedocs.io>`__ and their associated `playbooks <https://lab.enough.community/main/securedrop-club/tree/master/molecule>`__ and `pending bugs and tasks <https://lab.enough.community/main/securedrop-club/issues?label_name[]=Other>`__
 
 Organization
 ------------
@@ -74,7 +74,7 @@ Ansible repository layout
 -------------------------
 
 The `ansible repository
-<http://lab.securedrop.club/main/securedrop-club/>`_ groups playbooks
+<http://lab.enough.community/main/securedrop-club/>`_ groups playbooks
 and roles in separate directories to reduce the number of files a to
 consider when working on improving a playbook or a role service.
 
@@ -87,11 +87,11 @@ consider when working on improving a playbook or a role service.
 * ``molecule/preprod``: full preproduction environment. See `Integration testing`_.
 * ``molecule/sexy-debian``: optional tools that debian users like to work with
 * ``molecule/weblate``: `weblate <https://weblate.org/>`_ for
-  `securedrop.club <https://weblate.securedrop.club>`_
+  `enough.community <https://weblate.enough.community>`_
 
 The toplevel directory contains the `playbook that applies to the
-securedrop.club production environment
-<http://lab.securedrop.club/main/securedrop-club/blob/master/securedrop-club-playbook.yml>`_. It
+enough.community production environment
+<http://lab.enough.community/main/securedrop-club/blob/master/securedrop-club-playbook.yml>`_. It
 is a list of playbooks imported from each of the subdirectories listed
 above.
 
@@ -122,7 +122,7 @@ verified manually inside the preproduction environment.
 
 .. note:: the person running the following commands need their
           personal ssh public key to give them access to
-          `debian@ns1.securedrop.club`.
+          `debian@ns1.enough.community`.
 
 * ``molecule create -s preprod``
 * ``molecule converge -s preprod``
@@ -131,11 +131,11 @@ verified manually inside the preproduction environment.
 
         TASK [debug] *******************************************************************
             ok: [localhost] => {
-            "domain": "ndi1nze0mdqk.test.securedrop.club"
+            "domain": "ndi1nze0mdqk.test.enough.community"
         }
 
 * ``molecule verify -s preprod``
-* manually verify `weblate.ndi1nze0mdqk.test.securedrop.club`,
-  `icinga.ndi1nze0mdqk.test.securedrop.club`, etc. and integration with online
+* manually verify `weblate.ndi1nze0mdqk.test.enough.community`,
+  `icinga.ndi1nze0mdqk.test.enough.community`, etc. and integration with online
   services such as GitHub authentication.
 * ``molecule destroy -s preprod``

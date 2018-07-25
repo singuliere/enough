@@ -127,7 +127,7 @@ A host can declare hosting web at a given fqdn:
 ::
 
       vars.http_vhosts["Secure Drop Forum"] = {
-        http_vhost = "forum.securedrop.club"
+        http_vhost = "forum.enough.community"
         http_uri = "/c/devops"
         http_ssl = true
         http_string = "devops discussions"
@@ -161,7 +161,7 @@ fqdn for more advanced checks (check result of a POST, etc.) if needed.
 
 Example of use in a role: `molecule/weblate/roles/weblate/tasks/monitoring.yml`.
 
-Since monitoring `http vhosts` happens often in  `securedrop.club`, an Ansible
+Since monitoring `http vhosts` happens often in  `enough.community`, an Ansible
 role helps to declare it:
 
 ::
@@ -204,8 +204,8 @@ expiration):
 
       /* Define zones and files for checks */
       vars.zones["Secure Drop Club"] = {
-        fqdn = "securedrop.club"
-        file = "/etc/bind/zones/masters/securedrop.club"
+        fqdn = "enough.community"
+        file = "/etc/bind/zones/masters/enough.community"
         view = "external"
       }
 

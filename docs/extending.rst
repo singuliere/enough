@@ -1,13 +1,13 @@
-Extending `securedrop.club`
+Extending `enough.community`
 ===========================
 
 After :ref:`getting started <getting_started>`, you may want to add some
-host/service in `securedrop.club` :ref:`infrastructure <infrastructure>`.
+host/service in `enough.community` :ref:`infrastructure <infrastructure>`.
 
 Overview
 --------
 
-The `securedrop.club` infrastructure is developed and deployed using ansible.
+The `enough.community` infrastructure is developed and deployed using ansible.
 The main playbook is `securedrop-club-playbook.yml`.
 
 The development, tuning and corrections of the playbook is done in a separate
@@ -30,7 +30,7 @@ deployment, its monitoring deployment, its ability to send emails, etc.
 Some very horizontal playbooks are regrouped in the `misc` scenario.
 
 The presence of a `bind-host` in most scenarios allows to spoof all records
-from `securedrop.club` domain from an hermetic internal view (and could spoof
+from `enough.community` domain from an hermetic internal view (and could spoof
 any other domain). By the way, this disallow external requests like e.g. ACME
 challenge for TLS Certificates. To overcome this limitation, the
 domain of the scenario is defined in a one-time testing subdomain when a
@@ -39,7 +39,7 @@ defined (meaning that we should use the "fake Let's Encrypt unlimited testing
 infrastructure").
 
 At the end of integration, the `preprod` scenario allows to deploy all
-`securedrop.club` playbooks, in a testing subdomain.
+`enough.community` playbooks, in a testing subdomain.
 
 Adding a host
 -------------
@@ -111,7 +111,7 @@ About hostnames
 """""""""""""""
 
 We do not use groups and each hostname matches the service it provides:
-`securedrop.club` infrastructure use `service`-host as naming convention.
+`enough.community` infrastructure use `service`-host as naming convention.
 Each given host (e.g. `postfix-host`) is attached to a given service`
 (e.g.  "infrastructure's mail relay").
 

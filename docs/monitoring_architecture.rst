@@ -111,7 +111,7 @@ with an host which simply contains this kind of declaration:
 ::
 
       vars.http_vhosts[""Forum""] = {
-        http_vhost = ""forum.securedrop.club""
+        http_vhost = ""forum.enough.community""
         http_ssl = true
       }
 
@@ -119,7 +119,7 @@ Well, fortunately the description may add a list of some attended
 strings at some given URI, and any other parameter of your choice,
 provided that you write the code which will exploit it.
 
-The main monitoring configuration for securedrop.club is available in
+The main monitoring configuration for enough.community is available in
 `molecule/icinga/roles/icinga2/files/services/` and deployed in the
 global Icinga zone, thus available to all the cluster.
 

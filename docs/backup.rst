@@ -4,7 +4,7 @@ Backups and recovery
 Backup policy
 -------------
 
-Each VM is `snapshoted daily <http://lab.securedrop.club/main/securedrop-club/blob/master/molecule/backup/roles/backup/templates/backup.sh>`_ and snapshots `older than 30 days <http://lab.securedrop.club/main/securedrop-club/blob/master/molecule/backup/roles/backup/templates/prune-backup.sh>`_ are removed.
+Each VM is `snapshoted daily <http://lab.enough.community/main/securedrop-club/blob/master/molecule/backup/roles/backup/templates/backup.sh>`_ and snapshots `older than 30 days <http://lab.enough.community/main/securedrop-club/blob/master/molecule/backup/roles/backup/templates/prune-backup.sh>`_ are removed.
 
 Disaster recovery
 -----------------
@@ -12,7 +12,7 @@ Disaster recovery
 The VMs are cheap and do not provide any kind of guarantee and all
 data can be lost. To recover a lost production VM:
 
-* login debian@ansible.securedrop.club and get OpenStack credentials from `~/openrc.sh` or :doc:`ask a team member <team>`.
+* login debian@ansible.enough.community and get OpenStack credentials from `~/openrc.sh` or :doc:`ask a team member <team>`.
 * cd /srv/checkout
 
 If the virtual machine is cattle
