@@ -1,4 +1,4 @@
-testinfra_hosts = ['cloud-host']
+testinfra_hosts = ['wereport-host']
 
 def test_nextcloud(host):
     cmd = host.run("""
