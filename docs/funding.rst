@@ -22,10 +22,10 @@ All expenses are proposed and approved as follows:
 #. Someone posts a message `in the forum
    <https://forum.enough.community/c/funding>`__ asking for funds to be released.
 #. The request is discussed by active volunteers. A volunteer is an
-   individual who does not receive any monetary compensation, either
-   directly or indirectly for the work done on Enough. A volunteer
-   is active if they contributed in a quantifiable way to Enough
-   in the past six months.
+   member of the Enough Community who does not receive any monetary
+   compensation, either directly or indirectly for the work done on
+   Enough. A volunteer is active if they contributed in a quantifiable
+   way to Enough in the past six months.
 #. Ideally there is a consensus between the volunteers. If at least
    one volunteer asks for a vote, it is organized in the form of a yes
    or no question. The winner of the vote is the one that gets the
