@@ -74,9 +74,9 @@ Inventory
 
 The ansible inventory is created by the
 ``molecule/infrastructure/create.yml`` playbook and stored in the
-``hosts.yml`` file every time the ``molecule create`` command runs.
-The inventory is read from the ``hosts-base.yml`` file, the IP address of each
-host is added and the result is written into ``hosts.yml``.
+``inventory/01-hosts.yml`` file every time the ``molecule create -s
+preprod`` command runs.  The inventory variables (such as the ssh port
+number) are read from the ``hosts-base.yml`` file.
 
 Updating
 --------
