@@ -3,23 +3,22 @@
 Monitoring howto
 ================
 
-As explained in "Object logic style vs Apply logic style" we
-follow an "apply logic style" for Icinga 2 configuration, with is
-pretty well suited for generic monitoring setup on homogeneous clusters.
-Fortunately it does not disallow adding isolated services (à la Nagios),
-so future exceptions to the rules may be handled this way.
+Icinga2 follows an "apply logic style" for its configuration but it
+does not disallow adding isolated services, to handle exceptions to
+the rules.
 
-For most of the service definitions, they are based on predefined
+Most of the service definitions are based on predefined
 commands which are documented
 `here <https://www.icinga.com/docs/icinga2/latest/doc/10-icinga-template-library/#plugin-check-commands-for-monitoring-plugins>`__.
 
 Monitoring deployment
 ---------------------
 
-Monitoring is deployed as long as the playbook
-`molecule/icinga/icinga-playbook.yml` has been imported. The Icinga2 master
-is `icinga-host`. See also `inventor/host_vars/icinga-host/monitoring.yml` for
-specific deployment attributes: icingaweb credentials, https, virtualhost fqdn.
+Monitoring is deployed by importing the
+`molecule/icinga/icinga-playbook.yml` playbook. The Icinga2 master is
+`icinga-host`. See also
+`inventory/host_vars/icinga-host/monitoring.yml` for specific
+deployment attributes: icingaweb credentials, https, virtualhost fqdn.
 
 Each host is monitored by default.
 
