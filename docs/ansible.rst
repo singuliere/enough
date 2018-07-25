@@ -86,20 +86,4 @@ The `/srv/checkout` directory is a clone of the `ansible repository
 
 .. code::
 
-
-Testing a production upgrade
-----------------------------
-
-Testing strategy to verify we can go from nothing to the most recent
-version and also upgrade from the currently used version to the most
-recent version. Assuming we always tag the repository before applying
-it to the production.
-
-Using an empty tenant:
-
-* git checkout previous-version-tag
-* molecule verify # nothing -> previous-version-tag
-* git checkout master # version under test
-* molecule verify # previous-version-tag -> master
-* molecule tests # nothing -> master
    git pull --rebase
