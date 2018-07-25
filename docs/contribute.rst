@@ -25,7 +25,7 @@ Bugs and features list
 ----------------------
 
 Each service under the `enough.community` domain can be worked on
-independantly and have their own integration tests. There is no need
+independently and have their own integration tests. There is no need
 to understand how `Weblate` is deployed if you're improving
 `Discourse`, for instance.
 
