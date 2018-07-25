@@ -112,6 +112,13 @@
   become: False
 
 - name: occ app:enable activity
+  shell: |
+    {{ app_sh }} php -f occ app:enable activity
+    {{ app_sh }} php -f occ config:app:set --value=1 activity notify_email_file_created
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
 - name: git clone https://lab.{{ domain }}/main/app/
   git:
     repo: "https://lab.{{ domain }}/main/app/"
