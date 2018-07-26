@@ -6,19 +6,27 @@ Hosting and infrastructure
 OpenStack at OVH
 ----------------
 
-All virtual machines are in the OVH OpenStack cloud, under the user
-**ce188933-ovh** bound to the `enough.community admin mail <admin@enough.community>`_.
+All virtual machines are in the OVH OpenStack cloud. The OVH account
+is **ce188933-ovh** (login via https://www.ovh.com/auth/) and is bound
+to the `enough.community admin mail <admin@enough.community>`_.
 
-The following OpenStack projects have been defined:
+The following OVH projects have been defined:
 
-* **Contributors**
+.. note::
+   The OVH user is the paying customer and the OVH projects are
+   completely isolated from each other. The OVH interface allows to
+   create OpenStack tenants in a given project. An OpenStack tenant
+   only has access to the OVH project in which it has been created.
+   A tenant has access to all the regions.
+
+* **OVH Project: Contributors**
    - Region **DE1**: used for testing by Loïc Dachary
    - Region **SBG5**: used for testing by François Poulain
 
-* **CI**
+* **OVH Project: CI**
    - Region **DE1**: GitLab runner
 
-* **Production**
+* **OVH Project: Production**
    - Region **GRA5**: all Ansible maintained production VMs
    - Region **SBG5**: the VM running ansible to control production VMs
      in the **GRA5** region.
