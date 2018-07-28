@@ -1,7 +1,7 @@
 version: '2'
 services:
   weblate:
-    image: weblate/weblate:3.0.1-4
+    image: weblate/weblate:3.1.1-1
     links:
       - database
       - cache
