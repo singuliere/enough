@@ -1,5 +1,5 @@
 Extending `enough.community`
-===========================
+============================
 
 After :ref:`getting started <getting_started>`, you may want to add some
 host/service in `enough.community` :ref:`infrastructure <infrastructure>`.
