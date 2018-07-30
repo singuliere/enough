@@ -57,7 +57,7 @@ Let's start with a `dummy` scenario.
 Cookie Cutter
 ^^^^^^^^^^^^^
 
-We can use cookiecutter for creating scenario. Il will ask for some variables
+We can use cookiecutter for creating scenario. It will ask for some variables
 and apply them in the template defined in the `cookiecutter` directory:
 
 ::
