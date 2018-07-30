@@ -1,0 +1,18 @@
+---
+
+- import_playbook: ../misc/history-playbook.yml
+- import_playbook: ../misc/sexy-debian-playbook.yml
+- import_playbook: ../misc/sshd-playbook.yml
+{% if cookiecutter.use_monitoring == "y" %}
+- import_playbook: ../icinga/test-icinga-playbook.yml
+- import_playbook: ../icinga/icinga-playbook.yml
+{% endif %}
+{% if cookiecutter.use_dns == "y" %}
+- import_playbook: ../bind/bind-playbook.yml
+- import_playbook: ../bind/bind-client-playbook.yml
+{% endif %}
+{% if cookiecutter.use_mails == "y" %}
+- import_playbook: ../postfix/postfix-playbook.yml
+{% endif %}
+- import_playbook: {{ cookiecutter.scenario_name }}-playbook.yml
+- import_playbook: ../misc/commit_etc-playbook.yml
