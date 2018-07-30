@@ -13,13 +13,11 @@ provisioner:
   lint:
     name: ansible-lint
   env:
-    # https://github.com/metacloud/molecule/issues/1008 for why ../../.. and ../ only
-    ANSIBLE_ROLES_PATH: roles:../../../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles:../packages/roles:../jdauphant.nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles:../packages/roles:../jdauphant.nginx/roles
   inventory:
     links:
-      # Path is relative to .molecule folder
-      group_vars: ../certs_group_vars
-      host_vars:  ../certs_host_vars
+      group_vars: certs_group_vars
+      host_vars:  certs_host_vars
 scenario:
   name: certs
   test_sequence:

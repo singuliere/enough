@@ -38,7 +38,7 @@ Zones
 -----
 
 enough.community
-```````````````
+````````````````
 
 The `enough.community` zone is managed on a dedicated virtual machine
 `ns1.enough.community`. It is generated via `the bind playbook
@@ -53,7 +53,7 @@ The `enough.community` zone is managed on a dedicated virtual machine
 * The `SPF` **TXT** record help :doc:`send mail <postfix>` successfully.
 
 test.enough.community
-````````````````````
+`````````````````````
 
 The `test.enough.community` zone is managed on the same dedicated virtual machine
 `ns1.enough.community`. It is generated via `the bind playbook

@@ -12,6 +12,9 @@
         {% if http_vhost_string is defined %}
           http_string = "{{ http_vhost_string }}"
         {% endif %}
+        {% if http_vhost_status is defined %}
+          http_expect = "{{ http_vhost_status }}"
+        {% endif %}
         }
     insertafter: 'Define httpd services and attributes'
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf

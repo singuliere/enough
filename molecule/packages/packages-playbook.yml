@@ -31,6 +31,7 @@
       http_vhost_name: Packages
       http_vhost_fqdn: "{{ packages_vhost_fqdn }}"
       http_vhost_uri: "/"
-      http_vhost_string: "apt-key"
+      http_vhost_status: 403
+      http_vhost_string: "Forbidden"
 
   become: True
