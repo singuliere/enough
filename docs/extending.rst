@@ -52,29 +52,35 @@ modified.
 Adding a scenario
 -----------------
 
-Copying files
+Let's start with a `dummy` scenario.
+
+Cookie Cutter
 ^^^^^^^^^^^^^
 
-First we create directories:
+We can use cookiecutter for creating scenario. Il will ask for some variables
+and apply them in the template defined in the `cookiecutter` directory:
 
 ::
 
- mkdir -p molecule/dummy/roles molecule/dummy/tests
+ # cookiecutter cookiecutter
+ scenario_name [scenario_name]: dummy
+ role_name [dummy]:
+ vm_name [dummy-host]:
+ use_extra_storage [n]:
+ use_dns [y]: n
+ use_mails [y]: n
+ use_monitoring [y]: n
 
-Then we select a scenario to get inspiration from. The misc scenario is a good
-starting point.
+Then we move the obtained scenario in the molecule directory:
 
 ::
 
- cp -P molecule/misc/{create,destroy,molecule}.yml molecule/dummy/
-
-Notice the `-P` option for preserving links. The files `create.yml` and
-`destroy.yml` are linked to the infrastructure scenario.
+ mv dummy/ molecule/
 
 Scenario definition
 ^^^^^^^^^^^^^^^^^^^
 
-Next, edit `molecule/dummy/molecule.yml`. You should at least:
+Next, edit `molecule/dummy/molecule.yml`. You could at least:
 
 - edit the scenario's name
   ::
@@ -82,7 +88,7 @@ Next, edit `molecule/dummy/molecule.yml`. You should at least:
    scenario:
      name: dummy
 
-- define the hosts to create.
+- control the hosts to be created
   ::
 
     - name: dummy-host

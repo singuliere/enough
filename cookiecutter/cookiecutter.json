@@ -1,0 +1,9 @@
+{
+  "scenario_name":    "scenario_name",
+  "role_name":        "{{ cookiecutter.scenario_name }}",
+  "vm_name":          "{{ cookiecutter.scenario_name }}-host",
+  "use_extra_storage":"n",
+  "use_dns":          "y",
+  "use_mails":        "y",
+  "use_monitoring":   "y"
+}
