@@ -12,7 +12,7 @@ if ! test -f /var/www/html/enough.apk || ! git pull --ff-only | grep -q up-to-da
   DOCKER_OPTIONS="--rm "
   DOCKER_OPTIONS+="--volume $(pwd):$(pwd) --workdir $(pwd) "
   DOCKER_OPTIONS+="--volume /srv/gradle-caches:/root/.gradle/caches "
-  DOCKER_OPTIONS+="--add-host lab.enough.community:$(getent hosts lab.securedrop.club | cut -f1 -d' ') "
+  DOCKER_OPTIONS+="--add-host lab.enough.community:$(getent hosts lab.enough.community | cut -f1 -d' ') "
   DOCKER_OPTIONS+="--volume /srv/Enough.keystore:$(pwd)/Enough.keystore "
   DOCKER_OPTIONS+="--env PASSWORD={{packages_apk_password}} "
   docker run $DOCKER_OPTIONS runmymind/docker-android-sdk ./gradlew build -x findBugs -x pmd -x test

@@ -27,9 +27,9 @@
      Key-Length: 4096
      Subkey-Type: ELG-E
      Subkey-Length: 4096
-     Name-Real: SecureDrop test packages
+     Name-Real: Enough test packages
      Name-Comment: with no passphrase
-     Name-Email: contact@securedrop.club
+     Name-Email: contact@enough.community
      Expire-Date: 0
      %no-protection
      %commit
