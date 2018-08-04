@@ -119,6 +119,19 @@
     chdir: "{{ app_dir }}"
   become: False
 
+- name: git clone https://lab.{{ domain }}/main/registration/
+  git:
+    repo: "https://lab.{{ domain }}/main/registration/"
+    force: yes
+    dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/registration
+
+- name: occ app:enable registration
+  shell: |
+    {{ app_sh }} php -f occ app:enable registration
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
 - name: git clone https://lab.{{ domain }}/main/app/
   git:
     repo: "https://lab.{{ domain }}/main/app/"
