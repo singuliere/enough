@@ -130,6 +130,7 @@
     {{ app_sh }} php -f occ config:app:set --value='communicate securely and privately' theming slogan
     {{ app_sh }} php -f occ config:app:set --value=http://enough.community theming url
     {{ app_sh }} php -f occ config:app:set --value=Enough theming name
+    {{ app_sh }} php -f occ config:app:set --value=image/png theming logoMime
   args:
     chdir: "{{ app_dir }}"
   become: False
