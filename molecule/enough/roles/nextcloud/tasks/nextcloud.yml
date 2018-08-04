@@ -168,6 +168,14 @@
     chdir: "{{ app_dir }}"
   become: False
 
+- name: (re)create nextcloud to take into account all customizations above
+  docker_service:
+    files: docker-compose-infrastructure.yml
+    project_src: "{{ app_dir }}"
+    state: present
+    restarted: yes
+  become: False
+
 - name: apt-get install tor
   apt:
     name: tor
