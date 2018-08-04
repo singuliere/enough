@@ -119,17 +119,44 @@
     chdir: "{{ app_dir }}"
   become: False
 
+- name: git clone https://lab.{{ domain }}/main/registration/
+  git:
+    repo: "https://lab.{{ domain }}/main/registration/"
+    force: yes
+    dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/registration
+
+- name: occ app:enable registration
+  shell: |
+    {{ app_sh }} php -f occ app:enable registration
+  args:
+    chdir: "{{ app_dir }}"
+  become: False
+
 - name: git clone https://lab.{{ domain }}/main/app/
   git:
     repo: "https://lab.{{ domain }}/main/app/"
     force: yes
     dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/enough
 
+- name: apt-get install rsync
+  apt:
+    name: rsync
+    state: present
+
+- name: install Enough theme
+  shell: |
+    rsync -av --delete apps/enough/theme/ themes/enough/
+  args:
+    chdir: /var/lib/docker/volumes/apache_nextcloud/_data
+
 - name: occ config:app:set theming
   shell: |
     {{ app_sh }} php -f occ config:app:set --value='communicate securely and privately' theming slogan
     {{ app_sh }} php -f occ config:app:set --value=http://enough.community theming url
     {{ app_sh }} php -f occ config:app:set --value=Enough theming name
+    {{ app_sh }} php -f occ config:app:set --value=image/png theming logoMime
+    {{ app_sh }} php -f occ config:system:set theme --value=enough --type string
+    {{ app_sh }} php -f occ maintenance:theme:update
   args:
     chdir: "{{ app_dir }}"
   become: False
