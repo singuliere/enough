@@ -1,0 +1,7 @@
+- name: recreate nextcloud to take into account configuration changes
+  docker_service:
+    files: docker-compose-infrastructure.yml
+    project_src: "{{ app_dir }}"
+    state: present
+    restarted: yes
+  become: False

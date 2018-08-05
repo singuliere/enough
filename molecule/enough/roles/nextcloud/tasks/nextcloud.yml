@@ -110,6 +110,7 @@
   args:
     chdir: "{{ app_dir }}"
   become: False
+  notify: recreate nextcloud to take into account configuration changes
 
 - name: occ app:enable activity
   shell: |
@@ -118,6 +119,7 @@
   args:
     chdir: "{{ app_dir }}"
   become: False
+  notify: recreate nextcloud to take into account configuration changes
 
 - name: git clone https://lab.{{ domain }}/main/registration/
   git:
@@ -148,6 +150,7 @@
     rsync -av --delete apps/enough/theme/ themes/enough/
   args:
     chdir: /var/lib/docker/volumes/apache_nextcloud/_data
+  notify: recreate nextcloud to take into account configuration changes
 
 - name: occ config:app:set theming
   shell: |
@@ -160,20 +163,13 @@
   args:
     chdir: "{{ app_dir }}"
   become: False
+  notify: recreate nextcloud to take into account configuration changes
 
 - name: occ app:enable enough
   shell: |
     {{ app_sh }} php -f occ app:enable enough
   args:
     chdir: "{{ app_dir }}"
-  become: False
-
-- name: (re)create nextcloud to take into account all customizations above
-  docker_service:
-    files: docker-compose-infrastructure.yml
-    project_src: "{{ app_dir }}"
-    state: present
-    restarted: yes
   become: False
 
 - name: apt-get install tor
