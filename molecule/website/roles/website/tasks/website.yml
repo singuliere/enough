@@ -69,6 +69,12 @@
     - default
     - hugo
 
+- name: apt-get install libsass1/buster
+  apt:
+    name: libsass1
+    default_release: buster
+    state: present
+
 - name: apt-get install hugo
   apt:
     name: hugo
