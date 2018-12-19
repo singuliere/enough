@@ -2,7 +2,6 @@
 - import_playbook: molecule/misc/history-playbook.yml
 - import_playbook: molecule/misc/sexy-debian-playbook.yml
 - import_playbook: molecule/misc/sshd-playbook.yml
-- import_playbook: molecule/certs/certs-playbook.yml
 - import_playbook: molecule/bind/bind-playbook.yml
 - import_playbook: molecule/bind/bind-client-playbook.yml
 - import_playbook: molecule/authorized_keys/authorized-keys-playbook.yml

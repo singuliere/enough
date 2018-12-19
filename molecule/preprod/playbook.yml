@@ -1,6 +1,7 @@
 ---
 
 - import_playbook: ../icinga/test-icinga-playbook.yml
+- import_playbook: ../certs/certs-playbook.yml
 - import_playbook: ../../enough-community-playbook.yml
 
 - name: display domain name
