@@ -1,12 +1,25 @@
 ---
-- name: ensure that /usr/local/share/ca-certificates/infrastructure exists
+- name: mkdir -p /usr/local/share/ca-certificates/infrastructure
   file:
     path: /usr/local/share/ca-certificates/infrastructure
     state: directory
+    owner: root
+    group: root
+    mode: 0755
 
-- name: Install certs
+- name: upload fake LE certs
   copy:
     src: "files/certs/{{ item }}"
+    dest: "/usr/local/share/ca-certificates/infrastructure/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items: "{{ certbot_fake_le_certs }}"
+
+- name: link or unlink LE fake .crt from .pem
+  file:
+    src: "/usr/local/share/ca-certificates/infrastructure/{{ item }}"
     dest: "/usr/local/share/ca-certificates/infrastructure/{{ item | replace('.pem', '.crt') }}"
-  with_items: "{{ certs }}"
-  notify: update certs
+    state: "{% if with_fake_LE | default(false) %}link{% else %}absent{% endif %}"
+  notify: update-ca-certificates
+  with_items: "{{ certbot_fake_le_certs }}"  

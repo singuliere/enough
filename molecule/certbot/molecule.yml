@@ -6,22 +6,20 @@ lint:
 platforms:
   - name: bind-host
     flavor: "s1-2"
-  - name: icinga-host
+  - name: certbot-host
     flavor: "s1-2"
-  - name: packages-host
-    flavor: "s1-4"
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../bind/roles:../icinga/roles:../certs/roles:../certbot/roles:../jdauphant.nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../bind/roles:../jdauphant.nginx/roles
   inventory:
     links:
-      group_vars: packages_group_vars
-      host_vars:  ../../inventory/host_vars
+      group_vars: ../../inventory/group_vars
+      host_vars:  certbot_host_vars
 scenario:
-  name: packages
+  name: certbot
   test_sequence:
     - destroy
     - create
