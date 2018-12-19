@@ -1,0 +1,32 @@
+---
+- name: setup fake LE
+  hosts: all
+  become: true
+
+  roles:
+    - role: jdauphant.nginx
+      vars:
+        nginx_sites:
+          default:
+            - listen 80
+            - server_name {{ inventory_hostname }}.{{ domain }}
+
+- name: setup fake (because of host_vars/certbot-host.yml) LE
+  hosts: certbot-host
+  become: true
+
+  roles:
+    - role: certbot
+      vars:
+        admins_email: "contact@something.com"
+        vhost_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+
+- name: setup real (because of host_vars/bind-host.yml) LE
+  hosts: bind-host
+  become: true
+
+  roles:
+    - role: certbot
+      vars:
+        admins_email: "contact@something.com"
+        vhost_fqdn: "{{ inventory_hostname }}.{{ domain }}"
