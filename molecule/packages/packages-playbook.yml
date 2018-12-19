@@ -1,27 +1,19 @@
 ---
-- name: install nginx
+- name: install packages
   hosts: packages-host
+  become: true
 
   roles:
     - role: jdauphant.nginx
-      nginx_http_params:
-        - access_log "/var/log/nginx/access.log"
-      nginx_sites:
-        default:
-          - listen "{% if with_https is defined and with_https == true %}8080{% else %}80{% endif %}"
-          - server_name _
-          - root /var/www/html/
+      vars:
+        nginx_sites:
+          default:
+            - listen 80
+            - server_name {{ packages_vhost_fqdn }}
+    - role: certbot
+      vars:
+        vhost_fqdn: "{{ packages_vhost_fqdn }}"
 
-  tasks:
-    - name: restart nginx
-      shell: systemctl restart nginx
-
-  become: True
-
-- name: install packages
-  hosts: packages-host
-
-  roles:
     - { role: ansible-role-docker, docker_install_compose: false }
     - { role: docker }
 
@@ -33,5 +25,3 @@
       http_vhost_uri: "/"
       http_vhost_status: 403
       http_vhost_string: "Forbidden"
-
-  become: True
