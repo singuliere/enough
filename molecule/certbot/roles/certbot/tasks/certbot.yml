@@ -16,4 +16,5 @@
       --authenticator standalone --installer nginx               \
       --pre-hook  "systemctl stop nginx"                         \
       --post-hook "systemctl start nginx"                        \
+      --redirect                                                 \
       {% if with_fake_LE | default(false) %}--test-cert{% endif %}
