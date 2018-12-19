@@ -1,27 +1,6 @@
----
-- name: Install custom certificates
-  hosts: [ 'all' ]
+- name: install fake LE certificates, if needed
+  hosts: all
   become: true
 
-  tasks:
-
-  - name: install letsencrypt fakeroot when needed
-    include_role:
-      name: install_certs
-    vars:
-      certs:
-        - fakeleintermediatex1.pem
-        - fakelerootx1.pem
-    when:
-      - 'with_fake_LE is defined'
-      - 'with_fake_LE == true'
-
-  - name: uninstall letsencrypt fakeroot when needed
-    include_role:
-      name: uninstall_certs
-    vars:
-      certs:
-        - fakeleintermediatex1.pem
-        - fakelerootx1.pem
-    when:
-      - 'with_fake_LE is undefined or with_fake_LE != true'
+  roles:
+    - role: install_certs

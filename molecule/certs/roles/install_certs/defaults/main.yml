@@ -1,0 +1,4 @@
+---
+certbot_fake_le_certs:
+  - fakeleintermediatex1.pem
+  - fakelerootx1.pem
