@@ -34,6 +34,7 @@
 - name: git clone https://github.com/WeblateOrg/docker
   git:
     repo: 'https://github.com/WeblateOrg/docker'
+    version: 706fb3675c14c47d22a97f1f1df4698f47ff245d
     force: yes
     dest: /srv/weblate
   become: False
