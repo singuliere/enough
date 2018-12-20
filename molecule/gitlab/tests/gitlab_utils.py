@@ -5,15 +5,9 @@ import yaml
 
 
 def get_address(host):
-    for vars_dir in ('group_vars/all', '../../inventory/group_vars/all'):
-        with_https_path = vars_dir + '/with_https.yml'
-        if os.path.exists(with_https_path):
-            with_https = yaml.load(open(with_https_path))
-            if with_https and with_https.get('with_https'):
-                return ('https', 'lab.' + yaml.load(
-                    open(vars_dir + '/domain.yml'))['domain'])
-    inventory = yaml.load(open(host.backend.ansible_inventory))
-    return ('http', inventory['all']['hosts']['gitlab-host']['ansible_host'])
+    vars_dir = '../../inventory/group_vars/all'
+    return ('https', 'lab.' + yaml.load(
+        open(vars_dir + '/domain.yml'))['domain'])
 
 
 def get_password():
@@ -51,7 +45,7 @@ def create_user(url, headers, user, password):
     r.raise_for_status()
 
 
-def get_or_create_namespace(url, headers, user):
+def get_namespace(url, headers, user):
     r = requests.get(url + '/namespaces?search=' + user,
                      headers=headers,
                      verify='../../certs')
@@ -60,7 +54,7 @@ def get_or_create_namespace(url, headers, user):
 
 
 def recreate_test_project(url, headers, user, project):
-    namespace_id = get_or_create_namespace(url, headers, user)
+    namespace_id = get_namespace(url, headers, user)
     r = requests.get(url + '/projects/' + user + '%2F' + project,
                      headers=headers,
                      verify='../../certs')

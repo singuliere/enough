@@ -54,7 +54,7 @@
       - redis:redisio
     ports:
       - "22:22"
-      - "{% if with_https is defined and with_https == true %}8080{% else %}80{% endif %}:80"
+      - "8080:80"
     volumes:
       - /var/run/docker.sock:/run/docker.sock
       - /opt/gitlab/data:/home/git/data
@@ -70,9 +70,9 @@
       SMTP_OPENSSL_VERIFY_MODE: 'none'
       SMTP_AUTHENTICATION: ':plain'
       GITLAB_SIGNUP: 'true'
-      GITLAB_PORT: "{% if with_https is defined and with_https == true %}443{% else %}80{% endif %}"
+      GITLAB_PORT: "443"
       GITLAB_HOST: "lab.{{ domain }}"
-      GITLAB_HTTPS: "{% if with_https is defined and with_https == true %}true{% else %}false{% endif %}"
+      GITLAB_HTTPS: "true"
       OAUTH_BLOCK_AUTO_CREATED_USERS: 'false'
       GITLAB_SSH_PORT: '22'
       GITLAB_SECRETS_SECRET_KEY_BASE: "{{ gitlab_secrets_secret_key_base }}"
@@ -89,18 +89,3 @@
   apt:
     name: haveged
     state: present
-
-- name: start https-portal
-  docker_container:
-    name: https-portal
-    image: steveltn/https-portal:1.2.4
-    restart_policy: always
-    ports:
-      - '80:80'
-      - '443:443'
-    env:
-      CLIENT_MAX_BODY_SIZE: 0
-      DOMAINS: 'gitlab.{{ domain }} -> http://gitlab.{{ domain }}:8080, lab.{{ domain }} -> http://gitlab.{{ domain }}:8080'
-      STAGE: "{% if with_fake_LE is undefined %}production{% else %}staging{% endif %}"
-      SERVER_NAMES_HASH_BUCKET_SIZE: 64
-    state: "{% if with_https is defined and with_https == true %}started{% else %}absent{% endif %}"
