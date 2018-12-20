@@ -6,8 +6,6 @@ lint:
 platforms:
   - name: bind-host
     flavor: "s1-2"
-  - name: postfix-host
-    flavor: "s1-2"
   - name: icinga-host
     flavor: "s1-2"
   - name: chat-host
@@ -17,10 +15,10 @@ provisioner:
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles:../packages/roles:../jdauphant.nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../bind/roles:../icinga/roles:../jdauphant.nginx/roles:../certbot/roles:../certbot/roles
   inventory:
     links:
-      group_vars: ../../inventory/group_vars
+      group_vars: chat_group_vars
       host_vars:  ../../inventory/host_vars
 scenario:
   name: chat

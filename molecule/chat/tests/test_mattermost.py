@@ -1,9 +1,7 @@
 testinfra_hosts = ['chat-host']
 
 def test_mattermost(host):
-    cmd = host.run("""
-    exit 0
-    """)
-    print(cmd.stdout)
-    print(cmd.stderr)
-    assert 0 == cmd.rc
+    with host.sudo():
+        host.run("apt-get install -y curl")
+
+    assert host.run("curl -s -m 5 https://chat.$(hostname -d)").rc == 0

@@ -29,11 +29,7 @@ services:
         - PGID=1000
     restart: unless-stopped
     ports:
-{% if with_https is not defined or with_https == false %}
-      - "80:8000"
-{% else %}
       - "8000:8000"
-{% endif %}
     volumes:
       - ./volumes/app/mattermost/config:/mattermost/config:rw
       - ./volumes/app/mattermost/data:/mattermost/data:rw
@@ -46,19 +42,3 @@ services:
       - MM_DBNAME=mattermost
       # in case your config is not in default location
       #- MM_CONFIG=/mattermost/config/config.json
-
-{% if with_https is defined and with_https == true %}
-  https-portal:
-    image: steveltn/https-portal:1.2.4
-    ports:
-      - '80:80'
-      - '443:443'
-    restart: always
-    environment:
-      DOMAINS: '{{ chat_vhost_fqdn }} -> http://{{ chat_vhost_fqdn }}:8000'
-      WEBSOCKET: 'true'
-{% if with_fake_LE is undefined %}
-      STAGE: production
-{% endif %}
-      SERVER_NAMES_HASH_BUCKET_SIZE: 128
-{% endif %}
