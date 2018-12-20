@@ -1,6 +1,7 @@
 [submodule "roles/ansible-role-docker"]
 	path = molecule/infrastructure/roles/ansible-role-docker
 	url = https://github.com/geerlingguy/ansible-role-docker
+        branch = 2.5.2
 [submodule "roles/debops.etc_aliases"]
 	path = molecule/postfix/roles/debops.etc_aliases
 	url = https://github.com/debops/ansible-etc_aliases
