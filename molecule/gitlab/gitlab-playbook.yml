@@ -9,6 +9,45 @@
     - { role: ansible-role-docker, docker_install_compose: false }
     - { role: gitlab }
 
+    - role: jdauphant.nginx
+      vars:
+        nginx_configs:
+          gitlab:
+            - |
+              upstream backend {
+                server 127.0.0.1:8080;
+                keepalive 32;
+              }
+
+        nginx_sites:
+          default:
+            - |
+              listen 80;
+              server_name {{ gitlab_vhost_fqdn }};
+              server_name {{ short_gitlab_vhost_fqdn }};
+              location / {
+                  client_max_body_size 50M;
+                  proxy_set_header Connection "";
+                  proxy_set_header Host $http_host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+                  proxy_set_header X-Frame-Options SAMEORIGIN;
+                  proxy_buffers 256 16k;
+                  proxy_buffer_size 16k;
+                  proxy_read_timeout 600s;
+                  proxy_cache_revalidate on;
+                  proxy_cache_min_uses 2;
+                  proxy_cache_use_stale timeout;
+                  proxy_cache_lock on;
+                  proxy_http_version 1.1;
+                  proxy_pass http://backend;
+              }
+    - role: certbot
+      vars:
+        vhost_fqdn: "{{ gitlab_vhost_fqdn }},{{ short_gitlab_vhost_fqdn }}"
+
+
     - role: monitor_http_vhost
       http_vhost_name: Gitlab
       http_vhost_fqdn: "gitlab.{{ domain }}"
