@@ -8,11 +8,7 @@ services:
     volumes:
       - weblate-data:/app/data
     ports:
-{% if with_https is defined and with_https == true %}
       - '8000:80'
-{% else %}
-      - '80:80'
-{% endif %}
     env_file:
       - ./environment
     restart: always
@@ -29,15 +25,9 @@ services:
       - WEBLATE_ADMIN_NAME=admin
       - WEBLATE_ADMIN_EMAIL={{ WEBLATE_ADMIN_EMAIL }}
       - WEBLATE_ADMIN_PASSWORD={{ WEBLATE_ADMIN_PASSWORD }}
-{% if with_https is defined and with_https == true %}
       - WEBLATE_DEBUG=0
       - WEBLATE_ENABLE_HTTPS=1
       - WEBLATE_ALLOWED_HOSTS={{ weblate_vhost_fqdn }}
-{% else %}
-      - WEBLATE_DEBUG=1
-      - WEBLATE_ENABLE_HTTPS=0
-      - WEBLATE_ALLOWED_HOSTS=*
-{% endif %}
       - WEBLATE_REGISTRATION_OPEN=1
   database:
     image: postgres:9.6-alpine
@@ -52,21 +42,6 @@ services:
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis-data:/data
-{% if with_https is defined and with_https == true %}
-  https-portal:
-    image: steveltn/https-portal:1.2.4
-    ports:
-      - '80:80'
-      - '443:443'
-    restart: always
-    environment:
-      DOMAINS: '{{ weblate_vhost_fqdn }} -> http://{{ weblate_vhost_fqdn }}:8000'
-{% if with_fake_LE is undefined %}
-      STAGE: production
-{% endif %}
-      SERVER_NAMES_HASH_BUCKET_SIZE: 128
-{% endif %}
-      PROXY_READ_TIMEOUT: 3600
 volumes:
   weblate-data: {}
   postgres-data: {}
