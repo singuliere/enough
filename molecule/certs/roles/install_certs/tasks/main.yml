@@ -13,7 +13,7 @@
     dest: "/usr/local/share/ca-certificates/infrastructure/{{ item }}"
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
   with_items: "{{ certbot_fake_le_certs }}"
 
 - name: link or unlink LE fake .crt from .pem
