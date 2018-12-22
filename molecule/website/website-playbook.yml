@@ -1,23 +1,10 @@
 ---
 - name: install website
   hosts: website-host
+  become: true
 
   roles:
     - { role: website }
-
-    - role: jdauphant.nginx
-      vars:
-        nginx_sites:
-          default:
-            - |
-              listen 80;
-              server_name {{ website_vhost_fqdn }};
-              server_name www.{{ website_vhost_fqdn }};
-              root /var/www/html/;
-    - role: certbot
-      vars:
-        vhost_fqdn: "{{ website_vhost_fqdn }},www.{{ website_vhost_fqdn }}"
-
 
     - role: monitor_http_vhost
       http_vhost_name: Website
@@ -25,4 +12,23 @@
       http_vhost_uri: "/"
       http_vhost_string: "Enough"
 
-  become: True
+# the repetition of play is intentional to avoid a weird bug https://paste2.org/HtmME4EV
+# it may be happening only with ansible 2.4
+- name: install letsencrypt on {{ website_vhost_fqdn }}
+  hosts: website-host
+  become: true
+
+  roles:
+    - role: letsencrypt-nginx
+      vars:
+        letsencrypt_nginx_fqdn: "{{ website_vhost_fqdn }}"
+
+- name: install letsencrypt on www.{{ website_vhost_fqdn }}
+  hosts: website-host
+  become: true
+
+  roles:
+    - role: letsencrypt-nginx
+      vars:
+        letsencrypt_nginx_fqdn: "www.{{ website_vhost_fqdn }}"
+
