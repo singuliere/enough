@@ -9,6 +9,3 @@ icingaadmins_email: icingaadmins@{{ domain }}
 
 
 icinga_vhost_fqdn: icinga.{{ domain }}
-
-# available but un-needed options for let's encrypt
-# certbot_redirect: true
