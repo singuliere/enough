@@ -1,0 +1,4 @@
+---
+- include_tasks: letsencrypt-nginx.yml
+  when: not (letsencrypt_nginx_client | default(false))
+- import_tasks: certs.yml
