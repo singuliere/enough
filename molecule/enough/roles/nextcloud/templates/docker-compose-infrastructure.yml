@@ -23,7 +23,7 @@ services:
     environment:
       - VIRTUAL_HOST={{ vhost_fqdn }}
       - LETSENCRYPT_HOST={{ vhost_fqdn }}
-      - LETSENCRYPT_EMAIL=admin@securedrop.club
+      - LETSENCRYPT_EMAIL=admin@{{ production_domain }}
       - POSTGRES_HOST=db
     env_file:
       - db.env

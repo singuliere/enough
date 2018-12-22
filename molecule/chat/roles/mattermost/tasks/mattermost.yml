@@ -21,9 +21,18 @@
   become: False
 
 - name: create mattermost directories
-  shell: |
-    mkdir -p /srv/mattermost/volumes/app/mattermost/{data,config,logs}
-    chown -R debian:debian /srv/mattermost/volumes/app
+  file:
+    dest: '/srv/mattermost/volumes/{{ item }}'
+    state: 'directory'
+    owner: 'debian'
+    group: 'debian'
+    mode: '0755'
+  with_items:
+    - app
+    - app/mattermost
+    - app/mattermost/data
+    - app/mattermost/config
+    - app/mattermost/logs
 
 - name: Copy docker-compose-infrastructure.yml
   template:
