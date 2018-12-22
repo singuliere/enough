@@ -1,5 +1,5 @@
 ---
-- name: setup DNS server
+- name: setup monitoring DNS server
   hosts: bind-host
   become: True
 
