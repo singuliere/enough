@@ -4,16 +4,9 @@
   become: true
 
   roles:
-    - role: jdauphant.nginx
+    - role: letsencrypt-nginx
       vars:
-        nginx_sites:
-          default:
-            - listen 80
-            - server_name {{ packages_vhost_fqdn }}
-            - root /var/www/html/
-    - role: certbot
-      vars:
-        vhost_fqdn: "{{ packages_vhost_fqdn }}"
+        letsencrypt_nginx_fqdn: "{{ packages_vhost_fqdn }}"
 
     - { role: ansible-role-docker, docker_install_compose: false }
     - { role: docker }
