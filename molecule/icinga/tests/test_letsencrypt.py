@@ -4,24 +4,21 @@ import requests
 import pytest
 import yaml
 
-def get_master_fqdn(host):
-    host= host.get_host('ansible://icinga-host', ansible_inventory=host.backend.ansible_inventory)
-    with host.sudo():
-        f = host.file("/etc/nginx/sites-enabled/icinga-host")
-        return re.search('server_name (.*);', f.content_string).group(1)
+testinfra_hosts = ['icinga-host']
+
+def get_address():
+    vars_dir = '../../inventory/group_vars/all'
+    return 'icinga.' + yaml.load(
+        open(vars_dir + '/domain.yml'))['domain']
     
-def try_if_letsencrypt(host):
-    host= host.get_host('ansible://icinga-host', ansible_inventory=host.backend.ansible_inventory)
-    with host.sudo():
-        return host.file("/etc/letsencrypt").exists
-
 def test_icingaweb2_login_screen(host):
-    if not try_if_letsencrypt(host):
-        return True
-
-    address = get_master_fqdn(host)
+    address = get_address()
     print ('https://{address}/icingaweb2/authentication/login'.format(address=address))
     s = requests.Session()
+    r = s.get('http://{address}/icingaweb2/authentication/login'.format(
+        address=address,
+    ), timeout=5)
+    r.status_code = 302
     s.verify = '../../certs'
     r = s.get('https://{address}/icingaweb2/authentication/login'.format(
         address=address,

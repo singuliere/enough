@@ -60,9 +60,9 @@
     name: hugo
     state: present
 
-- name: /var/www/html is owned by debian
+- name: /usr/share/nginx/html is owned by debian
   file:
-    path: /var/www/html
+    path: /usr/share/nginx/html
     state: directory
     owner: debian
 

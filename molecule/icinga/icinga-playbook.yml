@@ -13,25 +13,33 @@
 
 
 - name: install icinga master
-
   hosts: icinga-host
   become: true
-  tasks:
 
-  - name: install icinga master
-    include_role:
-      name: icinga2
+  roles:
+    - role: icinga2
+    - role: letsencrypt-nginx
+      vars:
+        letsencrypt_nginx_email: "{{ icingaadmins_email }}"
+        letsencrypt_nginx_fqdn: "{{ icinga_vhost_fqdn }}"
+        letsencrypt_nginx_sites: |
+            location ~ ^/icingaweb2/index\.php(.*)$ {
+              fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+              fastcgi_index index.php;
+              include fastcgi_params;
+              fastcgi_param SCRIPT_FILENAME /usr/share/icingaweb2/public/index.php;
+              fastcgi_param ICINGAWEB_CONFIGDIR /etc/icingaweb2;
+              fastcgi_param REMOTE_USER $remote_user;
+            }
 
-  - name: install letsencrypt
-    include_role:
-      name: certbot-nginx
-    vars:
-      admins_email: "{{ icingaadmins_email }}"
-      vhost_fqdn: "{{ icinga_vhost_fqdn }}"
-    when:
-      - 'with_https is defined'
-
-
+            location ~ ^/icingaweb2(.+)? {
+            	alias /usr/share/icingaweb2/public;
+            	index index.php;
+            	try_files $1 $uri $uri/ /icingaweb2/index.php$is_args$args;
+            }
+            location / {
+              return 302 /icingaweb2;
+            }
 
 - name: install icinga clients
   hosts: 'all:!icinga-host'

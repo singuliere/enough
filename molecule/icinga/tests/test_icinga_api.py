@@ -4,6 +4,8 @@ import requests
 import pytest
 import yaml
 
+testinfra_hosts = ['icinga-host']
+
 def get_auth(host):
     host= host.get_host('ansible://icinga-host', ansible_inventory=host.backend.ansible_inventory)
     with host.sudo():
@@ -13,10 +15,10 @@ def get_auth(host):
             re.search('password = "(.*)"', f.content_string).group(1)
         )
     
-def get_master_address(host):
-    inventory = yaml.load(open(host.backend.ansible_inventory))
-    address = inventory['all']['hosts']['icinga-host']['ansible_host']
-    return address
+def get_address():
+    vars_dir = '../../inventory/group_vars/all'
+    return 'icinga.' + yaml.load(
+        open(vars_dir + '/domain.yml'))['domain']
 
 def sloppy_get(url, headers={}, auth=None):
     s = requests.Session()
@@ -28,18 +30,18 @@ def sloppy_get(url, headers={}, auth=None):
     return r
 
 def test_icinga_api_hosts(host):
-    address = get_master_address(host)
+    address = get_address()
     r = sloppy_get(
             'https://{address}:5665/v1/objects/hosts'.format(address=address,),
             {'Accept': 'application/json'},
             get_auth(host),
             )
     answer = r.json()
-    assert len(answer['results']) == 3
-    assert set([h['name'] for h in answer['results']]) == set(['icinga-host', 'monitoring-client-host', 'monitoring-client2-host'])
+    assert len(answer['results']) == 4
+    assert set([h['name'] for h in answer['results']]) == set(['bind-host', 'icinga-host', 'monitoring-client-host', 'monitoring-client2-host'])
 
 def test_icinga_api_services (host):
-    address = get_master_address(host)
+    address = get_address()
     r = sloppy_get(
             'https://{address}:5665/v1/objects/services'.format(address=address,),
             {'Accept': 'application/json'},

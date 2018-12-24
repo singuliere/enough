@@ -1,0 +1,9 @@
+---
+- name: setup all hosts as letsencrypt-nginx clients
+  hosts: all
+  become: true
+
+  roles:
+    - role: letsencrypt-nginx
+      vars:
+        letsencrypt_nginx_client: true

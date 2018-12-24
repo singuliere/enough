@@ -6,7 +6,7 @@ def test_website(host):
     flock /tmp/update-website \
           bash -x /srv/update-website.sh \
           >> /var/log/update-website.log 2>&1
-    grep --quiet -i enough /var/www/html/index.html
+    grep --quiet -i enough /usr/share/nginx/html/index.html
     """)
     print(cmd.stdout)
     print(cmd.stderr)
@@ -23,3 +23,9 @@ def test_website(host):
     print(cmd.stdout)
     print(cmd.stderr)
     assert 0 == cmd.rc
+
+    with host.sudo():
+        host.run("apt-get install -y curl")
+
+    assert host.run("curl -m 5 -I https://$(hostname -d)").rc == 0
+    assert host.run("curl -m 5 -I https://www.$(hostname -d)").rc == 0

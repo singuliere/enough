@@ -1,6 +1,6 @@
 ---
 - import_playbook: ../misc/sshd-playbook.yml
-- import_playbook: ../certs/certs-playbook.yml
+- import_playbook: ../letsencrypt-nginx/letsencrypt-nginx-playbook.yml
 - import_playbook: ../icinga/test-icinga-playbook.yml
 - import_playbook: ../bind/bind-playbook.yml
 - import_playbook: ../bind/bind-client-playbook.yml

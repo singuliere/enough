@@ -5,7 +5,7 @@ def test_enough(host):
     set -xe
     flock /tmp/update-packages \
           bash -x /srv/enough-android-update-packages.sh
-    test -f /var/www/html/enough.apk
+    test -f /usr/share/nginx/html/enough.apk
     """)
     print(cmd.stdout)
     print(cmd.stderr)

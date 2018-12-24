@@ -4,4 +4,7 @@ def test_mattermost(host):
     with host.sudo():
         host.run("apt-get install -y curl")
 
-    assert host.run("curl -s -m 5 https://chat.$(hostname -d)").rc == 0
+    r = host.run("curl -s -m 5 https://chat.$(hostname -d)")
+    assert r.rc == 0
+    assert 'Mattermost' in r.stdout
+

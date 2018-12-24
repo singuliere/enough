@@ -49,13 +49,13 @@
         --env OS_USERNAME={{ gitlab_os_username }} \
         --env OS_PASSWORD={{ gitlab_os_password }} \
         --env OS_REGION_NAME={{ gitlab_os_region_name }} \
-        {% if with_fake_LE is defined %}--env GIT_SSL_NO_VERIFY=1{% endif %} \
+        {% if letsencrypt_nginx_staging | default(false) %}--env GIT_SSL_NO_VERIFY=1{% endif %} \
         --executor docker \
         --docker-image debian:stretch \
         --docker-volumes /srv:/srv \
         --docker-volumes /var/run/docker.sock:/run/docker.sock \
         --docker-volumes /usr/lib/x86_64-linux-gnu/libltdl.so.7:/usr/lib/x86_64-linux-gnu/libltdl.so.7 \
         --docker-volumes $(which docker):/bin/docker \
-        {% if with_fake_LE is defined %}--tls-ca-file /etc/ssl/certs/fakeleintermediatex1.pem{% endif %} \
+        {% if letsencrypt_nginx_staging | default(false) %}--tls-ca-file /etc/ssl/certs/fakeleintermediatex1.pem{% endif %} \
         --docker-pull-policy if-not-present
   when: result|failed

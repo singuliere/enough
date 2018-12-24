@@ -14,4 +14,4 @@
       --agree-tos                                                \
       --email devnull@{{ domain }}                               \
       -d postfix-host.{{ domain }}                               \
-      {% if with_fake_LE is defined %}--test-cert{% endif %}
+      {% if letsencrypt_nginx_staging | default(false) %}--test-cert{% endif %}

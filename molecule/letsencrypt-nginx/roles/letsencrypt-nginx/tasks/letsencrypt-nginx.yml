@@ -1,0 +1,112 @@
+---
+- name: Create /var/cache/nginx
+  file:
+    path: /var/cache/nginx
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+# so the entropy source does not block when `openssl dhparam` needs it
+- name: apt-get install haveged
+  apt:
+    name: haveged
+    state: present
+
+- name: Create /etc/nginx
+  file:
+    path: /etc/nginx
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+# https://www.ssllabs.com/ssltest/analyze.html recommends it
+- name: generate strongers dhparams
+  command: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+  args:
+    creates: /etc/nginx/dhparams.pem
+
+- name: install nginx
+  include_role:
+    name: jdauphant.nginx
+  # do **not** try vars: | ... until https://github.com/ansible/ansible/issues/19084
+  # is resolved
+  vars:
+     nginx_http_params:
+       # because server names can be long when using test subdomains
+       - server_names_hash_bucket_size 128
+       - ssl_dhparam /etc/nginx/dhparams.pem
+     nginx_configs: |
+       {
+         '{{ letsencrypt_nginx_fqdn }}': [
+         {% if letsencrypt_nginx_reverse_proxy | default(false) %}
+         """
+              upstream {{ letsencrypt_nginx_fqdn }}.backend {
+                server {{ letsencrypt_nginx_reverse_proxy }};
+                keepalive 32;
+              }
+              proxy_cache_path /var/cache/nginx/{{ letsencrypt_nginx_fqdn }} levels=1:2 keys_zone={{ letsencrypt_nginx_fqdn }}:10m max_size=1g inactive=120m use_temp_path=off;
+         """
+         {% endif %}
+         ]
+       }
+     nginx_sites: |
+       {
+         '{{ letsencrypt_nginx_fqdn }}': [
+           'listen 80',
+           'server_name {{ letsencrypt_nginx_fqdn }}',
+           """{{ letsencrypt_nginx_sites }}""",
+           {% if letsencrypt_nginx_reverse_proxy | default(false) %}
+           """
+              location / {
+                  proxy_set_header Upgrade $http_upgrade;
+                  proxy_set_header Connection "upgrade";
+                  proxy_set_header Host $http_host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+                  proxy_set_header X-Frame-Options SAMEORIGIN;
+
+                  client_body_timeout 60;
+                  client_max_body_size 50M;
+                  send_timeout 300;
+                  lingering_timeout 5;
+
+                  proxy_buffers 256 16k;
+                  proxy_buffer_size 16k;
+                  proxy_connect_timeout 90;
+                  proxy_send_timeout 300;
+                  proxy_read_timeout 600s;
+                  proxy_pass http://{{ letsencrypt_nginx_fqdn }}.backend;
+                  proxy_http_version 1.1;
+
+                  proxy_cache {{ letsencrypt_nginx_fqdn }};
+                  proxy_cache_revalidate on;
+                  proxy_cache_min_uses 2;
+                  proxy_cache_use_stale timeout;
+                  proxy_cache_lock on;
+              }
+           """
+           {% endif %}
+         ]
+       }
+      
+- name: apt-get install certbot python-certbot-nginx
+  apt:
+    name: 
+      - certbot
+      - python-certbot-nginx
+    state: present
+
+- name: call let's encrypt on {{ letsencrypt_nginx_fqdn }}
+  command: |
+    certbot -n                                                   \
+      --agree-tos                                                \
+      --email {{ letsencrypt_nginx_email }}                      \
+      -d {{ letsencrypt_nginx_fqdn }}                            \
+      --authenticator standalone --installer nginx               \
+      --pre-hook  "systemctl stop nginx"                         \
+      --post-hook "systemctl start nginx"                        \
+      --redirect                                                 \
+      {% if letsencrypt_nginx_staging | default(false) %}--test-cert{% endif %}

@@ -21,7 +21,7 @@ provisioner:
   inventory:
     links:
       # Path is relative to directory in which this molecule.yml file resides
-      group_vars: forum_group_vars
+      group_vars: ../../inventory/group_vars
       host_vars:  ../../inventory/host_vars
 scenario:
   name: forum

@@ -1,0 +1,5 @@
+---
+
+- import_playbook: ../bind/bind-playbook.yml
+- import_playbook: ../bind/bind-client-playbook.yml
+- import_playbook: test-letsencrypt-nginx-playbook.yml

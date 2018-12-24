@@ -15,10 +15,10 @@ provisioner:
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../bind/roles:../icinga/roles:../certs/roles:../certbot/roles:../jdauphant.nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../bind/roles:../icinga/roles:../letsencrypt-nginx/roles:../jdauphant.nginx/roles
   inventory:
     links:
-      group_vars: packages_group_vars
+      group_vars: ../../inventory/group_vars
       host_vars:  ../../inventory/host_vars
 scenario:
   name: packages

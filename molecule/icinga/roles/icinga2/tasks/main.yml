@@ -154,12 +154,11 @@
     - ido-mysql
   notify: reload icinga2
 
-- name: apt-get install nginx, icingaweb2 and friends
+- name: apt-get install icingaweb2 and friends
   apt:
     name: "{{ item }}"
     state: present
   with_items:
-    - "nginx-full"
     - "icingacli"
     - "icingaweb2"
     - "icingaweb2-module-monitoring"
@@ -170,35 +169,6 @@
 - name: append icingaweb2 group to www-data
   command: usermod -a -G icingaweb2 www-data
   changed_when: False
-
-- name: install nginx configuration
-  template:
-    src:  templates/nginx.conf
-    dest: /etc/nginx/sites-available/{{ inventory_hostname }}
-  changed_when: False
-
-- name: unset default nginx configuration
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
-
-- name: generate strongers dhparams
-  command: openssl dhparam -out /etc/nginx/dhparams.pem 2048
-  args:
-    creates: /etc/nginx/dhparams.pem
-
-- name: setup gninx dhparams
-  lineinfile:
-    path: /etc/nginx/nginx.conf
-    line: ssl_dhparam /etc/nginx/dhparams.pem;
-    insertafter: "ssl_prefer_server_ciphers"
-
-- name: set up nginx configuration
-  file:
-    src:  /etc/nginx/sites-available/{{ inventory_hostname }}
-    dest: /etc/nginx/sites-enabled/{{ inventory_hostname }}
-    state: link
-  notify: reload nginx
 
 - name: 'hash icingaweb2 user password'
   shell: openssl passwd -1 "{{ icingaweb2_user_pass }}"
