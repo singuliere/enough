@@ -35,7 +35,7 @@ from `enough.community` domain during the tests (and could spoof
 any other domain). This disallow external requests like e.g. ACME
 challenge for TLS Certificates. To overcome this limitation, the
 domain of the scenario is defined in a one-time testing subdomain when a
-`bind-host` is used by the scenario and the variable `with_fake_LE` has been
+`bind-host` is used by the scenario and the variable `letsencrypt_nginx_staging` has been
 defined (meaning that we should use the "fake Let's Encrypt unlimited testing
 infrastructure").
 

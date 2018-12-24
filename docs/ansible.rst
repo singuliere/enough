@@ -52,7 +52,6 @@ testing are not used in production).
 
 .. code::
 
-   $ echo with_https: true | sudo tee /srv/checkout/inventory/group_vars/all/with_https.yml
    $ echo domain: enough.community | sudo tee /srv/checkout/inventory/group_vars/all/domain.yml
 
 Running

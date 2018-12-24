@@ -50,7 +50,7 @@
 
 - name: wait for nextcloud to be ready
   uri:
-    url: "http{% if with_https is defined and with_https == true %}s{% endif %}://{{ vhost_fqdn }}"
+    url: "https://{{ vhost_fqdn }}"
     method: GET
     status_code: 200
   register: nextcloud_get
