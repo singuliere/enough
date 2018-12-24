@@ -1,4 +1,4 @@
-testinfra_hosts = ['cloud-host', 'wereport-host']
+testinfra_hosts = ['cloud-host']
 
 def test_nextcloud(host):
     cmd = host.run("""
@@ -6,7 +6,7 @@ def test_nextcloud(host):
     d=/dev/sdb
     test -e /dev/sdb || d=/dev/vda
     mount | grep $d | grep /var/lib/docker
-    curl --silent http://127.0.0.1/login | grep --quiet 'Forgot pass'
+    curl --silent https://cloud.$(hostname -d)/login | grep --quiet 'Forgot pass'
     """)
     print(cmd.stdout)
     print(cmd.stderr)
