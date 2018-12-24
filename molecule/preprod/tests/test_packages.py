@@ -1,1 +1,1 @@
-../../../molecule/packages/tests/test_packages.py
+../../packages/tests/test_packages.py

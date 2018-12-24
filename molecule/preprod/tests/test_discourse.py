@@ -1,0 +1,1 @@
+../../forum/tests/test_discourse.py

@@ -1,0 +1,1 @@
+../../wereport/tests/test_nextcloud.py
