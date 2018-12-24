@@ -12,13 +12,9 @@
 
   hosts: 'postfix-host'
   become: true
-  tasks:
+  roles:
 
-  - name: install certbot and issue certificate
-    include_role:
-      name: certbot-postfix
-    when:
-      - 'with_https is defined'
+  - role: certbot-postfix
 
 - name: install and configure postfix relay
   hosts: 'postfix-host'
@@ -46,8 +42,8 @@
               state: 'comment'
       base__maincf:
         - name: 'smtpd_relay_restrictions'
-          value: "{% if with_fake_LE is defined or with_https is undefined %}check_recipient_access inline:{{'{'}}dachary.org=OK{{'}'}} defer{% endif %}"
-          state: "{% if with_fake_LE is defined or with_https is undefined %}present{% else %}absent{% endif %}"
+          value: "{% if letsencrypt_nginx_staging | default(false) %}check_recipient_access inline:{{'{'}}dachary.org=OK{{'}'}} defer{% endif %}"
+          state: "{% if letsencrypt_nginx_staging | default(false) %}present{% else %}absent{% endif %}"
         - name: 'mynetworks'
           value:
             - name: '0.0.0.0/0'
@@ -68,7 +64,7 @@
         - name: 'smtpd_tls_CAfile'
           value: '/etc/letsencrypt/live/postfix-host.{{ domain }}/chain.pem'
           section: 'smtpd-tls'
-      postfix__maincf: "{% if with_https is defined %}{{ base__maincf + TLS__maincf }}{% else %}{{ base__maincf }}{% endif %}"
+      postfix__maincf: "{{ base__maincf + TLS__maincf }}"
       postfix__restrictions_maincf: []
 
     - role: install_dns_mail_records
