@@ -3,10 +3,8 @@ templates:
   - "templates/redis.template.yml"
   - "templates/web.template.yml"
   - "templates/web.ratelimited.template.yml"
-{% if with_https is defined and with_https == true %}
   - "templates/web.ssl.template.yml"
   - "templates/web.letsencrypt.ssl.template.yml"
-{% endif %}
 
 expose:
   - "80:80"   # http
