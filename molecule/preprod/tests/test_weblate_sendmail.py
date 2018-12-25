@@ -1,1 +1,1 @@
-../../../molecule/weblate/tests/test_postfix.py
+../../weblate/tests/test_postfix.py

@@ -1,1 +1,1 @@
-../../../molecule/gitlab/tests/gitlab_utils.py
+../../gitlab/tests/gitlab_utils.py
