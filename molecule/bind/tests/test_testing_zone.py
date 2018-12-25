@@ -1,6 +1,6 @@
 import yaml, re
 
-testinfra_hosts = ['bind-client-host', 'external-host']
+testinfra_hosts = ['bind-client-host']
 
 def test_ns1_test(host):
     domain = host.run("hostname -d").stdout.strip()
@@ -15,7 +15,7 @@ def test_bind(host):
 
 def test_update(host):
     domain = host.run("hostname -d").stdout.strip()
-    hostname = host.run("hostname").stdout.strip()
+    hostname = host.run("hostname -s").stdout.strip()
     host= host.get_host('ansible://bind-host', ansible_inventory=host.backend.ansible_inventory)
     cmd = host.run('''
         nsupdate <<EOF
@@ -31,7 +31,7 @@ def test_update(host):
 
 def test_dig_update(host):
     domain = host.run("hostname -d").stdout.strip()
-    hostname = host.run("hostname").stdout.strip()
+    hostname = host.run("hostname -s").stdout.strip()
     cmd = host.run("dig +short TXT {}.test.{}".format(hostname, domain))
     print (cmd.stdout.strip())
     assert 0 == cmd.rc
@@ -39,7 +39,7 @@ def test_dig_update(host):
 
 def test_clean_update(host):
     domain = host.run("hostname -d").stdout.strip()
-    hostname = host.run("hostname").stdout.strip()
+    hostname = host.run("hostname -s").stdout.strip()
     host= host.get_host('ansible://bind-host', ansible_inventory=host.backend.ansible_inventory)
     cmd = host.run('''
         nsupdate <<EOF

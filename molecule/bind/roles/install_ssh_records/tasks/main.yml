@@ -1,18 +1,39 @@
 ---
+- name: add buster repo and update cache
+  apt_repository:
+    repo: deb http://deb.debian.org/debian/ buster main
+    state: present
+  delegate_to: bind-host
+  run_once: true
+
+- name: setup apt pinning for openssh-client
+  copy:
+    src:  apt-preferences.d/{{ item }}
+    dest: /etc/apt/preferences.d/{{ item }}
+  with_items:
+    - default
+    - openssh-client
+  delegate_to: bind-host
+  run_once: true
+
+- name: install openssh-client/buster
+  apt:
+    name: openssh-client
+    state: latest
+    default_release: buster
+  delegate_to: bind-host
+  run_once: true
 
 - name: generate SSHFP records
   shell: |
-      ssh-keygen -r {{ inventory_hostname }}
+      ssh-keyscan -D -p {{ install_ssh_records_port }} {{ install_ssh_records_host }}
+  delegate_to: bind-host
   register: cmd
 
 - name: install SSHFP records
   blockinfile:
-    content: "{{ hostvars[item].cmd.stdout }}"
-    path: "/var/cache/bind/{{ domain }}"
-    marker: ";; {mark} SSHFP records for {{ item }}"
-    validate: 'named-checkzone -d {{ domain }} %s'
+    content: "{{ cmd.stdout }}"
+    path: "/var/cache/bind/{% if install_ssh_records_host in hostvars %}{{ install_ssh_records_host }}.{{ domain }}.zone{% else %}{{ domain }}{% endif %}"
+    marker: ";; {mark} SSHFP records {{ cmd.cmd }}"
   delegate_to: bind-host
   notify: reload bind
-  with_items:
-    - "{{ ansible_play_batch }}"
-  run_once: true

@@ -1,6 +1,6 @@
 ---
 - name: setup DNS client
-  hosts: [ 'all' ]
+  hosts: all:!external-host
   become: True
 
   roles:
@@ -8,6 +8,11 @@
       dns_nameservers: ['{{ hostvars["bind-host"]["ansible_host"] }}']
       dns_search: "{{ domain }}"
       dns_domain: "{{ domain }}"
+
+    - role: install_ssh_records
+      vars:
+        install_ssh_records_host: "{{ ansible_hostname }}"
+        install_ssh_records_port: "{{ ansible_port }}"
 
   tasks:
     - name: set hostname
