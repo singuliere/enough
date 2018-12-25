@@ -15,11 +15,7 @@ services:
     volumes:
       - nextcloud:/var/www/html
     ports:
-{% if with_https is not defined or with_https == false %}
-      - 80:80
-{% else %}
       - 8080:80
-{% endif %}
     environment:
       - VIRTUAL_HOST={{ vhost_fqdn }}
       - LETSENCRYPT_HOST={{ vhost_fqdn }}
@@ -33,7 +29,6 @@ services:
       - proxy-tier
       - default
 
-{% if with_https is defined and with_https == true %}
   proxy:
     build: ./proxy
     restart: always
@@ -62,7 +57,6 @@ services:
       - proxy-tier
     depends_on:
       - proxy
-{% endif %}
 
 volumes:
   db:

@@ -170,7 +170,6 @@ role helps to declare it:
       http_vhost_fqdn: "forum.{{ domain }}"
       http_vhost_uri: /c/devops
       http_vhost_string: "devops discussions"
-
       # should be set at host or playbook level
       with_https: true
 
