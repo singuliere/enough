@@ -8,7 +8,6 @@
 - import_playbook: ../bind/bind-client-playbook.yml
 - import_playbook: ../icinga/icinga-playbook.yml
 - import_playbook: ../postfix/postfix-playbook.yml
-- import_playbook: ../gitlab/test-real-gitlab-playbook.yml
 - import_playbook: ../enough/enough-playbook.yml
 - import_playbook: cloud-playbook.yml
 - import_playbook: ../misc/commit_etc-playbook.yml
