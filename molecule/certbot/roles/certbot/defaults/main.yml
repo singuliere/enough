@@ -1,3 +1,0 @@
----
-admins_email: "contact@{{ domain }}"
-vhost_fqdn: "must.be.overridden"
