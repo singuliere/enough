@@ -1,13 +1,8 @@
 ---
-
-- import_playbook: ../misc/history-playbook.yml
-- import_playbook: ../misc/sexy-debian-playbook.yml
-- import_playbook: ../misc/sshd-playbook.yml
+- import_playbook: ../letsencrypt-nginx/letsencrypt-nginx-playbook.yml
 - import_playbook: ../icinga/test-icinga-playbook.yml
 - import_playbook: ../bind/bind-playbook.yml
 - import_playbook: ../bind/bind-client-playbook.yml
 - import_playbook: ../icinga/icinga-playbook.yml
 - import_playbook: ../postfix/postfix-playbook.yml
-- import_playbook: ../gitlab/test-real-gitlab-playbook.yml
 - import_playbook: enough-playbook.yml
-- import_playbook: ../misc/commit_etc-playbook.yml
