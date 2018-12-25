@@ -124,7 +124,7 @@
     - role: nsupdate_user
 
 - name: Install SSHFP records
-  hosts: all
+  hosts: all:!external-host
   become: True
 
   roles:
