@@ -22,6 +22,7 @@
       http_vhost_uri: "/users/sign_in"
       http_vhost_string: "GitLab"
 
+# separate plays because of https://github.com/ansible/ansible/issues/50278
 - name: setup reverse proxy for {{ gitlab_vhost_fqdn }}
   hosts: gitlab-host
   become: true

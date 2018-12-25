@@ -12,8 +12,7 @@
       http_vhost_uri: "/"
       http_vhost_string: "Enough"
 
-# the repetition of play is intentional to avoid a weird bug https://paste2.org/HtmME4EV
-# it may be happening only with ansible 2.4
+# separate plays because of https://github.com/ansible/ansible/issues/50278
 - name: install letsencrypt on {{ website_vhost_fqdn }}
   hosts: website-host
   become: true
