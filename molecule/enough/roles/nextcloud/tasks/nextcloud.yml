@@ -70,7 +70,7 @@
 
 - name: occ maintenance:install
   shell: |
-    {{ app_sh }} bash -c 'php -f occ maintenance:install --database-host=$POSTGRES_HOST --database-name=$POSTGRES_DB --database-user=$POSTGRES_USER --admin-user {{ NEXTCLOUD_ADMIN_USER }} --admin-pass {{ NEXTCLOUD_ADMIN_PASS }} --database pgsql --database-pass=$POSTGRES_PASSWORD'
+    {{ app_sh }} bash -c 'php -f occ maintenance:install --database pgsql --database-host=$POSTGRES_HOST --database-name=enough --database-user=$POSTGRES_USER --database-pass=$POSTGRES_PASSWORD --admin-user="{{ NEXTCLOUD_ADMIN_USER }}" --admin-pass="{{ NEXTCLOUD_ADMIN_PASS }}"'
   args:
     chdir: "{{ app_dir }}"
   become: False
