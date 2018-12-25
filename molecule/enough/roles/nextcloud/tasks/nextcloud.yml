@@ -50,11 +50,12 @@
     state: present
   become: False
 
-- name: wait for nextcloud to be ready
+- name: wait for {{ vhost_fqdn }} to be ready
   uri:
     url: "https://{{ vhost_fqdn }}"
     method: GET
-    status_code: 200
+    # 400 is because vhost_fqdn may not yet been set as a trusted domain
+    status_code: [ 400, 200 ]
   register: nextcloud_get
   until: nextcloud_get|succeeded
   retries: 30
