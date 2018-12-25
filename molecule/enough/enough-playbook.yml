@@ -14,6 +14,7 @@
       http_vhost_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
       http_vhost_uri: "/login"
       http_vhost_string: "Forgot password"
+      with_https: true
 
     - role: monitor_tor_http_vhost
       with_https: false
