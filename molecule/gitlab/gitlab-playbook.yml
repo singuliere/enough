@@ -10,6 +10,10 @@
     - { role: ansible-role-docker, docker_install_compose: false }
     - { role: gitlab }
 
+    - role: install_ssh_records
+      vars:
+        install_ssh_records_host: lab
+
     - role: monitor_http_vhost
       http_vhost_name: Gitlab
       http_vhost_fqdn: "gitlab.{{ domain }}"
