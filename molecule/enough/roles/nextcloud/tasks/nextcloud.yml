@@ -13,7 +13,7 @@
 - name: git clone https://github.com/nextcloud/docker/
   git:
     repo: https://github.com/nextcloud/docker/
-    version: 13.0.4
+    version: "{{ enough_nextcloud_version }}"
     force: yes
     dest: /srv/nextcloud
   become: False
@@ -23,7 +23,9 @@
   become: False
 
 - name: docker build apache-cron
-  shell: docker build -t nextcloud:apache-cron .
+  shell: |
+    sed -i -e 's/apache/{{ enough_nextcloud_version }}-apache/' Dockerfile
+    docker build -t nextcloud:apache-cron .
   args:
     chdir: /srv/nextcloud/.examples/dockerfiles/cron/apache
   become: False
@@ -48,11 +50,12 @@
     state: present
   become: False
 
-- name: wait for nextcloud to be ready
+- name: wait for {{ vhost_fqdn }} to be ready
   uri:
     url: "https://{{ vhost_fqdn }}"
     method: GET
-    status_code: 200
+    # 400 is because vhost_fqdn may not yet been set as a trusted domain
+    status_code: [ 400, 200 ]
   register: nextcloud_get
   until: nextcloud_get|succeeded
   retries: 30
@@ -68,7 +71,7 @@
 
 - name: occ maintenance:install
   shell: |
-    {{ app_sh }} bash -c 'php -f occ maintenance:install --database-host=$POSTGRES_HOST --database-name=$POSTGRES_DB --database-user=$POSTGRES_USER --admin-user {{ NEXTCLOUD_ADMIN_USER }} --admin-pass {{ NEXTCLOUD_ADMIN_PASS }} --database pgsql --database-pass=$POSTGRES_PASSWORD'
+    {{ app_sh }} bash -c 'php -f occ maintenance:install --database pgsql --database-host=$POSTGRES_HOST --database-name=enough --database-user=$POSTGRES_USER --database-pass=$POSTGRES_PASSWORD --admin-user="{{ NEXTCLOUD_ADMIN_USER }}" --admin-pass="{{ NEXTCLOUD_ADMIN_PASS }}"'
   args:
     chdir: "{{ app_dir }}"
   become: False
@@ -121,9 +124,9 @@
   become: False
   notify: recreate nextcloud to take into account configuration changes
 
-- name: git clone https://lab.{{ domain }}/main/registration/
+- name: git clone https://lab.{{ production_domain }}/main/registration/
   git:
-    repo: "https://lab.{{ domain }}/main/registration/"
+    repo: "https://lab.{{ production_domain }}/main/registration/"
     force: yes
     dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/registration
 
@@ -134,9 +137,9 @@
     chdir: "{{ app_dir }}"
   become: False
 
-- name: git clone https://lab.{{ domain }}/main/app/
+- name: git clone https://lab.{{ production_domain }}/main/app/
   git:
-    repo: "https://lab.{{ domain }}/main/app/"
+    repo: "https://lab.{{ production_domain }}/main/app/"
     force: yes
     dest: /var/lib/docker/volumes/apache_nextcloud/_data/apps/enough
 

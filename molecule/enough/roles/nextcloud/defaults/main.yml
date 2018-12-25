@@ -1,3 +1,4 @@
 ---
 NEXTCLOUD_ADMIN_USER: admin
 NEXTCLOUD_ADMIN_PASS: admin
+enough_nextcloud_version: 13.0.4
