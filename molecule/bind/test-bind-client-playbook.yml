@@ -6,7 +6,5 @@
   tasks:
     - name: apt-get install dnsutils
       apt:
-        name: "{{ item }}"
+        name: dnsutils
         state: present
-      with_items:
-        - dnsutils
