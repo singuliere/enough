@@ -1,9 +1,11 @@
-ansible==2.4.0
-pip-tools
+ansible==2.7.5
+pip-tools==3.2.0
 molecule==2.16.0
-shade
+shade==1.30.0
 sphinx
 # we need 1.7.1 otherwise it fails but ... molecule wants 1.6.3 so we need
 # to patch requirements.txt manually. Debugging conflicts requires running
 # pip-compile --verbose because of https://github.com/jazzband/pip-tools/issues/220
 testinfra
+openstacksdk==0.22.0
+netaddr==0.7.19
