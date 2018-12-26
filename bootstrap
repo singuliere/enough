@@ -1,3 +1,4 @@
+git submodule upate --recursive
 rm -fr ../virtualenv
 virtualenv ../virtualenv
 source ../virtualenv/bin/activate

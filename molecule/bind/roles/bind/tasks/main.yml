@@ -2,12 +2,8 @@
 
 - name: BIND Install
   package:
-    pkg: "{{ item }}"
-    state: installed
-  with_items:
-    - python-netaddr
-    - bind9
-    - bind9utils
+    pkg: [python-netaddr, bind9, bind9utils, dnsutils]
+    state: present
 
 - name: Create serial, based on last two digits of year, month, day, and hour
   command: date +%y%m%d%H
@@ -27,6 +23,14 @@
 
 - name: dump dynamic zones to disk, and remove their journal files
   shell: rndc sync -clean || true
+
+- name: create include files
+  copy:
+    content: ""
+    dest: "/var/cache/bind/{{ item }}.{{ domain }}.zone"
+    force: no
+  with_items:
+    - "{{ hostvars.keys() }}"
 
 - name: BIND zone file
   template:

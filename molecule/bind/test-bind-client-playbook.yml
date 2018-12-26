@@ -3,10 +3,14 @@
   hosts: [ bind-client-host, external-host ]
   become: True
 
+  roles:
+
+    - role: install_ssh_records
+      vars:
+        install_ssh_records_host: bind-client
+
   tasks:
     - name: apt-get install dnsutils
       apt:
-        name: "{{ item }}"
+        name: dnsutils
         state: present
-      with_items:
-        - dnsutils

@@ -1,0 +1,3 @@
+Package: openssh-client
+Pin: release n=buster
+Pin-Priority: 942
