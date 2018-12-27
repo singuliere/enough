@@ -13,6 +13,7 @@
       repository: https://github.com/discourse/discourse_docker
 
     - role: monitor_http_vhost
+      http_vhost_https: true
       http_vhost_name: Forum
       http_vhost_fqdn: "{{ forum_vhost_fqdn }}"
       http_vhost_uri: "/"

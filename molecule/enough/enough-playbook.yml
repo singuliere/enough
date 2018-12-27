@@ -10,14 +10,13 @@
       vhost_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
 
     - role: monitor_http_vhost
+      http_vhost_https: true
       http_vhost_name: "{{ inventory_hostname }}"
       http_vhost_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
       http_vhost_uri: "/login"
       http_vhost_string: "Forgot password"
-      with_https: true
 
     - role: monitor_tor_http_vhost
-      with_https: false
       tor_hostname_file: /var/lib/tor/services/cloud/hostname
       tor_http_vhost_name: "{{ inventory_hostname }}"
       tor_http_vhost_uri: "/login"

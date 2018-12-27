@@ -12,6 +12,7 @@
         letsencrypt_nginx_fqdn: "{{ weblate_vhost_fqdn }}"
 
     - role: monitor_http_vhost
+      http_vhost_https: true
       http_vhost_name: Weblate
       http_vhost_fqdn: "weblate.{{ domain }}"
       http_vhost_uri: "/"

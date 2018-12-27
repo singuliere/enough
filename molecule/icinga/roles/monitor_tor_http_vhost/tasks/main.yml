@@ -29,9 +29,6 @@
         {% if tor_http_vhost_uri is defined %}
           http_uri = "{{ tor_http_vhost_uri }}"
         {% endif %}
-        {% if with_https is defined and with_https == true %}
-          http_ssl = true
-        {% endif %}
         {% if tor_http_vhost_string is defined %}
           http_string = "{{ tor_http_vhost_string }}"
         {% endif %}

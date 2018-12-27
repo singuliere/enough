@@ -170,8 +170,7 @@ role helps to declare it:
       http_vhost_fqdn: "forum.{{ domain }}"
       http_vhost_uri: /c/devops
       http_vhost_string: "devops discussions"
-      # should be set at host or playbook level
-      with_https: true
+      http_vhost_https: true
 
 Torified Web services monitoring
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -183,7 +182,6 @@ path of the service hostname. An Ansible role helps to declare it:
 ::
 
     - role: monitor_tor_http_vhost
-      with_https: false
       tor_hostname_file: /var/lib/tor/services/cloud/hostname
       tor_http_vhost_name: Cloud
       tor_http_vhost_uri: "/login"
