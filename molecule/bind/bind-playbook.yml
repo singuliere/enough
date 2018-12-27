@@ -96,7 +96,7 @@
 
           www 1800 IN CNAME {{ domain }}.
 
-          {% if 'gitlab-host' in hostvars %}lab 1800 IN CNAME gitlab-host{% endif %}
+          {% if 'gitlab-host' in hostvars %}lab 1800 IN A {{ hostvars['gitlab-host']['ansible_host'] }}{% endif %}
 
           test 1800 IN NS ns1.{{ domain }}.
 
