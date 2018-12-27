@@ -9,14 +9,10 @@
     name: virtualenv
     state: present
 
-- name: apt-get install python-pip
+- name: apt-get install python-pip python-setuptools
   apt:
-    name: python-pip
+    name: [python-pip, python-setuptools]
     state: present
-
-- name: pip install setuptools
-  pip:
-    name: setuptools
 
 - name: chown debian /srv
   file:
