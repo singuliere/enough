@@ -7,6 +7,7 @@
     - { role: website }
 
     - role: monitor_http_vhost
+      with_https: true
       http_vhost_name: Website
       http_vhost_fqdn: "{{ website_vhost_fqdn }}"
       http_vhost_uri: "/"

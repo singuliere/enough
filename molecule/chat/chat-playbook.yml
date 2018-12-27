@@ -13,6 +13,7 @@
         letsencrypt_nginx_fqdn: "{{ chat_vhost_fqdn }}"
 
     - role: monitor_http_vhost
+      with_https: true
       http_vhost_name: Chat
       http_vhost_fqdn: "{{ chat_vhost_fqdn }}"
       http_vhost_uri: "/"
