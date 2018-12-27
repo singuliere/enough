@@ -17,7 +17,6 @@
       with_https: true
 
     - role: monitor_tor_http_vhost
-      with_https: false
       tor_hostname_file: /var/lib/tor/services/cloud/hostname
       tor_http_vhost_name: "{{ inventory_hostname }}"
       tor_http_vhost_uri: "/login"

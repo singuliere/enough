@@ -183,7 +183,6 @@ path of the service hostname. An Ansible role helps to declare it:
 ::
 
     - role: monitor_tor_http_vhost
-      with_https: false
       tor_hostname_file: /var/lib/tor/services/cloud/hostname
       tor_http_vhost_name: Cloud
       tor_http_vhost_uri: "/login"
