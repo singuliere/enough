@@ -84,6 +84,22 @@ machine as follows:
                     -i inventories/common \
                     enough-community-playbook.yml
 
+Some hosts contain private information that belong to users who only
+trust some administrators of the infrastructure, not all of
+them. These hosts only have the ssh public keys of the trusted
+administrators and are listed in a dedicated inventory subdirectory.
+For instance, the administrator `dachary` owns the the inventory
+directory `inventories/dachary`. This administrator can then run the
+playbook on all the common infrastructure as well as all the hosts
+that can only be accessed by them as follows:
+
+.. code::
+
+   ansible-playbook --private-key ~/.ssh/id_rsa \
+                    -i inventories/common \
+                    -i inventories/dachary \
+                    enough-community-playbook.yml
+
 Inventory
 ---------
 
