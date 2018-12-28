@@ -5,10 +5,10 @@ __pycache__
 .cache
 pytestdebug.log
 docs/_build/
-inventory/01-hosts.yml
+inventories/common/01-hosts.yml
 private-key.yml
 *.pyc
 infrastructure_key*
 secret
-inventory/group_vars/all/domain.yml
+inventories/common/group_vars/all/domain.yml
 openrc.sh

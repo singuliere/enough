@@ -22,8 +22,8 @@ provisioner:
     ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
   inventory:
     links:
-      group_vars: ../../inventory/group_vars
-      host_vars:  ../../inventory/host_vars
+      group_vars: ../../inventories/common/group_vars
+      host_vars:  ../../inventories/common/host_vars
 scenario:
   name: gitlab
   test_sequence:

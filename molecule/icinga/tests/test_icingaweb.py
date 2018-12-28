@@ -7,7 +7,7 @@ import yaml
 testinfra_hosts = ['icinga-host']
 
 def get_address():
-    vars_dir = '../../inventory/group_vars/all'
+    vars_dir = '../../inventories/common/group_vars/all'
     return 'icinga.' + yaml.load(
         open(vars_dir + '/domain.yml'))['domain']
     

@@ -47,12 +47,12 @@ Manually create `/srv/enough-community/clouds.yml` from `~/openrc.sh` and check 
 
 Set the passwords and other secret credentialis in the file or
 directory matching a given host at
-`/srv/checkout/inventory/host_vars/` (so that the default used during
+`/srv/checkout/inventories/common/host_vars/` (so that the default used during
 testing are not used in production).
 
 .. code::
 
-   $ echo domain: enough.community | sudo tee /srv/checkout/inventory/group_vars/all/domain.yml
+   $ echo domain: enough.community | sudo tee /srv/checkout/inventories/common/group_vars/all/domain.yml
 
 Secrets
 -------
@@ -89,7 +89,7 @@ Inventory
 
 The ansible inventory is created by the
 ``molecule/infrastructure/create.yml`` playbook and stored in the
-``inventory/01-hosts.yml`` file every time the ``molecule create -s
+``inventories/common/01-hosts.yml`` file every time the ``molecule create -s
 preprod`` command runs.  The inventory variables (such as the ssh port
 number) are read from the ``hosts-base.yml`` file.
 

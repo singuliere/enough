@@ -17,7 +17,7 @@ Monitoring deployment
 Monitoring is deployed by importing the
 `molecule/icinga/icinga-playbook.yml` playbook. The Icinga2 master is
 `icinga-host`. See also
-`inventory/host_vars/icinga-host/monitoring.yml` for specific
+`inventories/common/host_vars/icinga-host/monitoring.yml` for specific
 deployment attributes: icingaweb credentials, https, virtualhost fqdn.
 
 Each host is monitored by default.
@@ -232,6 +232,6 @@ Hosts vars
 
 A host can define a list of lines to be added to its icinga configuration,
 using the Ansible variable ``monitoring_host_vars``. Se e.g.
-``inventory/host_vars/demo-host/monitoring.yml`` for an example.
+``inventories/common/host_vars/icinga-host/monitoring.yml`` for an example.
 
 Default is empty.

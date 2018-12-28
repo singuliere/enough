@@ -5,7 +5,7 @@ import yaml
 
 
 def get_address(host):
-    vars_dir = '../../inventory/group_vars/all'
+    vars_dir = '../../inventories/common/group_vars/all'
     return ('https', 'lab.' + yaml.load(
         open(vars_dir + '/domain.yml'))['domain'])
 
