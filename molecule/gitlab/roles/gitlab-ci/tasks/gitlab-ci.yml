@@ -22,7 +22,7 @@
     method: GET
     status_code: 200
   register: api_projects
-  until: api_projects|succeeded
+  until: api_projects is success
   retries: 20
   delay: 30
   delegate_to: gitlab-host
@@ -58,4 +58,4 @@
         --docker-volumes $(which docker):/bin/docker \
         {% if letsencrypt_nginx_staging | default(false) %}--tls-ca-file /etc/ssl/certs/fakeleintermediatex1.pem{% endif %} \
         --docker-pull-policy if-not-present
-  when: result|failed
+  when: result is failed

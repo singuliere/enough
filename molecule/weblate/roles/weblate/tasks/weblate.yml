@@ -43,5 +43,5 @@
 
 - name: Activate crontab
   shell: crontab /srv/crontab
-  when: crontab|changed
+  when: crontab is changed
   become: False

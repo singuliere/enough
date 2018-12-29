@@ -65,7 +65,7 @@
   args:
     creates:  /etc/icinga2/pki/trusted-master.crt
   register: output
-  until: output|success
+  until: output is success
   retries: 10
   delay: 5
 
@@ -98,7 +98,7 @@
       --accept-config
   changed_when: False
   register: output
-  until: output|success
+  until: output is success
   retries: 10
   delay: 5
 

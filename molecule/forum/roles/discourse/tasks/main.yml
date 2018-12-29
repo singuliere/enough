@@ -27,4 +27,4 @@
   args:
     chdir: "/srv/forum/{{ forum_name }}"
   become: false
-  when: app_config|changed
+  when: app_config is changed

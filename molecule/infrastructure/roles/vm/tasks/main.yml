@@ -82,7 +82,7 @@
     -i {{ ssh_private_keyfile }}
     {% if hosts_orig is defined and item.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.openstack.name].ansible_user is defined %}{{ hosts_orig.all.hosts[item.openstack.name].ansible_user }}{% else %}debian{% endif %}@{{ item.openstack.public_v4 }} which python
   register: result
-  until: result|success
+  until: result is success
   retries: 30
   delay: 10
   with_items: "{{ server.results }}"
@@ -95,7 +95,7 @@
     -i {{ ssh_private_keyfile }}
     {% if hosts_orig is defined and item.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.openstack.name].ansible_user is defined %}{{ hosts_orig.all.hosts[item.openstack.name].ansible_user }}{% else %}debian{% endif %}@{{ item.openstack.public_v4 }} grep -q 'Cloud-init.*finished' /var/log/cloud-init-output.log
   register: result
-  until: result|success
+  until: result is success
   retries: 30
   delay: 10
   with_items: "{{ server.results }}"
