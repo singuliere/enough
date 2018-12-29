@@ -14,4 +14,4 @@
     state: present
     key: "{{ lookup('file', item) }}"
     key_options: command="/usr/local/bin/add_temp_record.sh",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc
-  with_fileglob: "{{ nsupdate_user_keys_globs }}"
+  loop: "{{ query('fileglob', *nsupdate_user_keys_globs) }}"

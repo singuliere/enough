@@ -23,7 +23,7 @@
 - name: wait for icinga starting up and conf creation, before tweaking it
   wait_for:
     path: /etc/icinga2/{{ item }}
-  with_items:
+  loop:
     - conf.d
     - constants.conf
     - features-available
@@ -67,7 +67,7 @@
   file:
     path: /etc/icinga2/conf.d/{{ item }}.conf
     state: absent
-  with_items:
+  loop:
     - apt
     - groups
     - services
@@ -93,7 +93,7 @@
   copy:
     src:  files/{{ item }}.conf
     dest: /etc/icinga2/zones.d/global-templates/{{ item }}.conf
-  with_items:
+  loop:
     - commands
     - downtimes
     - notifications
@@ -113,7 +113,7 @@
   template:
     src:  templates/{{ item }}.conf
     dest: /etc/icinga2/zones.d/global-templates/{{ item }}.conf
-  with_items:
+  loop:
     - users
     - services/mail
 
@@ -142,7 +142,7 @@
   icinga2_feature:
     name: "{{ item }}"
     state: present
-  with_items:
+  loop:
     - command
     - ido-mysql
   notify: reload icinga2
@@ -190,7 +190,7 @@
     dest: /etc/icingaweb2/{{ item }}
     owner: www-data
     group: icingaweb2
-  with_items:
+  loop:
     - authentication.ini
     - config.ini
     - groups.ini
@@ -208,7 +208,7 @@
     dest: /etc/icingaweb2/modules/monitoring/{{ item }}
     owner: www-data
     group: icingaweb2
-  with_items:
+  loop:
     - backends.ini
     - commandtransports.ini
     - config.ini

@@ -39,7 +39,7 @@
     <<: *os_auth
     display_name: "{{ item.name }}"
     size: "{{ item.size }}"
-  with_items: "{{ volumes_description }}"
+  loop: "{{ volumes_description }}"
   when: state == "present"
 
 - name: instances "{{ state }}"
@@ -64,7 +64,7 @@
         - systemctl restart ssh
     security_groups:
       - infrastructure
-  with_items: "{% if molecule_yml is defined %}{{ molecule_yml.platforms }}{% endif %}{% if vms is defined %}{{ vms }}{% endif %}"
+  loop: "{% if molecule_yml is defined %}{{ molecule_yml.platforms }}{% endif %}{% if vms is defined %}{{ vms }}{% endif %}"
   register: server
 
 - name: destroy volumes
@@ -72,7 +72,7 @@
     state: absent
     <<: *os_auth
     display_name: "{{ item.name }}"
-  with_items: "{{ volumes_description }}"
+  loop: "{{ volumes_description }}"
   when: state == "absent"
 
 - name: Wait for python on the instances
@@ -85,7 +85,7 @@
   until: result is success
   retries: 30
   delay: 10
-  with_items: "{{ server.results }}"
+  loop: "{{ server.results }}"
   when: state == "present"
 
 - name: Wait for cloud-init ending on the instances
@@ -98,5 +98,5 @@
   until: result is success
   retries: 30
   delay: 10
-  with_items: "{{ server.results }}"
+  loop: "{{ server.results }}"
   when: state == "present"

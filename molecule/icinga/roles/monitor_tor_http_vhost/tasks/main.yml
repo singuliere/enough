@@ -38,5 +38,4 @@
     marker: "/* {mark} {{ tor_http_vhost_name }} tor http vhost on {{ item }} */"
   delegate_to: icinga-host
   notify: reload icinga2
-  with_items:
-  - "{{ ansible_play_batch }}"
+  loop: "{{ ansible_play_batch }}"

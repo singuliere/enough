@@ -4,4 +4,4 @@
     user: "{{ ansible_user }}"
     state: present
     key: "{{ lookup('file', item) }}"
-  with_fileglob: "{{ ssh_keys_directories }}"
+  loop: "{{ query('fileglob', *ssh_keys_directories) }}"

@@ -27,7 +27,7 @@
     owner: 'debian'
     group: 'debian'
     mode: '0755'
-  with_items:
+  loop:
     - app
     - app/mattermost
     - app/mattermost/data

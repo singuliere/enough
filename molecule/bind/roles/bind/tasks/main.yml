@@ -29,8 +29,7 @@
     content: ""
     dest: "/var/cache/bind/{{ item }}.{{ domain }}.zone"
     force: no
-  with_items:
-    - "{{ hostvars.keys() }}"
+  loop: "{{ hostvars.keys() }}"
 
 - name: BIND zone file
   template:

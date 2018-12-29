@@ -12,6 +12,6 @@
     shell: |
       f=/usr/local/share/ca-certificates/infrastructure/{{ item }}
       test -L $f || rm -f $f
-    with_items:
+    loop:
       - fakeleintermediatex1.crt
       - fakelerootx1.crt
