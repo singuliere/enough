@@ -2,30 +2,23 @@
 
 - name: apt-get install icinga2 and friends
   apt:
-    name: "{{ item }}"
+    name:
+      - icinga2
+      - mariadb-server
+      - mariadb-client
+      - icinga2-ido-mysql
     state: present
-  with_items:
-    - icinga2
-    - mariadb-server
-    - mariadb-client
-    - icinga2-ido-mysql
 
 - name: apt-get install monitoring plugins
   apt:
-    name: "{{ item }}"
+    name: [monitoring-plugins, nagios-plugins-contrib]
     state: present
     install_recommends: no
-  with_items:
-    - "monitoring-plugins"
-    - "nagios-plugins-contrib"
 
 - name: apt-get install monitoring plugins deps
   apt:
-    name: "{{ item }}"
+    name: [dnsutils, xz-utils]
     state: present
-  with_items:
-    - dnsutils
-    - xz-utils
 
 - name: wait for icinga starting up and conf creation, before tweaking it
   wait_for:
@@ -156,15 +149,14 @@
 
 - name: apt-get install icingaweb2 and friends
   apt:
-    name: "{{ item }}"
+    name:
+      - "icingacli"
+      - "icingaweb2"
+      - "icingaweb2-module-monitoring"
+      - "php-mysql"
+      - "php7.0-intl"
+      - "php7.0-fpm"
     state: present
-  with_items:
-    - "icingacli"
-    - "icingaweb2"
-    - "icingaweb2-module-monitoring"
-    - "php-mysql"
-    - "php7.0-intl"
-    - "php7.0-fpm"
 
 - name: append icingaweb2 group to www-data
   command: usermod -a -G icingaweb2 www-data

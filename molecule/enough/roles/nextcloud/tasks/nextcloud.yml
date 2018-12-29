@@ -175,14 +175,9 @@
     chdir: "{{ app_dir }}"
   become: False
 
-- name: apt-get install tor
+- name: apt-get install tor and torsocks
   apt:
-    name: tor
-    state: present
-
-- name: apt-get install torsocks
-  apt:
-    name: torsocks
+    name: [tor, torsocks]
     state: present
 
 - name: mkdir /var/lib/tor/services

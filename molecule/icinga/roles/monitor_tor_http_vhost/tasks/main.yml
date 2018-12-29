@@ -1,10 +1,7 @@
 - name: install tor for check_tor_http
   apt:
-    name: "{{ item }}"
+    name: [tor, torsocks]
     state: present
-  with_items:
-    - tor
-    - torsocks
   delegate_to: icinga-host
 
 - name: restart tor

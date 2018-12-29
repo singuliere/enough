@@ -7,19 +7,14 @@
 
 - name: apt-get install monitoring plugins
   apt:
-    name: "{{ item }}"
+    name: [monitoring-plugins, nagios-plugins-contrib]
     state: present
     install_recommends: no
-  with_items:
-    - monitoring-plugins
-    - nagios-plugins-contrib
 
 - name: apt-get install monitoring plugins deps
   apt:
-    name: "{{ item }}"
+    name: xz-utils
     state: present
-  with_items:
-    - xz-utils
 
 - name: retrieve the process user name
   shell: awk -F= '"ICINGA2_USER" == $1 {print $2}' /usr/lib/icinga2/icinga2

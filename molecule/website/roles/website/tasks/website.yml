@@ -1,17 +1,7 @@
 ---
-- name: apt-get install git
+- name: apt-get install git, virtualenv, python-pip and python-setuptools
   apt:
-    name: git
-    state: present
-
-- name: apt-get install virtualenv
-  apt:
-    name: virtualenv
-    state: present
-
-- name: apt-get install python-pip python-setuptools
-  apt:
-    name: [python-pip, python-setuptools]
+    name: [git, virtualenv, python-pip, python-setuptools]
     state: present
 
 - name: chown debian /srv
