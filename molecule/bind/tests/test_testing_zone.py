@@ -53,13 +53,16 @@ def test_clean_update(host):
         '''.format(domain, hostname, domain))
     assert 0 == cmd.rc
 
-def test_subdomain_creation (host):
+def test_subdomain_creation(host):
+    test_domain = host.run("hostname -d").stdout.strip()
     inventory = yaml.load(open(host.backend.ansible_inventory))
-    address = inventory['all']['hosts']['bind-host']['ansible_host']
-    master= host.get_host('ansible://localhost', ansible_inventory=host.backend.ansible_inventory)
-    cmd = master.run('ssh -i ../../id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no subdomain@{}'.format(address))
+    bind_address = inventory['all']['hosts']['bind-host']['ansible_host']
+    other_bind_address = '1.2.3.4'
+    localhost = host.get_host('ansible://localhost', ansible_inventory=host.backend.ansible_inventory)
+    cmd = localhost.run('ssh -i ../../id_rsa -o BatchMode=yes -o StrictHostKeyChecking=no subdomain@{address} {ns_ip} subsubdomain.test.{test_domain}'.format(ns_ip=other_bind_address, address=bind_address, test_domain=test_domain))
     assert 0 == cmd.rc
     assert "Creating " in cmd.stdout.strip()
     domain = re.search(r'Creating (.*)', cmd.stdout).group(1),
-    cmd = host.run("dig +short NS {}".format(domain[0]))
+    cmd = host.run("dig +short ns-{}".format(domain[0]))
     assert 0 == cmd.rc
+    assert cmd.stdout == other_bind_address, "looking for " + domain[0]

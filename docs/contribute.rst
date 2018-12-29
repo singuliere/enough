@@ -111,7 +111,7 @@ verified manually inside the preproduction environment.
 
 .. note:: the person running the following commands need their
           personal ssh public key to give them access to
-          `debian@ns1.enough.community`.
+          `subdomain@ns1.enough.community`.
 
 * ``molecule create -s preprod``
 * ``molecule converge -s preprod``
