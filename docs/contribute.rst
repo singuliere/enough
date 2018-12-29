@@ -65,7 +65,7 @@ consider when working on improving a playbook or a service.
 * ``molecule/authorized_keys``: distribute SSH public keys
 * ``molecule/backup``: daily VMs snapshots
 * ``molecule/bind``: DNS server and client
-* ``molecule/certs``: certs files for testing
+* ``molecule/letsencrypt-nginx``: nginx reverse proxy with letsencrypt integration
 * ``molecule/icinga``: resources monitoring
 * ``molecule/infrastructure``: VMs creation and firewalling
 * ``molecule/misc/roles/commit_etc``: keep track of changes in /etc
