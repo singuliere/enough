@@ -2,10 +2,12 @@
   systemd:
     name: icinga2
     state: reloaded
+    enabled: True
   changed_when: False
 
 - name: reload nginx
   systemd:
     name: nginx
     state: reloaded
+    enabled: True
   changed_when: False
