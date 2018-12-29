@@ -57,7 +57,7 @@
     # 400 is because vhost_fqdn may not yet been set as a trusted domain
     status_code: [ 400, 200 ]
   register: nextcloud_get
-  until: nextcloud_get|succeeded
+  until: nextcloud_get is success
   retries: 30
   delay: 5
 
@@ -175,14 +175,9 @@
     chdir: "{{ app_dir }}"
   become: False
 
-- name: apt-get install tor
+- name: apt-get install tor and torsocks
   apt:
-    name: tor
-    state: present
-
-- name: apt-get install torsocks
-  apt:
-    name: torsocks
+    name: [tor, torsocks]
     state: present
 
 - name: mkdir /var/lib/tor/services
@@ -219,7 +214,7 @@
     url=$(cat /var/lib/tor/services/cloud/hostname)
     torsocks curl --silent http://$url/login > /dev/null
   register: tor_nextcloud_curl
-  until: tor_nextcloud_curl|succeeded
+  until: tor_nextcloud_curl is success
   retries: 30
   delay: 10
 

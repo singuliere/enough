@@ -1,10 +1,8 @@
 ---
 - name: apt-get install certbot
   apt:
-    name: "{{ item }}"
+    name: certbot
     state: present
-  with_items:
-    - certbot
 
 - name: call let's encrypt on vhost_fqdn
   shell: |

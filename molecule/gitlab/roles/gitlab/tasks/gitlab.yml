@@ -1,12 +1,7 @@
 ---
-- name: apt-get install virtualenv
+- name: apt-get install virtualenv, python-pip and python-setuptools
   apt:
-    name: virtualenv
-    state: present
-
-- name: apt-get install python-pip python-setuptools
-  apt:
-    name: [python-pip, python-setuptools]
+    name: [virtualenv, python-pip, python-setuptools]
     state: present
 
 - name: pip install docker

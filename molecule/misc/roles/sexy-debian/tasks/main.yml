@@ -2,28 +2,27 @@
 
 - name: apt-get install useful tools
   apt:
-    name: "{{ item }}"
+    name:
+      - bsd-mailx
+      - curl
+      - dnsutils
+      - fail2ban
+      - htop
+      - iftop
+      - iotop
+      - itop
+      - less
+      - lsof
+      - man
+      - screen
+      - tcpdump
+      - telnet
+      - tig
+      - traceroute
+      - tree
+      - unattended-upgrades
+      - vim
     state: present
-  with_items:
-  - bsd-mailx
-  - curl
-  - dnsutils
-  - fail2ban
-  - htop
-  - iftop
-  - iotop
-  - itop
-  - less
-  - lsof
-  - man
-  - screen
-  - tcpdump
-  - telnet
-  - tig
-  - traceroute
-  - tree
-  - unattended-upgrades
-  - vim
 
 - name: fancy root .bashrc
   blockinfile:
