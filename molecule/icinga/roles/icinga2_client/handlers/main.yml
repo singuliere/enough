@@ -2,6 +2,7 @@
   systemd:
     name: icinga2
     state: reloaded
+    enabled: True
   changed_when: False
   delegate_to: icinga-host
 
@@ -9,4 +10,5 @@
   systemd:
     name: icinga2
     state: reloaded
+    enabled: True
   changed_when: False

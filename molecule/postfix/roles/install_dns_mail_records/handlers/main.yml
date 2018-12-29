@@ -2,5 +2,6 @@
   systemd:
     name: bind9
     state: reloaded
+    enabled: True
   changed_when: False
   delegate_to: bind-host

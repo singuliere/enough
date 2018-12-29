@@ -11,6 +11,7 @@
   service:
     name: tor
     state: restarted
+    enabled: True
 
 - name: retrieve tor_http_vhost_fqdn
   shell: "cat {{ tor_hostname_file }}"
