@@ -47,10 +47,11 @@
     state: directory
     owner: debian
 
-- name: update-packages.sh log file
-  file:
-    path: /var/log/update-packages.log
-    state: touch
+- name: Create empty update-packages.sh log file
+  copy:
+    dest: /var/log/update-packages.log
+    content: ""
+    force: False
     owner: debian
 
 - name: install /etc/logrotate.d/packages-logrotate
