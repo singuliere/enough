@@ -58,7 +58,7 @@ Running
 -------
 
 The `ansible repository
-<http://lab.enough.community/main/enough-community/>`_ is run from the
+<http://lab.enough.community/main/infrastructure/>`_ is run from the
 `/srv/checkout` directory of the `ansible.enough.community` virtual
 machine as follows:
 
