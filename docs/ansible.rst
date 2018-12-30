@@ -80,6 +80,7 @@ machine as follows:
 .. code::
 
    ansible-playbook --private-key infrastructure_key \
+                    --vault-password-file=$HOME/.vault_pass.txt \
                     -i inventory \
                     enough-community-playbook.yml
 
