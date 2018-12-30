@@ -64,18 +64,12 @@
       - set_fact:
           domain: "{{ cmd.stdout|lower }}.test.enough.community"
   
-      - name: create NS record in test zone (requires access to bind-host.enough.community)
-        shell: |
-          ssh debian@bind-host.enough.community nsupdate <<EOF
-          server localhost
-          zone test.enough.community
-          update add ns-{{ domain }}. 1800 A {{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }}
-          update add {{ domain }}. 1800 NS ns-{{ domain }}.
-          show
-          send
-          quit
-          EOF
-  
+      - name: create NS record in test zone (requires access to bind-host.{{ production_domain }})
+        command: |
+          ssh -o BatchMode=yes \
+              -o StrictHostKeyChecking=no \
+              subdomain@ns1.{{ production_domain }} {{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }} {{ domain }}
+
       - name: save the test sub-domain
         copy:
           content: |

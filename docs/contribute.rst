@@ -65,7 +65,7 @@ consider when working on improving a playbook or a service.
 * ``molecule/authorized_keys``: distribute SSH public keys
 * ``molecule/backup``: daily VMs snapshots
 * ``molecule/bind``: DNS server and client
-* ``molecule/certs``: certs files for testing
+* ``molecule/letsencrypt-nginx``: nginx reverse proxy with letsencrypt integration
 * ``molecule/icinga``: resources monitoring
 * ``molecule/infrastructure``: VMs creation and firewalling
 * ``molecule/misc/roles/commit_etc``: keep track of changes in /etc
@@ -111,7 +111,7 @@ verified manually inside the preproduction environment.
 
 .. note:: the person running the following commands need their
           personal ssh public key to give them access to
-          `debian@ns1.enough.community`.
+          `subdomain@ns1.enough.community`.
 
 * ``molecule create -s preprod``
 * ``molecule converge -s preprod``
