@@ -49,6 +49,11 @@
     force: False
     owner: debian
 
+- name: rm -f /usr/share/nginx/html/index.html
+  file:
+    path: /usr/share/nginx/html/index.html
+    state: absent
+
 - name: install /etc/logrotate.d/packages-logrotate
   copy:
     src: packages-logrotate
