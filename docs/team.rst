@@ -29,7 +29,7 @@ Infrastructure
 
 * `François Poulain <fpoulain@metrodore.fr>`__
 * `Loïc Dachary <loic@dachary.org>`__
-* `Louis Vanhaelewyn <louis.vanhaelewyn@free.fr>`__
+* `Pierre-Louis Bonicoli <pierre-louis.bonicoli@gmx.fr>`__
 
 Weblate
 -------
@@ -42,6 +42,7 @@ Mattermost
 * `François Poulain <fpoulain@metrodore.fr>`__
 * `Loïc Dachary <loic@dachary.org>`__
 * `Louis Vanhaelewyn <louis.vanhaelewyn@free.fr>`__
+* `Pierre-Louis Bonicoli <pierre-louis.bonicoli@gmx.fr>`__
 
 Readthedocs
 -----------

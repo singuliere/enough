@@ -54,6 +54,21 @@ testing are not used in production).
 
    $ echo domain: enough.community | sudo tee /srv/checkout/inventory/group_vars/all/domain.yml
 
+Secrets
+-------
+
+The default credentials (for Weblate, Discourse etc.) are only
+suitable for integration testing and must be overriden before
+deploying on publicly available hosts. The recommended way of doing this is to:
+
+* fork The `ansible repository <http://lab.enough.community/main/infrastructure/>`_ into a private repository
+* add files overriding the secrets in `inventories/common/host_vars/*/secrets.yml`
+* encrypt those files with `ansible vault <https://docs.ansible.com/ansible/latest/user_guide/vault.html>`_
+* share the password to decrypt the files with trusted administrators
+
+The encrypted secrets are kept in a private repository to not be
+publicly exposed to brute force attacks.
+
 Running
 -------
 
