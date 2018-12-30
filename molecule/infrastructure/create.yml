@@ -88,4 +88,4 @@
     - name: Dump hosts_conf
       copy:
         content: "{{ hosts_orig | combine(hosts_updates, recursive=True) | to_yaml }}"
-        dest: "../../inventories/common/01-hosts.yml"
+        dest: "../../inventories/01-hosts.yml"
