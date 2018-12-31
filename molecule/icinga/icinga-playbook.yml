@@ -3,14 +3,11 @@
   hosts: localhost
   connection: local
   gather_facts: False
-  vars:
-    os_security_group_tcp: [ 5665 ]
-  tasks:
 
-  - name: configure firewall
-    include_role:
-      name: firewall
-
+  roles:
+    - role: firewall
+      vars:
+        os_security_group_tcp: [ 5665 ]
 
 - name: install icinga master
   hosts: icinga-host
@@ -44,23 +41,17 @@
 - name: install icinga clients
   hosts: 'all:!icinga-host'
   become: true
-  tasks:
 
-  - name: install icinga client
-    include_role:
-      name: icinga2_client
-    when:
-      - 'not_monitored is undefined'
-
-
+  roles:
+    - role: icinga2_client
+      when:
+        - not_monitored is undefined
 
 - name: install icinga monitoring capabilities
   hosts: 'all'
   become: true
-  tasks:
 
-  - name: install icinga monitoring capabilities
-    include_role:
-      name: icinga2_common
-    when:
-      - 'not_monitored is undefined'
+  roles:
+    - role: icinga2_common
+      when:
+        - not_monitored is undefined
