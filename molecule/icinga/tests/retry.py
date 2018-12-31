@@ -1,0 +1,24 @@
+import time
+from functools import wraps
+
+
+class RetryException(Exception):
+    pass
+
+
+def retry(exceptions, tries=2, delay=1):
+    def deco_retry(f):
+        @wraps(f)
+        def f_retry(*args, **kwargs):
+            mtries, mdelay = tries + 1, delay
+            while tries > 0:
+                try:
+                    return f(*args, **kwargs)
+                except exceptions as e:
+                    print('{}, Retrying in {} seconds...'.format(e, mdelay))
+                    time.sleep(mdelay)
+                    mtries -= 1
+                    mdelay *= 2
+            raise RetryException("Number of retries exceeded for function " + f.__name__)
+        return f_retry
+    return deco_retry
