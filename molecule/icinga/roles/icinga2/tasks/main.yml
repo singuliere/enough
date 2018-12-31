@@ -170,7 +170,7 @@
     icingaweb2_user_hash: "{{ output.stdout }}"
 
 - set_fact:
-    icingaweb2_dbpass: "{{ lookup('password', '/tmp/icingaweb2_dbpass') }}"
+    icingaweb2_dbpass: "{{ lookup('password', 'secret/icingaweb2_dbpass') }}"
 
 - name: create icingaweb2 DB
   command: mariadb -e "CREATE DATABASE IF NOT EXISTS icingaweb2;"
