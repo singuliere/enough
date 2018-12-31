@@ -4,6 +4,8 @@ import requests
 import pytest
 import yaml
 
+import retry
+
 testinfra_hosts = ['icinga-host']
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -50,3 +52,34 @@ def test_icinga_api_services(host):
     assert len(answer['results']) > 40
     assert host.backend.host != "monitoring-client-host" or len([s for s in answer['results'] if 'monitoring-client-host!Secure Drop Forum' == s['name']]) == 1
     assert len([s for s in answer['results'] if 'icinga-host!Manhack Securedrop instance over Tor' == s['name']]) == 1
+
+@retry.retry(AssertionError, tries=7)
+def wait_for_service(session, api, name):
+    r = session.get(
+        '{api}/objects/services/{name}'.format(api=api, name=name)
+    )
+    r.raise_for_status()
+    answer = r.json()
+    assert int(answer['results'][0]['attrs']['state']) == 0
+    return True
+
+def is_service_ok(host, name):
+    #
+    # force the check to reduce the waiting time
+    #
+    session = get_api_session(host)
+    api = 'https://{}:5665/v1'.format(get_address())
+    r = session.post(
+        '{api}/actions/reschedule-check'.format(api=api),
+        json={
+            "type": "Service",
+            "filter": "service.__name==\"{}\"".format(name),
+            "force": True,
+        }
+    )
+    r.raise_for_status()
+    answer = r.json()
+    assert len(answer['results']) == 1
+    assert int(answer['results'][0]['code']) == 200
+
+    return wait_for_service(session, api, name)
