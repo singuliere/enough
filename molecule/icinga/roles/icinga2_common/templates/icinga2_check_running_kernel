@@ -1,1 +1,0 @@
-{{ icinga_user }} ALL=NOPASSWD: /usr/lib/nagios/plugins/check_running_kernel
