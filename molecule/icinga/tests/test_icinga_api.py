@@ -83,3 +83,6 @@ def is_service_ok(host, name):
     assert int(answer['results'][0]['code']) == 200
 
     return wait_for_service(session, api, name)
+
+def test_icinga_ntp_time(host):
+    assert is_service_ok(host, 'monitoring-client-host!systemd-timesyncd is working')
