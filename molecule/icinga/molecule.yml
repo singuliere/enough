@@ -32,5 +32,10 @@ scenario:
     - destroy
 verifier:
   name: testinfra
+  options:
+    v: True
+    x: True
+#    s: True
+#    k: test_icinga_ntp_time
   lint:
     name: flake8
