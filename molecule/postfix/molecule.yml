@@ -34,6 +34,7 @@ verifier:
   name: testinfra
   options:
     v: True
-    s: True
+#    s: True
+#    k: test_service
   lint:
     name: flake8
