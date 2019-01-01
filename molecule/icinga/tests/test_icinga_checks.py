@@ -1,5 +1,3 @@
-import urllib3
-
 from tests.icinga_helper import IcingaHelper
 
 testinfra_hosts = ['icinga-host']
