@@ -1,5 +1,10 @@
 ---
 
+- name: apt-get install git
+  apt:
+    name: git
+    state: present
+
 - name: mkdir /srv/forum
   file:
     state: directory
