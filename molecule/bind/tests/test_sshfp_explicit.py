@@ -7,7 +7,7 @@ def test_sshfp(host):
     #
     #     - role: install_ssh_records
     #       vars:
-    #         install_ssh_records_host: bind-client
+    #         install_ssh_records_host: ns1
     #
     with host.sudo():
-        assert host.file('/var/cache/bind/' + domain).contains('bind-client IN SSHFP')
+        assert host.file('/var/cache/bind/' + domain).contains('ns1 IN SSHFP')
