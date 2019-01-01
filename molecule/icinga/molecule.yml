@@ -37,5 +37,7 @@ verifier:
     x: True
 #    s: True
 #    k: test_icinga_ntp_time
+  env:
+    PYTHONPATH: ../..
   lint:
     name: flake8
