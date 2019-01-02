@@ -4,4 +4,5 @@ os_security_group_tcp: [ ]
 os_security_group_tcp_external: [ ]
 os_security_group_udp: [ ]
 os_security_group_udp_external: [ ]
+os_security_group_remote_ip_prefix: 0.0.0.0/0
 state: 'present'
