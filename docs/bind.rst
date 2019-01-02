@@ -23,7 +23,8 @@ because everything depends on it.
 .. code::
 
    ansible-playbook -l bind-host \
-                    --private-key infrastructure_key -i inventory \
+                    --private-key infrastructure_key \
+                    -i inventories/common \
                     enough-community-playbook.yml 
 
 Mail

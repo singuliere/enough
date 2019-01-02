@@ -31,8 +31,8 @@ provisioner:
     ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles:../packages/roles:../jdauphant.nginx/roles:../nextcloud/roles
   inventory:
     links:
-      group_vars: ../../inventory/group_vars
-      host_vars:  ../../inventory/host_vars
+      group_vars: ../../inventories/common/group_vars
+      host_vars:  ../../inventories/common/host_vars
 scenario:
   name: {{ cookiecutter.scenario_name }}
   test_sequence:

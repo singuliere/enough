@@ -3,7 +3,7 @@ GitLab
 
 `lab.enough.community <http://lab.enough.community/main/infrastructure/tree/master/molecule/gitlab/roles/gitlab>`_ is installed `with docker <https://hub.docker.com/r/sameersbn/gitlab/>`_.
 
-The configuration variables are set in `inventory/host_vars/gitlab-host.yml` at
+The configuration variables are set in `inventories/common/host_vars/gitlab-host/gitlab.yml` at
 the root of the repository. It can be copied from
 `molecule/gitlab/roles/gitlab/defaults/main.yml`.
 

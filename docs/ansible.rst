@@ -47,12 +47,12 @@ Manually create `/srv/enough-community/clouds.yml` from `~/openrc.sh` and check 
 
 Set the passwords and other secret credentialis in the file or
 directory matching a given host at
-`/srv/checkout/inventory/host_vars/` (so that the default used during
+`/srv/checkout/inventories/common/host_vars/` (so that the default used during
 testing are not used in production).
 
 .. code::
 
-   $ echo domain: enough.community | sudo tee /srv/checkout/inventory/group_vars/all/domain.yml
+   $ echo domain: enough.community | sudo tee /srv/checkout/inventories/common/group_vars/all/domain.yml
 
 Secrets
 -------
@@ -81,7 +81,23 @@ machine as follows:
 
    ansible-playbook --private-key infrastructure_key \
                     --vault-password-file=$HOME/.vault_pass.txt \
-                    -i inventory \
+                    -i inventories/common \
+                    enough-community-playbook.yml
+
+Some hosts contain private information that belong to users who only
+trust some administrators of the infrastructure, not all of
+them. These hosts only have the ssh public keys of the trusted
+administrators and are listed in a dedicated inventory subdirectory.
+For instance, the administrator `dachary` owns the the inventory
+directory `inventories/dachary`. This administrator can then run the
+playbook on all the common infrastructure as well as all the hosts
+that can only be accessed by them as follows:
+
+.. code::
+
+   ansible-playbook --private-key ~/.ssh/id_rsa \
+                    -i inventories/common \
+                    -i inventories/dachary \
                     enough-community-playbook.yml
 
 Inventory
@@ -89,9 +105,13 @@ Inventory
 
 The ansible inventory is created by the
 ``molecule/infrastructure/create.yml`` playbook and stored in the
-``inventory/01-hosts.yml`` file every time the ``molecule create -s
-preprod`` command runs.  The inventory variables (such as the ssh port
-number) are read from the ``hosts-base.yml`` file.
+``inventories/01-hosts.yml`` file every time the ``molecule create``
+command runs.  The inventory variables (such as the ssh port number)
+are read from the ``hosts-base.yml`` file.
+
+It is the responsibility of the system administrator to copy/paste the
+content of ``inventories/01-hosts.yml`` in the relevant subdirectory
+(`common` etc.).
 
 Updating
 --------

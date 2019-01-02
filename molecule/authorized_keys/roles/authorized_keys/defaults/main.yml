@@ -1,1 +1,1 @@
-ssh_keys_directories: [ 'ssh_keys/*.pub' ]
+authorized_keys_globs: [ 'ssh_keys/*.pub' ]
