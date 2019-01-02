@@ -1,25 +1,35 @@
 ---
 - name: prepare cloud environment
   hosts: enough
+  become: true
 
   roles:
-    - { role: docker_filesystem }
-    - { role: ansible-role-docker }
-    - { role: docker }
+    - role: firewall
+      vars:
+        os_security_group_udp_external: [ 53 ]
+        os_security_group_tcp_external: [ 5665, 465 ]
+        os_security_group_remote_ip_prefix: "{{ ansible_host }}/32"
+      delegate_to: localhost
+      become: false
+
+    - role: docker_filesystem
+    - role: ansible-role-docker
+    - role: docker
     - role: nextcloud
-      vhost_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
+      vars:
+        vhost_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
 
     - role: monitor_http_vhost
-      http_vhost_https: true
-      http_vhost_name: "{{ inventory_hostname }}"
-      http_vhost_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
-      http_vhost_uri: "/login"
-      http_vhost_string: "Forgot password"
+      vars:
+        http_vhost_https: true
+        http_vhost_name: "{{ inventory_hostname }}"
+        http_vhost_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
+        http_vhost_uri: "/login"
+        http_vhost_string: "Forgot password"
 
     - role: monitor_tor_http_vhost
-      tor_hostname_file: /var/lib/tor/services/cloud/hostname
-      tor_http_vhost_name: "{{ inventory_hostname }}"
-      tor_http_vhost_uri: "/login"
-      tor_http_vhost_string: "Forgot password"
-
-  become: True
+      vars:
+        tor_hostname_file: /var/lib/tor/services/cloud/hostname
+        tor_http_vhost_name: "{{ inventory_hostname }}"
+        tor_http_vhost_uri: "/login"
+        tor_http_vhost_string: "Forgot password"

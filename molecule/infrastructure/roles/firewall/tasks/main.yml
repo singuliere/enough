@@ -38,7 +38,7 @@
   - name: security group rule for TCP ports (external)
     os_security_group_rule:
       <<: *rule_tcp
-      remote_ip_prefix: 0.0.0.0/0
+      remote_ip_prefix: "{{ os_security_group_remote_ip_prefix }}"
     loop: "{{ os_security_group_tcp_external }}"
   
   - name: security group rule for UDP ports (define rule_udp)
@@ -59,7 +59,7 @@
   - name: security group rule for UDP ports (external)
     os_security_group_rule:
       <<: *rule_udp
-      remote_ip_prefix: 0.0.0.0/0
+      remote_ip_prefix: "{{ os_security_group_remote_ip_prefix }}"
     loop: "{{ os_security_group_udp_external }}"
   
   - name: security group rule for ICMP (internal)
@@ -75,7 +75,7 @@
       <<: *os_auth
       security_group: infrastructure
       protocol: icmp
-      remote_ip_prefix: 0.0.0.0/0
+      remote_ip_prefix: "{{ os_security_group_remote_ip_prefix }}"
     when: os_security_group_icmp
   
   when: state == 'present'

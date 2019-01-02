@@ -1,12 +1,17 @@
 ---
 
-- name: apt-get install useful tools
+# these must be moved elsewhere
+- name: apt-get install fail2band and unattended-upgrades
+  apt:
+    name:
+      - fail2ban
+      - unattended-upgrades
+    state: present
+
+- name: apt-get install tools for human interaction
   apt:
     name:
       - bsd-mailx
-      - curl
-      - dnsutils
-      - fail2ban
       - htop
       - iftop
       - iotop
@@ -20,8 +25,8 @@
       - tig
       - traceroute
       - tree
-      - unattended-upgrades
       - vim
+      - emacs-nox
     state: present
 
 - name: fancy root .bashrc
@@ -103,6 +108,7 @@
     name: editor
     path: /usr/bin/vim.basic
 
+# the following must be moved elsewhere
 - name: free Debian
   copy:
     dest: /etc/apt/sources.list
