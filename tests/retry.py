@@ -11,7 +11,7 @@ def retry(exceptions, tries=2, delay=1):
         @wraps(f)
         def f_retry(*args, **kwargs):
             mtries, mdelay = tries + 1, delay
-            while tries > 0:
+            while mtries > 0:
                 try:
                     return f(*args, **kwargs)
                 except exceptions as e:

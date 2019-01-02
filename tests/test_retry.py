@@ -1,20 +1,31 @@
-from retry import retry
+import pytest
+import retry
 
 
 def test_that_retry_works_on_simple_function():
 
-    @retry(Exception)
+    @retry.retry(Exception)
     def f():
         return True
 
-    assert f
+    assert f()
+
+
+def test_that_retry_fails():
+
+    @retry.retry(AssertionError)
+    def f():
+        assert 0
+
+    with pytest.raises(retry.RetryException):
+        f()
 
 
 def test_that_retry_works_on_complex_function():
     class C():
         fail = 2
 
-        @retry(Exception, tries=3)
+        @retry.retry(Exception, tries=3)
         def f(self):
             self.fail -= 1
             assert self.fail == 0
