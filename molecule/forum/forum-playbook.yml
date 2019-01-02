@@ -17,6 +17,6 @@
       http_vhost_name: Forum
       http_vhost_fqdn: "{{ forum_vhost_fqdn }}"
       http_vhost_uri: "/"
-      http_vhost_string: "Enough"
+      http_vhost_string: "https://github.com/discourse"
 
   become: True

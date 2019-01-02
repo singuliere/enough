@@ -1,8 +1,8 @@
 ---
 
-- name: apt-get install git
+- name: apt-get install git curl
   apt:
-    name: git
+    name: [git, curl]
     state: present
 
 - name: chown debian /srv
