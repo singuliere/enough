@@ -12,3 +12,4 @@ infrastructure_key*
 secret
 inventories/common/group_vars/all/domain.yml
 openrc.sh
+inventories/01-hosts.yml
