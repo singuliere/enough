@@ -1,7 +1,7 @@
 ---
 
 # these must be moved elsewhere
-- name: apt-get install fail2band and unattended-upgrades
+- name: apt-get install fail2ban and unattended-upgrades
   apt:
     name:
       - fail2ban
