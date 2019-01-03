@@ -1,7 +1,21 @@
 ---
-- name: setup DNS client
+- name: setup DNS client (allow-recursion)
   hosts: all:!external-host
-  become: True
+  become: true
+  serial: 1 # so blockinfile does not race against itslef
+
+  tasks:
+    - name: allow recursion for {{ ansible_hostname }}
+      blockinfile:
+        path: /etc/bind/named.conf.allow-recursion
+        insertafter: allow-recursion {
+        marker: "# {mark} ansible managed {{ ansible_host }}"
+        content: "{{ ansible_host }};"
+      delegate_to: bind-host
+
+- name: setup DNS client (dhclient, ssh_records, hostname)
+  hosts: all:!external-host
+  become: true
 
   roles:
     - role: dhclient

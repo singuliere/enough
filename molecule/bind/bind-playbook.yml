@@ -42,19 +42,13 @@
             listen-on-v6 { any; };
             allow-query { any; };
             recursion yes;
-            allow-recursion {
-              {% for host, info in hostvars.items() %}
-              {% if host != 'external-host' %}
-              {{ info.ansible_host }}; # {{ host }}
-              {% endif %}
-              {% endfor %}
-            };
             allow-transfer  {
               217.70.177.40; # ns6.gandi.net
               {% if 'external-host' in hostvars %}
               {{ hostvars['external-host'].ansible_host }};
               {% endif %}
             };
+            include "/etc/bind/named.conf.allow-recursion";
           };
 
           include "/etc/bind/named.conf.default-zones";
