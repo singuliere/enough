@@ -30,7 +30,7 @@
           1D )
 
                      IN  NS     ns1.{{ domain }}.
-          @ 1800 IN A {{ hostvars[inventory_hostname].ansible_host }}
+          @ 1800 IN A {{ ansible_host }}
 
     - role: bind
       bind_zone_name: "{{ domain }}"
@@ -84,7 +84,7 @@
 
           {% if 'website-host' in hostvars %}@ 1800 IN A {{ hostvars['website-host'].ansible_host }}{% endif %}
 
-          ns1 1800 IN A {{ hostvars[inventory_hostname].ansible_host }}
+          ns1 1800 IN A {{ ansible_host }}
 
           ansible 1800 IN A 51.68.80.10
 
