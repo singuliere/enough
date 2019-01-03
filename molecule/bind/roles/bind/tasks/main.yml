@@ -35,13 +35,6 @@
 - name: dump dynamic zones to disk, and remove their journal files
   shell: rndc sync -clean || true
 
-- name: create include files
-  copy:
-    content: ""
-    dest: "/var/cache/bind/{{ item }}.{{ domain }}.zone"
-    force: no
-  loop: "{{ hostvars.keys() }}"
-
 - name: BIND zone file
   template:
     src: zone.conf.j2

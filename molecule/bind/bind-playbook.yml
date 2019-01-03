@@ -57,7 +57,7 @@
             type master;
             file "{{ domain }}";
             notify yes;
-            allow-update { none; };
+            allow-update { localhost; };
           };
 
           zone "test.{{ domain }}" IN {
@@ -100,12 +100,6 @@
 
           @ 1800 IN MX 50 fb.mail.gandi.net.
           @ 1800 IN MX 10 spool.mail.gandi.net.
-
-          {% for host, info in hostvars.items() %}
-          {{ host }} 1800 IN A {{ info.ansible_host }}
-          {{ host|replace("-host","") }} 1800 IN CNAME {{ host }}
-          $INCLUDE /var/cache/bind/{{ host }}.{{ domain }}.zone
-          {% endfor %}
 
           @ IN CAA 0 issue "letsencrypt.org"
 

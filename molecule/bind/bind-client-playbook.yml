@@ -13,6 +13,27 @@
         content: "{{ ansible_host }};"
       delegate_to: bind-host
 
+- name: setup DNS client (A/CNAME records)
+  hosts: all:!external-host
+  become: true
+
+  tasks:
+    - name: install BIND A/CNAME records
+      shell: |
+        nsupdate <<EOF
+        server localhost
+        zone {{ domain }}
+        update add {{ bind_client_hostname }}.{{ domain }}. 1800 A {{ bind_client_ip }}
+        update add {{ bind_client_hostname | replace("-host","") }}.{{ domain }}. 1800 CNAME {{ bind_client_hostname }}.{{ domain }}.
+        show
+        send
+        quit
+        EOF
+      delegate_to: bind-host
+      vars:
+        bind_client_hostname: "{{ ansible_hostname }}"
+        bind_client_ip: "{{ ansible_host }}"
+
 - name: setup DNS client (dhclient, ssh_records, hostname)
   hosts: all:!external-host
   become: true
