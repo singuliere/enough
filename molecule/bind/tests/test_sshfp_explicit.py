@@ -9,5 +9,8 @@ def test_sshfp(host):
     #       vars:
     #         install_ssh_records_host: ns1
     #
-    with host.sudo():
-        assert host.file('/var/cache/bind/' + domain).contains('ns1 IN SSHFP')
+    cmd = host.run('dig sshfp +noall +answer @ns1.{domain} ns1.{domain}'.format(
+        domain=domain))
+    assert cmd.rc == 0
+    assert 'SSHFP' in cmd.stdout
+    assert 'ns1.' + domain in cmd.stdout

@@ -30,7 +30,7 @@
           1D )
 
                      IN  NS     ns1.{{ domain }}.
-          @ 1800 IN A {{ hostvars[inventory_hostname].ansible_host }}
+          @ 1800 IN A {{ ansible_host }}
 
     - role: bind
       bind_zone_name: "{{ domain }}"
@@ -42,19 +42,13 @@
             listen-on-v6 { any; };
             allow-query { any; };
             recursion yes;
-            allow-recursion {
-              {% for host, info in hostvars.items() %}
-              {% if host != 'external-host' %}
-              {{ info.ansible_host }}; # {{ host }}
-              {% endif %}
-              {% endfor %}
-            };
             allow-transfer  {
               217.70.177.40; # ns6.gandi.net
               {% if 'external-host' in hostvars %}
               {{ hostvars['external-host'].ansible_host }};
               {% endif %}
             };
+            include "/etc/bind/named.conf.allow-recursion";
           };
 
           include "/etc/bind/named.conf.default-zones";
@@ -63,7 +57,7 @@
             type master;
             file "{{ domain }}";
             notify yes;
-            allow-update { none; };
+            allow-update { localhost; };
           };
 
           zone "test.{{ domain }}" IN {
@@ -90,7 +84,7 @@
 
           {% if 'website-host' in hostvars %}@ 1800 IN A {{ hostvars['website-host'].ansible_host }}{% endif %}
 
-          ns1 1800 IN A {{ hostvars[inventory_hostname].ansible_host }}
+          ns1 1800 IN A {{ ansible_host }}
 
           ansible 1800 IN A 51.68.80.10
 
@@ -106,12 +100,6 @@
 
           @ 1800 IN MX 50 fb.mail.gandi.net.
           @ 1800 IN MX 10 spool.mail.gandi.net.
-
-          {% for host, info in hostvars.items() %}
-          {{ host }} 1800 IN A {{ info.ansible_host }}
-          {{ host|replace("-host","") }} 1800 IN CNAME {{ host }}
-          $INCLUDE /var/cache/bind/{{ host }}.{{ domain }}.zone
-          {% endfor %}
 
           @ IN CAA 0 issue "letsencrypt.org"
 

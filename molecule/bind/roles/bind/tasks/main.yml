@@ -11,6 +11,17 @@
   changed_when: false
   run_once: true
 
+- name: BIND master config file allow recursion
+  copy:
+    content: |
+      allow-recursion {
+      };
+    dest: /etc/bind/named.conf.allow-recursion
+    force: no
+    owner: root
+    group: bind
+    mode: '0640'
+
 - name: BIND master config file
   template:
     src: named.conf.j2
@@ -23,13 +34,6 @@
 
 - name: dump dynamic zones to disk, and remove their journal files
   shell: rndc sync -clean || true
-
-- name: create include files
-  copy:
-    content: ""
-    dest: "/var/cache/bind/{{ item }}.{{ domain }}.zone"
-    force: no
-  loop: "{{ hostvars.keys() }}"
 
 - name: BIND zone file
   template:
