@@ -1,0 +1,9 @@
+firewall_ssh_server_group:
+  hosts:
+    wereport-host:
+    cloud-host:
+
+firewall_web_server_group:
+  hosts:
+    wereport-host:
+    cloud-host:
