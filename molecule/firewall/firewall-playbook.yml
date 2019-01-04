@@ -1,0 +1,116 @@
+---
+- name: firewall for web
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item }}"
+        firewall_clients: [ 0.0.0.0/0 ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 80, 443 ]
+      with_items: "{{ groups.firewall_web_server_group | default([]) }}"
+
+- name: firewall for DNS
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item }}"
+        firewall_clients: [ 0.0.0.0/0 ]
+        firewall_protocols: [ tcp, udp ]
+        firewall_ports: [ 53 ]
+      with_items: "{{ groups.firewall_dns_server_group | default([]) }}"
+
+- name: firewall for ssh
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item }}"
+        firewall_clients: [ 0.0.0.0/0 ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 22 ]
+      with_items: "{{ groups.firewall_ssh_server_group | default([]) }}"
+
+- name: firewall for icinga2
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item.0 }}"
+        firewall_clients: [ "{{ hostvars[item.1]['ansible_host'] }}/32" ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 5665 ]
+      with_nested:
+        - "{{ groups.firewall_icinga2_server_group | default([]) }}"
+        - |
+          [
+            {% if groups.firewall_icinga2_client_group is defined %}
+              {% for host in groups.firewall_icinga2_client_group %}
+                {% if hostvars[host].ansible_host is defined %}
+                  "{{ host }}",
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          ]
+
+- name: firewall for postfix
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item.0 }}"
+        firewall_clients: [ "{{ hostvars[item.1]['ansible_host'] }}/32" ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 465 ]
+      with_nested:
+        - "{{ groups.firewall_postfix_server_group | default([]) }}"
+        - |
+          [
+            {% if groups.firewall_postfix_client_group is defined %}
+              {% for host in groups.firewall_postfix_client_group %}
+                {% if hostvars[host].ansible_host is defined %}
+                  "{{ host }}",
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          ]
+
+- name: firewall for ICMP
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item.0 }}"
+        firewall_clients: [ "{{ hostvars[item.1]['ansible_host'] }}/32" ]
+        firewall_protocols: [ icmp ]
+      with_nested:
+        - "{{ groups.firewall_icmp_server_group | default([]) }}"
+        - |
+          [
+            {% if groups.firewall_icmp_client_group is defined %}
+              {% for host in groups.firewall_icmp_client_group %}
+                {% if hostvars[host].ansible_host is defined %}
+                  "{{ host }}",
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          ]

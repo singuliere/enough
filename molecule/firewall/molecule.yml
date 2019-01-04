@@ -1,0 +1,52 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: server-host
+    flavor: "s1-2"
+    groups:
+      - firewall_dns_server_group
+      - firewall_postfix_server_group
+      - firewall_icinga2_server_group
+      - firewall_web_server_group
+      - firewall_ssh_server_group
+      - firewall_icmp_server_group
+  - name: client-host
+    flavor: "s1-2"
+    groups:
+      - firewall_dns_client_group
+      - firewall_postfix_client_group
+      - firewall_icinga2_client_group
+      - firewall_web_client_group
+      - firewall_ssh_client_group
+      - firewall_icmp_client_group
+  - name: gitlab-host
+    flavor: "s1-2"
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  env:
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles
+  inventory:
+    links:
+      group_vars: ../../inventories/common/group_vars
+      host_vars:  ../../inventories/common/host_vars
+scenario:
+  name: firewall
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: True
+    s: True
+#    k: test_server_visible_from_external
+  lint:
+    name: flake8
