@@ -11,4 +11,11 @@
     - ../../private-key.yml
   roles:
     - { role: vm, state: absent }
-    - { role: firewall, state: absent }
+  tasks:
+    - name: destroy firewall
+      include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item.name }}"
+        firewall_state: absent
+      loop: "{{ molecule_yml.platforms }}"

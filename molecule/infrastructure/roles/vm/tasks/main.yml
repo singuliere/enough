@@ -63,7 +63,7 @@
         - sed -i -e '/^#Port/s/^.*$/Port {% if hosts_orig is defined and item.name in hosts_orig.all.hosts and hosts_orig.all.hosts[item.name].ansible_port is defined %}{{ hosts_orig.all.hosts[item.name].ansible_port }}{% else %}22{% endif %}/' /etc/ssh/sshd_config
         - systemctl restart ssh
     security_groups:
-      - infrastructure
+      - "{{ item.name }}"
   loop: "{% if molecule_yml is defined %}{{ molecule_yml.platforms }}{% endif %}{% if vms is defined %}{{ vms }}{% endif %}"
   register: server
 
