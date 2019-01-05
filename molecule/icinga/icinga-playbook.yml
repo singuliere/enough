@@ -1,14 +1,4 @@
 ---
-- name: configure firewall
-  hosts: localhost
-  connection: local
-  gather_facts: False
-
-  roles:
-    - role: firewall
-      vars:
-        os_security_group_tcp: [ 5665 ]
-
 - name: install icinga master
   hosts: icinga-host
   become: true
