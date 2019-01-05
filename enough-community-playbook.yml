@@ -1,4 +1,5 @@
 ---
+- import_playbook: molecule/firewall/firewall-playbook.yml
 - import_playbook: molecule/misc/history-playbook.yml
 - import_playbook: molecule/misc/sexy-debian-playbook.yml
 - import_playbook: molecule/misc/sshd-playbook.yml
