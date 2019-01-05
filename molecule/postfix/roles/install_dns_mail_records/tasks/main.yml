@@ -1,10 +1,13 @@
 ---
-
 - name: install DNS mail txt records
-  blockinfile:
-    content: |
-      @ 1800 IN TXT "v=spf1 mx ip4:{{ hostvars['postfix-host']['ansible_host'] }} ~all"
-    path: "/var/cache/bind/{{ domain }}"
-    marker: ";; {mark} postfix TXT records"
+  shell: |
+        nsupdate <<EOF
+        server localhost
+        zone {{ domain }}
+        update add {{ domain }}. 1800 IN TXT "v=spf1 mx ip4:{{ hostvars['postfix-host']['ansible_host'] }} ~all"
+        show
+        send
+        quit
+        EOF
   delegate_to: bind-host
   notify: reload bind
