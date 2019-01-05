@@ -12,10 +12,13 @@ platforms:
     flavor: "s1-2"
 provisioner:
   name: ansible
+  options:
+    i: ../../inventories/common/firewall.yml
+    limit: bind-host,chat-host,icinga-host,localhost
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../bind/roles:../icinga/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../icinga/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
   inventory:
     links:
       group_vars: ../../inventories/common/group_vars
