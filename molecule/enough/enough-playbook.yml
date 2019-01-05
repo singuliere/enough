@@ -4,14 +4,6 @@
   become: true
 
   roles:
-    - role: firewall
-      vars:
-        os_security_group_udp_external: [ 53 ]
-        os_security_group_tcp_external: [ 5665, 465 ]
-        os_security_group_remote_ip_prefix: "{{ ansible_host }}/32"
-      delegate_to: localhost
-      become: false
-
     - role: docker_filesystem
     - role: ansible-role-docker
     - role: docker

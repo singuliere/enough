@@ -1,6 +1,8 @@
 testinfra_hosts = ['cloud-host']
 
 def test_nextcloud(host):
+    with host.sudo():
+        host.run("apt-get install -y curl")
     cmd = host.run("""
     set -xe
     d=/dev/sdb
