@@ -3,7 +3,7 @@ import time
 import testinfra
 import yaml
 
-testinfra_hosts = ['bind-client-host']
+testinfra_hosts = ['icinga-host']
 
 def test_bind(host):
     domain = host.run("hostname -d").stdout.strip()

@@ -12,6 +12,7 @@ class TestChecks(IcingaHelper):
 #        r = self.get_client().objects.list('Service', joins=['host.name'])
         with host.sudo():
             host.run("systemctl restart icinga2")
+        assert self.is_service_ok('bind-host!ping4')
         domain = host.run("hostname -d").stdout.strip()
         assert self.is_service_ok('bind-host!Zone test.' + domain)
         assert self.is_service_ok('bind-host!Zone ' + domain)
