@@ -1,4 +1,5 @@
 import website
+import testinfra
 from tests.icinga_helper import IcingaHelper
 
 testinfra_hosts = ['icinga-host']

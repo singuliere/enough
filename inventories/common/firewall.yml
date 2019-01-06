@@ -1,0 +1,56 @@
+# ssh
+firewall_ssh_server_group:
+  hosts:
+    bind-host:
+    postfix-host:
+    icinga-host:
+    weblate-host:
+    gitlab-host:
+    runner-host:
+    packages-host:
+    website-host:
+    chat-host:
+
+# postfix
+firewall_postfix_server_group:
+  hosts:
+    postfix-host:
+
+firewall_postfix_client_group:
+  children:
+    firewall_ssh_server_group:
+
+# DNS
+firewall_dns_server_group:
+  hosts:
+    bind-host:
+
+# icinga2
+firewall_icinga2_server_group:
+  hosts:
+    icinga-host:
+
+firewall_icinga2_client_group:
+  children:
+    firewall_ssh_server_group:
+
+# web
+firewall_web_server_group:
+  hosts:
+    chat-host:
+    forum-host:
+    gitlab-host:
+    icinga-host:
+    packages-host:
+    postfix-host:  # not a web host but has a web site for the purpose of obtaining letsencrypt certificates
+    weblate-host:
+    website-host:
+
+# icmp
+firewall_icmp_server_group:
+  children:
+    firewall_ssh_server_group:
+
+firewall_icmp_client_group:
+  hosts:
+    icinga-host:

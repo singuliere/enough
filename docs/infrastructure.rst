@@ -40,12 +40,9 @@ Security groups
 ---------------
 
 The firewall to all machines is based on `openstack security groups
-<https://docs.openstack.org/nova/latest/admin/security-groups.html>`_. The
-`infrastructure
-<http://lab.enough.community/main/infrastructure/blob/master/molecule/infrastructure/roles/vm/tasks/main.yml>`_
-security group is shared by all VMs. It means that if the DNS VM needs
-to open port 53/udp, it will be open for all VMs. This was done
-because it is simpler but a distinct set of rules for each VM would be better.
+<https://docs.openstack.org/nova/latest/admin/security-groups.html>`_. There
+is one `security group per VM
+<http://lab.enough.community/main/infrastructure/blob/master/molecule/infrastructure/roles/vm/tasks/main.yml>`_.
 
 VM naming conventions
 ---------------------

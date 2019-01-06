@@ -1,0 +1,46 @@
+---
+- include_vars: clouds.yml
+
+- name: define os_auth
+  os_security_group: &os_auth
+    auth:
+      auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      username: "{{ clouds.ovh.auth.username }}"
+      password: "{{ clouds.ovh.auth.password }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+    region_name: "{{ clouds.ovh.region_name }}"
+  when: false
+
+- name:  security group rule
+  os_security_group:
+    <<: *os_auth
+    state: "{{ firewall_state }}"
+    name: "{{ firewall_server }}"
+    description: security group for infrastructure servers
+
+- name:  security group rule (tcp/udp)
+  os_security_group_rule:
+    <<: *os_auth
+    security_group: "{{ firewall_server }}"
+    port_range_min: "{{ firewall_item.0 }}"
+    port_range_max: "{{ firewall_item.0 }}"
+    protocol: "{{ firewall_item.1 }}"
+    remote_ip_prefix: "{{ firewall_item.2 }}"
+  with_nested:
+    - "{{ firewall_ports }}"
+    - "{{ firewall_protocols }}"
+    - "{{ firewall_clients }}"
+  loop_control:
+    loop_var: firewall_item
+  when: firewall_state == 'present' and firewall_protocols[0] != 'icmp'
+
+- name: security group rule (icmp)
+  os_security_group_rule:
+    <<: *os_auth
+    security_group: "{{ firewall_server }}"
+    protocol: icmp
+    remote_ip_prefix: "{{ firewall_item }}"
+  with_items: "{{ firewall_clients }}"
+  loop_control:
+    loop_var: firewall_item
+  when: firewall_state == 'present' and firewall_protocols[0] == 'icmp'

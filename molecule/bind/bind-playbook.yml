@@ -1,14 +1,4 @@
 ---
-- name: configure firewall
-  hosts: localhost
-  connection: local
-  gather_facts: False
-
-  roles:
-    - role: firewall
-      os_security_group_udp_external: [ 53 ]
-      os_security_group_tcp_external: [ 53 ]
-
 - name: setup DNS server
   hosts: bind-host
   become: True
@@ -82,7 +72,7 @@
                      IN  NS     ns1.{{ domain }}.
                      IN  NS     ns6.gandi.net.
 
-          {% if 'website-host' in hostvars %}@ 1800 IN A {{ hostvars['website-host'].ansible_host }}{% endif %}
+          {% if 'website-host' in hostvars and hostvars['website-host'].ansible_host is defined  %}@ 1800 IN A {{ hostvars['website-host'].ansible_host }}{% endif %}
 
           ns1 1800 IN A {{ ansible_host }}
 
@@ -90,7 +80,7 @@
 
           www 1800 IN CNAME {{ domain }}.
 
-          {% if 'gitlab-host' in hostvars %}lab 1800 IN A {{ hostvars['gitlab-host']['ansible_host'] }}{% endif %}
+          {% if 'gitlab-host' in hostvars and hostvars['gitlab-host'].ansible_host is defined %}lab 1800 IN A {{ hostvars['gitlab-host']['ansible_host'] }}{% endif %}
 
           test 1800 IN NS ns1.{{ domain }}.
 

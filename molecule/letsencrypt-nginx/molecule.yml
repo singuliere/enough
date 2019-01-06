@@ -8,18 +8,27 @@ platforms:
     flavor: "s1-2"
   - name: nginx-host
     flavor: "s1-2"
+    groups:
+      - firewall_ssh_server_group
   - name: proxy-host
     flavor: "s1-2"
+    groups:
+      - firewall_ssh_server_group
   - name: client-host
     flavor: "s1-2"
+    groups:
+      - firewall_ssh_server_group
 provisioner:
   name: ansible
+  options:
+    i: ../../inventories/common/firewall.yml
+    limit: bind-host,nginx-host,proxy-host,client-host,localhost
 #  options:
 #    vvv: True
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../bind/roles:../jdauphant.nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../jdauphant.nginx/roles
   inventory:
     links:
       group_vars: ../../inventories/common/group_vars

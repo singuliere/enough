@@ -14,15 +14,20 @@ platforms:
     flavor: "s1-2"
     groups:
       - enough
+      - firewall_ssh_server_group
+      - firewall_web_server_group
     volumes:
       - name: cloud-volume
         size: 10
 provisioner:
   name: ansible
+  options:
+    i: ../../inventories/common/firewall.yml
+    limit: bind-host,postfix-host,icinga-host,cloud-host,localhost
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../postfix/roles:../bind/roles:../icinga/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../postfix/roles:../bind/roles:../icinga/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
   inventory:
     links:
       group_vars: ../../inventories/common/group_vars

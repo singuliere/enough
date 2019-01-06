@@ -8,16 +8,21 @@ platforms:
     flavor: "s1-2"
   - name: bind-client-host
     flavor: "s1-2"
+    groups:
+      - firewall_ssh_server_group
   - name: external-host
     flavor: "s1-2"
   - name: icinga-host
     flavor: "s1-2"
 provisioner:
   name: ansible
+  options:
+    i: ../../inventories/common/firewall.yml
+    limit: bind-host,bind-client-host,external-host,icinga-host,localhost
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../authorized_keys/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles:../icinga/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../authorized_keys/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles:../icinga/roles
   inventory:
     links:
       group_vars: ../../inventories/common/group_vars

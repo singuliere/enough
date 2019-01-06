@@ -2,8 +2,13 @@
 
 - name: open port 5665 on firewall for tests
   hosts: localhost
-  connection: local
-  gather_facts: False
+  gather_facts: false
+
   roles:
     - role: firewall
-      os_security_group_tcp_external: [ 5665 ]
+      vars:
+        firewall_server: icinga-host
+        firewall_clients: [ 0.0.0.0/0 ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 5665 ]
+

@@ -1,6 +1,6 @@
 import yaml, re
 
-testinfra_hosts = ['bind-client-host']
+testinfra_hosts = ['icinga-host']
 
 def test_ns1_test(host):
     domain = host.run("hostname -d").stdout.strip()
