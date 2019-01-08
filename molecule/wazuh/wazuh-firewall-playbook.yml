@@ -1,0 +1,40 @@
+- name: firewall for wazuh
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    wazuh_servers: "{{ groups.firewall_wazuh_server_group | default([]) }}"
+    wazuh_clients: |
+          [
+            {% if groups.firewall_wazuh_client_group is defined %}
+              {% for host in groups.firewall_wazuh_client_group %}
+                {% if hostvars[host].ansible_host is defined %}
+                  "{{ host }}",
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          ]
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item.0 }}"
+        firewall_clients: [ "{{ hostvars[item.1]['ansible_host'] }}/32" ]
+        firewall_protocols: [ udp ]
+        firewall_ports: [ 1514 ]
+      with_nested:
+        - "{{ wazuh_servers }}"
+        - "{{ wazuh_clients }}"
+
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item.0 }}"
+        firewall_clients: [ "{{ hostvars[item.1]['ansible_host'] }}/32" ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 55000 ]
+      with_nested:
+        - "{{ wazuh_servers }}"
+        - "{{ wazuh_clients }}"
+

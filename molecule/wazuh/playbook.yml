@@ -1,0 +1,12 @@
+---
+- import_playbook: ../firewall/firewall-playbook.yml
+- import_playbook: wazuh-firewall-playbook.yml
+- import_playbook: ../letsencrypt-nginx/letsencrypt-nginx-playbook.yml
+- import_playbook: ../icinga/test-icinga-playbook.yml
+- import_playbook: ../bind/bind-playbook.yml
+- import_playbook: ../bind/bind-client-playbook.yml
+- import_playbook: ../icinga/icinga-playbook.yml
+- import_playbook: ../postfix/postfix-playbook.yml
+- import_playbook: wazuh-manager-playbook.yml
+- import_playbook: wazuh-agent-playbook.yml
+- import_playbook: test-wazuh-playbook.yml

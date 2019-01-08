@@ -1,0 +1,15 @@
+---
+- name: install wazuh-manager
+  hosts: wazuh-host
+  become: true
+  vars:
+    wazuh_manager_api_user: "frob:$apr1$wOI7F7qb$ZfLb5n.2IgHk8.vrfh3sq." # htpasswd -nb frob nitz
+  vars_files:
+    - manager.yml
+
+  roles:
+    - role: ansible-wazuh-manager
+      vars:
+        wazuh_api_user:
+          - "{{ wazuh_manager_api_user }}"
+        wazuh_manager_fqdn: "wazuh.{{ domain }}"
