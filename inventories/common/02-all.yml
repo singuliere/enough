@@ -14,3 +14,15 @@ enough:
   hosts:
     cloud-host:
     wereport-host:
+
+wazuh_agent:
+  hosts:
+    bind-host:
+    chat-host:
+    forum-host:
+    gitlab-host:
+    icinga-host:
+    packages-host:
+    postfix-host:
+    runner-host:
+    weblate-host:
