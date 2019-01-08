@@ -20,3 +20,6 @@
 [submodule "molecule/jdauphant.nginx/roles/jdauphant.nginx"]
 	path = molecule/jdauphant.nginx/roles/jdauphant.nginx
 	url = https://github.com/jdauphant/ansible-role-nginx.git
+[submodule "molecule/wazuh/wazuh-ansible"]
+	path = molecule/wazuh/wazuh-ansible
+	url = https://lab.enough.community/main/wazuh-ansible

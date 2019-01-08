@@ -1,0 +1,45 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: bind-host
+    flavor: "s1-2"
+  - name: postfix-host
+    flavor: "s1-2"
+    groups:
+      - wazuh_agent
+  - name: icinga-host
+    flavor: "s1-2"
+  - name: wazuh-host
+    flavor: "s1-2"
+provisioner:
+  name: ansible
+  options:
+    i: ../../inventories/common/firewall.yml
+    limit: bind-host,postfix-host,icinga-host,wazuh-host,localhost
+  lint:
+    name: ansible-lint
+  env:
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../postfix/roles:../bind/roles:../icinga/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
+  inventory:
+    links:
+      group_vars: ../../inventories/common/group_vars
+      host_vars:  ../../inventories/common/host_vars
+scenario:
+  name: wazuh
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: True
+    s: True
+#    k: test_wazuh
+  lint:
+    name: flake8

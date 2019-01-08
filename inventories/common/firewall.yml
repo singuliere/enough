@@ -4,6 +4,7 @@ firewall_ssh_server_group:
     bind-host:
     postfix-host:
     icinga-host:
+    wazuh-host:
     weblate-host:
     gitlab-host:
     runner-host:
@@ -31,6 +32,15 @@ firewall_icinga2_server_group:
     icinga-host:
 
 firewall_icinga2_client_group:
+  children:
+    firewall_ssh_server_group:
+
+# wazuh
+firewall_wazuh_server_group:
+  hosts:
+    wazuh-host:
+
+firewall_wazuh_client_group:
   children:
     firewall_ssh_server_group:
 

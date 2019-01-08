@@ -23,6 +23,7 @@ All resources are deployed and maintained via :doc:`ansible <ansible>`.
   infrastructure
   extending
   bind
+  ids
   authorized_keys
   backup
   postfix

@@ -1,0 +1,13 @@
+---
+
+- name: open port 55000 on firewall for tests
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - role: firewall
+      vars:
+        firewall_server: wazuh-host
+        firewall_clients: [ 0.0.0.0/0 ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 55000 ]
