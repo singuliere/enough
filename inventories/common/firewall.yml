@@ -4,6 +4,7 @@ firewall_ssh_server_group:
     bind-host:
     postfix-host:
     icinga-host:
+    forum-host:
     wazuh-host:
     weblate-host:
     gitlab-host:
