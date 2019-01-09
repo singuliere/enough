@@ -1,16 +1,15 @@
-import urllib3
-import re
 import requests
-import pytest
 import yaml
 
 testinfra_hosts = ['icinga-host']
+
 
 def get_address():
     vars_dir = '../../inventories/common/group_vars/all'
     return 'icinga.' + yaml.load(
         open(vars_dir + '/domain.yml'))['domain']
-    
+
+
 def test_icingaweb2_login_screen(host):
     address = get_address()
     print ('https://{address}/icingaweb2/authentication/login'.format(address=address))
@@ -23,7 +22,7 @@ def test_icingaweb2_login_screen(host):
     r = s.get('https://{address}/icingaweb2/authentication/login'.format(
         address=address,
     ), timeout=5)
-    cookies= dict(r.cookies)
+    cookies = dict(r.cookies)
     r = s.get('https://{address}/icingaweb2/authentication/login?_checkCookie=1'.format(
         address=address,
     ), cookies=cookies, timeout=5)

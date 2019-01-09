@@ -1,5 +1,6 @@
 testinfra_hosts = ['cloud-host']
 
+
 def test_nextcloud(host):
     with host.sudo():
         host.run("apt-get install -y curl")
@@ -13,6 +14,7 @@ def test_nextcloud(host):
     print(cmd.stdout)
     print(cmd.stderr)
     assert 0 == cmd.rc
+
 
 def test_nextcloud_via_tor(host):
     cmd = host.run("""

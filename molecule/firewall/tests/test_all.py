@@ -1,7 +1,9 @@
 testinfra_hosts = ['client-host']
 
+
 def test_server_visible_from_client(host):
-    server_host = host.get_host('ansible://server-host', ansible_inventory=host.backend.ansible_inventory)
+    server_host = host.get_host('ansible://server-host',
+                                ansible_inventory=host.backend.ansible_inventory)
     server_ip = server_host.ansible.get_variables()['ansible_host']
     with host.sudo():
         host.run("apt-get install -y nmap")
@@ -33,9 +35,12 @@ def test_server_visible_from_client(host):
     assert r.rc == 0
     assert ', 0% packet loss' in r.stdout
 
+
 def test_server_visible_from_external(host):
-    external_host = host.get_host('ansible://gitlab-host', ansible_inventory=host.backend.ansible_inventory)
-    server_host = host.get_host('ansible://server-host', ansible_inventory=host.backend.ansible_inventory)
+    external_host = host.get_host('ansible://gitlab-host',
+                                  ansible_inventory=host.backend.ansible_inventory)
+    server_host = host.get_host('ansible://server-host',
+                                ansible_inventory=host.backend.ansible_inventory)
     server_ip = server_host.ansible.get_variables()['ansible_host']
     with external_host.sudo():
         external_host.run("apt-get install -y nmap")
@@ -56,8 +61,10 @@ def test_server_visible_from_external(host):
     assert r.rc == 1
     assert ', 100% packet loss' in r.stdout
 
+
 def test_gitlab_visible_from_client(host):
-    gitlab_host = host.get_host('ansible://gitlab-host', ansible_inventory=host.backend.ansible_inventory)
+    gitlab_host = host.get_host('ansible://gitlab-host',
+                                ansible_inventory=host.backend.ansible_inventory)
     gitlab_ip = gitlab_host.ansible.get_variables()['ansible_host']
     with host.sudo():
         host.run("apt-get install -y nmap")

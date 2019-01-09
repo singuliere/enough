@@ -1,12 +1,12 @@
 from icinga2api.client import Client
 import re
-import requests
-import retry
+from enough.common import retry
 import urllib3
 import yaml
 import testinfra
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 class IcingaHelper(object):
 

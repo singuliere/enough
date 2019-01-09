@@ -1,4 +1,3 @@
-import os
 import requests
 import time
 import yaml
@@ -14,6 +13,7 @@ def get_password():
     variables = yaml.load(open(
         '../../molecule/gitlab/roles/gitlab/defaults/main.yml'))
     return variables['gitlab_password']
+
 
 #
 # https://docs.gitlab.com/ce/api/oauth2.html#resource-owner-password-credentials

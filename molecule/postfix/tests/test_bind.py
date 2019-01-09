@@ -1,5 +1,6 @@
 testinfra_hosts = ['postfix-client-host']
 
+
 def test_spf(host):
     with host.sudo():
         host.run("apt-get install -y dnsutils")

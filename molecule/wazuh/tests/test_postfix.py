@@ -1,9 +1,8 @@
-import pytest
-import time
 import testinfra
-from tests import retry
+from enough.common import retry
 
 testinfra_hosts = ['wazuh-host']
+
 
 def test_wazuh_send_mail(host):
 

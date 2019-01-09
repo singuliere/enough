@@ -1,9 +1,7 @@
-import pytest
-import time
-import testinfra
 import yaml
 
 testinfra_hosts = ['icinga-host']
+
 
 def test_bind(host):
     domain = host.run("hostname -d").stdout.strip()
@@ -19,6 +17,7 @@ def test_bind(host):
         assert 0 == cmd.rc
         assert address in cmd.stdout.strip()
         assert h + "." + domain in cmd.stdout.strip()
+
 
 def test_recursion(host):
     cmd = host.run("getent hosts fsf.org")

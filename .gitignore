@@ -13,3 +13,8 @@ secret
 inventories/common/group_vars/all/domain.yml
 openrc.sh
 inventories/01-hosts.yml
+.tox
+.coverage
+src
+build
+*.egg-info

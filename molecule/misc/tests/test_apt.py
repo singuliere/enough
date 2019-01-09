@@ -1,5 +1,3 @@
-import pytest
-
 def test_apt(host):
     with host.sudo():
         cmd = host.run("apt update")

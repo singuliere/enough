@@ -2,9 +2,10 @@ from pprint import pprint
 import testinfra
 import requests
 import yaml
-from tests import retry
+from enough.common import retry
 
 testinfra_hosts = ['wazuh-host']
+
 
 class Wazuh(object):
 
@@ -45,6 +46,7 @@ class Wazuh(object):
         d = r.json()
         pprint(d)
         assert d['error'] == 0
+
         @retry.retry(AssertionError, tries=8)
         def wait_for_syscheck():
             assert self.get_syscheck_end() > last
@@ -59,9 +61,8 @@ class Wazuh(object):
         assert info['file'] == path
         return info['md5']
 
-        
+
 def test_wazuh(host):
-    wazuh_host = host
     # postfix_host is a wazuh agent
     postfix_host = testinfra.host.Host.get_host(
         'ansible://postfix-host',

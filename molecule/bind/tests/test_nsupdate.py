@@ -1,5 +1,6 @@
 testinfra_hosts = ['bind-host']
 
+
 def test_nsupdate_ssh_keys(host):
     with host.sudo():
         # X6yEpyb0O1DoPISER4tgxIb is

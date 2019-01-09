@@ -2,6 +2,7 @@ from tests.icinga_helper import IcingaHelper
 
 testinfra_hosts = ['icinga-host']
 
+
 class TestChecks(IcingaHelper):
 
     def test_disk(self):

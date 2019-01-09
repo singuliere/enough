@@ -1,5 +1,5 @@
 import pytest
-import retry
+from enough.common import retry
 
 
 def test_that_retry_works_on_simple_function():

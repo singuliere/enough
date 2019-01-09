@@ -1,7 +1,9 @@
 testinfra_hosts = ['external-host']
 
+
 def test_bind(host):
-    bind_host= host.get_host('ansible://bind-host', ansible_inventory=host.backend.ansible_inventory)
+    bind_host = host.get_host('ansible://bind-host',
+                              ansible_inventory=host.backend.ansible_inventory)
     domain = bind_host.run("hostname -d").stdout.strip()
 
     cmd = host.run("getent hosts ns1.{}".format(domain))

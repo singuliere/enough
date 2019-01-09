@@ -1,5 +1,6 @@
 testinfra_hosts = ['wereport-host']
 
+
 def test_nextcloud(host):
     cmd = host.run("""
     set -xe
@@ -11,6 +12,7 @@ def test_nextcloud(host):
     print(cmd.stdout)
     print(cmd.stderr)
     assert 0 == cmd.rc
+
 
 def test_nextcloud_via_tor(host):
     cmd = host.run("""

@@ -1,8 +1,8 @@
-import pytest
 import time
 import testinfra
 
 testinfra_hosts = ['postfix-host']
+
 
 def test_sendmail(host):
     domain = host.run("hostname -d").stdout.strip()

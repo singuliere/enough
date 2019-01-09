@@ -1,0 +1,2 @@
+jobs:
+  script: tests/run-tests.sh

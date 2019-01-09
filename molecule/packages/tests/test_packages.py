@@ -1,6 +1,5 @@
-import re
-
 testinfra_hosts = ['packages-host']
+
 
 def test_packages(host):
     cmd = host.run("""
@@ -15,6 +14,7 @@ def test_packages(host):
     print(cmd.stdout)
     print(cmd.stderr)
     assert 0 == cmd.rc
+
 
 def test_displayed_packages(host):
     with host.sudo():

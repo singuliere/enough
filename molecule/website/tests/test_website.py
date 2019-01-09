@@ -1,6 +1,7 @@
 import website
 testinfra_hosts = ['website-host']
 
+
 def test_website(host):
     website.update(host)
     with host.sudo():
