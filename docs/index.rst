@@ -18,6 +18,7 @@ All resources are deployed and maintained via :doc:`ansible <ansible>`.
   team
   contribute
   funding
+  cli
   ansible
   documentation
   infrastructure

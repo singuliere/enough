@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  one:
+    image: {{ this.get_image_name('base') }}
+    ports:
+      - {{ this.get_ports() }}
+    deploy:
+      restart_policy: 
+        condition: none
+    networks:
+      - {{ this.name }}
+
+networks:
+  {{ this.name }}:

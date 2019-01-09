@@ -1,0 +1,970 @@
+CHANGES
+=======
+
+1.0.0
+-----
+
+* version 1.0.0
+* cli: distribution related files
+* cli: implement enough install
+* cli: implement docker swarm helpers
+* cli: implement enough build enough image
+* cli: move test only dependencies to requirements.in
+* tests: helper function to temporarily change the environment
+* cli: bootstrap a cli that does nothing but tests ok
+* move tests.retry to enough.common.retry
+* cleanup: fix all flake8 errors
+* inventories: list all hosts in need of a wazuh agent
+* preprod: define wazuh-host
+* wazuh: use default() instead of play vars
+* production: need molecule/{firewall,wazuh}/roles
+* forum: it is accessible via ssh
+* production: add wazuh playbooks
+* wazuh: add IDS manager and agents
+* postfix: use nsupdate to add SPF TXT record to the zone
+* wereport: switch to using firewall playbook
+* website: switch to using firewall playbook
+* weblate: switch to using firewall playbook
+* preprod: switch to using firewall playbook
+* postfix: switch to using firewall playbook
+* packages: switch to using firewall playbook
+* misc: switch to using firewall playbook
+* letsencrypt-nginx: switch to using firewall playbook
+* icinga: switch to using firewall playbook
+* gitlab: switch to using firewall playbook
+* forum: switch to using firewall playbook
+* enough: switch to using firewall playbook
+* cloud: switch to using firewall playbook
+* chat: switch to using firewall playbook
+* bind: switch to using firewall playbook
+* backup: switch to using firewall playbook
+* production: assign hosts to their firewall groups
+* infrastructure: use the new firewall role to create/destroy vms
+* firewall: create a firewall playbook and refactor the role
+* ignore generated inventories/01-hosts.yml
+* bind: cleanup: use ansible\_host instead of going via hostvars
+* bind: the SSHFP record is inserted via nsupdate instead of $INCLUDE
+* bind: the bind client adds its own A and CNAME
+* bind: the bind client adds itself to allow-recursion
+* tests: do not read domains.yml from obsolete directory
+* sexy-debian: fix typo in comment
+* molecule: move 01-hosts.yml into inventories
+* ansible: implement privilege separation for fpoulain & dachary
+* ansible: implement privilege separation for dachary
+* ansible: document the privilege separation strategy
+* ansible: define hosts accessible to all admins
+* ansible: move inventory to inventories/common
+* authorized\_keys: s/ssh\_keys\_directories/authorized\_keys\_globs/
+* enough: external Enough instances can access to icinga,bind,postfix
+* sexy-debian: emacs-nox is sexy too
+* firewall: os\_security\_group\_remote\_ip\_prefix defaults to 0.0.0.0/0
+* enough: cosmetic cleanup
+* cloud,wereport: enough roles are in ../enough/roles
+* tests: retry must fail after N tries
+* wereport: convert icinga test to use IcingaHelper
+* website: convert icinga test to use IcingaHelper
+* weblate: convert icinga test to use IcingaHelper
+* packages: convert icinga test to use IcingaHelper
+* gitlab: convert icinga test to use IcingaHelper
+* forum: convert icinga test to use IcingaHelper
+* enough: convert icinga test to use IcingaHelper
+* get\_url: add owner/group/mode params, use ~ dir
+* cloud: convert icinga test to use IcingaHelper
+* chat: convert icinga test to use IcingaHelper
+* weblate: remove misplaced icingaweb test case
+* bind: tests setting sshfp explicitly with ns1
+* bind: convert icinga test to use IcingaHelper
+* postfix: staging letsencrypt certificates are Untrusted
+* postfix: bind test need dnsutils
+* postfix: convert icinga test to use IcingaHelper
+* postfix: reduce the test playbook to the minimum
+* icinga: cleanup: remove urllib import
+* icinga: trim test\_icinga\_api.py
+* icinga: rework helpers to use icinga2api instead of requests
+* icinga: move helpers to the tests directory
+* icinga: refactor tests into a class instead of functions
+* icinga: add a service check on all host to verify time is in sync
+* icinga: helper to wait for a service to turn green
+* icinga: reminders to debug tests
+* icinga: refactor sloppy\_get into get\_api\_session
+* icinga: helper to retry a few times when waiting for success
+* icinga: reduce the test playbook to the minimum
+* icinga: when possible, use roles instead of tasks in playbooks
+* icinga: check\_running\_kernel does not require sudo privileges
+* the secret directory is ignored everywhere, no need to repeat
+* icinga: use password temporary file in the repository
+* docs: vault is needed when running in production
+* docs: explain how production secrets should be shared
+* docs: repository is infrastructure, not enough-community
+* icinga: move default credentials into the role
+* packages: rm -f /usr/share/nginx/html/index.html
+* monitoring: fix apt module call
+* bind: use the subdomain user instead of hand made nsupdate script
+* bind: subdomain@ creation must be based on an argument
+* Ensure services are enabled
+* Create empty logfile only when it doesn't exist
+* Use recommended 'loop' keyword
+* Use Jinja tests instead of Jinja filters
+* Don't rely on implicit squashing
+* doc: introduce letsencrypt-nginx instead of certs
+* preprod: stop as soon as an error occurs
+* molecule ignores ansible.cfg, trim its content
+* upgrade to ansible 2.7.5
+* nsupdate: get keys stored in the nsupdate directory
+* authorized\_keys: allow singuliere to run tests
+* enough: upgrade to the latest stable 14.0.4
+* gitlab: verify lab has a SSHFP record
+* gitlab: lab.{{ domain }} must be an A record
+* install python setuptools from package instead of the pip role
+* icinga: replace with\_https by http\_vhost\_https for consistency
+* icinga: tor does not need https
+* icinga: monitor https instead of http
+* bootstrap: add missing --init
+* reminder to update the submodules
+* gitlab: generate SSHFP records for GitLab ssh server
+* bind: use ssh-keyscan to generate SSHFP records
+* bind: remove playbooks not required for tests
+* enough: monitor https because http is 301 to https
+* enough: upgrade to 13.0.8
+* preprod: transition to letsencrypt-nginx
+* certbot: remove because it is replaced by letsencrypt-nginx
+* gitlab: remove test-real-gitlab-playbook.yml
+* cloud: reduce the test playbook to the minimum
+* wereport: reduce the test playbook to the minimum
+* enough: the test playbook does not use the history role
+* enough: remove unused directories from ANSIBLE\_ROLE\_PATH
+* enough: at bootstrap a GET will return 400
+* enough: use enough as a database name instead of nextcloud
+* enough: pin to nextcloud 13.0.4 & postgres 10.6
+* website: sudo the tests to avoid permission races
+* enough: use https for tests
+* create SSHFP & reload bind only once
+* Don't compare inventory\_name with hostname
+* Don't create SSHFP records for external-host
+* bind test: setup bind before icinga
+* cleanup: remove traces of with\_https & with\_fake\_LE
+* letsencrypt-nginx: explain why there are separate plays
+* Add missing role path
+* forum: with\_https is always true
+* forum: with\_https is always true
+* weblate: transition to letsencrypt-nginx
+* packages: transition to letsencrypt-nginx
+* gitlab: transition to letsencrypt-nginx
+* chat: transition to letsencrypt-nginx
+* icinga: transition to letsencrypt-nginx
+* infrastructure: letsencrypt\_nginx\_staging also create test domains
+* production: replace certs with letsencrypt-nginx
+* backup test: display stderr first
+* Fix backup test
+* website: transition to letsencrypt-nginx
+* letsencrypt-nginx: a role to setup a LE enabled nginx
+* doc(enough): fix remaining occurences of securedrop.club
+* feat(git): ignore openrc.sh
+* refactor(chat): replace shell by ansible idiom
+* bind: only create the gitlab-host CNAME if the host exists
+* Remove whole directory when fake certs aren't used
+* Fix fake let's encrypt certs rights
+* Add my public key
+* update the documentation to remove references to https-portal
+* weblate: replace https-portal with certbot
+* website: replace https-portal with certbot
+* inventory: production\_domain is the domain without the .test part
+* gitlab: replace https-portal with certbot
+* chat: replace https-portal with certbot
+* infrastructure: upgrade ansible-role-docker to version 2.5.2
+* certs are only relevant when using fake LE, therefore not in production
+* packages: scripts expect visible files to be in /var/www/html
+* certbot: redirect 80 to 443, always
+* certbot: include in ansible.cfg for production
+* packages: using certbot instead of https-portal
+* activate pipelining
+* certbot: implement a nginx based certbot role
+* certs: add cleanup role, to run before the modified certs role
+* certs: simplify the playbook and the role
+* website: install libsass1 from debian/buster
+* Titanium is no longer monitored
+* enough: use notify to restart NextCloud when the configuration changes
+* enough: restart containers after customization
+* enough: install the Enough theme
+* enough: install & enable the registration app
+* enough: the logo is PNG
+* fix
+* feat(scenarios): add a cookiecutter to help scenario creation
+* fix(doc) fix headings
+* fix(packages): monitor 403 on packages.enough.community
+* feat(icinga): allow monitoring of failling status
+* rm(icinga) remove titatium monitoring
+* fix(certs): fix email: ACME server refuse a too much false address
+* fix(authorized\_keys): fix test broken by 342e8ef4
+* fix(ssh config): fix test broken by 5ae901a7
+* fix(scenarios): fix paths; adapt to the new molecule convention
+* fix(monitoring) allows 2 rsyslogd due to forum docker image
+* feat (shell prompt) mimic ee logo in the prompt
+* weblate: upgrade to 3.1.1-1
+* funding: move to the forum
+* forum: fix profile picture update bug by upgrading
+* infrastructure: clarify OVH / OpenStack auth hierarchy
+* weblate: remove obsolete variable names references
+* team: add Louis & François where relevant
+* postfix: fix typos
+* monitoring\_howto: reword the introduction
+* monitoring\_architecture: reword the description
+* infrastructure: reflect the zones of the enough.community OVH project
+* index: link to the enough.community manifesto
+* gitlab: fix links and variables
+* gitlab: remove GitHub third party auth
+* funding: cosmetic changes
+* extending: reword and update the tutorial
+* documentation: fix the documentation URL
+* contribute: cleanup and reword
+* contribute: removed precise links to service bug lists
+* demo: remove from the index as it is gone
+* cloud: rename into enough
+* fix SecureDrop leftovers
+* bind: cosmetic changes
+* backup: fix typos
+* ansible: there is no production upgrade test at the moment
+* ansible: fix the host file names
+* ansible: pull --rebase is a oneliner
+* weblate: do not send mail on every crontab run
+* enough: notify when new files are created
+* enough: configure theme
+* enough: configure outgoing mail server
+* enough: enable encryption by default
+* split cloud in three scenarios
+* docs: typo
+* horizontally
+* s/securedrop-club/infrastructure/
+* replace securedrop.club with enough.community
+* cloud: remove SecureDrop leftover
+* cloud: add wereport
+* cloud: upgrade to 13.0.4
+* infrastructure: allow multiple hosts with volumes
+* cloud: split cloud into two roles
+* forum: use 172.17.0.1 as a smtp server
+* forum: hardcode master because there is no alternative
+* forum: the discourse\_docker always uses the master branch
+* forum: do not use a separate volume for docker
+* forum: this is a forum for Enough
+* domain.yml is dynamically generated and must be ignored
+* remove whitespace from file name
+* api rate limit lifting is no longer needed
+* forum: initial version
+* fix (icinga): replace hardcoded domain
+* cloud: the Enough app is under the main group
+* packages: android migrated from securedrop.club to enough.community
+* update documentation for Enough
+* website: use {{ domain }} instead of a hardcoded value
+* preprod: use enough playbook
+* preprod: bot and demo do not exist in Enough
+* postfix: use {{ domain }} instead of a hardcoded value
+* misc: s/securedrop-club/infrastructure/
+* gitlab: migrate to 11.0.4
+* no more trusty or ubuntu hosts
+* weblate: update to weblate 3.0.1
+* replace \ SD / with - E -
+* ansible is hardcoded to enough.community VM
+* remove securedrop specific playbook
+* ignore the dynamically created secret directory
+* the .molecule directory no longer exists
+* packages: remove securedrop specific playbooks
+* do not remove ECDSA because it creates problems
+* newest molecule versions do no have issues with ../ in links
+* infrastructure: replace securedrop.club with enough.community
+* icinga: trim securedrop.club specific comments
+* gitlab: trim securedrop.club specific bits
+* cloud: trim securedrop.club specific comments
+* chat: trim securedrop.club specific comments
+* update requirements
+* certs: trim securedrop.club specific comments
+* dhclient: trim securedrop.club specific comments
+* do not name docker compose with securedrop-club
+* enough.community production playbooks
+* no trusty or ubuntu host
+* infrastructure\_key is private
+* remove securedrop specific roles
+* use\_hostnames is no longer useful (static inventory)
+* invert names
+* packages: grsec source package test
+* packages: do not test kernel sources in SecureDrop installation
+* packages: grsec builder is using Xenial, not trusty
+* packages: rename docker image kernel-builder
+* packages: use the latest trusty
+* packages: keep older grsec kernels
+* packages: upgrade grsec to 4.4.135
+* packages: do not verify packages after building
+* demo: 0.8 was released
+* packages: add missing file for enough packages
+* production: run the molecule/packages/\*-playbook.yml
+* packages: update password variable name
+* production: building APK needs more than 2GB
+* packages: add the enough playbook
+* packages: split packages & securedrop playbooks
+* add monitoring for Manhack and Titanium Securedrop instances
+* monitor\_tor\_http\_vhost: allow direct tor\_http\_vhost\_fqdn definition
+* demo: create directory with docker exec
+* demo: set write\_wakeup\_threshold to 3000
+* demo: s/Submit documents/SUBMIT DOCUMENTS/ for 0.7.0
+* demo: haveged installation needs root
+* demo: set the haveged target to > 2400
+* demo: get entropy faster
+* demo: take into account 0.7 changes in monitoring
+* demo: 0.7.0 was published, upgrade the demo
+* cloud: install enough from https://lab.securedrop.club/enough/app/
+* add test for 404 on demo
+* demo: add 404 pages
+* cloud: add .onion URL to trusted\_domains
+* Test displayed packages urls; fix #58
+* cloud: prefer torsocks for tests
+* cloud: initialize nextcloud with sqlite for tests
+* Demo: restore normal monitoring delay; fix #75
+* Deduplicate packages; fix #91
+* doc: tor http monitoring
+* doc: cosmetic
+* cloud: wait for nextcloud to boot in tests
+* cloud: /dev/vda and /dev/sdb are two names for attached disks
+* Restarting tor is needed to get hostname
+* Test cloud monitoring over tor
+* generic .onion fqdn
+* Cloud: monitor rjrdsaj4jemwrui6.onion
+* Define a new role for monitoring tor http services
+* Icinga: add tor monitoring capability
+* ayush isn't active right now, wait until he proposes something
+* fix
+* add sshd playbook to scenarios
+* add sshd\_config role
+* Revert "Merge branch 'fix\_90' into 'master'"
+* add sshd playbook to scenarios
+* add sshd\_config role
+* cloud: fix misplaced conditional in docker-compose template
+* Revert "be explicit about volume attachment names"
+* docs: add missing security group
+* demo: add missing directory /var/lib/securedrop/tmp
+* demo: restart every 24h
+* cloud: expose Nextcloud via Tor
+* Less typing apt vs. apt-get
+* Revert "Merge branch 'wip-disaster-doc' into 'master'"
+* docs: add missing security group
+* be explicit about volume attachment names
+* docs: reboot once after disaster recovery
+* demo: do not try to update the repository
+* document disaster recover and exercises
+* cloud: Nextcloud can be changed by the theme
+* demo: do not git reset the repository
+* infrastructure: do nothing when there are no volumes
+* fix
+* website: use apt pinning to install hugo from testing
+* fix
+* Testing icinga objects
+* Adding monitoring to the postfix scenario
+* Add a role for postfix monitoring and enable it
+* Monitoring smtp services & ssmtp TLS cert
+* monitoring: adjust probe
+* fix cloud monitoring
+* forgotten link
+* website: sync submodules but not with --remote
+* website: sync submodules with the proper sub-command
+* website: sync submodules
+* Add Swarthon's ssh public key
+* cloud: remove extra quotes
+* cloud: do not bind port 80 on app if with\_https == true
+* cloud: documentation
+* remove ubuntu from certs scenario
+* postfix: test trusted connexion between client and relay
+* Postfix: use fqdn in relayhost setting
+* Explicit implicit
+* Enable TLS in postfix scenario
+* enable letsencrypt TLS on postfix relay
+* postfix: add a role for standalone certbot
+* Enable certs in postfix scenario
+* certs: better managment. This autobuild /etc/ssl/certs/ca-certificates
+* cloud: initial implementation
+* infrastructure: implement docker\_filesystem
+* infrastructure: implement volumes attached to VMs
+* chat: add mattermost references and reminders
+* chat: expose port 8000
+* chat: initial implementation
+* bots: sd-helper is merged in master
+* preprod: add bots and sd-helper
+* bots: initial implementation
+* Add ssh public key for aydwi
+* demo: we're not really interested in the content of the pages
+* demo: rebuild whenever the branch is updated
+* demo: cron jobs do not have tty
+* packages: use ref as a variable name instead of $ref
+* packages: reprepro configuration must be in the script
+* packages: no need for variables
+* packages: build tags instead of branches
+* packages: get 3.14 from apt instead of apt-test
+* packages: get code from lab.securedrop.club
+* packages: remove hostvars debug to reduce verbosity
+* packages: /var/www/html/index.html is created from existing packages
+* infrastructure: wait for cloud-init in a more portable way
+* production: add grsec kernels
+* packages: add a link to the playbook + add source packages
+* packages: re-order the tasks and add rsync
+* packages: add grsec packages based on linux-4.4.115
+* packages: add trusty-host for native tests instead of docker
+* infrastructure: add vms argument to vm role
+* packages: we can build from branches or tags (i.e. refs)
+* demo: enable l10n menu for all existing languages, not just supported languages
+* demo: compiling translations needs to be done for demo & i18n
+* demo: the demo patch needs to be applied after each update
+* demo: reword the error message
+* demo: set user to ansible\_user by default
+* demo: add i18n demo
+* Documentation: postfix
+* dhclient: update stability test
+* dhclient: move from lineinfile to template
+* rename variables dirs specific to scenarios; to avoid confusion with ansible variables dirs specific to playbooks
+* bind: restart all interfaces to refresh /etc/resolv.conf
+* history: do not become root on localhost
+* demo: smaller VM using Debian GNU/Linux Stretch
+* demo: deprecate the vagrant demo for the docker based demo
+* packages: move the docker setup to infrastructure
+* backup: allow openstack --insecure during tests
+* backup: only backup pet hosts
+* backup: packages-host contains signing keys and old packages
+* weblate: update to 2.20
+* https-portal: upgrade from 1 to 1.2.4
+* dhclient.conf: supersede nameservers
+* Icinga2: more robust icinga2 user/group detection; fix #67
+* enable history and tests on each playbook before sexy-debian; fix #66
+* defining history role and adding to misc scenario
+* setup dhclient options and resolv.conf strictly equals; fix #62
+* resolv.conf: add stability test
+* funding: add advertisement idea
+* production: deploy the website
+* website,bind: use website-host instead of redirectoring to the forum
+* website: deploy website.securedrop.club
+* demo: move hardcoding lab.securedrop.club to a dedicated playbook
+* VM creation: add a waiting for cloud-init termination; fix #61
+* small fix
+* monitoring: looks for fake certs absence
+* certs: new role for removing certs; should fix #60
+* test fake certs absence
+* backup: only backup vms that need to
+* gitlab: upgrade to 10.5.6 with GITLAB\_SHARED\_RUNNERS\_REGISTRATION\_TOKEN
+* bind: write /etc/resolv.conf for immediate benefits
+* funding: mention the FPF fundraising to avoid confusion
+* doc: small improvements
+* doc: fix english
+* documentation: extending securedrop.club
+* ANSIBLE\_ROLES\_PATH: uniformization
+* demo: lower notice patch context making it more portable between SD versions
+* monitoring: exclude docker containers from defaults volumes (problematic since last docker upgrade)
+* demo: upgrade to 0.6
+* monitoring: exclude docker containers from defaults volumes (problematic since last docker upgrade)
+* docs: add a section about funding
+* docs: make links anonymous
+* docs: fix release version
+* demo: fix typo regarding the private key
+* packages: remove redundant domain
+* gitlab runner: explicit tls-ca-file
+* dhclient role: remove reload handler
+* removes monitoring\_service\_template; uses now monitoring\_host\_vars
+* doc: monitoring hosts vars
+* icinga: add generic host vars
+* gitlab: cleanup redundant cert validation
+* removing Oefenweb.ansible-dns
+* bind-client: moves from Oefenweb.ansible-dns to dhclient role
+* Creates role dhclient
+* icinga: enhancement: generates dhparams only if needed (save times)
+* packages: 0.5.2 is the new release
+* gitlab: enable docker for the runners
+* gitlab: run the CI on another host
+* postfix playbook: limit relaying to domain dachary.org in test environment; avoid spamming; fix #34
+* redefine WEBLATE\_SERVER\_EMAIL; fix #54
+* fix icinga playbook
+* icinga2 role: remove un-needed bogus line
+* weblate scenario: specialize variables
+* packages scenario: specialize variables
+* certbot-nginx role: generic variables
+* icinga scenario: specialize variables
+* packages: handle https and http case
+* remove dead code
+* packages: centralize fqdn definition; fix #27
+* gitlab: hold gitlab-runner so it is not upgraded
+* Demo: enable & compile translations; fix #39
+* monitoring: enforce nginx dhparams; grab points to ssl golf
+* packages: fix test url
+* Certs: adding test scenario
+* certs: new scenario installing custom certificates when needed
+* certs: renaming certs
+* doc: monitoring tweaking
+* doc: enlarge heading depth
+* demo: preserve user permissions in git repo
+* monitoring: demo-host use delayed service template; fix #46
+* monitoring: control default service template at host level; introduce template for delayed notifications
+* demo: untrack export only if already tracked
+* demo: fallback to 3way merge if the patching fails
+* certbot: use standalone authenticator but preserve nginx installer; fix #47
+* sexy debian: add colored man pages
+* gitlab: do not ssl verify if using fake LE
+* demo: do not sudo when reseting the ansible connection
+* packages: reset ansible connection after docker group change
+* packages: marker for log readability
+* packages: update-packages.sh argument to reduce the number of branches
+* packages: store the hash of $branch instead of HEAD
+* packages: git clean -qq does nothing -ff does
+* packages: log package building output
+* packages: fix to work in preprod
+* bind scenario: testing subdomain created
+* bind scenario: testing subdomain creation
+* Bind scenario: creates nsupdate\_user
+* fix
+* bind scenario: more selective etc commit; fix #45
+* ignore \*.pyc
+* apt update after source defining; fix #44
+* Untrack exports
+* Make sure etckeeper is installed
+* demo: ignore vagrant mess in /etc; fix #42
+* demo documentation; fix #41
+* change testing subdomains; use reversed epoch with base32; close #14
+* demo: check-securedrop-demo is protected by a flock
+* demo: vagrant status has running no matter what
+* demo: vagrant status works better
+* demo: reboot to rebuild
+* demo: fail if curl hangs for more than 30 sec
+* package: now on branch release/0.5.1
+* demo: confused bootstrap with crontab
+* demo: 2GB RAM is a little short, give it 4GB
+* demo: on HTTP not on HTTPS
+* demo: avoid cron job races
+* demo: use a more stable way to check for updates
+* demo: vagrant listens on 127.0.0.1 by default, not 192.168.0.1
+* demo: create /var/www/html before populating it
+* demo: delete empty jdauphant.nginx role
+* weblate: upgrade to 2.18
+* un-needed >>
+* demo: add auto-rebuild script and cron
+* quiet scripts
+* allow to disable https with with\_https: false
+* disable https for demo
+* cosmetic
+* demo: monitoring "sample notice" presence
+* demo: adding "sample notice" to securedrop templates
+* cosmetic
+* adding fancy error page
+* w3c validator compliance
+* demo: smarter landing page
+* minimal credits; reported in https://github.com/jiangts/JS-OTP/issues/7
+* Provides easy OTP codes for demo login
+* add script for resetting demo credentials and db
+* set domain on demo landing page
+* use dummy boxes ips; rebuild-securedrop-demo.sh will handle it
+* build securedrop demo asynchronously
+* fix kernel version monitoring on ubuntu hosts
+* updating securedrop repo
+* simplification
+* explicit implicit
+* demo: complete rebuild script
+* securedrop role: moves on demo-host control scripts
+* demo: adding minimal doc
+* allow to face with large name sizes (test subdomain)
+* add demo test on preprod scenario
+* avoid un-needed multiple tests runs from localhost
+* authorized\_keys: makes it more user agnostic for ubuntu compat
+* explicit implicit stuff
+* renamming
+* demo: adding playbook to preprod
+* tests for demo monitoring
+* adding vhost monitoring to playbook
+* enable icinga in scenario
+* demo scenario: add icinga-host
+* demo scenario: add nginx tests
+* give access to lab.securedrop.club in closed test env
+* demo: add bind in scenario
+* demo: add sexy-debian in scenario
+* sexy-debian: allow to use with ubuntu
+* add role for demo static files
+* add nginx role to playbook
+* Adding jdauphant/ansible-role-nginx role
+* tests for role securedrop
+* add role securedrop
+* add role vagrand\_libvirt
+* add demo molecule scenario
+* allow to use Ubuntu image
+* gitlab: give less memory to workers
+* gitlab: give more memory to workers
+* weblate: be more flexible & debuggable when https is not set
+* docs: better path for first time contributors
+* add CONTRIBUTING.md so it shows in GitLab
+* weblate: deactivate debug mode
+* packages: also build the release/0.5 branch
+* gitlab: use docker for the CI instead of the shell
+* packages: utility library
+* packages: force restart nginx
+* packages: versions do not change on each commit
+* packages: add to production
+* packages: add to production
+* packages: create SecureDrop packages for the develop branch
+* jdauphant.nginx: add with no tests or playbook
+* doc: the variable is mirror\_securedrop, not mirror\_from\_securedrop
+* infrastructure: set default for the domain.yml file
+* gitlab: documentation of the mirror variables
+* gitlab: more robust runner test
+* gitlab: fix flake8
+* gitlab: split utilities out of the gitlab test script
+* gitlab: mirror the securedrop repository to gitlab
+* etckeeper is not sexy
+* preprod: with\_https / with\_fake\_LE are global variables
+* preprod: add gitlab tests
+* gitlab: implement with\_fake\_LE tests
+* infrastructure, preprod: move test domain to VM creation
+* icinga: no need for vhost\_fqdn = \_
+* gitlab: fix incorrect icinga selector
+* gitlab: add gitlab CI shared runner with OpenStack credentials
+* gitlab: upgrade to gitlab 10.1.3
+* weblate: set WEBLATE\_ALLOWED\_HOSTS to the fqdn instead of \*
+* clean
+* monitoring lab.securedrop.club
+* gitlab monitoring: fix uri
+* add sshfp tests on preprod
+* sshfp records: fix wrong records
+* sshfp records: avoid possible false positive in tests (mismatching host key...)
+* gitlab: when with\_https the port of the gitlab generated URLs must be 443
+* gitlab: page assets must be HTTPS when HTTPS is active
+* dont check whois on tests subdomains
+* fix #16 : mail problem on icinga master
+* add docker net in mynetworks; should fix #15
+* misc: commit\_etc des not need to be root on localhost
+* weblate: global lock on crontab actions
+* bind: add ssh records
+* add CAA record
+* dns\_mail\_records: use handler
+* freeze/thaw zone when update it; should fix #14
+* fix tests for testing with LE staging environment
+* rehash certs using "openssl rehash certs"
+* adding letencrypt root+intermediate production certificates
+* adding letencrypt root+intermediate staging certificates
+* use with\_fake\_LE as global var for letsencrypt staging env
+* icinga: master/client roles: use handlers
+* Move roles to misc scenario
+* fix: etckeeper return nonzero code when /etc is already clean
+* add a new playbook and role for etc committing
+* rename "sexy-debian" scenario to "misc"
+* bind monitoring role: using handler for icinga reload
+* deploy monitor\_http\_vhost role on gitlab-playbook
+* deploy monitor\_http\_vhost role on weblate-playbook
+* docs
+* add test for role monitor\_http\_vhost
+* adding dummy deploiement a for http monitoting role
+* adding a role for http monitoring
+* weblate: test: add retries since a weblate freshly recreated may take few mins to be operationnal
+* group\_vars and host\_vars must be in the inventory directory
+* private key should not be commited
+* gitlab: lab is a CNAME of gitlab-host
+* gitlab: we need to gather\_facts
+* gitlab: lab.securedrop.club is the canonical name
+* gitlab: remove broken link to GitHub
+* doc: add not about preprod pre-requisites
+* preprod: add gitlab
+* weblate: port 5665 must be open for tests first
+* infrastructure: remove obsolete security group securedrop-club-external
+* infrastructure: configure VM with ansible\_port if not 22
+* open port 2222 as an alternate ssh port
+* add symlinks to group\_vars and host\_vars in all molecule.yml
+* molecule create makes a static inventory
+* clould credentials and private key
+* remove obsolete vm.yml
+* gitlab: first implementation
+* link identical tests
+* doc cosmetic
+* doc
+* fix whitespace in yml
+* Adding/recopying preprod scenario tests
+* preprod env: set up dedicated host\_vars
+* adding preprod molecule scenario based on domain spoofing
+* update: doc and tests
+* doc
+* adding a zone test.securedrop.club hosted on bind-host
+* doc
+* doc
+* move icingaweb credentials
+* adding lsof
+* make letsencrypt optionnal
+* adding tests on weblate scenarios
+* fix
+* back to hardcoded names
+* Revert "genericization"
+* back to hardcoded names
+* fix
+* remove domain; it is defined in group\_vars/all
+* better name
+* restore SPF part of role install\_dkim\_keys
+* remove dkim, aliases and mx stuff
+* come back to hard coded hosts
+* hostname-agnostic playbook
+* postfix: playbook bring mail capability to all defined hosts in the cluster
+* bind: open port 53 to allow for zone transfer
+* firewall: remove unused securedrop-external security group
+* postfix: add mail related TXT records to the DNS
+* bind: rework with a custom role instead of bertvv
+* bind: replicate the zone defined in gandi.net
+* docs: fix inverted GRA3 / SBG3
+* sync bertvv.bind because it was force pushed
+* document all molecule directories
+* docs: DNS, hosting and philosophy
+* postfix: do not hardcode the name of the zone file
+* securedrop-club: use authorized-keys-playbook.yml
+* bind: use Oefenweb.ansible-dns instead of jdauphant.dns
+* adding less on VMs
+* avoid use of not\_monitored: install icinga before loosing DNS
+* moves test specific stuff to test-\*playbook.yml
+* {host,group}\_vars: use molecule.yml rather than symlinks
+* disable re-notification for services; slow them for host (default: every 30mins)
+* adapt bind and molecule scenario for new icinga scenario
+* doc: small cosmetic fixes
+* doc: monitoring deployment
+* open port 5665 on firewall for tests, since it has been closed in the install playboook
+* Adding timeouts to get calls. Failure to do so can cause your program to hang indefinitely. See http://docs.python-requests.org/en/master/user/quickstart/#timeouts
+* fix global vars management
+* add a second client for testing parralelism issues
+* disable daily downtimes
+* genericization
+* refactor icinga playbook (not yet fully functionnal)
+* securedrop-club: backup only runs on the bind-host machine
+* fix
+* add monitoring stuff
+* minimal documentation skeletton
+* small fix: we deliver mail for this domain
+* small fix
+* enable etckeeper monitoring on the cluster
+* deploy icinga\_common role
+* create icinga2\_common role
+* centralize playbook sexy-debian
+* create sexy-debian playbook, molecule env, test apt
+* add free source.list
+* configure editor
+* weblate: crontab needs -f docker-compose-securedrop-club.yml
+* ajout de sexy-debian
+* ajout de sexy-debian
+* enlarge whois check interval
+* enlarge check interval
+* bind: weblate needs access to lab
+* backup: each hostname must be separated by a space
+* weblate: use docker-compose-securedrop-club.yml for tests
+* weblate: implement letsencrypt
+* adding instructions
+* disable letsencrypt from icinga playbook
+* create letsencrypt test
+* adapt tests for strict https option
+* icingaweb: manual https redirect since certbot refuse to break any conf including redirection
+* icinga: add certbot-nginx role
+* define icingaadmins\_email variable
+* icinga: add vhost\_fqdn playbook variable
+* refactor icinga VM playbook
+* adding sexy-debian to scenarios (fail2ban is now part of sexy-debian)
+* adding a sexy-debian role
+* template mail domain in icinga conf
+* degooglization
+* rely on a lazier mail server
+* conditionnally add MX record
+* remove "a" from spf
+* adding aliases for common services (rfc2142)
+* make icinga spamming icingaadmins@securedrop.club
+* make weblate http checks use TLS
+* bind: limit recursion to the ansible provisionned hosts
+* do not hardcode securedrop.club, use the domain variable
+* bind: use https://github.com/dachary/ansible-role-bind
+* bind: DNS is exposed to all
+* backup: s/.sh// in tests as well
+* remove debops ferm from postfix scenario
+* update debops.opendkim to v0.2 and remove local bugfixes
+* backup: s/(\*).sh/(\1)/
+* bind: remove duplicate dns\_domain
+* README: fix molecule command
+* backup: add missing openrc.sh template
+* s/testkey/securedrop\_key/
+* ansible: install emacs-nox tmux
+* bind: switch back to upstream bertvv.bind
+* bind: verify bind and bind-host are available
+* bind: add a "foo CNAME" for each "foo-host A"
+* chmod 600 id\_rsa # cannot be stored in git
+* s/\_host/-host/ because DNS names may choke on \_
+* weblate: make tests more verbose
+* ansible: fix symlinks
+* backup: wait until the image is active
+* postfix: mail a domain other than securedrop.club
+* postfix: depends on the bind playbook
+* bind: the bind client needs dig
+* bind: dkim is not part of the bind playbook
+* postfix: rename the host from postfix to postfix\_host
+* remove all groups because we don't use them
+* instructions to run the production playbook
+* openstack: force the use of IPv4 IP addresses
+* authorized\_keys: facts are needed to get to the machines
+* securedrop-club: create playbook
+* bind: set search & domain name
+* weblate: use s1-4 flavor for the weblate vm
+* openstack: we have unique hostnames, use them intsead of UUID
+* weblate: all hosts are setup to use bind as a nameserver
+* bind: move bind tests from weblate
+* weblate: remove dedicated bind-playbook
+* bind: add sfp & marc TXT records
+* bind: all hosts use the bind\_host
+* bind: icinga monitoring
+* bind: all hosts are added to the zone
+* weblate: sync with remote module
+* bind: using https://github.com/dachary/ansible-role-bind
+* weblate: remove bind playbooks and tests
+* weblate: reorganize playbooks
+* bind: split master/client for reusability
+* backup: keep 30 days of snapshoted images
+* merge opendkim playbook in postfix playbook
+* authorized\_keys: simplify
+* authorized\_keys: install admin ssh keys
+* infrastructure: do not create too many hosts
+* add fail2ban on bind host
+* add bind\_host to monitoring clients; early deploy of the icinga master
+* adding monitoring to bind
+* weblate: depends on all other scenarios
+* postfix: no need to sudo locally
+* use import\_playbook instead of include
+* infrastructure: remove redundant security group key
+* postfix: rename ansible-opendkim into debops.opendkim
+* weblate: resurect weblate role
+* fixup! postfix: move weblate,ansible-role-docker roles
+* gitmodule: fix names
+* postfix: move weblate,ansible-role-docker roles
+* fixup! icinga: move icinga2,icinga2\_client,fail2ban roles
+* postfix: move debops.\*,install\_dkim\_keys roles
+* icinga: move icinga2,icinga2\_client,fail2ban roles
+* bind: move bertvv.bind,jdauphant.dns roles
+* ansible: move ansible role
+* infrastructure: move firewall,vm roles
+* ansible: all roles are found in molecule/\*/roles
+* fix weblate monitoring
+* Revert "weblate: comment out monitoring of securedrop project"
+* adding dnsutils as monitoring dep
+* add tests
+* temporary fork of extract-domainkey-zone. See https://github.com/debops/ansible-opendkim/issues/4
+* deploy dkim keys on the bind host
+* add spf and dmarc bind entries
+* cosmetic
+* vm: wait up to 10 minutes for a VM to come up
+* weblate: comment out monitoring of securedrop project
+* weblate: add firewall dependency
+* postfix: open port 465 tcp in the firewall
+* infrastructure: open port 80,443 tcp in the firewall
+* icinga: open port 5665 tcp in the firewall
+* bind: open port 53 udp in the firewall
+* enable opendkim on weblate molecule scenario and add dkim test
+* enable opendkim on postfix molecule scenario and add dkim test
+* infrastructure: split firewall out of vm
+* bind: fix broken role links
+* adding debops.opendkim
+* add monitoring of weblate projects
+* better fix
+* Revert "remove checking of all mounted disks since check\_disk doesnt like dockers overlays and check\_disk -X doesnt seems to work as expected"
+* remove checking of all mounted disks since check\_disk doesnt like dockers overlays and check\_disk -X doesnt seems to work as expected
+* ajout du monitoring de weblate
+* ajout du role fail2ban
+* postfix: symlink each role instead of the directory
+* add LICENSE file
+* icinga: symlink each role instead of the directory (part 2)
+* weblate: symlink each role instead of the directory
+* icinga: symlink each role instead of the directory
+* icinga: rename from monitoring\_client
+* ansible: symlink each role instead of the directory
+* remove obsolete scenario
+* infrastructure: symlink each role instead of the directory
+* roles: split external roles
+* weblate: add .gitignore
+* postfix: split test specific playbook out
+* docs: upgrade test strategy
+* weblate: verify weblate can send a mail
+* weblate: draft role
+* postfix: verbose comment
+* bind: focus on one bind\_client\_host not all hosts
+* bind: minimal bind configuration with tests
+* bind: failing for mysterious reasons
+* postfix: display the command to be run not the old
+* postfix: integration tests
+* perms
+* testing from all hosts
+* remove ansible-role-docker from monitoring\_client scenario
+* using sudo for getting access
+* using sudo for getting access
+* add xz-utils since it is a monitoring plugin dep
+* fixes
+* deploy icinga and icingaweb from debian packages
+* postfix: smtps server and client using it as a relay
+* better organisation and test filtering
+* remove un-needed delegation
+* adding testfile
+* avoid deprecation warns
+* factor api call code
+* scenario icinga: check icingaweb, api hosts and api services
+* fix
+* fix
+* adding dummy\_monitoring\_objects for testing purpose
+* reload icinga from inside of container; not all the container
+* adding markers
+* start adding dummy objects for testing monitoring configuration
+* add postfix vm / role
+* cleaning
+* fix and move
+* adding monitoring to the postfix role
+* using fail2ban role
+* adding fail2ban role
+* add icingaweb vhost monitoring
+* add dependancies
+* fix
+* cosmetic changes
+* ading monitoring-plugins-contrib since it provides check\_running\_kernel
+* disabling un-needed conf
+* request may fail even if port has been opened
+* adding config files and ansiblification of config deployement
+* wait for icingaweb2 starting up and database setting up
+* add supplementary precautions
+* fix zones
+* fix
+* test file availability and dont try to move them if they are already gone
+* change hostname ; in future we should define a playbook var for icinga\_host name
+* fix zone definition on master and clients
+* use docker\_service
+* fixes changed
+* fixes
+* postfix playbook: remove sudo, use less shell, more ansible modules
+* fixes
+* the master host might not be ready
+* cleaning
+* loic patch: installing master before all so it s easy to get its IP
+* simplify stuff from molecule point of view
+* adding client related configuration
+* icinga2\_client playbook: finish hanshake with a dynamic icinga\_master retrieval
+* ignoring openrc.sh is better than publishing it
+* add environnement flag since ansible dont allows paramter passing (see #20432)
+* add a --hold option forcing the use of the cache
+* firsts steps for a monitoring client - to be finished
+* adding a very basic playbook for monitoring client
+* adding a monitoring client as a scenario
+* update the submodules
+* keep the clouds.yml symlink
+* update instructions to test
+* instructions to verify all works
+* trim clouds.yml
+* add clouds.yml example
+* infrastructure: open port 80
+* icinga: add test verifying icinga API is running
+* icinga: expose 5665
+* infrastructure: open 5665 for icinga API
+* infrastructure: give it a unique name
+* icinga: define role
+* ansible: split from infrastructure molecule
+* add secrets
+* a bit refactor
+* minimal README and secrets.yml example
+* infrastructure: minimal molecule verify
+* infrastructure: setup securedrop-club ansible repo and dependencies
+* infrastructure: use test ssh key by default
+* add test ssh key
+* add missing packages in bootstrap
+* infrastructure: update requirements
+* infrastructure: bootstrap ansible role on the ansible\_host
+* infrastructure: persist the IP of the OpenStack instance
+* infrastructure: create / destroy virtual machines
+* bootstraping the pip environment
+* infrastructure: create keypair

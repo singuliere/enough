@@ -18,3 +18,4 @@ inventories/01-hosts.yml
 src
 build
 *.egg-info
+dist

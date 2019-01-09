@@ -1,10 +1,10 @@
-cliff>=2.14
 ansible==2.7.5
-pip-tools==3.2.0
+cliff>=2.14
+jinja2>=1.1
 molecule==2.16.0
-shade==1.30.0
-sphinx==1.8.3
-testinfra==1.14.0
-openstacksdk==0.22.0
 netaddr==0.7.19
+openstacksdk==0.22.0
+requests>=2.21
+sh>=1.12
+shade==1.30.0
 -e git+https://github.com/fmnisme/python-icinga2api.git@9a1a3cc7968d6c72bf49e97ef387b2824e6835e9#egg=icinga2api

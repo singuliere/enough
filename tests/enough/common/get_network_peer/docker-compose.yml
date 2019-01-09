@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  test:
+    image: debian:buster
+    networks:
+      - enough
+
+networks:
+  enough:
