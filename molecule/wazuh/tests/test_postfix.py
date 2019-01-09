@@ -1,5 +1,5 @@
 import testinfra
-from tests import retry
+from enough.common import retry
 
 testinfra_hosts = ['wazuh-host']
 

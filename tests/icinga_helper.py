@@ -1,6 +1,6 @@
 from icinga2api.client import Client
 import re
-import retry
+from enough.common import retry
 import urllib3
 import yaml
 import testinfra

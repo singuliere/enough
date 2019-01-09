@@ -2,7 +2,7 @@ from pprint import pprint
 import testinfra
 import requests
 import yaml
-from tests import retry
+from enough.common import retry
 
 testinfra_hosts = ['wazuh-host']
 
