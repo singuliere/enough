@@ -1,0 +1,7 @@
+.git
+.tox
+venv
+.eggs
+**/__pycache__
+**/*.pyc
+**/*.pyo
