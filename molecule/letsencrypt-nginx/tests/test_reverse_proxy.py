@@ -1,5 +1,6 @@
 testinfra_hosts = ['proxy-host']
 
+
 def test_proxy(host):
     with host.sudo():
         host.run("apt-get install -y curl")

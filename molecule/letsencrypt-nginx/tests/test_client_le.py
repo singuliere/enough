@@ -1,5 +1,6 @@
 testinfra_hosts = ['client-host']
 
+
 def test_certs(host):
     with host.sudo():
         host.run("apt-get install -y curl")

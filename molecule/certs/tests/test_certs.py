@@ -4,5 +4,5 @@ def test_certs(host):
         if host.backend.host == "debian-host":
             expected = True  # the certs are expected to be installed
         elif host.backend.host == "bind-host":
-            expected = False  # the certs are expected to have been installed and then removed 
+            expected = False  # the certs are expected be installed and then removed
         assert host.exists(path) == expected

@@ -1,7 +1,6 @@
-import os
 import subprocess
-import pytest
 import yaml
+
 
 def test_all(host):
     inventory = yaml.load(open(host.backend.ansible_inventory))

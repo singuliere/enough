@@ -1,8 +1,8 @@
-import pytest
 import time
 import testinfra
 
 testinfra_hosts = ['weblate-host']
+
 
 def test_weblate_send_mail(host):
 
@@ -13,7 +13,8 @@ def test_weblate_send_mail(host):
 
     cmd = weblate_host.run("""
     cd /srv/weblate
-    sudo docker-compose -f docker-compose-infrastructure.yml exec -T weblate weblate sendtestemail loic+doomtofail@dachary.org
+    sudo docker-compose -f docker-compose-infrastructure.yml exec -T weblate weblate \
+         sendtestemail loic+doomtofail@dachary.org
     """)
     print(cmd.stdout)
     print(cmd.stderr)

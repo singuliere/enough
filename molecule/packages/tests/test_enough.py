@@ -1,5 +1,6 @@
 testinfra_hosts = ['packages-host']
 
+
 def test_enough(host):
     cmd = host.run("""
     set -xe

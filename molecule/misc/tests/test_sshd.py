@@ -1,5 +1,3 @@
-import pytest
-
 def test_ssh(host):
     domain = host.run("hostname -d").stdout.strip()
     cmd = host.run("ssh-keyscan debian-host.{}".format(domain))

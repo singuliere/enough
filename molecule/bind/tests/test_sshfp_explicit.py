@@ -1,4 +1,5 @@
-testinfra_hosts = [ 'bind-host' ]
+testinfra_hosts = ['bind-host']
+
 
 def test_sshfp(host):
     domain = host.run('hostname -d').stdout.strip()
