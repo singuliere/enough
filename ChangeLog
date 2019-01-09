@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+1.0.0
+-----
+
+* version 1.0.0
 * cli: distribution related files
 * cli: implement enough install
 * cli: implement docker swarm helpers
