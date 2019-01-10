@@ -13,4 +13,5 @@
              api_port: 55000
              api_proto: 'http'
              api_user: '{{ wazu_agent_api_user | default("frob") }}'
+         wazuh_api_reachable_from_agent: true
          api_pass: '{{ wazu_agent_api_pass | default("nitz") }}'
