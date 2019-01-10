@@ -2,7 +2,7 @@
 
 - name: apt-get install git curl
   apt:
-    name: [git, curl]
+    name: [ git, curl ]
     state: present
 
 - name: chown debian /srv
@@ -71,7 +71,9 @@
 
 - name: occ maintenance:install
   shell: |
-    {{ app_sh }} bash -c 'php -f occ maintenance:install --database pgsql --database-host=$POSTGRES_HOST --database-name=enough --database-user=$POSTGRES_USER --database-pass=$POSTGRES_PASSWORD --admin-user="{{ NEXTCLOUD_ADMIN_USER }}" --admin-pass="{{ NEXTCLOUD_ADMIN_PASS }}"'
+    {{ app_sh }} bash -c 'php -f occ maintenance:install \
+                                    --database pgsql --database-host=$POSTGRES_HOST --database-name=enough --database-user=$POSTGRES_USER --database-pass=$POSTGRES_PASSWORD \
+                                    --admin-user="{{ NEXTCLOUD_ADMIN_USER }}" --admin-pass="{{ NEXTCLOUD_ADMIN_PASS }}"'
   args:
     chdir: "{{ app_dir }}"
   become: False
@@ -177,7 +179,7 @@
 
 - name: apt-get install tor and torsocks
   apt:
-    name: [tor, torsocks]
+    name: [ tor, torsocks ]
     state: present
 
 - name: mkdir /var/lib/tor/services
