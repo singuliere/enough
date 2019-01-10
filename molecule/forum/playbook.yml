@@ -6,4 +6,3 @@
 - import_playbook: ../icinga/icinga-playbook.yml
 - import_playbook: ../postfix/postfix-playbook.yml
 - import_playbook: forum-playbook.yml
-
