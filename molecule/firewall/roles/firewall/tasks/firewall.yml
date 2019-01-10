@@ -11,14 +11,14 @@
     region_name: "{{ clouds.ovh.region_name }}"
   when: false
 
-- name:  security group rule
+- name: security group rule
   os_security_group:
     <<: *os_auth
     state: "{{ firewall_state }}"
     name: "{{ firewall_server }}"
     description: security group for infrastructure servers
 
-- name:  security group rule (tcp/udp)
+- name: security group rule (tcp/udp)
   os_security_group_rule:
     <<: *os_auth
     security_group: "{{ firewall_server }}"
