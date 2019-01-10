@@ -1,5 +1,5 @@
 ---
-bind_zone: []
+bind_zone: [ ]
 bind_master:
   - |
       options {
@@ -8,4 +8,3 @@ bind_master:
          listen-on-v6 { any; };
       };
       include "/etc/bind/named.conf.default-zones";
-

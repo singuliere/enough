@@ -2,7 +2,7 @@
 
 - name: BIND Install
   package:
-    pkg: [python-netaddr, bind9, bind9utils, dnsutils]
+    pkg: [ python-netaddr, bind9, bind9utils, dnsutils ]
     state: present
 
 - name: Create serial, based on last two digits of year, month, day, and hour

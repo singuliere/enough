@@ -8,7 +8,7 @@
 
 - name: setup apt pinning for openssh-client
   copy:
-    src:  apt-preferences.d/{{ item }}
+    src: apt-preferences.d/{{ item }}
     dest: /etc/apt/preferences.d/{{ item }}
   loop:
     - default
