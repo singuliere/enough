@@ -58,7 +58,7 @@
       alias rm='rm -i'
       alias cp='cp -i'
       alias mv='mv -i'
-      
+
 - name: fancy user .bashrc
   blockinfile:
     path: /home/{{ ansible_user }}/.bashrc

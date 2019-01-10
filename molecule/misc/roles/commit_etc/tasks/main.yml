@@ -2,7 +2,7 @@
 
 - name: apt-get install useful git etckeeper
   apt:
-    name: [git, etckeeper]
+    name: [ git, etckeeper ]
     state: present
 
 - name: get git commit
