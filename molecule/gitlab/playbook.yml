@@ -9,4 +9,3 @@
 - import_playbook: ../postfix/postfix-playbook.yml
 - import_playbook: gitlab-playbook.yml
 - import_playbook: gitlab-ci-playbook.yml
-
