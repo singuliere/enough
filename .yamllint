@@ -13,6 +13,8 @@ ignore: |
   **/inventories/01-hosts.yml
   **/enough/common/data/docker-compose.yml
   **/enough/data/docker-compose.yml
+  # remove me now
+  **/infrastructure/roles/vm/tasks/main.yml
 
 rules:
   braces:
