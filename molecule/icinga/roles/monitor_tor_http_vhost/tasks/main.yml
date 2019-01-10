@@ -1,6 +1,6 @@
 - name: install tor for check_tor_http
   apt:
-    name: [tor, torsocks]
+    name: [ tor, torsocks ]
     state: present
   delegate_to: icinga-host
 
