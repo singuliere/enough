@@ -1,3 +1,2 @@
 ---
 ssh_private_keyfile: "{{ lookup('pipe', 'git rev-parse --show-toplevel') }}/id_rsa"
-
