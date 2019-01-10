@@ -31,4 +31,3 @@
     - role: letsencrypt-nginx
       vars:
         letsencrypt_nginx_fqdn: "www.{{ website_vhost_fqdn }}"
-
