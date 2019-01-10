@@ -56,7 +56,7 @@
           value: '/etc/letsencrypt/live/postfix-host.{{ domain }}/chain.pem'
           section: 'smtpd-tls'
       postfix__maincf: "{{ base__maincf + TLS__maincf }}"
-      postfix__restrictions_maincf: []
+      postfix__restrictions_maincf: [ ]
 
     - role: install_dns_mail_records
     - role: postfix_relay_monitoring

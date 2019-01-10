@@ -26,7 +26,7 @@ provisioner:
   inventory:
     links:
       group_vars: ../../inventories/common/group_vars
-      host_vars:  ../../inventories/common/host_vars
+      host_vars: ../../inventories/common/host_vars
 scenario:
   name: postfix
   test_sequence:

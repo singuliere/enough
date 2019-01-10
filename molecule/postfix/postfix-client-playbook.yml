@@ -12,7 +12,7 @@
 
     - role: debops.secret
       secret__directories:
-        - '{{ postfix__secret__directories     | d([])}}'
+        - '{{ postfix__secret__directories     | d([ ])}}'
 
     - role: debops.postfix
       postfix__mailname: '{{ domain }}'
@@ -20,7 +20,7 @@
       postfix__relayhost: '[postfix-host.{{ domain }}]:465'
       postfix__maincf:
         - name: 'mynetworks'
-          value: ['172.17.0.0/16']
+          value: [ '172.17.0.0/16' ]
           comment: Set docker net in mynetworks
         - name: 'smtp_tls_security_level'
           value: 'encrypt'
