@@ -1,0 +1,10 @@
+exclude_paths:
+  - molecule/postfix/roles/debops.postfix
+
+skip_list:
+  - ANSIBLE0004 # Git checkouts must contain explicit version
+  - ANSIBLE0006 # git used in place of git module
+  - ANSIBLE0010 # Package installs should not use latest
+  - ANSIBLE0011 # All tasks should be named
+  - ANSIBLE0012 # Commands should not change things if nothing needs doing
+  - ANSIBLE0013 # Use shell only when shell functionality is required
