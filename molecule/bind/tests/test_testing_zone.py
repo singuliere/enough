@@ -1,4 +1,3 @@
-import yaml
 import re
 
 testinfra_hosts = ['icinga-host']
@@ -20,9 +19,9 @@ def test_bind(host):
 def test_update(host):
     domain = host.run("hostname -d").stdout.strip()
     hostname = host.run("hostname -s").stdout.strip()
-    host = host.get_host('ansible://bind-host',
-                         ansible_inventory=host.backend.ansible_inventory)
-    cmd = host.run('''
+    bind_host = host.get_host('ansible://bind-host',
+                              ansible_inventory=host.backend.ansible_inventory)
+    cmd = bind_host.run('''
         nsupdate <<EOF
         server localhost
         zone test.{}
@@ -64,8 +63,9 @@ def test_clean_update(host):
 
 def test_subdomain_creation(host):
     test_domain = host.run("hostname -d").stdout.strip()
-    inventory = yaml.load(open(host.backend.ansible_inventory))
-    bind_address = inventory['all']['hosts']['bind-host']['ansible_host']
+    bind_host = host.get_host('ansible://bind-host',
+                              ansible_inventory=host.backend.ansible_inventory)
+    bind_address = bind_host.ansible.get_variables()['ansible_host']
     other_bind_address = '1.2.3.4'
     localhost = host.get_host('ansible://localhost',
                               ansible_inventory=host.backend.ansible_inventory)
