@@ -6,8 +6,6 @@ lint:
 platforms:
   - name: backup-host
     flavor: "s1-2"
-    groups:
-      - firewall_ssh_server_group
   - name: weblate-host
     flavor: "s1-2"
     groups:
