@@ -11,13 +11,13 @@
 
 - name: apt-get install monitoring plugins
   apt:
-    name: [monitoring-plugins, nagios-plugins-contrib]
+    name: [ monitoring-plugins, nagios-plugins-contrib ]
     state: present
     install_recommends: no
 
 - name: apt-get install monitoring plugins deps
   apt:
-    name: [dnsutils, xz-utils]
+    name: [ dnsutils, xz-utils ]
     state: present
 
 - name: wait for icinga starting up and conf creation, before tweaking it
@@ -86,12 +86,12 @@
 
 - name: fix mail-service-notification.sh
   copy:
-    src:  files/scripts/mail-service-notification.sh
+    src: files/scripts/mail-service-notification.sh
     dest: /etc/icinga2/scripts/mail-service-notification.sh
 
 - name: deploy our global configuration
   copy:
-    src:  files/{{ item }}.conf
+    src: files/{{ item }}.conf
     dest: /etc/icinga2/zones.d/global-templates/{{ item }}.conf
   loop:
     - commands
@@ -111,7 +111,7 @@
 
 - name: deploy our templated configuration
   template:
-    src:  templates/{{ item }}.conf
+    src: templates/{{ item }}.conf
     dest: /etc/icinga2/zones.d/global-templates/{{ item }}.conf
   loop:
     - users

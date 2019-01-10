@@ -1,12 +1,12 @@
 ---
 - name: apt-get install git, virtualenv, python-pip and python-setuptools
   apt:
-    name: [git, virtualenv, python-pip, python-setuptools]
+    name: [ git, virtualenv, python-pip, python-setuptools ]
     state: present
 
 - name: pip install docker and docker-compose
   pip:
-    name: [docker, docker-compose]
+    name: [ docker, docker-compose ]
 
 - name: chown debian /srv
   file:

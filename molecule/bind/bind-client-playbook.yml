@@ -2,7 +2,7 @@
 - name: setup DNS client (allow-recursion)
   hosts: all:!external-host
   become: true
-  serial: 1 # so blockinfile does not race against itslef
+  serial: 1  # so blockinfile does not race against itslef
 
   tasks:
     - name: allow recursion for {{ ansible_hostname }}
@@ -40,7 +40,7 @@
 
   roles:
     - role: dhclient
-      dns_nameservers: ['{{ hostvars["bind-host"]["ansible_host"] }}']
+      dns_nameservers: [ '{{ hostvars["bind-host"]["ansible_host"] }}' ]
       dns_search: "{{ domain }}"
       dns_domain: "{{ domain }}"
 

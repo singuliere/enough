@@ -11,4 +11,3 @@
         firewall_clients: [ 0.0.0.0/0 ]
         firewall_protocols: [ tcp ]
         firewall_ports: [ 5665 ]
-

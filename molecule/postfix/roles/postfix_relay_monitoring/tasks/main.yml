@@ -7,4 +7,3 @@
     path: /etc/icinga2/zones.d/master/{{ inventory_hostname }}/host.conf
   delegate_to: icinga-host
   notify: reload icinga2
-

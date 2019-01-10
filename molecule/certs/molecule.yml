@@ -17,7 +17,7 @@ provisioner:
   inventory:
     links:
       group_vars: certs_group_vars
-      host_vars:  ../../inventories/common/host_vars
+      host_vars: ../../inventories/common/host_vars
 scenario:
   name: certs
   test_sequence:

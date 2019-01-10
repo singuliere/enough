@@ -37,4 +37,3 @@
       with_nested:
         - "{{ wazuh_servers }}"
         - "{{ wazuh_clients }}"
-

@@ -1,7 +1,7 @@
 ---
 - name: apt-get install git, virtualenv, python-pip and python-setuptools
   apt:
-    name: [git, virtualenv, python-pip, python-setuptools]
+    name: [ git, virtualenv, python-pip, python-setuptools ]
     state: present
 
 - name: chown debian /srv
@@ -29,7 +29,7 @@
 - name: setup apt pinning
   # it should be better to use backports; but hugo isn't available there
   copy:
-    src:  apt-preferences.d/{{ item }}
+    src: apt-preferences.d/{{ item }}
     dest: /etc/apt/preferences.d/{{ item }}
   loop:
     - default

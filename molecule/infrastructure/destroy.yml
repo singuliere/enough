@@ -10,7 +10,9 @@
     - ../../clouds.yml
     - ../../private-key.yml
   roles:
-    - { role: vm, state: absent }
+    - role: vm
+      vars:
+        state: absent
   tasks:
     - name: destroy firewall
       include_role:

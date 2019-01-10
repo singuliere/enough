@@ -33,11 +33,11 @@
   # do **not** try vars: | ... until https://github.com/ansible/ansible/issues/19084
   # is resolved
   vars:
-     nginx_http_params:
-       # because server names can be long when using test subdomains
-       - server_names_hash_bucket_size 128
-       - ssl_dhparam /etc/nginx/dhparams.pem
-     nginx_configs: |
+    nginx_http_params:
+      # because server names can be long when using test subdomains
+      - server_names_hash_bucket_size 128
+      - ssl_dhparam /etc/nginx/dhparams.pem
+    nginx_configs: |
        {
          '{{ letsencrypt_nginx_fqdn }}': [
          {% if letsencrypt_nginx_reverse_proxy | default(false) %}
@@ -51,7 +51,7 @@
          {% endif %}
          ]
        }
-     nginx_sites: |
+    nginx_sites: |
        {
          '{{ letsencrypt_nginx_fqdn }}': [
            'listen 80',
@@ -91,10 +91,10 @@
            {% endif %}
          ]
        }
-      
+
 - name: apt-get install certbot python-certbot-nginx
   apt:
-    name: 
+    name:
       - certbot
       - python-certbot-nginx
     state: present

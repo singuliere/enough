@@ -39,10 +39,10 @@ services:
   cache:
     image: redis:4-alpine
     restart: always
-    command: ["redis-server", "--appendonly", "yes"]
+    command: [ "redis-server", "--appendonly", "yes" ]
     volumes:
       - redis-data:/data
 volumes:
-  weblate-data: {}
-  postgres-data: {}
-  redis-data: {}
+  weblate-data: { }
+  postgres-data: { }
+  redis-data: { }

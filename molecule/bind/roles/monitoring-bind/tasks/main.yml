@@ -1,6 +1,6 @@
 - name: apt-get install monitoring plugins deps
   apt:
-    name: [whois, libdate-manip-perl]
+    name: [ whois, libdate-manip-perl ]
     state: present
 
 - name: declare zone {{ domain }} on bind-host

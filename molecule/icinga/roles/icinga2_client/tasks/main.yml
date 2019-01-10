@@ -7,7 +7,7 @@
 
 - name: apt-get install monitoring plugins
   apt:
-    name: [monitoring-plugins, nagios-plugins-contrib]
+    name: [ monitoring-plugins, nagios-plugins-contrib ]
     state: present
     install_recommends: no
 
@@ -47,7 +47,7 @@
       --key  /etc/icinga2/pki/{{ inventory_hostname }}.key \
       --cert /etc/icinga2/pki/{{ inventory_hostname }}.crt
   args:
-    creates:  /etc/icinga2/pki/{{ inventory_hostname }}.crt
+    creates: /etc/icinga2/pki/{{ inventory_hostname }}.crt
 
 - name: wait for master availability
   wait_for:
@@ -63,7 +63,7 @@
       --trustedcert /etc/icinga2/pki/trusted-master.crt \
       --host {{ hostvars['icinga-host']['ansible_host'] }}
   args:
-    creates:  /etc/icinga2/pki/trusted-master.crt
+    creates: /etc/icinga2/pki/trusted-master.crt
   register: output
   until: output is success
   retries: 10
