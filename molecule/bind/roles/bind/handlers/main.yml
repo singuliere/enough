@@ -1,5 +1,4 @@
 ---
-
 - name: restart bind
   service:
     name: bind9

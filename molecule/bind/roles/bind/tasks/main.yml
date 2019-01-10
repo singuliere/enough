@@ -1,5 +1,4 @@
 ---
-
 - name: BIND Install
   package:
     pkg: [ python-netaddr, bind9, bind9utils, dnsutils ]
