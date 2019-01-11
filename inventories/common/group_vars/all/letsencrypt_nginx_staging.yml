@@ -1,2 +1,2 @@
 ---
-letsencrypt_nginx_staging: true
+letsencrypt_nginx_staging: "{{ letsencrypt_staging }}"

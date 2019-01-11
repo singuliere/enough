@@ -4,6 +4,9 @@
   become: true
 
   roles:
+    - role: letsencrypt
+      vars:
+        letsencrypt_staging: true
     - role: letsencrypt-nginx
       vars:
         letsencrypt_nginx_staging: true
@@ -16,6 +19,9 @@
   become: true
 
   roles:
+    - role: letsencrypt
+      vars:
+        letsencrypt_staging: true
     - role: letsencrypt-nginx
       vars:
         letsencrypt_nginx_staging: true
@@ -40,6 +46,9 @@
   become: true
 
   roles:
+    - role: letsencrypt
+      vars:
+        letsencrypt_staging: false
     - role: letsencrypt-nginx
       vars:
         letsencrypt_nginx_staging: false
@@ -51,6 +60,9 @@
   become: true
 
   roles:
+    - role: letsencrypt
+      vars:
+        letsencrypt_staging: true
     - role: letsencrypt-nginx
       vars:
         letsencrypt_nginx_staging: true
