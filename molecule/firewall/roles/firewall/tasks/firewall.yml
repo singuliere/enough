@@ -11,7 +11,7 @@
     region_name: "{{ clouds.ovh.region_name }}"
   when: false
 
-- name: security group rule
+- name: security group
   os_security_group:
     <<: *os_auth
     state: "{{ firewall_state }}"
