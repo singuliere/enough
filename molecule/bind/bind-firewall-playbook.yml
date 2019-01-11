@@ -1,0 +1,15 @@
+---
+- name: firewall for DNS
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item }}"
+        firewall_clients: [ 0.0.0.0/0 ]
+        firewall_protocols: [ tcp, udp ]
+        firewall_ports: [ 53 ]
+      when: hostvars[item].ansible_host is defined
+      with_items: "{{ groups.firewall_dns_server_group | default([]) }}"
