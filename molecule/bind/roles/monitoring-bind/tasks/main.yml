@@ -1,3 +1,4 @@
+---
 - name: apt-get install monitoring plugins deps
   apt:
     name: [ whois, libdate-manip-perl ]

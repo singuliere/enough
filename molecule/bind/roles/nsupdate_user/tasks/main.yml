@@ -1,3 +1,4 @@
+---
 - name: Install forced command
   template:
     src: templates/add_temp_record.sh.j2

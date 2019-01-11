@@ -1,12 +1,11 @@
-import yaml
-
 testinfra_hosts = ['icinga-host']
 
 
 def test_bind(host):
     domain = host.run("hostname -d").stdout.strip()
-    inventory = yaml.load(open(host.backend.ansible_inventory))
-    address = inventory['all']['hosts']['bind-host']['ansible_host']
+    bind_host = host.get_host('ansible://bind-host',
+                              ansible_inventory=host.backend.ansible_inventory)
+    address = bind_host.ansible.get_variables()['ansible_host']
     for h in ('ns1', 'bind', 'bind-host'):
         cmd = host.run("getent hosts {}.{}".format(h, domain))
         assert 0 == cmd.rc
