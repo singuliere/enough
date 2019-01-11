@@ -1,1 +1,2 @@
+---
 authorized_keys_globs: [ 'ssh_keys/*.pub' ]
