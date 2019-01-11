@@ -2,11 +2,12 @@
 - name: Create /usr/local/share/ca-certificates/infrastructure when fake LE certs are used
   file:
     path: /usr/local/share/ca-certificates/infrastructure
-    state: "{% if with_fake_LE | default(false) %}directory{% else %}absent{% endif %}"
+    state: directory
     owner: root
     group: root
     mode: 0755
   notify: update-ca-certificates
+  when: letsencrypt_staging | default(false)
 
 - name: upload fake LE certs
   copy:
@@ -15,6 +16,6 @@
     owner: root
     group: root
     mode: 0644
-  when: with_fake_LE | default(false)
-  loop: "{{ certbot_fake_le_certs }}"
+  loop: "{{ letsencrypt_fake_le_certs }}"
   notify: update-ca-certificates
+  when: letsencrypt_staging | default(false)

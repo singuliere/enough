@@ -1,5 +1,6 @@
 ---
 - import_playbook: ../firewall/firewall-playbook.yml
+- import_playbook: ../letsencrypt/letsencrypt-playbook.yml
 - import_playbook: ../letsencrypt-nginx/letsencrypt-nginx-playbook.yml
 - import_playbook: ../icinga/test-icinga-playbook.yml
 - import_playbook: ../bind/bind-playbook.yml

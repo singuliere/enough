@@ -6,14 +6,18 @@ lint:
 platforms:
   - name: bind-host
     flavor: "s1-2"
+    groups:
+      - firewall_web_server_group
   - name: nginx-host
     flavor: "s1-2"
     groups:
       - firewall_ssh_server_group
+      - firewall_web_server_group
   - name: proxy-host
     flavor: "s1-2"
     groups:
       - firewall_ssh_server_group
+      - firewall_web_server_group
   - name: client-host
     flavor: "s1-2"
     groups:
@@ -28,7 +32,7 @@ provisioner:
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../jdauphant.nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../letsencrypt/roles:../jdauphant.nginx/roles
   inventory:
     links:
       group_vars: ../../inventories/common/group_vars
@@ -46,5 +50,6 @@ verifier:
   options:
     v: True
     s: True
+#    k: test_certs
   lint:
     name: flake8

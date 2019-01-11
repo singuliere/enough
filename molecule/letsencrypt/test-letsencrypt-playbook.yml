@@ -1,0 +1,7 @@
+---
+- name: install fake letsencrypt certificates
+  hosts: certs-host
+  become: true
+
+  roles:
+    - role: letsencrypt

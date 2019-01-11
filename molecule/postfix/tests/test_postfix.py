@@ -21,7 +21,7 @@ def test_sendmail(host):
     assert 0 == cmd.rc
 
     check = ("grep -q 'Untrusted TLS connection established to postfix-host' "
-             "/var/log/mail.log")
+             "/var/log/syslog")
     for _ in range(300):
         print(check)
         cmd = postfix_client_host.run(check)

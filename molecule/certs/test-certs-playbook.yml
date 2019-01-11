@@ -1,9 +1,0 @@
----
-- name: uninstall fake LE certificates
-  hosts: bind-host
-  become: true
-
-  roles:
-    - role: install_certs
-      vars:
-        with_fake_LE: false

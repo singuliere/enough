@@ -93,7 +93,7 @@
               domain: {{ domain }}
             dest: "../../inventories/common/group_vars/all/domain.yml"
 
-      when: hosts_updates['all']['hosts']['bind-host'] is defined and (letsencrypt_nginx_staging | default(false))
+      when: hosts_updates['all']['hosts']['bind-host'] is defined and (letsencrypt_staging | default(false))
 
     - name: Dump instance config
       copy:
