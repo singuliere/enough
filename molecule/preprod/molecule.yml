@@ -23,6 +23,9 @@ platforms:
     flavor: "s1-4"
   - name: packages-host
     flavor: "s1-4"
+    # remove when https://github.com/ansible/molecule/issues/1650 is resolved
+    groups:
+      - wazuh_agent
   - name: website-host
     flavor: "s1-2"
   - name: chat-host
