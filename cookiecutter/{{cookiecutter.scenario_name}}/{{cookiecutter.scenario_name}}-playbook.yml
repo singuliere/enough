@@ -1,8 +1,0 @@
----
-- name: The playbook name
-  hosts: {{ cookiecutter.vm_name }}
-
-  roles:
-    - role: {{ cookiecutter.role_name }}
-
-  become: True

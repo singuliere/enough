@@ -54,28 +54,15 @@ Adding a scenario
 
 Let's start with a `dummy` scenario.
 
-Cookie Cutter
-^^^^^^^^^^^^^
+Copying from an existing scenario
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We can use cookiecutter for creating scenario. It will ask for some variables
-and apply them in the template defined in the `cookiecutter` directory:
-
-::
-
- # cookiecutter cookiecutter
- scenario_name [scenario_name]: dummy
- role_name [dummy]:
- vm_name [dummy-host]:
- use_extra_storage [n]:
- use_dns [y]: n
- use_mails [y]: n
- use_monitoring [y]: n
-
-Then we move the obtained scenario in the molecule directory:
+It is recommended to copy an existing scenario that ressembles the one
+to be created.
 
 ::
 
- mv dummy/ molecule/
+ cp -a molecule/website molecule/dummy
 
 Scenario definition
 ^^^^^^^^^^^^^^^^^^^
@@ -104,11 +91,13 @@ You should then be able to:
   ::
 
    molecule create -s dummy
+
 - log into instances
   ::
 
    molecule login -s dummy --host dummy-host
    molecule login -s dummy --host external-host
+
 - destroy instances
   ::
 
