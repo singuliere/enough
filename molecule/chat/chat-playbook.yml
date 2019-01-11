@@ -1,11 +1,12 @@
 ---
 - name: prepare chat environment
   hosts: chat-host
+  become: true
 
   roles:
-    - { role: ansible-role-docker }
-    - { role: docker }
-    - { role: mattermost }
+    - role: ansible-role-docker
+    - role: docker
+    - role: mattermost
 
     - role: letsencrypt-nginx
       vars:
@@ -18,5 +19,3 @@
       http_vhost_fqdn: "{{ chat_vhost_fqdn }}"
       http_vhost_uri: "/"
       http_vhost_string: "Mattermost"
-
-  become: True
