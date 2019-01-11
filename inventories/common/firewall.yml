@@ -53,7 +53,6 @@ firewall_web_server_group:
     gitlab-host:
     icinga-host:
     packages-host:
-    postfix-host:  # not a web host but has a web site for the purpose of obtaining letsencrypt certificates
     weblate-host:
     website-host:
 

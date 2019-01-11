@@ -2,14 +2,34 @@
 - name: install letsencrypt certificate if needed
 
   hosts: 'postfix-host'
-  become: true
   roles:
 
-  - role: certbot-postfix
+    - role: firewall
+      vars:
+        firewall_server: "{{ inventory_hostname }}"
+        firewall_clients: [ 0.0.0.0/0 ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 80, 443 ]
+        firewall_rule_state: present
+      delegate_to: localhost
+      become: false
+
+    - role: certbot-postfix
+      become: true
+
+    - role: firewall
+      vars:
+        firewall_server: "{{ inventory_hostname }}"
+        firewall_clients: [ 0.0.0.0/0 ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 80, 443 ]
+        firewall_rule_state: absent
+      delegate_to: localhost
+      become: false
 
 - name: install and configure postfix relay
   hosts: 'postfix-host'
-  become: True
+  become: true
 
   environment: '{{ inventory__environment | d({})
                    | combine(inventory__group_environment | d({}))
