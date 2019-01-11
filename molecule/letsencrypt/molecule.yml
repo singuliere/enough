@@ -19,7 +19,7 @@ provisioner:
       group_vars: ../../inventories/common/group_vars
       host_vars: ../../inventories/common/host_vars
 scenario:
-  name: certs
+  name: letsencrypt
   test_sequence:
     - destroy
     - create
