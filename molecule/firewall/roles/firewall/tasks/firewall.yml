@@ -26,6 +26,7 @@
     port_range_max: "{{ firewall_item.0 }}"
     protocol: "{{ firewall_item.1 }}"
     remote_ip_prefix: "{{ firewall_item.2 }}"
+    state: "{{ firewall_rule_state | default('present') }}"
   with_nested:
     - "{{ firewall_ports }}"
     - "{{ firewall_protocols }}"
@@ -40,6 +41,7 @@
     security_group: "{{ firewall_server }}"
     protocol: icmp
     remote_ip_prefix: "{{ firewall_item }}"
+    state: "{{ firewall_rule_state | default('present') }}"
   with_items: "{{ firewall_clients }}"
   loop_control:
     loop_var: firewall_item

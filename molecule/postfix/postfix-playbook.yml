@@ -1,3 +1,4 @@
 ---
+- import_playbook: postfix-firewall-playbook.yml
 - import_playbook: postfix-relay-playbook.yml
 - import_playbook: postfix-client-playbook.yml

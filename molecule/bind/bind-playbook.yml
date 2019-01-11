@@ -1,4 +1,5 @@
 ---
+- import_playbook: bind-firewall-playbook.yml
 - name: setup DNS server
   hosts: bind-host
   become: True

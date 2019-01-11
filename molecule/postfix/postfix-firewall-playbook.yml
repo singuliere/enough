@@ -1,0 +1,18 @@
+---
+- name: firewall for postfix
+  hosts: localhost
+  gather_facts: false
+  become: no
+
+  tasks:
+    - include_role:
+        name: firewall
+      vars:
+        firewall_server: "{{ item.0 }}"
+        firewall_clients: [ "{{ hostvars[item.1]['ansible_host'] }}/32" ]
+        firewall_protocols: [ tcp ]
+        firewall_ports: [ 465 ]
+      when: hostvars[item.0].ansible_host is defined and hostvars[item.1].ansible_host is defined
+      with_nested:
+        - "{{ groups.firewall_postfix_server_group | default([]) }}"
+        - "{{ groups.firewall_postfix_client_group | default([]) }}"
