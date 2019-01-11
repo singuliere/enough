@@ -29,10 +29,6 @@
         {%- endfor %}
       {%- endif %}[]
 
-- name: display the volumes_description var
-  debug:
-    msg: "volumes_description: {{ volumes_description }}"
-
 - name: create volumes
   os_volume:
     state: present
