@@ -4,19 +4,19 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: debian-host
+  - name: certs-host
     flavor: "s1-2"
-  - name: bind-host
+  - name: nocerts-host
     flavor: "s1-2"
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../bind/roles:../jdauphant.nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles
   inventory:
     links:
-      group_vars: certs_group_vars
+      group_vars: ../../inventories/common/group_vars
       host_vars: ../../inventories/common/host_vars
 scenario:
   name: certs

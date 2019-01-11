@@ -1,0 +1,7 @@
+- name: install fake letsencrypt certificates, if needed
+  hosts: all
+  become: true
+
+  roles:
+    - role: letsencrypt
+      when: letsencrypt_staging | default(false)

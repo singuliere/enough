@@ -1,6 +1,0 @@
-- name: install fake LE certificates, if needed
-  hosts: all
-  become: true
-
-  roles:
-    - role: install_certs
