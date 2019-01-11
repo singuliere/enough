@@ -1,4 +1,6 @@
 ---
+- import_playbook: icinga-firewall-playbook.yml
+
 - name: install icinga master
   hosts: icinga-host
   become: true
