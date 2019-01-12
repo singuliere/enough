@@ -77,8 +77,6 @@
 
           ansible 1800 IN A 51.68.80.10
 
-          {% if 'gitlab-host' in hostvars and hostvars['gitlab-host'].ansible_host is defined %}lab 1800 IN A {{ hostvars['gitlab-host']['ansible_host'] }}{% endif %}
-
           test 1800 IN NS ns1.{{ domain }}.
 
           imap 1800 IN CNAME access.mail.gandi.net.

@@ -6,6 +6,17 @@
   vars_files:
     - ../../clouds.yml
 
+  pre_tasks:
+    - name: set CNAME
+      nsupdate:
+        server: localhost
+        zone: "{{ domain }}"
+        record: "{{ short_gitlab_vhost_fqdn }}."
+        ttl: 1800
+        type: CNAME
+        value: "gitlab-host"
+      delegate_to: bind-host
+
   roles:
     - { role: ansible-role-docker, docker_install_compose: false }
     - { role: gitlab }
