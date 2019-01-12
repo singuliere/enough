@@ -26,20 +26,23 @@
 
 - name: generate SSHFP records
   shell: |
-    ssh-keyscan -D -p {{ install_ssh_records_port }} {{ install_ssh_records_host }} 2>&1 | grep -v '^;' | sed -e 's/ IN /.{{ domain }}. 604800 /'
+    echo "[ '{{ install_ssh_records_host }}', ["
+    ssh-keyscan -D -p {{ install_ssh_records_port }} {{ install_ssh_records_host }} | while read record IN SSHFP value ; do
+       echo "'$value',"
+    done
+    echo '] ]'
   delegate_to: bind-host
   register: cmd
 
 - name: install SSHFP records
-  shell: |
-        nsupdate <<EOF
-        server localhost
-        zone {{ domain }}
-        update add {{ item }}
-        show
-        send
-        quit
-        EOF
-  loop: "{{ cmd.stdout_lines }}"
+  nsupdate:
+    server: localhost
+    zone: "{{ domain }}"
+    record: "{{ sshfp.0 }}"
+    ttl: 604800
+    type: SSHFP
+    value: "{{ sshfp.1 }}"
+  vars:
+    sshfp: "{{ cmd.stdout }}"
   delegate_to: bind-host
   notify: reload bind

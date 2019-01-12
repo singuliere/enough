@@ -95,3 +95,15 @@
           @ IN CAA 0 issue "letsencrypt.org"
 
     - role: nsupdate_user
+
+  tasks:
+
+    - name: apt-get install virtualenv, python-pip and python-setuptools
+      apt:
+        name: [ python-pip, python-setuptools ]
+
+    # dependency of
+    # https://docs.ansible.com/ansible/latest/modules/nsupdate_module.html
+    - name: pip install dnspython
+      pip:
+        name: dnspython==1.16.0
