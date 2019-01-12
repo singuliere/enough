@@ -3,8 +3,29 @@
   hosts: website-host
   become: true
 
+  pre_tasks:
+    - name: set A
+      nsupdate:
+        server: localhost
+        zone: "{{ domain }}"
+        record: "{{ domain }}."
+        ttl: 1800
+        type: A
+        value: "{{ ansible_host }}"
+      delegate_to: bind-host
+
+    - name: set CNAME
+      nsupdate:
+        server: localhost
+        zone: "{{ domain }}"
+        record: "www.{{ domain }}."
+        ttl: 1800
+        type: CNAME
+        value: "{{ domain }}."
+      delegate_to: bind-host
+
   roles:
-    - { role: website }
+    - role: website
 
     - role: monitor_http_vhost
       http_vhost_https: true
