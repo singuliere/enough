@@ -1,10 +1,11 @@
 ---
 - name: setup monitoring DNS server
   hosts: bind-host
-  become: True
+  become: true
 
   roles:
     - role: monitoring-bind
       bind_zone_name: '{{ domain }}'
+
     - role: monitoring-bind
       bind_zone_name: 'test.{{ domain }}'

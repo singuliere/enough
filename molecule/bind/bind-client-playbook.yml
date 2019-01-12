@@ -49,9 +49,10 @@
 
   roles:
     - role: dhclient
-      dns_nameservers: [ '{{ hostvars["bind-host"]["ansible_host"] }}' ]
-      dns_search: "{{ domain }}"
-      dns_domain: "{{ domain }}"
+      vars:
+        dns_nameservers: [ '{{ hostvars["bind-host"]["ansible_host"] }}' ]
+        dns_search: "{{ domain }}"
+        dns_domain: "{{ domain }}"
 
     - role: install_ssh_records
       vars:

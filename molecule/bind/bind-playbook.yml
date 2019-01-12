@@ -1,13 +1,13 @@
 ---
 - import_playbook: bind-firewall-playbook.yml
+
 - name: setup DNS server
   hosts: bind-host
-  become: True
+  become: true
 
   roles:
     - role: bind
       bind_zone_name: "test.{{ domain }}"
-
       bind_zone:
         - |
           $ORIGIN test.{{ domain }}.
@@ -75,7 +75,7 @@
 
           ns1 1800 IN A {{ ansible_host }}
 
-          ansible 1800 IN A 51.68.80.10
+          ansible 1800 IN A 51.68.80.10  ;; remove me
 
           test 1800 IN NS ns1.{{ domain }}.
 
