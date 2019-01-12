@@ -18,8 +18,11 @@
       delegate_to: bind-host
 
   roles:
-    - { role: ansible-role-docker, docker_install_compose: false }
-    - { role: gitlab }
+    - role: ansible-role-docker
+      vars:
+        docker_install_compose: false
+
+    - role: gitlab
 
     - role: install_ssh_records
       vars:
