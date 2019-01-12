@@ -29,17 +29,17 @@
     group: bind
     mode: '0640'
     validate: 'named-checkconf %s'
+  when: bind_master is defined
   notify: restart bind
-
-- name: dump dynamic zones to disk, and remove their journal files
-  shell: rndc sync -clean || true
 
 - name: BIND zone file
   template:
     src: zone.conf.j2
     dest: "/var/cache/bind/{{ bind_zone_name }}"
+    force: no
     owner: root
     group: bind
     mode: '0640'
     validate: 'named-checkzone -d {{ bind_zone_name }} %s'
+  when: bind_zone is defined
   notify: restart bind
