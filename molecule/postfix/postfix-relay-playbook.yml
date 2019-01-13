@@ -78,5 +78,16 @@
       postfix__maincf: "{{ base__maincf + TLS__maincf }}"
       postfix__restrictions_maincf: [ ]
 
-    - role: install_dns_mail_records
     - role: postfix_relay_monitoring
+
+  tasks:
+
+    - name: set SPF DNS record
+      nsupdate:
+        server: localhost
+        zone: "{{ domain }}"
+        record: "{{ domain }}."
+        ttl: 1800
+        type: TXT
+        value: "v=spf1 mx ip4:{{ ansible_host }} ~all"
+      delegate_to: bind-host
