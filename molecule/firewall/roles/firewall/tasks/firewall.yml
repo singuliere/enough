@@ -27,6 +27,8 @@
     protocol: "{{ firewall_item.1 }}"
     remote_ip_prefix: "{{ firewall_item.2 }}"
     state: "{{ firewall_rule_state | default('present') }}"
+  register: result
+  changed_when: firewall_changed_when | default(result is changed)
   with_nested:
     - "{{ firewall_ports }}"
     - "{{ firewall_protocols }}"

@@ -4,7 +4,7 @@
     name: certbot
     state: present
 
-- name: call let's encrypt on vhost_fqdn
+- name: call let's encrypt on postfix-host
   shell: |
     certbot -n                                                   \
       certonly                                                   \
@@ -13,3 +13,5 @@
       --email admin@{{ domain }}                                 \
       -d postfix-host.{{ domain }}                               \
       {% if letsencrypt_staging | default(false) %}--test-cert{% endif %}
+  register: result
+  changed_when: "'no action taken' not in result.stdout"

@@ -10,6 +10,7 @@
         firewall_protocols: [ tcp ]
         firewall_ports: [ 80, 443 ]
         firewall_rule_state: present
+        firewall_changed_when: false
       delegate_to: localhost
       become: false
 
@@ -23,6 +24,7 @@
         firewall_protocols: [ tcp ]
         firewall_ports: [ 80, 443 ]
         firewall_rule_state: absent
+        firewall_changed_when: false
       delegate_to: localhost
       become: false
 
