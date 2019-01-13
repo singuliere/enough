@@ -3,6 +3,8 @@
   template:
     src: dhclient.conf.j2
     dest: /etc/dhcp/dhclient.conf
+  register: dhclient
 
 - name: restart all interfaces to reload dhclient.conf and update /etc/resolv.conf
   shell: "ifdown -a ; ifup -a"
+  when: dhclient is changed

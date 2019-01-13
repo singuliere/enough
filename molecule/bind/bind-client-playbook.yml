@@ -13,36 +13,46 @@
         content: "{{ ansible_host }};"
       delegate_to: bind-host
 
-- name: setup DNS client (A/CNAME records)
+- name: setup DNS client
   hosts: all:!external-host
   become: true
+  vars:
+    dns_a_record: "{{ ansible_hostname }}"
+    dns_cname_record: '{{ ansible_hostname | replace("-host","") }}'
+    dns_a: "{{ ansible_host }}"
 
-  tasks:
-    - name: install BIND A/CNAME records
-      shell: |
-        nsupdate <<EOF
-        server localhost
-        zone {{ domain }}
-        update add {{ bind_client_hostname }}.{{ domain }}. 1800 A {{ bind_client_ip }}
-        update add {{ bind_client_hostname | replace("-host","") }}.{{ domain }}. 1800 CNAME {{ bind_client_hostname }}.{{ domain }}.
-        show
-        send
-        quit
-        EOF
+  pre_tasks:
+    - name: set A
+      nsupdate:
+        server: localhost
+        zone: "{{ domain }}"
+        record: "{{ dns_a_record }}"
+        ttl: 1800
+        type: A
+        value: "{{ dns_a }}"
       delegate_to: bind-host
-      vars:
-        bind_client_hostname: "{{ ansible_hostname }}"
-        bind_client_ip: "{{ ansible_host }}"
 
-- name: setup DNS client (dhclient, ssh_records, hostname)
-  hosts: all:!external-host
-  become: true
+    - name: set CNAME
+      nsupdate:
+        server: localhost
+        zone: "{{ domain }}"
+        record: "{{ dns_cname_record }}"
+        ttl: 1800
+        type: CNAME
+        value: "{{ dns_a_record }}"
+      delegate_to: bind-host
+
+    - debug:
+        msg: |
+          {{ dns_a_record }} IN A {{ dns_a }}
+          {{ dns_cname_record }} IN CNAME {{ dns_a_record }}
 
   roles:
     - role: dhclient
-      dns_nameservers: [ '{{ hostvars["bind-host"]["ansible_host"] }}' ]
-      dns_search: "{{ domain }}"
-      dns_domain: "{{ domain }}"
+      vars:
+        dns_nameservers: [ '{{ hostvars["bind-host"]["ansible_host"] }}' ]
+        dns_search: "{{ domain }}"
+        dns_domain: "{{ domain }}"
 
     - role: install_ssh_records
       vars:

@@ -6,13 +6,37 @@
   vars_files:
     - ../../clouds.yml
 
+  pre_tasks:
+    - name: set CNAME
+      nsupdate:
+        server: localhost
+        zone: "{{ domain }}"
+        record: "{{ short_gitlab_vhost_fqdn }}."
+        ttl: 1800
+        type: CNAME
+        value: "gitlab-host"
+      delegate_to: bind-host
+
   roles:
-    - { role: ansible-role-docker, docker_install_compose: false }
-    - { role: gitlab }
+    - role: ansible-role-docker
+      vars:
+        docker_install_compose: false
+
+    - role: gitlab
 
     - role: install_ssh_records
       vars:
         install_ssh_records_host: lab
+
+    - role: letsencrypt-nginx
+      # do **not** use vars here because of https://github.com/ansible/ansible/issues/50278
+      letsencrypt_nginx_reverse_proxy: 127.0.0.1:8080
+      letsencrypt_nginx_fqdn: "{{ gitlab_vhost_fqdn }}"
+
+    - role: letsencrypt-nginx
+      # do **not** use vars here because of https://github.com/ansible/ansible/issues/50278
+      letsencrypt_nginx_reverse_proxy: 127.0.0.1:8080
+      letsencrypt_nginx_fqdn: "{{ short_gitlab_vhost_fqdn }}"
 
     - role: monitor_http_vhost
       http_vhost_https: true
@@ -27,24 +51,3 @@
       http_vhost_fqdn: "lab.{{ domain }}"
       http_vhost_uri: "/users/sign_in"
       http_vhost_string: "GitLab"
-
-# separate plays because of https://github.com/ansible/ansible/issues/50278
-- name: setup reverse proxy for {{ gitlab_vhost_fqdn }}
-  hosts: gitlab-host
-  become: true
-
-  roles:
-    - role: letsencrypt-nginx
-      vars:
-        letsencrypt_nginx_reverse_proxy: 127.0.0.1:8080
-        letsencrypt_nginx_fqdn: "{{ gitlab_vhost_fqdn }}"
-
-- name: setup reverse proxy for {{ short_gitlab_vhost_fqdn }}
-  hosts: gitlab-host
-  become: true
-
-  roles:
-    - role: letsencrypt-nginx
-      vars:
-        letsencrypt_nginx_reverse_proxy: 127.0.0.1:8080
-        letsencrypt_nginx_fqdn: "{{ short_gitlab_vhost_fqdn }}"
