@@ -1,9 +1,8 @@
 ---
 - name: install letsencrypt certificate if needed
-
   hosts: 'postfix-host'
-  roles:
 
+  roles:
     - role: firewall
       vars:
         firewall_server: "{{ inventory_hostname }}"
@@ -35,8 +34,8 @@
                    | combine(inventory__group_environment | d({}))
                    | combine(inventory__host_environment  | d({})) }}'
   roles:
-
     - role: debops.postfix/env
+
     - role: debops.secret
       secret__directories:
         - '{{ postfix__secret__directories     | d([])}}'
