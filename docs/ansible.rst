@@ -62,15 +62,68 @@ suitable for integration testing and must be overriden before
 deploying on publicly available hosts. The recommended way of doing this is to:
 
 * fork The `ansible repository <http://lab.enough.community/main/infrastructure/>`_ into a private repository
-* add files overriding the secrets in `inventories/common/host_vars/*/secrets.yml`
+* add files overriding the secrets in `inventories/common/{host,group}_vars/*/*secrets*.yml`
 * encrypt those files with `ansible vault <https://docs.ansible.com/ansible/latest/user_guide/vault.html>`_
 * share the password to decrypt the files with trusted administrators
 
 The encrypted secrets are kept in a private repository to not be
 publicly exposed to brute force attacks.
 
+Getting the production repository
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code::
+
+   $ git clone --recursive \
+               git@lab.enough.community:main/production-infrastructure.git
+   $ cd infrastructure
+   $ git remote add upstream \
+               git@lab.enough.community:main/infrastructure.git
+   $ ansible-vault decrypt \
+                   --vault-password-file ~/.vault_pass.txt \
+                   infrastructure_key
+
+Rebasing production
+~~~~~~~~~~~~~~~~~~~
+
+.. code::
+
+   $ git rebase upstream/master
+
+Pushing to production
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code::
+
+   $ git push --force origin master
+
 Running
 -------
+
+Creating new hosts
+~~~~~~~~~~~~~~~~~~
+
+.. code::
+
+   ANSIBLE_VAULT_PASSWORD_FILE=$HOME/.vault_pass.txt \
+      molecule create -s preprod
+
+It will create the `inventories/01-hosts.yml` file, from which the new
+hosts can be copy/pasted into `inventories/common/hosts-definition.yml`
+or `inventories/dachary/hosts-definition.yml` etc.
+
+.. code::
+
+    all:
+      hosts:
+        new-host:
+          ansible_host: 51.68.78.253
+          ansible_port: '22'
+          ansible_user: debian
+
+
+Updating
+~~~~~~~~
 
 The `ansible repository
 <http://lab.enough.community/main/infrastructure/>`_ is run from the
@@ -96,6 +149,7 @@ that can only be accessed by them as follows:
 .. code::
 
    ansible-playbook --private-key ~/.ssh/id_rsa \
+                    --vault-password-file=$HOME/.vault_pass.txt \
                     -i inventories/common \
                     -i inventories/dachary \
                     enough-community-playbook.yml
