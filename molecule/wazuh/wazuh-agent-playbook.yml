@@ -2,6 +2,8 @@
 - name: install wazuh-agent
   hosts: wazuh_agent
   become: true
+  vars_files:
+    - agent.yml
 
   roles:
     - role: ansible-wazuh-agent
