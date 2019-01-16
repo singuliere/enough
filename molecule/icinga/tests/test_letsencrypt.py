@@ -12,7 +12,7 @@ def get_address():
 
 def test_icingaweb2_login_screen(host):
     address = get_address()
-    print ('https://{address}/icingaweb2/authentication/login'.format(address=address))
+    print('https://{address}/icingaweb2/authentication/login'.format(address=address))
     s = requests.Session()
     r = s.get('http://{address}/icingaweb2/authentication/login'.format(
         address=address,
