@@ -1,59 +1,6 @@
 Ansible
 =======
 
-Creation
---------
-
-The `ansible.enough.community` virtual machine was created in the `GRA5` region with:
-
-.. code::
-
-   $ openstack keypair create --public-key ~/.ssh/id_rsa.pub loic
-   $ openstack --quiet server create --image 'Debian 9' --flavor 's1-2' \
-             --key-name loic --wait ansible
-   $ scp enough-openrc-production.sh debian@ansible.enough.community:openrc.sh
-   $ ssh debian@ansible.enough.community
-   $ sudo apt-get update
-   $ sudo apt-get install tmux emacs-nox git python-openstackclient rsync virtualenv python-all-dev
-   $ sudo chown debian /srv
-   $ rsync -av enough-community/ debian@ansible.enough.community:/srv/enough-community/
-   $ ( cd /srv/enough-community && git submodule update )
-   $ 
-   $ virtualenv /srv/virtualenv
-   $ cat >> .bashrc <<EOF
-   source /srv/virtualenv/bin/activate
-   source $HOME/openrc.sh
-   export HISTSIZE=1000000
-   export PROMPT_COMMAND='history -a' # history -r
-   EOF
-
-Logout and login again:
-
-.. code::
-
-   $ pip install -r /srv/enough-community/requirements.txt
-   $ ssh-keygen -f infrastructure_key
-   $ cat > /srv/enough-community/private-key.yml <<EOF
-   ---
-   ssh_private_keyfile: "{{ lookup('pipe', 'git rev-parse --show-toplevel') }}/infrastructure_key"
-   EOF
-
-Manually create `/srv/enough-community/clouds.yml` from `~/openrc.sh` and check it works:
-
-.. code::
-
-   $ molecule create -s infrastructure
-   $ molecule destroy -s infrastructure
-
-Set the passwords and other secret credentialis in the file or
-directory matching a given host at
-`/srv/checkout/inventories/common/host_vars/` (so that the default used during
-testing are not used in production).
-
-.. code::
-
-   $ echo domain: enough.community | sudo tee /srv/checkout/inventories/common/group_vars/all/domain.yml
-
 Secrets
 -------
 

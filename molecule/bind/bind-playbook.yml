@@ -75,8 +75,6 @@
 
           ns1 1800 IN A {{ ansible_host }}
 
-          ansible 1800 IN A 51.68.80.10  ;; remove me
-
           test 1800 IN NS ns1.{{ domain }}.
 
           imap 1800 IN CNAME access.mail.gandi.net.
