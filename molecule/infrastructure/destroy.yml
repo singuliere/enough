@@ -8,7 +8,6 @@
     hosts_orig: "{{ lookup('file', '../../hosts-base.yml') | from_yaml }}"
   vars_files:
     - ../../clouds.yml
-    - ../../private-key.yml
   roles:
     - role: vm
       vars:

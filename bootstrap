@@ -5,4 +5,3 @@ source ../virtualenv/bin/activate
 sudo apt-get install -y libssl-dev gcc python-dev make
 pip install -r requirements.txt
 chmod 600 id_rsa # cannot be stored in git
-ln -s private-key.yml.example private-key.yml

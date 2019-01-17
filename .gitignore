@@ -6,7 +6,6 @@ __pycache__
 pytestdebug.log
 docs/_build/
 inventories/common/01-hosts.yml
-private-key.yml
 *.pyc
 infrastructure_key*
 secret

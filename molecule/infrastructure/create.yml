@@ -10,7 +10,6 @@
     hosts_orig: "{{ lookup('file', '../../hosts-base.yml') | from_yaml }}"
   vars_files:
     - ../../clouds.yml
-    - ../../private-key.yml
   pre_tasks:
     - name: firewall for ssh ports
       include_role:
