@@ -68,13 +68,9 @@ consider when working on improving a playbook or a service.
 * ``molecule/letsencrypt-nginx``: nginx reverse proxy with letsencrypt integration
 * ``molecule/icinga``: resources monitoring
 * ``molecule/infrastructure``: VMs creation and firewalling
-* ``molecule/misc/roles/commit_etc``: keep track of changes in /etc
-* ``molecule/misc/roles/history``: keep track of Ansible runs
-* ``molecule/misc/roles/sexy-debian``: non essential Debian specific convenience tweaks
-* ``molecule/misc/roles/sshd_config``: /etc/ssh/sshd_config shared by all VMs
 * ``molecule/postfix``: outgoing mail relay for all VMs
 * ``molecule/preprod``: full preproduction environment. See `Integration testing`_.
-* ``molecule/sexy-debian``: optional tools that debian users like to work with
+* etc.
 
 The other scenarii found in the `molecule` directory are services such
 as `weblate <https://weblate.org/>`_ or `discourse <https://discourse.org/>`_.
