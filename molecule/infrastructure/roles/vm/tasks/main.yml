@@ -1,6 +1,4 @@
 ---
-- include_vars: clouds.yml
-
 - name: Define auth
   os_security_group: &os_auth
     auth:

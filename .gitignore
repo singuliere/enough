@@ -1,5 +1,4 @@
 *~
-/clouds.yml
 *.retry
 __pycache__
 .cache
@@ -10,6 +9,7 @@ inventories/common/01-hosts.yml
 infrastructure_key*
 secret
 inventories/common/group_vars/all/domain.yml
+inventories/common/group_vars/all/clouds.yml
 openrc.sh
 inventories/01-hosts.yml
 .tox

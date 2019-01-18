@@ -48,7 +48,7 @@ Getting started
 * get OpenStack credentials (ask :doc:`anyone in the <team>`) and store then in `openrc.sh`
 * ``source openrc.sh``
 * ``openstack server list``: should successfully return nothing on a new tenant
-* ``cp clouds.yml.example clouds.yml``
+* ``cp clouds.yml.example inventories/common/group_vars/all/clouds.yml`` and edit to match `openrc.sh`
 * ``molecule converge -s bind``: create VMs for the scenario `bind` and run ansible playbook defined for this scenario
 * ``molecule verify -s bind``: run scenario's tests
 * ``molecule login -s bind --host bind-host``: should ssh to the machine
