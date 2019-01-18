@@ -48,7 +48,7 @@ Getting started
 * get OpenStack credentials (ask :doc:`anyone in the <team>`) and store then in `openrc.sh`
 * ``source openrc.sh``
 * ``openstack server list``: should successfully return nothing on a new tenant
-* ``cp clouds.yml.example clouds.yml``
+* ``cp clouds.yml.example inventories/common/group_vars/all/clouds.yml`` and edit to match `openrc.sh`
 * ``molecule converge -s bind``: create VMs for the scenario `bind` and run ansible playbook defined for this scenario
 * ``molecule verify -s bind``: run scenario's tests
 * ``molecule login -s bind --host bind-host``: should ssh to the machine
@@ -68,13 +68,9 @@ consider when working on improving a playbook or a service.
 * ``molecule/letsencrypt-nginx``: nginx reverse proxy with letsencrypt integration
 * ``molecule/icinga``: resources monitoring
 * ``molecule/infrastructure``: VMs creation and firewalling
-* ``molecule/misc/roles/commit_etc``: keep track of changes in /etc
-* ``molecule/misc/roles/history``: keep track of Ansible runs
-* ``molecule/misc/roles/sexy-debian``: non essential Debian specific convenience tweaks
-* ``molecule/misc/roles/sshd_config``: /etc/ssh/sshd_config shared by all VMs
 * ``molecule/postfix``: outgoing mail relay for all VMs
 * ``molecule/preprod``: full preproduction environment. See `Integration testing`_.
-* ``molecule/sexy-debian``: optional tools that debian users like to work with
+* etc.
 
 The other scenarii found in the `molecule` directory are services such
 as `weblate <https://weblate.org/>`_ or `discourse <https://discourse.org/>`_.

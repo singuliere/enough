@@ -1,6 +1,4 @@
 ---
-- include_vars: clouds.yml
-
 - name: mkdir /usr/lib/backup
   file:
     state: directory

@@ -3,9 +3,6 @@
   hosts: gitlab-host
   become: true
 
-  vars_files:
-    - ../../clouds.yml
-
   pre_tasks:
     - name: set CNAME
       nsupdate:
