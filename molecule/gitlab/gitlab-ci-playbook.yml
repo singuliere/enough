@@ -1,9 +1,10 @@
 ---
 - name: install gitlab runner
   hosts: runner-host
+  become: true
 
   roles:
-    - { role: ansible-role-docker, docker_install_compose: false }
-    - { role: gitlab-ci }
+    - role: ansible-role-docker
+      docker_install_compose: false
 
-  become: True
+    - role: gitlab-ci
