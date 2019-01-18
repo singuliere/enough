@@ -3,6 +3,7 @@
 - import_playbook: ../letsencrypt/letsencrypt-playbook.yml
 - import_playbook: ../icinga/test-icinga-playbook.yml
 - import_playbook: ../letsencrypt-nginx/letsencrypt-nginx-playbook.yml
+- import_playbook: ../wazuh/test-wazuh-playbook.yml
 - import_playbook: ../../enough-community-playbook.yml
 
 - name: display domain name
