@@ -38,7 +38,7 @@ def test_dig_update(host):
     domain = host.run("hostname -d").stdout.strip()
     hostname = host.run("hostname -s").stdout.strip()
     cmd = host.run("dig +short TXT {}.test.{}".format(hostname, domain))
-    print (cmd.stdout.strip())
+    print(cmd.stdout.strip())
     assert 0 == cmd.rc
     assert "Updated by nsupdate" in cmd.stdout.strip()
 

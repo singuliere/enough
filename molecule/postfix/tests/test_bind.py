@@ -1,4 +1,4 @@
-testinfra_hosts = ['postfix-client-host']
+testinfra_hosts = ['icinga-host']
 
 
 def test_spf(host):

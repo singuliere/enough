@@ -4,7 +4,7 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: backup-host
+  - name: bind-host
     flavor: "s1-2"
   - name: weblate-host
     flavor: "s1-2"
@@ -14,7 +14,7 @@ provisioner:
   name: ansible
   options:
     i: ../../inventories/common/firewall.yml,../../inventories/common/02-all.yml
-    limit: backup-host,weblate-host,localhost
+    limit: bind-host,weblate-host,localhost
   lint:
     name: ansible-lint
   env:

@@ -22,20 +22,15 @@ click==6.7                # via click-completion, cookiecutter, git-url-parse, m
 cliff==2.14.0
 cmd2==0.8.9               # via cliff
 colorama==0.3.9           # via molecule, python-gilt
-configparser==3.5.0       # via flake8
-contextlib2==0.5.5        # via cmd2
 cookiecutter==1.6.0       # via molecule
 cryptography==2.4.2       # via ansible, openstacksdk, paramiko
 decorator==4.1.2          # via openstacksdk
 dogpile.cache==0.6.4      # via openstacksdk
-enum34==1.1.6             # via cmd2, cryptography, flake8
 fasteners==0.14.1         # via python-gilt
 flake8==3.5.0             # via molecule
 future==0.16.0            # via cookiecutter
-futures==3.1.1            # via openstacksdk
 git-url-parse==1.0.1      # via python-gilt
 idna==2.6                 # via cryptography, requests
-ipaddress==1.0.18         # via cryptography, openstacksdk
 iso8601==0.1.12           # via keystoneauth1, openstacksdk
 jinja2-time==0.2.0        # via cookiecutter
 jinja2==2.10
@@ -79,11 +74,9 @@ sh==1.12.14
 shade==1.30.0
 six==1.11.0               # via ansible-lint, bcrypt, click-completion, cliff, cmd2, cryptography, fasteners, git-url-parse, keystoneauth1, molecule, munch, openstacksdk, pynacl, python-dateutil, stevedore, testinfra
 stevedore==1.26.0         # via cliff, keystoneauth1
-subprocess32==3.5.3       # via cmd2
 tabulate==0.8.2           # via molecule
 testinfra==1.14.0         # via molecule
 tree-format==0.1.2        # via molecule
-unicodecsv==0.14.1        # via cliff
 urllib3==1.22             # via requests
 wcwidth==0.1.7            # via cmd2
 whichcraft==0.4.1         # via cookiecutter

@@ -1,4 +1,4 @@
-testinfra_hosts = ['backup-host']
+testinfra_hosts = ['bind-host']
 
 
 def expected_backups(host, count):

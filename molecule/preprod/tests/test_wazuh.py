@@ -1,0 +1,1 @@
+../../wazuh/tests/test_wazuh.py

@@ -2,24 +2,12 @@
 	path = molecule/infrastructure/roles/ansible-role-docker
 	url = https://github.com/geerlingguy/ansible-role-docker
         branch = 2.5.2
-[submodule "roles/debops.etc_aliases"]
-	path = molecule/postfix/roles/debops.etc_aliases
-	url = https://github.com/debops/ansible-etc_aliases
-[submodule "roles/debops.secret"]
-	path = molecule/postfix/roles/debops.secret
-	url = https://github.com/debops/ansible-secret
-[submodule "roles/debops.postfix"]
-	path = molecule/postfix/roles/debops.postfix
-	url = https://github.com/debops/ansible-postfix
-[submodule "roles/debops.ansible_plugins"]
-	path = molecule/postfix/roles/debops.ansible_plugins
-	url = https://github.com/debops/ansible-ansible_plugins
-[submodule "molecule/postfix/roles/ansible-opendkim"]
-	path = molecule/postfix/roles/debops.opendkim
-	url = https://github.com/debops/ansible-opendkim
 [submodule "molecule/jdauphant.nginx/roles/jdauphant.nginx"]
 	path = molecule/jdauphant.nginx/roles/jdauphant.nginx
 	url = https://github.com/jdauphant/ansible-role-nginx.git
 [submodule "molecule/wazuh/wazuh-ansible"]
 	path = molecule/wazuh/wazuh-ansible
 	url = https://lab.enough.community/main/wazuh-ansible
+[submodule "molecule/debops"]
+	path = molecule/debops
+	url = https://github.com/debops/debops
