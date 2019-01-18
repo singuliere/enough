@@ -10,15 +10,11 @@ platforms:
     flavor: "s1-2"
   - name: postfix-host
     flavor: "s1-2"
-  - name: postfix-client-host
-    flavor: "s1-2"
-    groups:
-      - firewall_ssh_server_group
 provisioner:
   name: ansible
   options:
     i: ../../inventories/common/firewall.yml
-    limit: bind-host,icinga-host,postfix-host,postfix-client-host,localhost
+    limit: bind-host,icinga-host,postfix-host,localhost
   lint:
     name: ansible-lint
   env:

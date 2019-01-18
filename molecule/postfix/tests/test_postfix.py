@@ -9,7 +9,7 @@ def test_sendmail(host):
 
     postfix_host = host
     postfix_client_host = testinfra.host.Host.get_host(
-        'ansible://postfix-client-host',
+        'ansible://icinga-host',
         ansible_inventory=host.backend.ansible_inventory)
 
     cmd = postfix_client_host.run("""
