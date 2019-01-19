@@ -30,6 +30,8 @@ cookiecutter==1.6.0       # via molecule
 coverage==4.5.2
 cryptography==2.4.2       # via ansible, openstacksdk, paramiko
 decorator==4.3.0          # via openstacksdk
+django==2.1.5
+djangorestframework==3.9.1
 docutils==0.14            # via sphinx
 dogpile.cache==0.6.8      # via openstacksdk
 fasteners==0.14.1         # via python-gilt
@@ -81,7 +83,7 @@ pytest-mock==1.10.0
 pytest==4.1.0
 python-dateutil==2.7.5    # via arrow
 python-gilt==1.2.1        # via molecule
-pytz==2018.9              # via babel
+pytz==2018.9              # via babel, django
 pyyaml==3.12              # via ansible, ansible-lint, cliff, molecule, openstacksdk, python-gilt, yamllint
 requests==2.21.0
 requestsexceptions==1.4.0  # via openstacksdk
