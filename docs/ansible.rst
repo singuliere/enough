@@ -81,11 +81,12 @@ The `ansible repository
 
 .. code::
 
-   ansible-playbook --private-key ~/.enough/enough.community/infrastructure_key \
-                    --vault-password-file=~/.enough/enough.community/vault_pass.txt \
-                    -i inventories/common \
-                    -i ~/.enough/enough.community \
-                    enough-community-playbook.yml
+   $ export MOLECULE_FILE=$(pwd)/molecule/preprod/molecule.yml
+   $ ansible-playbook --private-key ~/.enough/enough.community/infrastructure_key \
+                      --vault-password-file=~/.enough/enough.community/vault_pass.txt \
+                      -i inventories/common \
+                      -i ~/.enough/enough.community \
+                      enough-community-playbook.yml
 
 Some hosts contain private information that belong to users who only
 trust some administrators of the infrastructure. These hosts only have
