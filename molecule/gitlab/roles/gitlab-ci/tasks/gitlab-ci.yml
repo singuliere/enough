@@ -14,6 +14,8 @@
 - name: apt-get install gitlab-runner
   apt:
     name: gitlab-runner=11.8.0
+    # we want --allow-change-held-packages but all we have is --force
+    force: yes # Corresponds to the --force-yes to apt-get and implies allow_unauthenticated: yes
     state: present
 
 - name: hold gitlab-runner
