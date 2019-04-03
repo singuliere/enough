@@ -3,10 +3,13 @@ import time
 import yaml
 
 
-def get_address(host):
+def get_fqdn(host):
     vars_dir = '../../inventories/common/group_vars/all'
-    return ('https', 'lab.' + yaml.load(
-        open(vars_dir + '/domain.yml'))['domain'])
+    return 'lab.' + yaml.load(open(vars_dir + '/domain.yml'))['domain']
+
+
+def get_url(host):
+    return 'https://' + get_fqdn(host)
 
 
 def get_password():
@@ -16,59 +19,45 @@ def get_password():
 
 
 #
+# Not using python-gitlab because it does not support /oauth/token
+# see https://github.com/python-gitlab/python-gitlab/issues/753
+#
+#
 # https://docs.gitlab.com/ce/api/oauth2.html#resource-owner-password-credentials
 #
-def get_token(url):
-    r = requests.post(url + '/oauth/token', json={
+def session(host):
+    s = requests.Session()
+    s.verify = '../../certs'
+    url = get_url(host)
+    r = s.post(url + '/oauth/token', json={
         'username': 'root',
         'password': get_password(),
         'grant_type': 'password',
-    }, verify='../../certs')
+    })
+    s.api = url + '/api/v4'
     r.raise_for_status()
-    return 'Bearer ' + r.json()['access_token']
+    s.headers['Authorization'] = 'Bearer ' + r.json()['access_token']
+    return s
 
 
-def get_user(url, headers, user):
-    r = requests.get(url + '/users?username=' + user,
-                     headers=headers,
-                     verify='../../certs')
-    return len(r.json()) > 0
-
-
-def create_user(url, headers, user, password):
-    r = requests.post(url + '/users', headers=headers, data={
-        "email": "info@example.com",
-        "username": user,
-        "name": user,
-        "password": password,
-    }, verify='../../certs')
-    r.raise_for_status()
-
-
-def get_namespace(url, headers, user):
-    r = requests.get(url + '/namespaces?search=' + user,
-                     headers=headers,
-                     verify='../../certs')
+def get_namespace(session, user):
+    r = session.get(session.api + '/namespaces?search=' + user)
     r.raise_for_status()
     return r.json()[0]['id']
 
 
-def recreate_test_project(url, headers, user, project):
-    namespace_id = get_namespace(url, headers, user)
-    r = requests.get(url + '/projects/' + user + '%2F' + project,
-                     headers=headers,
-                     verify='../../certs')
+def recreate_test_project(session, user, project):
+    namespace_id = get_namespace(session, user)
+    r = session.get(session.api + '/projects/' + user + '%2F' + project)
     if r.status_code == requests.codes.ok:
-        r = requests.delete(url + '/projects/' + user + '%2F' + project,
-                            headers=headers,
-                            verify='../../certs')
+        r = session.delete(session.api + '/projects/' + user + '%2F' + project)
         r.raise_for_status()
     for _ in range(10):
-        r = requests.post(url + '/projects', headers=headers, data={
+        r = session.post(session.api + '/projects', data={
             "name": project,
             "namespace_id": int(namespace_id),
             "visibility": "public",
-        }, verify='../../certs')
+        })
         time.sleep(5)
         if r.status_code == 201:
             break

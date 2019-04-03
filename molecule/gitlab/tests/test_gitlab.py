@@ -15,11 +15,8 @@ def test_ci_runner(host, tmpdir):
         ansible_inventory=host.backend.ansible_inventory)
 
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    (scheme, address) = gitlab_utils.get_address(lab_host)
-    url = scheme + '://' + address
-    headers = {'Authorization': gitlab_utils.get_token(url)}
-    api = url + '/api/v4'
-    gitlab_utils.recreate_test_project(api, headers, 'root', 'testproject')
+    session = gitlab_utils.session(lab_host)
+    gitlab_utils.recreate_test_project(session, 'root', 'testproject')
     runner_host.run("rm -f /tmp/*.out")
     os.system("""
     set -ex
@@ -37,12 +34,11 @@ def test_ci_runner(host, tmpdir):
     git commit -m 'test'
     git config http.sslVerify false
     git remote add origin \
-         {scheme}://root:{password}@{address}/root/testproject.git
+         https://root:{password}@{address}/root/testproject.git
     git push -u origin master
     """.format(password=gitlab_utils.get_password(),
-               address=address,
-               directory=str(tmpdir),
-               scheme=scheme))
+               address=gitlab_utils.get_fqdn(lab_host),
+               directory=str(tmpdir)))
 
     for (what, expected) in (('OPENSTACK', 'OS_TENANT_NAME'),
                              ('DOCKER', 'CONTAINER')):
