@@ -219,13 +219,7 @@ Service templates
 A host can set a prefered service template, using the icinga variable
 ``vars.service_template``.
 
-For now two templates are availables in
-`molecule/icinga/roles/icinga2/files/templates.conf`:
-
-- generic-service
-- delayed-notification-service
-
-Default is generic-service.
+The templates can be found in `molecule/icinga/roles/icinga2/files/templates.conf`.
 
 Hosts vars
 ^^^^^^^^^^
