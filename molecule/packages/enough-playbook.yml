@@ -3,6 +3,7 @@
   hosts: packages-host
 
   roles:
-    - { role: enough-android }
+    - role: enough-pip
+    - role: enough-android
 
   become: True

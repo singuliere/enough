@@ -1,0 +1,44 @@
+---
+- name: get the Enough version from setup.cfg, if running from sources
+  shell: |
+    set -e
+    cd $(git rev-parse --show-toplevel)
+    grep -q 'name = enough' setup.cfg
+    sed -n -e 's/version = \(.*\)/\1/p' setup.cfg
+  changed_when: False
+  ignore_errors: True
+  register: enough_version
+  delegate_to: localhost
+  become: no
+
+- name: mkdir -p /usr/share/nginx/html/enough
+  file:
+    path: /usr/share/nginx/html/enough
+    state: directory
+    owner: debian
+  when: enough_version is succeeded
+
+- name: python setup.py sdist
+  shell: |
+    set -x
+    cd $(git rev-parse --show-toplevel)
+    version={{ enough_version.stdout }}
+    perl -pi -e "s/^version.*/version = $version/" setup.cfg
+    for i in 1 2 ; do
+      python setup.py sdist
+      amend=$(git log -1 --oneline | grep --quiet "version $version" && echo --amend)
+      git commit $amend -m "version $version" ChangeLog setup.cfg
+      git tag -a -f -m "version $version" $version
+    done
+  args:
+    creates: ../../dist/enough-{{ enough_version.stdout }}.tar.gz
+  delegate_to: localhost
+  become: no
+  when: enough_version is succeeded
+
+- name: cp enough-{{ enough_version.stdout }}.tar.gz
+  copy:
+    src: ../../../../../dist/enough-{{ enough_version.stdout }}.tar.gz
+    dest: /usr/share/nginx/html/enough/enough-{{ enough_version.stdout }}.tar.gz
+  become: no
+  when: enough_version is succeeded
