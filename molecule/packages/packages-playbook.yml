@@ -8,10 +8,12 @@
       vars:
         letsencrypt_nginx_fqdn: "{{ packages_vhost_fqdn }}"
 
-    - { role: ansible-role-docker, docker_install_compose: false }
-    - { role: docker }
+    - role: ansible-role-docker
+      docker_install_compose: false
 
-    - { role: packages }
+    - role: docker
+
+    - role: packages
 
     - role: monitor_http_vhost
       http_vhost_https: true
