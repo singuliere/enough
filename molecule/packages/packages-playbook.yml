@@ -7,6 +7,7 @@
     - role: letsencrypt-nginx
       vars:
         letsencrypt_nginx_fqdn: "{{ packages_vhost_fqdn }}"
+        letsencrypt_nginx_sites: "autoindex on"
 
     - role: ansible-role-docker
       docker_install_compose: false
@@ -20,5 +21,5 @@
       http_vhost_name: Packages
       http_vhost_fqdn: "{{ packages_vhost_fqdn }}"
       http_vhost_uri: "/"
-      http_vhost_status: 403
-      http_vhost_string: "Forbidden"
+      http_vhost_status: 200
+      http_vhost_string: "Index of"
