@@ -58,19 +58,14 @@ class DockerLeftovers(Exception):
 @retry(DockerLeftovers, tries=7)
 def docker_cleanup(prefix):
     leftovers = []
-    for stack in sh.docker.stack.ls('--format', '{{ .Name }}', _iter=True):
-        stack = stack.strip()
-        if stack.startswith(prefix):
-            sh.docker.stack.rm(stack, _ok_code=[0, 1])
-            leftovers.append('stack(' + stack + ')')
     for container in sh.docker.ps('--all', '--format', '{{ .Names }}', _iter=True):
         container = container.strip()
-        if container.startswith(prefix):
+        if prefix in container:
             sh.docker.rm('-f', container, _ok_code=[0, 1])
             leftovers.append('container(' + container + ')')
     for network in sh.docker.network.ls('--format', '{{ .Name }}', _iter=True):
         network = network.strip()
-        if network.startswith(prefix):
+        if prefix in network:
             sh.docker.network.rm(network, _ok_code=[0, 1])
             leftovers.append('network(' + network + ')')
     for image in sh.docker.images('--format', '{{ .Repository }}:{{ .Tag }}', _iter=True):
