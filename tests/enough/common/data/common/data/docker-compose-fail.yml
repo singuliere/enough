@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  enough-{{ this.name }}:
+    logging:
+      driver: json-file
+    healthcheck:
+      test: ["CMD", "/bin/false"]
+      interval: 1s
+      retries: 1
+    image: {{ this.get_image_name_with_version('base') }}
+    networks:
+      - enough-{{ this.name }}
+
+networks:
+  enough-{{ this.name }}:
