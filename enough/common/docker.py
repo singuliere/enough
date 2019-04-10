@@ -53,11 +53,6 @@ class Docker(object):
     def get_ports(self):
         return str(self.port) + ':8000'
 
-    def up(self):
-        self.create_image()
-        self._up()
-        return self.port
-
     def create_image(self):
         dockerfile = os.path.join(self.root, 'common/data/base.dockerfile')
         return self._create_image('base', '-f', dockerfile, '.')
@@ -89,7 +84,7 @@ class Docker(object):
             self.print_logs()
             raise
 
-    def _up(self):
+    def up(self):
         self.docker_compose('up', '-d')
 
     def inspect(self, format):

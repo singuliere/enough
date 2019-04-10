@@ -17,3 +17,12 @@ def test_enough_docker_image(docker_name):
     sh.docker('image', 'ls', '--filter', 'reference=' + image_name + ':latest',
               '--format', '{{ .Repository }}', _out=out)
     assert out.getvalue().strip() == image_name
+
+
+def test_enough_docker_service(docker_name, docker_options):
+    assert main(['build', 'enough', 'image', '--name', docker_name]) == 0
+    assert main(['--debug', 'create', 'service', '--name', docker_name] + docker_options) == 0
+    for name in sh.docker.ps('--format', '{{ .Names }}', _iter=True):
+        if docker_name in name:
+            return
+    assert 0, f'docker stack ls does not show {docker_name}'
