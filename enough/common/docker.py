@@ -73,10 +73,11 @@ class Docker(object):
         return self._create_image('base', '-f', dockerfile, '.')
 
     def _create_image(self, suffix, *args):
-        name = self.get_image_name(suffix)
+        name = self.get_image_name_with_version(suffix)
         build_args = ['--quiet', '--tag', name]
         self.docker.build(build_args + list(args))
         self._push_image(suffix)
+        self.docker.tag(name, self.get_image_name(suffix))
         return name
 
     def get_network_peer(self):
@@ -126,6 +127,8 @@ class Docker(object):
             if self.is_local():
                 self.session.trust_env = False
         return self.session
+    def get_image_name_with_version(self, suffix):
+        return self.get_image_name(suffix) + ':' + str(__version__)
 
     def rm(self):
         self.docker.stack.rm(self.name)

@@ -6,8 +6,14 @@ from io import StringIO
 
 def test_enough_docker_image(docker_name):
     assert main(['--debug', 'build', 'enough', 'image', '--name', docker_name]) == 0
-    image_name = Docker(docker_name).get_image_name(suffix=None)
+    image_name = Docker(docker_name).get_image_name_with_version(suffix=None)
     out = StringIO()
     sh.docker('image', 'ls', '--filter', 'reference=' + image_name,
               '--format', '{{ .Repository }}:{{ .Tag }}', _out=out)
+    assert out.getvalue().strip() == image_name
+
+    image_name = Docker(docker_name).get_image_name(suffix=None)
+    out = StringIO()
+    sh.docker('image', 'ls', '--filter', 'reference=' + image_name + ':latest',
+              '--format', '{{ .Repository }}', _out=out)
     assert out.getvalue().strip() == image_name
