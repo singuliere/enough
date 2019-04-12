@@ -1,11 +1,10 @@
 coverage==4.5
 flake8==3.5
 mock==2.0.0
-molecule==2.16.0
 pip-tools==3.5.0
-pytest==4.4.0
 pytest-cov==2.6.1
 pytest-django==3.4.8
 sphinx==1.8.2
 testinfra==1.14.0
 tox==3.5
+twine==1.13.0

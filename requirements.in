@@ -6,7 +6,14 @@ docker
 docker-compose
 -e git+https://github.com/fmnisme/python-icinga2api.git@9a1a3cc7968d6c72bf49e97ef387b2824e6835e9#egg=icinga2api
 jinja2>=1.1
+molecule==2.16.0
 netaddr==0.7.19
 openstacksdk==0.22.0
+#
+# pytest is required otherwise molecule will indirectly pull an ancient version that will create problems when
+# running tox, if specified in requirements-dev.in because egg-info will have a conflicting version.
+# This should be removed at some point.
+#
+pytest==4.4.0
 sh>=1.12
 shade==1.30.0
