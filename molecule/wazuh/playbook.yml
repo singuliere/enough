@@ -1,4 +1,5 @@
 ---
+- import_playbook: ../infrastructure/stretch-playbook.yml
 - import_playbook: ../firewall/firewall-playbook.yml
 - import_playbook: ../letsencrypt/letsencrypt-playbook.yml
 - import_playbook: wazuh-firewall-playbook.yml
