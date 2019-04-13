@@ -1,4 +1,5 @@
 ---
+- import_playbook: ../infrastructure/stretch-playbook.yml
 - import_playbook: ../bind/bind-firewall-playbook.yml
 - import_playbook: ../postfix/postfix-firewall-playbook.yml
 - import_playbook: ../icinga/icinga-firewall-playbook.yml

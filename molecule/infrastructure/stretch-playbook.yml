@@ -10,14 +10,14 @@
         content: |
           deb http://deb.debian.org/debian/ stretch main
           deb-src http://deb.debian.org/debian/ stretch main
-    
+
           deb http://security.debian.org/debian-security stretch/updates main
           deb-src http://security.debian.org/debian-security stretch/updates main
-    
+
           deb http://deb.debian.org/debian stretch-backports main
           deb-src http://deb.debian.org/debian stretch-backports main
       when: '"debian" == ansible_user'
-    
+
     - name: Run the equivalent of "apt-get update"
       apt:
         update_cache: yes

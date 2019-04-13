@@ -1,4 +1,5 @@
 ---
+- import_playbook: molecule/infrastructure/stretch-playbook.yml
 - import_playbook: molecule/firewall/firewall-playbook.yml
 - import_playbook: molecule/wazuh/wazuh-firewall-playbook.yml
 - import_playbook: molecule/misc/history-playbook.yml
