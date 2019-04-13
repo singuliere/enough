@@ -15,7 +15,7 @@ def test_icingaweb2_login_screen(host):
     print(f'https://{address}/icingaweb2/authentication/login')
     s = requests.Session()
     r = s.get(f'http://{address}/icingaweb2/authentication/login',
-              timeout=5)
+              timeout=5, allow_redirects=False)
     r.status_code = 302
     s.verify = '../../certs'
     r = s.get(f'https://{address}/icingaweb2/authentication/login',
