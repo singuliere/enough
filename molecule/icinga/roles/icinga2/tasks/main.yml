@@ -1,11 +1,16 @@
 ---
 
-- name: apt-get install icinga2 and friends
+- name: apt-get install mariadb-server mariadb-client
+  apt:
+    name:
+      - mariadb-server
+      - mariadb-client
+    state: present
+
+- name: apt-get install icinga2
   apt:
     name:
       - icinga2
-      - mariadb-server
-      - mariadb-client
       - icinga2-ido-mysql
     state: present
 
