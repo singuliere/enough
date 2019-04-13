@@ -20,7 +20,7 @@ provisioner:
   name: ansible
   options:
     i: ../../inventories/common/firewall.yml
-    limit: bind-host,icinga-host,monitor-client-host,monitor-client2-host,localhost
+    limit: bind-host,icinga-host,monitoring-client-host,monitoring-client2-host,localhost
   lint:
     name: ansible-lint
   env:
