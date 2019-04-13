@@ -1,7 +1,7 @@
 git submodule update --init --recursive
 rm -fr ../virtualenv
-virtualenv ../virtualenv
+sudo apt-get install curl virtualenv python3 gcc libffi-dev libssl-dev python3-dev make git
+virtualenv --python=python3 ../virtualenv
 source ../virtualenv/bin/activate
-sudo apt-get install -y libssl-dev gcc python-dev make
 pip install -r requirements.txt
 chmod 600 id_rsa # cannot be stored in git
