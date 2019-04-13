@@ -16,29 +16,60 @@
     path: /usr/share/nginx/html/enough
     state: directory
     owner: debian
-  when: enough_version is succeeded
+  when: enough_version.stdout != ''
 
 - name: python setup.py sdist
   shell: |
     set -x
     cd $(git rev-parse --show-toplevel)
     version={{ enough_version.stdout }}
-    perl -pi -e "s/^version.*/version = $version/" setup.cfg
-    for i in 1 2 ; do
-      python setup.py sdist
-      amend=$(git log -1 --oneline | grep --quiet "version $version" && echo --amend)
-      git commit $amend -m "version $version" ChangeLog setup.cfg
-      git tag -a -f -m "version $version" $version
-    done
-  args:
-    creates: ../../dist/enough-{{ enough_version.stdout }}.tar.gz
+    git tag -a -f -m "version $version" $version
+    python setup.py sdist
+    git tag -d $version
+    git checkout ChangeLog
   delegate_to: localhost
   become: no
-  when: enough_version is succeeded
+  when: enough_version != ''
 
 - name: cp enough-{{ enough_version.stdout }}.tar.gz
   copy:
     src: ../../../../../dist/enough-{{ enough_version.stdout }}.tar.gz
     dest: /usr/share/nginx/html/enough/enough-{{ enough_version.stdout }}.tar.gz
   become: no
-  when: enough_version is succeeded
+  when: enough_version != ''
+
+- name: mkdir -p /usr/share/nginx/html/docker-enough
+  file:
+    path: /usr/share/nginx/html/docker-enough
+    state: directory
+    owner: debian
+  when: enough_version != ''
+
+- name: cp enough/internal/data/enough.dockerfile
+  copy:
+    src: ../../../../../enough/internal/data/enough.dockerfile
+    dest: /usr/share/nginx/html/docker-enough/enough.dockerfile
+  become: no
+  when: enough_version != ''
+
+- name: cp enough/common/data/base.dockerfile
+  copy:
+    src: ../../../../../enough/common/data/base.dockerfile
+    dest: /usr/share/nginx/html/docker-enough/base.dockerfile
+  become: no
+  when: enough_version != ''
+
+- name: shell script to build image from this package host
+  copy:
+    content: |
+      d=$(mktemp -d)
+      cd $d
+      curl -q https://{{ packages_vhost_fqdn }}/docker-enough/base.dockerfile > Dockerfile
+      curl -q https://{{ packages_vhost_fqdn }}/docker-enough/enough.dockerfile >> Dockerfile
+      sed -i -e "s/replace this comment/$(date +%s)/" Dockerfile
+      docker build --build-arg PIP3_OPTS='--extra-index-url=https://{{ packages_vhost_fqdn }}/ --trusted-host={{ packages_vhost_fqdn }}' --build-arg ENOUGH_VERSION={{ enough_version.stdout }} -t enough .
+      cd -
+      rm -fr $d
+    dest: /usr/share/nginx/html/docker-enough/enough-build-docker-image.sh
+  become: no
+  when: enough_version != ''

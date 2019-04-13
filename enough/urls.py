@@ -19,5 +19,5 @@ from enough.api import views
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('bind/', views.bind),
+    path('bind/', views.bind, name='bind'),
 ]

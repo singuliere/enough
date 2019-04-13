@@ -16,6 +16,11 @@ class EnoughApp(App):
             deferred_help=True,
             )
 
+    def build_option_parser(self, description, version, argparse_kwargs=None):
+        parser = super().build_option_parser(description, version, argparse_kwargs)
+        parser.add_argument('--domain', help='Enough domain name')
+        return parser
+
 
 def main(argv=sys.argv[1:]):
     myapp = EnoughApp()

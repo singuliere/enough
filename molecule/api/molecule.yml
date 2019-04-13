@@ -1,0 +1,44 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: bind-host
+    flavor: "s1-2"
+  - name: api-host
+    flavor: "s1-2"
+  - name: packages-host
+    flavor: "s1-4"
+  - name: icinga-host
+    flavor: "s1-2"
+  - name: gitlab-host
+    flavor: "s1-4"
+provisioner:
+  name: ansible
+  options:
+    i: ../../inventories/common/firewall.yml
+    limit: bind-host,packages-host,icinga-host,api-host,gitlab-host,localhost
+  lint:
+    name: ansible-lint
+  env:
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../packages/roles:../gitlab/roles:../icinga/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
+  inventory:
+    links:
+      group_vars: ../../inventories/common/group_vars
+      host_vars: ../../inventories/common/host_vars
+scenario:
+  name: api
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: True
+    s: True
+  lint:
+    name: flake8

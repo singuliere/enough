@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  api:
+    command: /sbin/init
+    image: enough:latest
+    working_dir: /opt
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /opt/.enough:/root/.enough
+    security_opt:
+      - seccomp=unconfined
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - "8000:8000"
+    networks:
+      - enough
+
+networks:
+  enough:

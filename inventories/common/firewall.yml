@@ -1,6 +1,7 @@
 # ssh
 firewall_ssh_server_group:
   hosts:
+    api-host:
     bind-host:
     postfix-host:
     icinga-host:
@@ -48,6 +49,7 @@ firewall_wazuh_client_group:
 # web
 firewall_web_server_group:
   hosts:
+    api-host:
     chat-host:
     forum-host:
     gitlab-host:

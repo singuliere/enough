@@ -41,8 +41,8 @@ def test_replace_content():
     docker_name = 'DOCKER_NAME'
     with modified_environ('DOCKER_HOST'):
         d = DockerFixture(docker_name)
-        before = 'Name = {{ this.get_image_name(None) }}'
-        after = 'Name = ' + d.get_image_name(None)
+        before = 'Name = {{ this.get_image_name_with_version(None) }}'
+        after = 'Name = ' + d.get_image_name_with_version(None)
         assert d.replace_content(before) == after
 
 

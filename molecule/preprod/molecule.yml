@@ -4,6 +4,8 @@ driver:
 lint:
   name: yamllint
 platforms:
+  - name: api-host
+    flavor: "s1-2"
   - name: bind-host
     flavor: "s1-2"
   - name: postfix-host

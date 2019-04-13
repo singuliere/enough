@@ -1,0 +1,14 @@
+---
+- name: install API
+  hosts: api-host
+  become: true
+
+  roles:
+    - role: ansible-role-docker
+    - role: docker
+    - role: api
+
+    - role: letsencrypt-nginx
+      vars:
+        letsencrypt_nginx_reverse_proxy: 127.0.0.1:8000
+        letsencrypt_nginx_fqdn: "{{ api_vhost_fqdn }}"
