@@ -83,4 +83,5 @@ def docker_name():
     if 'DOCKER_HOST' not in os.environ:
         sh.docker.swarm.init(_ok_code=[1, 0])
     yield prefix
+    logging.getLogger('sh').setLevel(logging.CRITICAL)
     docker_cleanup(prefix)

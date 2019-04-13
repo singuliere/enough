@@ -1,0 +1,2 @@
+---
+api_vhost_fqdn: api.{{ domain }}

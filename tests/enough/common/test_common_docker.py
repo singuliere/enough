@@ -41,22 +41,24 @@ def test_replace_content():
     docker_name = 'DOCKER_NAME'
     with modified_environ('DOCKER_HOST'):
         d = DockerFixture(docker_name)
-        before = 'Name = {{ this.get_image_name(None) }}'
-        after = 'Name = ' + d.get_image_name(None)
+        before = 'Name = {{ this.get_image_name_with_version(None) }}'
+        after = 'Name = ' + d.get_image_name_with_version(None)
         assert d.replace_content(before) == after
 
 
 @pytest.mark.skipif('SKIP_INTEGRATION_TESTS' in os.environ, reason='skip integration test')
-def test_inner_up(docker_name, tcp_port):
+def test_up_no_wait(docker_name, tcp_port):
     d = docker.Docker(docker_name, port=tcp_port)
     assert d.create_image()
-    d._up()
+    d.up()
     assert d.inspect('{{ .Path }}') == ['/sbin/init']
+    d.down()
 
 
 @pytest.mark.skipif('SKIP_INTEGRATION_TESTS' in os.environ, reason='skip integration test')
 def test_up_wait_for_services(docker_name, tcp_port):
     d = docker.Docker(docker_name, port=tcp_port)
+    assert d.create_image()
     d.up_wait_for_services()
     assert '"Status":"healthy"' in d.get_logs()
     d.down()
@@ -76,6 +78,7 @@ def test_up_wait_for_services_fail(docker_name):
             return self.replace_content(open(f).read())
 
     d = DockerFixtureIntegration(docker_name)
+    assert d.create_image()
     with pytest.raises(retry.RetryException):
         d.up_wait_for_services()
     d.down()

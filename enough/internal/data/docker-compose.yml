@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  enough-{{ this.name }}:
+    logging:
+      driver: json-file
+    entrypoint: /sbin/init
+    healthcheck:
+      test: ["CMD", "curl", "--head", "http://127.0.0.1:8000/"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    command: ''
+    image: {{ this.get_image_name('') }}
+    working_dir: /opt
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - {{ this.confdir }}:/root/.enough/default
+    security_opt:
+      - seccomp=unconfined
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - {{ this.get_ports() }}
+    networks:
+      - enough-{{ this.name }}
+
+networks:
+  enough-{{ this.name }}:

@@ -17,6 +17,7 @@ enough:
 
 wazuh_agent:
   hosts:
+    api-host:
     bind-host:
     chat-host:
     forum-host:
