@@ -25,14 +25,16 @@ Release management
 
 * Publish a new version
 
- - python setup.py sdist upload --sign
+ - python setup.py sdist
+ - twine upload --username singuliere --password "$PYPI_PASSWORD" dist/enough-$version.tar.gz
  - git push ; git push --tags
  - docker rmi enoughcommunity/enough
- - docker build --no-cache --tag enoughcommunity/enough docker
- - docker build --tag enoughcommunity/enough:$(enough --version) docker
+ - python -m enough.internal.cmd build image
+ - docker tag enough:$version enoughcommunity/enough:$version
+ - docker tag enough:$version enoughcommunity/enough:latest
  - docker login
- - docker push enoughcommunity/enough
- - docker push enoughcommunity/enough:$(enough --version)
+ - docker push enoughcommunity/enough:latest
+ - docker push enoughcommunity/enough:$version
 
 * pypi maintenance
 
