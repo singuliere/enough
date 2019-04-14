@@ -104,25 +104,14 @@
   register: result
   changed_when: '"Applying " in result.stdout'
 
+- name: enough manage apiuser {{ api_admin_user }}
+  shell: |
+    enough manage apiuser '{{ api_admin_user }}' '{{ api_admin_user }}admin@{{ domain }}' '{{ api_admin_password }}'
+  register: result
+  changed_when: '"Created" in result.stdout'
 
 - name: enough api server
   shell: docker run --rm -v $HOME/.enough:/root/.enough -v /var/run/docker.sock:/var/run/docker.sock enough create service
-
-# - name: enough manage createsuperuser
-#   shell: |
-#     enough manage shell
-#   args:
-#     stdin: |
-#       from django.contrib.auth import get_user_model
-#       User = get_user_model()
-#       if User.objects.filter(username='admin'):
-#         print('Already exists ' + str(User.objects.filter(username='admin')))
-#       else:
-#         User.objects.create_superuser('admin', 'admin@{{ domain }}', '{{ enough_admin_password }}')
-#         print('Created')
-#   register: result
-#   become: no
-#   changed_when: '"Created" in result.stdout'
 
 # - name: 
 #   docker_service:
