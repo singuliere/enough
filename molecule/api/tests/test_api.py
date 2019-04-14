@@ -1,6 +1,7 @@
 import requests
 import yaml
 import dns.resolver
+import re
 
 testinfra_hosts = ['api-host']
 
@@ -10,15 +11,27 @@ def get_domain():
     return yaml.load(open(vars_dir + '/domain.yml'))['domain']
 
 
+def get_token(host):
+    with host.sudo():
+        r = host.run("enough manage drf_create_token admin")
+    print(str(r))
+    return re.sub(r'Generated token (\w+) for user admin', r'\1', str(r.stdout))
+
+
+#
 # debug with
 #
 # molecule login -s api --host=api-host
 # docker exec -ti tmp_enough-enough_1 journalctl -f --unit enough
 #
 def test_add_host(host):
+    token = get_token(host)
     domain = get_domain()
     url = f"https://api.{domain}"
     s = requests.Session()
+    s.headers = {
+        'Authorization': f'Token {token}',
+    }
     s.verify = '../../certs'
     data = {
         "zone": domain,

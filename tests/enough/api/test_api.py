@@ -1,5 +1,6 @@
 import pytest
 from django.urls import reverse
+from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
@@ -14,9 +15,9 @@ class APIUserAPITestCase(APITestCase):
     def setUp(self):
         self.user = UserModel.objects.create_user(
             username='test', email='test@...', password='top_secret')
-#        token = Token.objects.create(user=self.user)
+        token = Token.objects.create(user=self.user)
         self.client = APIClient()
-#        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
 
 class TestAPI(APIUserAPITestCase):
