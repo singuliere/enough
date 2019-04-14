@@ -19,12 +19,12 @@ class APIUserAPITestCase(APITestCase):
 #        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
 
-class TestReviewListUser(APIUserAPITestCase):
+class TestAPI(APIUserAPITestCase):
     @pytest.mark.django_db
     @mock.patch('enough.api.views.run_ansible')
-    def test_admin_can_patch_a_product(self, run_ansible):
+    def test_bind(self, run_ansible):
         url = reverse('bind')
-        run_ansible.return_value = '51.68.81.22 | FAILED! => {"changed": false}'
+        run_ansible.return_value = '51.68.81.22 | SUCCESS => {"changed": false}'
         data = {
             "bind_host": "51.68.81.22",
             "zone": "gyztqojxhe3tinjrbi.test.enough.community",
@@ -37,3 +37,4 @@ class TestReviewListUser(APIUserAPITestCase):
         response = self.client.post(url, data, format='json')
 
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['out'], {"changed": False})
