@@ -15,8 +15,8 @@
         <li>First name: <strong>{{user.first_name}}</strong></li>
         <li>Last name: <strong>{{user.last_name}}</strong></li>
         <li>Display name: <strong>{{user.display_name}}</strong></li>
-        <li>Email: <strong>{{user.email}}</strong></li>
-        <li>{% if request.user.profile.account_verified %}Verified{% else %}Unverified{% endif %}</li>
+        <li>Email: <strong id="mail">{{user.email}}</strong></li>
+        <li>Token: <strong id="token">{{token}}</strong></li>
       </ul>
     </div>
   </div>
