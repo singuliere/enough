@@ -3,7 +3,7 @@ from enough.version import __version__
 
 
 def test_enough_install_script(capsys):
-    assert main(['--debug', 'install', '--script']) == 0
+    assert main(['--debug', 'install', 'internal/data/install.sh']) == 0
     out, err = capsys.readouterr()
     assert 'docker run' in out
     assert 'function()' not in out
@@ -11,7 +11,7 @@ def test_enough_install_script(capsys):
 
 
 def test_enough_install_script_no_version(capsys):
-    assert main(['--debug', 'install', '--script', '--no-version']) == 0
+    assert main(['--debug', 'install', 'internal/data/install.sh', '--no-version']) == 0
     out, err = capsys.readouterr()
     assert 'docker run' in out
     assert 'function()' not in out
@@ -19,22 +19,16 @@ def test_enough_install_script_no_version(capsys):
 
 
 def test_enough_install_function(capsys):
-    assert main(['--debug', 'install']) == 0
+    assert main(['--debug', 'install', '--function', 'internal/data/install.sh']) == 0
     out, err = capsys.readouterr()
     assert 'docker run' in out
     assert 'function enough()' in out
     assert __version__ in out
 
 
-def test_enough_install_function_no_version(capsys):
-    assert main(['--debug', 'install', '--no-version']) == 0
+def test_enough_install_defaults(capsys):
+    assert main(['--debug', 'install']) == 0
     out, err = capsys.readouterr()
     assert 'docker run' in out
     assert 'function enough()' in out
-    assert __version__ not in out
-
-
-def test_enough_install_service(capsys):
-    assert main(['--debug', 'install', '--service']) == 0
-    out, err = capsys.readouterr()
-    assert 'ExecStart' in out
+    assert __version__ in out
