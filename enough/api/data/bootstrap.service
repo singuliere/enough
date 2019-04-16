@@ -1,0 +1,11 @@
+[Unit]
+Description=Bootstrap script run once after network is available
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/bootstrap.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -47,16 +47,16 @@
     path: "/root/.enough"
     state: directory
 
-- name: mkdir /root/.enough/default
+- name: mkdir /root/.enough/{{ domain }}
   file:
-    path: "/root/.enough/default"
+    path: "/root/.enough/{{ domain }}"
     state: directory
 
-- name: cp /etc/ssh/ssh_host_rsa_key ~/.enough/default/id_rsa
+- name: cp /etc/ssh/ssh_host_rsa_key ~/.enough/{{ domain }}/id_rsa
   copy:
     remote_src: yes
     src: /etc/ssh/ssh_host_rsa_key
-    dest: "/root/.enough/default/id_rsa"
+    dest: "/root/.enough/{{ domain }}/id_rsa"
     owner: "{{ ansible_user }}"
     mode: 0444
 
@@ -95,23 +95,29 @@
 
 - name: install enough
   shell: |
+    set -e
     bash -x /usr/local/bin/enough-build-docker-image.sh
-    docker run --rm enough install --script --no-version > /usr/local/bin/enough
+    docker run --rm enough install --no-version internal/data/install.sh > /usr/local/bin/enough
+    test -s /usr/local/bin/enough
     chmod +x /usr/local/bin/enough
 
 - name: enough manage migrate
-  shell: enough manage migrate
+  shell: enough --domain {{ domain }} manage migrate
   register: result
   changed_when: '"Applying " in result.stdout'
 
 - name: enough manage apiuser {{ api_admin_user }}
   shell: |
-    enough manage apiuser '{{ api_admin_user }}' '{{ api_admin_user }}admin@{{ domain }}' '{{ api_admin_password }}'
+    enough --domain {{ domain }} manage apiuser '{{ api_admin_user }}' '{{ api_admin_user }}admin@{{ domain }}' '{{ api_admin_password }}'
   register: result
   changed_when: '"Created" in result.stdout'
 
-- name: enough api server
-  shell: docker run --rm -v $HOME/.enough:/root/.enough -v /var/run/docker.sock:/var/run/docker.sock enough create service
+- name: enough create service
+  shell: |
+    docker run --rm \
+       -v /root/.enough:/root/.enough \
+       -v /var/run/docker.sock:/var/run/docker.sock \
+       enough --domain {{ domain }} create service
 
 # - name: 
 #   docker_service:

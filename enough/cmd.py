@@ -18,7 +18,7 @@ class EnoughApp(App):
 
     def build_option_parser(self, description, version, argparse_kwargs=None):
         parser = super().build_option_parser(description, version, argparse_kwargs)
-        parser.add_argument('--domain', help='Enough domain name')
+        parser.add_argument('--domain', default='enough.community', help='Enough domain name')
         return parser
 
 

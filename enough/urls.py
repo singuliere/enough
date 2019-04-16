@@ -15,9 +15,20 @@ Including another URLconf
 """
 from django.urls import path
 from enough.api import views
+from django.conf.urls import include, url
+from django.conf.urls.static import static
+from django.conf import settings
+from django.views.generic import TemplateView
+
+from .views import member_index
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('bind/', views.bind, name='bind'),
-]
+
+    url(r'^$', TemplateView.as_view(template_name='visitor/landing-index.html'),
+        name='landing_index'),
+    url(r'^accounts/', include('allauth.urls')),
+    url(r'^member/$', member_index, name='user_home'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

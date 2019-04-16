@@ -9,3 +9,4 @@ testinfra==1.14.0
 tox==3.5
 twine==1.13.0
 dnspython==1.16.0
+beautifulsoup4==4.7.1

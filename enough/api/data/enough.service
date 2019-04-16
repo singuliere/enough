@@ -4,7 +4,7 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=env PATH=/opt/venv/bin:${PATH} enough manage runserver 0.0.0.0:8000
+ExecStart=env PATH=/opt/venv/bin:${PATH} REQUESTS_CA_BUNDLE=/etc/ssl/certs enough --domain {{ this.app.options.domain }} manage runserver 0.0.0.0:8000
 
 [Install]
 WantedBy=multi-user.target

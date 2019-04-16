@@ -11,9 +11,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from os.path import dirname, join
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.environ.get('ENOUGH_BASE_DIR', 'enough.community')
+ENOUGH_DOMAIN = os.environ.get('ENOUGH_DOMAIN', 'enough.community')
+
+BASE_DIR = os.path.expanduser(f'~/.enough/{ENOUGH_DOMAIN}')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -36,9 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
+
     'enough.api',
+
+    'bootstrap3',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.gitlab',  # enabled by configure
+    'enough.auth',
 ]
 
 MIDDLEWARE = [
@@ -53,15 +65,25 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'enough.urls'
 
+AUTHENTICATION_BACKENDS = (
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+MODULE_DIR = dirname(__file__)
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            join(MODULE_DIR, 'templates', 'allauth'),
+            join(MODULE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.static',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -121,7 +143,33 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    join(MODULE_DIR, "static"),
+)
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
+}
+
+ENOUGH_GITLAB_URL = f'https://lab.{ENOUGH_DOMAIN}'
+
+SITE_ID = 1
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+LOGIN_REDIRECT_URL = '/member/'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_USERNAME_MIN_LENGTH = 1
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # testing...
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+SOCIALACCOUNT_AUTO_SIGNUP = False  # require social accounts to use the signup form ... I think
+# For custom sign-up form:
+# http://stackoverflow.com/questions/12303478/how-to-customize-user-profile-when-using-django-allauth
+SOCIALACCOUNT_PROVIDERS = {
+    'gitlab': {
+        'GITLAB_URL': ENOUGH_GITLAB_URL,
+        'SCOPE': ['read_user', 'api'],
+    },
 }

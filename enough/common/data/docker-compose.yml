@@ -19,7 +19,6 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      - {{ this.confdir }}:/root/.enough/default
     security_opt:
       - seccomp=unconfined
     cap_add:

@@ -26,7 +26,9 @@ class Build(Command):
         return parser
 
     def take_action(self, parsed_args):
-        Build.DockerEnough(parsed_args.name).create_image()
+        args = vars(parsed_args)
+        args['domain'] = self.app.options.domain
+        Build.DockerEnough(**args).create_image()
 
 
 class Create(Command):
@@ -46,4 +48,5 @@ class Create(Command):
 
     def take_action(self, parsed_args):
         args = vars(parsed_args)
+        args['domain'] = self.app.options.domain
         Create.DockerEnough(**args).up_wait_for_services()
