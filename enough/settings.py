@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.environ.get('ENOUGH_BASE_DIR', 'enough.community')
+ENOUGH_DOMAIN = os.environ.get('ENOUGH_DOMAIN', 'enough.community')
+
+BASE_DIR = os.path.expanduser(f'~/.enough/{ENOUGH_DOMAIN}')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/

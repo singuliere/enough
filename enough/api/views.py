@@ -1,10 +1,10 @@
+from django.conf import settings
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from io import StringIO
 import sh
-from enough import configuration
 import re
 import json
 
@@ -20,18 +20,18 @@ def run_ansible(*args, **kwargs):
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def bind(request):
-    confdir = configuration.get_directory(None)
+    basedir = settings.BASE_DIR
     bind_host = request.data.get('bind_host', 'bind-host')
     args = ['server=localhost']
     for k in ('zone', 'record', 'ttl', 'type', 'value'):
         if k in request.data:
             args.append(f'{k}={request.data[k]}')
     r = run_ansible('-i', f'{bind_host},',
-                    '--private-key', f'{confdir}/id_rsa',
+                    '--private-key', f'{basedir}/id_rsa',
                     '--user=debian',
                     bind_host,
                     '--one-line',
-                    f'--playbook-dir={confdir}',
+                    f'--playbook-dir={basedir}',
                     '-m', 'nsupdate', '-a', " ".join(args),
                     _env={
                         'ANSIBLE_NOCOLOR': 'true',

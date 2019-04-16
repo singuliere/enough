@@ -22,7 +22,7 @@ class Docker(object):
         self.name = name
         self.port = kwargs.get('port', '8000')
         self.retry = kwargs.get('retry', 9)
-        self.confdir = configuration.get_directory(kwargs.get('domain'))
+        self.domain = kwargs.get('domain', 'enough.community')
         self.bake_docker_compose(kwargs.get('docker_compose'))
 
     def bake_docker(self, docker):
