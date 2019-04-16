@@ -4,19 +4,19 @@ import testinfra
 import time
 
 import gitlab_utils
+from enough.common.gitlab import GitLab
 
 testinfra_hosts = ['gitlab-host']
 
 
 def test_ci_runner(host, tmpdir):
-    lab_host = host
     runner_host = testinfra.host.Host.get_host(
         'ansible://runner-host',
         ansible_inventory=host.backend.ansible_inventory)
 
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    session = gitlab_utils.session(lab_host)
-    gitlab_utils.recreate_test_project(session, 'root', 'testproject')
+    gitlab = GitLab(gitlab_utils.get_url(), 'root', gitlab_utils.get_password())
+    gitlab.recreate_project('root', 'testproject')
     runner_host.run("rm -f /tmp/*.out")
     os.system("""
     set -ex
@@ -37,7 +37,7 @@ def test_ci_runner(host, tmpdir):
          https://root:{password}@{address}/root/testproject.git
     git push -u origin master
     """.format(password=gitlab_utils.get_password(),
-               address=gitlab_utils.get_fqdn(lab_host),
+               address=gitlab_utils.get_fqdn(),
                directory=str(tmpdir)))
 
     for (what, expected) in (('OPENSTACK', 'OS_TENANT_NAME'),
