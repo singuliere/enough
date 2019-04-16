@@ -8,7 +8,6 @@ import sh
 import tempfile
 
 from enough.version import __version__
-from enough import configuration
 from enough.common.retry import retry, RetryException
 
 log = logging.getLogger(__name__)

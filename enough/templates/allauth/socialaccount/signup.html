@@ -1,0 +1,29 @@
+{% extends "bases/bootstrap-member.html" %}
+
+{% load bootstrap3 %}
+
+{% block head_title %}Signup{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+
+    <p>As a final step, please complete the following form:</p>
+    
+    <form class="signup" id="signup_form" method="post" action="">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      <div class="form-actions">
+	<button class="btn btn-primary"  type="submit">Sign In</button>
+      </div>
+    </form>
+  </div>
+</div>
+        
+
+{% endblock %}
+
+

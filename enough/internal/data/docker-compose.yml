@@ -19,7 +19,8 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      - {{ this.confdir }}:/root/.enough/default
+      - /root/.enough/{{ this.domain }}:/root/.enough/{{ this.domain }}
+      - /usr/local/share/ca-certificates/infrastructure:/usr/local/share/ca-certificates/infrastructure:ro
     security_opt:
       - seccomp=unconfined
     cap_add:

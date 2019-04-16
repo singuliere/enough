@@ -66,7 +66,10 @@
       cd $d
       curl -q https://{{ packages_vhost_fqdn }}/docker-enough/base.dockerfile > Dockerfile
       curl -q https://{{ packages_vhost_fqdn }}/docker-enough/enough.dockerfile >> Dockerfile
-      sed -i -e "s/replace this comment/$(date +%s)/" Dockerfile
+      sed -i \
+         -e "s/replace this comment/$(date +%s)/" \
+         -e "s/domain enough.community/domain {{ domain }}/" \
+         Dockerfile
       docker build --build-arg PIP3_OPTS='--extra-index-url=https://{{ packages_vhost_fqdn }}/ --trusted-host={{ packages_vhost_fqdn }}' --build-arg ENOUGH_VERSION={{ enough_version.stdout }} -t enough .
       cd -
       rm -fr $d
