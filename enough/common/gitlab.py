@@ -39,6 +39,20 @@ class GitLab(object):
         r.raise_for_status()
         return r.json()[0]['id']
 
+    def group_members(self, group):
+        r = self.s.get(self.s.api + f'/groups/{group}/members')
+        r.raise_for_status()
+        return r.json()
+
+    def is_member_of_group(self, group, username):
+        return any([x['username'] == username for x in self.group_members(group)])
+
+    def is_self_member_of_group(self, group):
+        r = self.s.get(self.s.api + f'/user')
+        r.raise_for_status()
+        user = r.json()
+        return self.is_member_of_group(group, user['username'])
+
     def recreate_project(self, user, project):
         namespace_id = self.get_namespace(user)
         r = self.s.get(self.s.api + '/projects/' + user + '%2F' + project)
@@ -71,3 +85,13 @@ class GitLab(object):
         r.raise_for_status()
         j = r.json()
         return j['application_id'], j['secret']
+
+    def ensure_group_exists(self, name):
+        r = self.s.get(f'{self.s.api}/groups/{name}')
+        if r.status_code == 200:
+            return
+        r = self.s.post(f'{self.s.api}/groups', json={
+            'name': name,
+            'path': name,
+        })
+        r.raise_for_status()

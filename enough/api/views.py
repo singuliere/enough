@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from enough.api.permissions import IsEnoughGroupMember
 from io import StringIO
 import sh
 import re
@@ -18,7 +19,7 @@ def run_ansible(*args, **kwargs):
 
 @api_view(['POST'])
 @authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
+@permission_classes((IsAuthenticated, IsEnoughGroupMember))
 def bind(request):
     basedir = settings.BASE_DIR
     bind_host = request.data.get('bind_host', 'bind-host')
