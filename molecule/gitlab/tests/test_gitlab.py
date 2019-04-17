@@ -15,7 +15,8 @@ def test_ci_runner(host, tmpdir):
         ansible_inventory=host.backend.ansible_inventory)
 
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    gitlab = GitLab(gitlab_utils.get_url(), 'root', gitlab_utils.get_password())
+    gitlab = GitLab(gitlab_utils.get_url())
+    gitlab.login('root', gitlab_utils.get_password())
     gitlab.recreate_project('root', 'testproject')
     runner_host.run("rm -f /tmp/*.out")
     os.system("""
