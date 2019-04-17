@@ -1,10 +1,10 @@
-{% extends "bases/bootstrap-auth.html" %}
+{% extends "bases/bootstrap-visitor.html" %}
 
-{% block head_title %}{% trans "Social Network Login Failure" %}{% endblock %}
+{% block head_title %}Social Network Login Failure{% endblock %}
 
 {% block content %}
-<h1>{% trans "Social Network Login Failure" %}</h1>
+<h1>Social Network Login Failure</h1>
 
-<p>{% trans "An error occurred while attempting to login via your social network account." %}</p>
+<p>An error occurred while attempting to login via your social network account.</p>
 <p>{{ auth_error }}</p>
 {% endblock %}

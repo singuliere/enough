@@ -1,3 +1,4 @@
+import os
 import requests
 import time
 
@@ -11,27 +12,46 @@ import time
 #
 class GitLab(object):
 
-    def __init__(self, url, username, password):
+    def __init__(self, url):
         self.url = url
-        self.s = self._session(username, password)
+        self._session()
 
-    def _session(self, username, password):
-        s = requests.Session()
-        s.verify = '../../certs'
-        r = s.post(self.url + '/oauth/token', json={
-            'username': 'root',
+    def _session(self):
+        self.s = requests.Session()
+        if 'REQUESTS_CA_BUNDLE' not in os.environ:
+            self.s.verify = '../../certs'
+        self.s.api = self.url + '/api/v4'
+
+    def login(self, username, password):
+        r = self.s.post(self.url + '/oauth/token', json={
+            'username': username,
             'password': password,
             'grant_type': 'password',
         })
-        s.api = self.url + '/api/v4'
         r.raise_for_status()
-        s.headers['Authorization'] = 'Bearer ' + r.json()['access_token']
-        return s
+        self.set_token(r.json()['access_token'])
+
+    def set_token(self, token):
+        self.s.headers['Authorization'] = f'Bearer {token}'
 
     def get_namespace(self, user):
         r = self.s.get(self.s.api + '/namespaces?search=' + user)
         r.raise_for_status()
         return r.json()[0]['id']
+
+    def group_members(self, group):
+        r = self.s.get(self.s.api + f'/groups/{group}/members')
+        r.raise_for_status()
+        return r.json()
+
+    def is_member_of_group(self, group, username):
+        return any([x['username'] == username for x in self.group_members(group)])
+
+    def is_self_member_of_group(self, group):
+        r = self.s.get(self.s.api + f'/user')
+        r.raise_for_status()
+        user = r.json()
+        return self.is_member_of_group(group, user['username'])
 
     def recreate_project(self, user, project):
         namespace_id = self.get_namespace(user)
@@ -65,3 +85,13 @@ class GitLab(object):
         r.raise_for_status()
         j = r.json()
         return j['application_id'], j['secret']
+
+    def ensure_group_exists(self, name):
+        r = self.s.get(f'{self.s.api}/groups/{name}')
+        if r.status_code == 200:
+            return
+        r = self.s.post(f'{self.s.api}/groups', json={
+            'name': name,
+            'path': name,
+        })
+        r.raise_for_status()
