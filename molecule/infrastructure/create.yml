@@ -92,14 +92,14 @@
 
       when: hosts_updates['all']['hosts']['bind-host'] is defined and (letsencrypt_staging | default(false))
 
+    - name: Dump hosts_conf
+      copy:
+        content: "{{ hosts_orig | combine(hosts_updates, recursive=True) | to_yaml }}"
+        dest: "../../inventories/01-hosts.yml"
+
     - name: Dump instance config
       copy:
         # NOTE(retr0h): Workaround for Ansible 2.2.
         #               https://github.com/ansible/ansible/issues/20885
         content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
         dest: "{{ molecule_instance_config }}"
-
-    - name: Dump hosts_conf
-      copy:
-        content: "{{ hosts_orig | combine(hosts_updates, recursive=True) | to_yaml }}"
-        dest: "../../inventories/01-hosts.yml"
