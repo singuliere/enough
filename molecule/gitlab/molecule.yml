@@ -14,6 +14,8 @@ platforms:
     flavor: "s1-2"
   - name: gitlab-host
     flavor: "s1-4"
+    groups:
+      - gitlab
 provisioner:
   name: ansible
   options:

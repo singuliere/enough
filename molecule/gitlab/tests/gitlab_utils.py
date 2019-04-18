@@ -12,5 +12,5 @@ def get_url():
 
 def get_password():
     variables = yaml.load(open(
-        '../../molecule/gitlab/roles/gitlab/defaults/main.yml'))
+        '../../inventories/common/group_vars/gitlab/gitlab.yml'))
     return variables['gitlab_password']
