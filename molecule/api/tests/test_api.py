@@ -2,7 +2,6 @@ import requests
 import yaml
 import dns.resolver
 import gitlab_utils
-from enough.common.gitlab import GitLab
 from bs4 import BeautifulSoup
 
 testinfra_hosts = ['api-host']
@@ -15,14 +14,6 @@ def get_domain():
 
 def api_sign_in(host):
     domain = get_domain()
-
-    gitlab = GitLab(gitlab_utils.get_url())
-    gitlab.login('root', gitlab_utils.get_password())
-    (client_id, client_secret) = gitlab.create_api_application(domain)
-
-    with host.sudo():
-        r = host.run(f"enough --domain {domain} manage "
-                     f"set_auth_provider gitlab {client_id} {client_secret}")
 
     #
     # GitLab home page
@@ -63,7 +54,7 @@ def api_sign_in(host):
     #
     r = lab.get(r.headers['Location'])
     r.raise_for_status()
-    assert 'An error has occurred' not in r.text
+    assert 'An error' not in r.text
     soup = BeautifulSoup(r.text, 'html.parser')
     data = {
         'commit': 'Authorize',
@@ -125,10 +116,6 @@ def api_sign_in(host):
 # docker exec -ti tmp_enough-enough_1 journalctl -f --unit enough
 #
 def test_add_host(host):
-    gitlab = GitLab(gitlab_utils.get_url())
-    gitlab.login('root', gitlab_utils.get_password())
-    gitlab.ensure_group_exists('enough')
-
     token = api_sign_in(host)
     domain = get_domain()
     url = f"https://api.{domain}"

@@ -84,9 +84,9 @@
   register: result
   changed_when: '"Applying " in result.stdout'
 
-- name: enough manage apiuser {{ api_admin_user }}
+- name: enough manage enough_api
   shell: |
-    enough --domain {{ domain }} manage apiuser '{{ api_admin_user }}' '{{ api_admin_user }}admin@{{ domain }}' '{{ api_admin_password }}'
+    enough --domain {{ domain }} manage enough_api {{ domain }} root '{{ gitlab_password }}'
   register: result
   changed_when: '"Created" in result.stdout'
 
