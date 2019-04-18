@@ -26,11 +26,11 @@ Manually create `~/.enough/enough.community/group_vars/all/clouds.yml` from `~/o
 
 .. code::
 
-   $ OS_CLIENT_CONFIG_FILE=inventories/common/group_vars/all/clouds.yml openstack --os-cloud ovh server list
+   $ OS_CLIENT_CONFIG_FILE=~/.enough/enough.community/group_vars/all/clouds.yml openstack --os-cloud ovh server list
 
 .. code::
 
-   $ echo domain: enough.community | sudo tee /srv/checkout/inventories/common/group_vars/all/domain.yml
+   $ echo domain: enough.community | sudo tee ~/.enough/enough.community/group_vars/all/domain.yml
 
 Getting the production repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -53,15 +53,21 @@ From a checkout of the `infrastructure
 
 .. code::
 
-   ansible-playbook --private-key ~/.enough/enough.community/infrastructure_key \
+   $ export MOLECULE_FILE=$(pwd)/molecule/preprod/molecule.yml
+   $ ansible-playbook --private-key ~/.enough/enough.community/infrastructure_key \
                     --vault-password-file=~/.enough/enough.community/vault_pass.txt \
                     -i inventories/common \
                     -i ~/.enough/enough.community \
                     molecule/infrastructure/create.yml
 
 It will create the `inventories/01-hosts.yml` file, which must be
-copied to `~/.enough/enough.community/01-hosts.yml` and committed to
+manually copied to `~/.enough/enough.community/01-hosts.yml` and committed to
 the repository.
+
+.. note::
+
+   The ansible-playbook run will fail with ``no filter named
+   'molecule_header'`` but it is ok to ignore that error.
 
 .. code::
 
