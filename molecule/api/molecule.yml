@@ -8,12 +8,16 @@ platforms:
     flavor: "s1-2"
   - name: api-host
     flavor: "s1-2"
+    groups:
+      - gitlab
   - name: packages-host
     flavor: "s1-4"
   - name: icinga-host
     flavor: "s1-2"
   - name: gitlab-host
     flavor: "s1-4"
+    groups:
+      - gitlab
 provisioner:
   name: ansible
   options:

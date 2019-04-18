@@ -27,3 +27,8 @@ wazuh_agent:
     postfix-host:
     runner-host:
     weblate-host:
+
+gitlab:
+  hosts:
+    gitlab-host:
+    api-host:
