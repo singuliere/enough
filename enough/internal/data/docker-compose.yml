@@ -20,6 +20,7 @@ services:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - /root/.enough/{{ this.domain }}:/root/.enough/{{ this.domain }}
+      - /etc/ssl/certs:/etc/ssl/certs:ro
       - /usr/local/share/ca-certificates/infrastructure:/usr/local/share/ca-certificates/infrastructure:ro
     security_opt:
       - seccomp=unconfined
