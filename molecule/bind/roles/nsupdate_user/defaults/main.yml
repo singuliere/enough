@@ -1,2 +1,0 @@
----
-nsupdate_user_keys_globs: [ 'nsupdate/*.pub', 'ssh_keys/*.pub' ]
