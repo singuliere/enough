@@ -86,12 +86,11 @@ class GitLab(object):
         j = r.json()
         return j['application_id'], j['secret']
 
-    def ensure_group_exists(self, name):
+    def ensure_group_exists(self, name, **kwargs):
         r = self.s.get(f'{self.s.api}/groups/{name}')
         if r.status_code == 200:
             return
-        r = self.s.post(f'{self.s.api}/groups', json={
-            'name': name,
-            'path': name,
-        })
+        args = {'name': name, 'path': name}
+        args.update(kwargs)
+        r = self.s.post(f'{self.s.api}/groups', json=args)
         r.raise_for_status()
