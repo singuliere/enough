@@ -6,6 +6,10 @@
   vars:
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
+    #
+    # obtained manually from api.{{ production_domain }}
+    #
+    enough_api_token: "{{ lookup('env', 'ENOUGH_API_TOKEN') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
     hosts_orig: "{{ lookup('file', '../../hosts-base.yml') | from_yaml }}"
   pre_tasks:
@@ -78,11 +82,47 @@
         - set_fact:
             domain: "{{ cmd.stdout|lower }}.test.enough.community"
 
-        - name: create NS record in test zone (requires access to bind-host.{{ production_domain }})
-          command: |
-            ssh -o BatchMode=yes \
-                -o StrictHostKeyChecking=no \
-                subdomain@ns1.{{ production_domain }} {{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }} {{ domain }}
+        - name: create glue record in test zone (requires access to api.{{ production_domain }})
+          uri:
+            url: https://api.{{ production_domain }}/bind/
+            method: POST
+            headers:
+              Authorization: "Token {{ enough_api_token }}"
+            body_format: json
+            body: |
+              {
+                "zone": "test.{{ production_domain }}.",
+                "record": "ns-{{ domain }}.",
+                "ttl": "1800",
+                "type": "A",
+                "value": "{{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }}"
+              }
+            status_code: 201
+          register: nsupdate
+
+        - debug:
+            msg: "{{ nsupdate.json.out }}"
+
+        - name: create NS record in test zone (requires access to api.{{ production_domain }})
+          uri:
+            url: https://api.{{ production_domain }}/bind/
+            method: POST
+            headers:
+              Authorization: "Token {{ enough_api_token }}"
+            body_format: json
+            body: |
+              {
+                "zone": "test.{{ production_domain }}",
+                "record": "{{ domain }}.",
+                "ttl": "1800",
+                "type": "NS",
+                "value": "ns-{{ domain }}."
+              }
+            status_code: 201
+          register: nsupdate
+
+        - debug:
+            msg: "{{ nsupdate.json.out }}"
 
         - name: save the test sub-domain
           copy:
