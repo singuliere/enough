@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
         gitlab = GitLab(f'https://lab.{kwargs["domain"]}')
         gitlab.login('root', kwargs['password'])
-        gitlab.ensure_group_exists('enough')
+        gitlab.ensure_group_exists('enough', request_access_enabled=True, visibility='public')
         (client_id, client_secret) = gitlab.create_api_application(kwargs['domain'])
 
         a = SocialApp(provider=provider, name=name, secret=client_secret,
