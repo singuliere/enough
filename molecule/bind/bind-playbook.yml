@@ -86,8 +86,6 @@
 
           @ IN CAA 0 issue "letsencrypt.org"
 
-    - role: nsupdate_user
-
   tasks:
 
     - name: apt-get install virtualenv, python-pip and python-setuptools

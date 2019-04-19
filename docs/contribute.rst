@@ -105,11 +105,12 @@ environment to verify it keeps working.
 After all tests pass, integration with online services must be
 verified manually inside the preproduction environment.
 
-.. note:: the person running the following commands need their
-          personal ssh public key to give them access to
-          `subdomain@ns1.enough.community`.
+The value of ``ENOUGH_API_TOKEN`` below is displayed to signed-in
+users at https://api.enough.community. Members of the `group
+enough <https://lab.enough.community/groups/enough/-/group_members>`_
+can sign-in, others can `request access <https://lab.enough.community/groups/enough/-/group_members/request_access>`_.
 
-* ``molecule create -s preprod``
+* ``ENOUGH_API_TOKEN=XXXXXXX molecule create -s preprod``
 * ``molecule converge -s preprod``
 * at end of converge you will get advertised about the testing subdomain:
   ::
