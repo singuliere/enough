@@ -1,6 +1,171 @@
 CHANGES
 =======
 
+1.0.1
+-----
+
+* version 1.0.1
+* bind: remove nsupdate leftovers
+* api: set request\_access\_enabled=True when creating the enough group
+* infrastructure: use api.enough.community to create the test subdomain
+* bind: remove the nsupdate\_user role
+* production: dump hosts\_conf before instance config
+* enough: mount /etc/ssl/certs instead of running update-ca-certificates
+* gitlab: move the password to the gitlab group
+* api: implement enough\_api to link api & gitlab
+* enough: set\_auth\_provider is now done by enough\_api
+* api: cosmetic cleanup
+* doc: fix the production instructions
+* production: add the API playbook
+* gitlab: fix test constructor
+* enough: test view in a pure pytest fashion
+* api: only members of the enough GitLab group can use /bind/
+* api: fix the authentication error template
+* enough: allow env override of ACCOUNT\_DEFAULT\_HTTP\_PROTOCOL
+* enough: rework gitlab helper to allow login+token authentication
+* enough: remove fields that are not necessary
+* enough: display the token in the API member page
+* api: allow authentication via GitLab
+* enough: rework configuration setting to always be ~/.enough/{domain}
+* api: run update-ca-certificates at bootstrap
+* gitlab: move gitlab helpers to enough.common
+* enough: rework internal install to display files
+* api: require token authentication from clients
+* enough: cosmetic cleanup of the api test
+* enough: implement enough manage apiuser
+* icinga: split mariadb & icinga installation
+* icinga: we don't want tests to follow redirections
+* icinga: cosmetic use of the f'' notation
+* use the stretch-playbook everywhere
+* icinga: fix host list typos
+* infrastructure: set the stretch source list
+* tests: ensure all files are in the dist
+* update enough release instructions
+* enough: install can be used for systemd, script & bash functions
+* update the bootstrap instructions
+* api: implement the bind endpoint
+* authorized\_keys: clouds.yml is no longer required
+* enough: include ansible playbooks, roles and inventories in package
+* enough: dnspython is needed for tests
+* requirements: molecule is not for dev
+* enough: implement ansible\_utils::get\_variable
+* tests: silence sh at teardown
+* gitignore: .eggs
+* enough: rename 'build enough image' to 'build image'
+* enough: docker up no longer implies image creation
+* upgrade requirements
+* api: implement a stub for the /bind endpoint
+* api: add dependencies to django & djangorestframework
+* enough: refactor for docker-compose instead of swarm
+* enough: create image with :latest as well as the :version
+* enough: add systemd & docker-compose to the base image
+* pep8 really is flake8
+* packages: make the packages host browsable
+* packages: implement the enough-pip role
+* packages: cosmetic layout of the playbook
+* enough: libffi-dev is needed when docker is not used
+* gitlab: runner package is held and needs --allow-change-held-packages
+* gitlab: upgrade to 11.8.x
+* gitlab: DRY tests
+* icinga: it is ok for /etc to be stale during 3h
+* icinga: delete the delayed-notification-service and the docs
+* icinga: only bother to report Tor down after 5h
+* icinga: tor is slow, increase the timeouts
+* docs: fix ansible invocation
+* gitlab: cosmetic cleanup
+* docs: no need to maintain an exhaustive list of molecule/\*
+* move clouds.yml to group\_vars/all
+* there no longer is an ansible.enough.community host
+* there is no need for a private-key.yml template
+* wazuh: share the test with preprod
+* postfix: share the test with preprod
+* backup: share the test with preprod
+* preprod: use tests for enough instead of wereport/cloud
+* chat: tests must retry a few times
+* add debops as a submodule
+* authorized\_keys: migration to python3
+* fix python3 flake8 errors
+* bump to 1.0.1
+* switch to using python3
+* wazuh: disable openscap
+* wazuh: verbatim copy of wazuh\_agent\_config so it can be overriden
+* postfix: only modify what is necessary
+* postfix: cosmetic changes
+* postfix: use the nsupdate module to record SPF
+* gitlab: cosmetic changes
+* bind: cosmetic changes
+* bind: improve idempotency
+* gitlab: faster workaround for github.com/ansible/ansible issue 50278
+* gitlab: move the definition of lab.domain to gitlab
+* website: move the definition of www.domain & domain to website
+* bind: do not always change the master & zone files
+* bind: replace shell nsupdate with the module by the same name
+* letsencrypt: rename the scenario, it no longer is certs
+* preprod: designate a host to be a wazuh\_agent
+* firewall: include firewall playbooks for testing
+* postfix: move rules from firewall to postfix
+* icinga: move rules from firewall to icinga
+* firewall: kill redundant ssh rules
+* bind: move rules from firewall to bind
+* postfix: temporarily open 80/443 for certbot
+* firewall: add firewall\_rule\_state to allow removal of rule
+* wazuh: do not apply firewall rules on undefined hosts
+* chat: cosmetic cleanup of the playbook
+* cookiecutter: remove and suggest copying an existing scenario instead
+* wereport: install fake certs for tests from the letsencrypt role
+* website: install fake certs for tests from the letsencrypt role
+* weblate: install fake certs for tests from the letsencrypt role
+* wazuh: install fake certs for tests from the letsencrypt role
+* preprod: install fake certs for tests from the letsencrypt role
+* packages: install fake certs for tests from the letsencrypt role
+* icinga: install fake certs for tests from the letsencrypt role
+* gitlab: install fake certs for tests from the letsencrypt role
+* forum: install fake certs for tests from the letsencrypt role
+* enough: install fake certs for tests from the letsencrypt role
+* cloud: install fake certs for tests from the letsencrypt role
+* chat: install fake certs for tests from the letsencrypt role
+* bind: install fake certs for tests from the letsencrypt role
+* postfix: use the letsencrypt module to install fake certs
+* use letsencrypt\_staging instead of letsencrypt\_nginx\_staging
+* letsencrypt-nginx: use the letsencrypt module to install fake certs
+* certs: rename into letsencrypt
+* firewall: only create rules for hosts with an ansible\_host
+* bind: use ansible.get\_variables() instead of parsing inventory
+* bind: cosmetic cleanup yaml
+* backup: canonical formatting of the backup role for tests
+* backup: remove debug message
+* backup: remove firewall\_ssh\_server\_group because it is not used
+* authorized\_keys: add leading --- for yaml clean
+* authorized\_keys: tests fails because of testkey permissions
+* authorized\_keys: add missing firewall
+* ignore ansible-lint warnings that are intentionaly violated
+* wereport: fix yamllint errors
+* website: fix yamllint errors
+* weblate: fix yamllint errors
+* wazuh: fix yamllint errors
+* preprod: fix yamllint errors
+* postfix: fix yamllint errors
+* packages: fix yamllint errors
+* misc: fix yamllint errors
+* letsencrypt-nginx: fix yamllint errors
+* jdauphant.nginx: remove dead code
+* infrastructure: fix yamllint errors
+* icinga: fix yamllint errors
+* gitlab: fix yamllint errors
+* forum: fix yamllint errors
+* firewall: fix yamllint errors
+* enough: fix yamllint errors
+* cloud: fix yamllint errors
+* chat: fix yamllint errors
+* certs: fix yamllint errors
+* backup: fix yamllint errors
+* bind: fix yamllint errors
+* authorized\_keys: fix yamllint errors
+* root: fix yamllint errors
+* add .yamllint implementing enough conventions
+* sync wazuh-ansible submodule
+* cli: document the usage and development
+
 1.0.0
 -----
 
@@ -14,6 +179,7 @@ CHANGES
 * cli: bootstrap a cli that does nothing but tests ok
 * move tests.retry to enough.common.retry
 * cleanup: fix all flake8 errors
+* production: explain how to work with the production repository
 * inventories: list all hosts in need of a wazuh agent
 * preprod: define wazuh-host
 * wazuh: use default() instead of play vars
