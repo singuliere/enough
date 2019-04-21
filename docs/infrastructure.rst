@@ -28,8 +28,6 @@ The following OVH projects have been defined:
 
 * **OVH Project: Production**
    - Region **GRA5**: all Ansible maintained production VMs
-   - Region **SBG5**: the VM running ansible to control production VMs
-     in the **GRA5** region.
 
 * `Login as a customer <https://www.ovh.com/auth/>`_
 * `OpenStack OVH management <https://www.ovh.com/manager/cloud/>`_
