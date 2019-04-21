@@ -1,6 +1,15 @@
 CHANGES
 =======
 
+1.0.2
+-----
+
+* version 1.0.2
+* fix the PyPI description
+* docs: there no longer is an ansible host
+* bump version 1.0.2
+* docs: fix CLI maintenance instructions
+
 1.0.1
 -----
 
