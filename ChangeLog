@@ -1,9 +1,11 @@
 CHANGES
 =======
 
-1.0.2
+1.0.3
 -----
 
+* version 1.0.3
+* normalize setup.cfg field names and add long-description
 * version 1.0.2
 * fix the PyPI description
 * docs: there no longer is an ansible host
