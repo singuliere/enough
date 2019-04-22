@@ -2,6 +2,7 @@ import requests
 import yaml
 import dns.resolver
 import gitlab_utils
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 testinfra_hosts = ['api-host']
@@ -37,6 +38,22 @@ def api_sign_in(host):
         'user[remember_me]': 0,
     })
     r.raise_for_status()
+
+    #
+    # Revoke all tokens (in case test is run multiple times)
+    #
+    r = lab.get(lab_url + '/profile/applications')
+    r.raise_for_status()
+    soup = BeautifulSoup(r.text, 'html.parser')
+    for f in soup.select('.oauth-authorized-applications form'):
+        data = {}
+        for input in f.children:
+            if input.name != 'input':
+                continue
+            data[input['name']] = input['value']
+        url = urlparse(f['action'])
+        r = lab.post(lab_url + url.path, params=url.query, data=data)
+        r.raise_for_status()
 
     #
     # API login
