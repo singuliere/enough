@@ -22,23 +22,19 @@ class APIUserAPITestCase(APITestCase):
 
 class TestAPI(APIUserAPITestCase):
     @pytest.mark.django_db
-    @mock.patch('enough.api.views.run_ansible')
+    @mock.patch('enough.common.bind.delegate_dns')
     @mock.patch('enough.api.permissions.has_permission')
-    def test_bind(self, has_permission, run_ansible):
-        url = reverse('bind')
-        run_ansible.return_value = '51.68.81.22 | SUCCESS => {"changed": false}'
+    def test_delegate_dns(self, has_permission, delegate_dns):
+        url = reverse('delegate-test-dns')
+        delegate_dns.return_value = [{"changed": False}, {"changed": True}, {"changed": False}]
         has_permission.return_value = True
         data = {
-            "bind_host": "51.68.81.22",
-            "zone": "gyztqojxhe3tinjrbi.test.enough.community",
-            "record": "foo.gyztqojxhe3tinjrbi.test.enough.community.",
-            "ttl": "1800",
-            "type": "A",
-            "value": "1.2.3.4",
+            "name": "gyztqojxhe3tinjrbi",
+            "ip": "1.2.3.4",
         }
 
         response = self.client.post(url, data, format='json')
 
         assert has_permission.called
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json()['out'], {"changed": False})
+        self.assertEqual(response.json()[0], {"changed": False})

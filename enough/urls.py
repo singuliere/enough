@@ -25,7 +25,7 @@ from .views import member_index
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('bind/', views.bind, name='bind'),
+    path('delegate-test-dns/', views.delegate_test_dns, name='delegate-test-dns'),
 
     url(r'^$', TemplateView.as_view(template_name='visitor/landing-index.html'),
         name='landing_index'),

@@ -123,16 +123,13 @@ def test_add_host(host):
     s.headers = {'Authorization': f'Token {token}'}
     s.verify = '../../certs'
     data = {
-        "zone": domain,
-        "record": f"foo.{domain}.",
-        "ttl": "1800",
-        "type": "A",
-        "value": "1.2.3.4",
+        "name": "foo",
+        "ip": "1.2.3.4",
     }
-    r = s.post(f'{url}/bind/', json=data, timeout=5)
+    r = s.post(f'{url}/delegate-test-dns/', json=data, timeout=60)
     # print(r.text)
     r.raise_for_status()
     resolver = dns.resolver.Resolver()
     bind_ip = str(resolver.query(f'bind.{domain}.')[0])
     resolver.nameservers = [bind_ip]
-    assert '1.2.3.4' == str(resolver.query(f'foo.{domain}.', 'a')[0])
+    assert '1.2.3.4' == str(resolver.query(f'ns-foo.test.{domain}.', 'a')[0])
