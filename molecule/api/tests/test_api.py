@@ -132,7 +132,7 @@ def api_sign_in(host):
 # molecule login -s api --host=api-host
 # docker exec -ti tmp_enough-enough_1 journalctl -f --unit enough
 #
-def test_add_host(host):
+def test_delegate_test_dns(host):
     token = api_sign_in(host)
     domain = get_domain()
     url = f"https://api.{domain}"
@@ -150,3 +150,23 @@ def test_add_host(host):
     bind_ip = str(resolver.query(f'bind.{domain}.')[0])
     resolver.nameservers = [bind_ip]
     assert '1.2.3.4' == str(resolver.query(f'ns-foo.test.{domain}.', 'a')[0])
+
+
+def test_create_or_upgrade(host):
+    token = api_sign_in(host)
+    domain = get_domain()
+    url = f"https://api.{domain}"
+    s = requests.Session()
+    s.headers = {'Authorization': f'Token {token}'}
+    s.verify = '../../certs'
+    data = {
+        "name": "bar",
+        "ip": "4.3.2.1",
+    }
+    r = s.post(f'{url}/create-or-upgrade/', json=data, timeout=60)
+    # print(r.text)
+    r.raise_for_status()
+    resolver = dns.resolver.Resolver()
+    bind_ip = str(resolver.query(f'bind.{domain}.')[0])
+    resolver.nameservers = [bind_ip]
+    assert '4.3.2.1' == str(resolver.query(f'ns-bar.d.{domain}.', 'a')[0])

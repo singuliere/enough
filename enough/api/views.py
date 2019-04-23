@@ -16,3 +16,14 @@ def delegate_test_dns(request):
         request.data['name'],
         request.data['ip'],
     ), safe=False, status=201)
+
+
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated, IsEnoughGroupMember))
+def create_or_upgrade(request):
+    return JsonResponse(bind.delegate_dns(
+        f'd.{settings.ENOUGH_DOMAIN}',
+        request.data["name"],
+        request.data["ip"],
+    ), safe=False, status=201)
