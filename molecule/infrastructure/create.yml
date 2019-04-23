@@ -85,7 +85,7 @@
         - set_fact:
             domain: "{{ subdomain }}.test.enough.community"
 
-        - name: create glue record in test zone (requires access to api.{{ production_domain }})
+        - name: create DNS delegation for {{ domain }} (requires access to api.{{ production_domain }})
           uri:
             url: https://api.{{ production_domain }}/delegate-test-dns/
             method: POST

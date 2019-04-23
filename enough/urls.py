@@ -26,6 +26,7 @@ from .views import member_index
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('delegate-test-dns/', views.delegate_test_dns, name='delegate-test-dns'),
+    path('create-or-upgrade/', views.create_or_upgrade, name='create-or-upgrade'),
 
     url(r'^$', TemplateView.as_view(template_name='visitor/landing-index.html'),
         name='landing_index'),
