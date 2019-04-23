@@ -80,49 +80,28 @@
           register: cmd
 
         - set_fact:
-            domain: "{{ cmd.stdout|lower }}.test.enough.community"
+            subdomain: "{{ cmd.stdout|lower }}"
+
+        - set_fact:
+            domain: "{{ subdomain }}.test.enough.community"
 
         - name: create glue record in test zone (requires access to api.{{ production_domain }})
           uri:
-            url: https://api.{{ production_domain }}/bind/
+            url: https://api.{{ production_domain }}/delegate-test-dns/
             method: POST
             headers:
               Authorization: "Token {{ enough_api_token }}"
             body_format: json
             body: |
               {
-                "zone": "test.{{ production_domain }}.",
-                "record": "ns-{{ domain }}.",
-                "ttl": "1800",
-                "type": "A",
-                "value": "{{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }}"
+                "name": "{{ subdomain }}",
+                "ip": "{{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }}"
               }
             status_code: 201
-          register: nsupdate
+          register: delegate_dns
 
         - debug:
-            msg: "{{ nsupdate.json.out }}"
-
-        - name: create NS record in test zone (requires access to api.{{ production_domain }})
-          uri:
-            url: https://api.{{ production_domain }}/bind/
-            method: POST
-            headers:
-              Authorization: "Token {{ enough_api_token }}"
-            body_format: json
-            body: |
-              {
-                "zone": "test.{{ production_domain }}",
-                "record": "{{ domain }}.",
-                "ttl": "1800",
-                "type": "NS",
-                "value": "ns-{{ domain }}."
-              }
-            status_code: 201
-          register: nsupdate
-
-        - debug:
-            msg: "{{ nsupdate.json.out }}"
+            msg: "{{ delegate_dns.json }}"
 
         - name: save the test sub-domain
           copy:

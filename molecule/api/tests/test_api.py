@@ -2,6 +2,7 @@ import requests
 import yaml
 import dns.resolver
 import gitlab_utils
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 testinfra_hosts = ['api-host']
@@ -37,6 +38,22 @@ def api_sign_in(host):
         'user[remember_me]': 0,
     })
     r.raise_for_status()
+
+    #
+    # Revoke all tokens (in case test is run multiple times)
+    #
+    r = lab.get(lab_url + '/profile/applications')
+    r.raise_for_status()
+    soup = BeautifulSoup(r.text, 'html.parser')
+    for f in soup.select('.oauth-authorized-applications form'):
+        data = {}
+        for input in f.children:
+            if input.name != 'input':
+                continue
+            data[input['name']] = input['value']
+        url = urlparse(f['action'])
+        r = lab.post(lab_url + url.path, params=url.query, data=data)
+        r.raise_for_status()
 
     #
     # API login
@@ -123,16 +140,13 @@ def test_add_host(host):
     s.headers = {'Authorization': f'Token {token}'}
     s.verify = '../../certs'
     data = {
-        "zone": domain,
-        "record": f"foo.{domain}.",
-        "ttl": "1800",
-        "type": "A",
-        "value": "1.2.3.4",
+        "name": "foo",
+        "ip": "1.2.3.4",
     }
-    r = s.post(f'{url}/bind/', json=data, timeout=5)
+    r = s.post(f'{url}/delegate-test-dns/', json=data, timeout=60)
     # print(r.text)
     r.raise_for_status()
     resolver = dns.resolver.Resolver()
     bind_ip = str(resolver.query(f'bind.{domain}.')[0])
     resolver.nameservers = [bind_ip]
-    assert '1.2.3.4' == str(resolver.query(f'foo.{domain}.', 'a')[0])
+    assert '1.2.3.4' == str(resolver.query(f'ns-foo.test.{domain}.', 'a')[0])

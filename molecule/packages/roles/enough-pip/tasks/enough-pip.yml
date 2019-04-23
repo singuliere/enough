@@ -4,7 +4,7 @@
     set -e
     cd $(git rev-parse --show-toplevel)
     grep -q 'name = enough' setup.cfg
-    sed -n -e 's/version = \(.*\)/\1/p' setup.cfg
+    sed -n -e 's/^version = \(.*\)/\1/p' setup.cfg
   changed_when: False
   ignore_errors: True
   register: enough_version
