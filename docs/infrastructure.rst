@@ -29,6 +29,9 @@ The following OVH projects have been defined:
 * **OVH Project: Production**
    - Region **GRA5**: all Ansible maintained production VMs
 
+The OVH acount **cl283532-ovh** is dedicated to hosting Enough
+instances dedicated to an organization or an individual.
+
 * `Login as a customer <https://www.ovh.com/auth/>`_
 * `OpenStack OVH management <https://www.ovh.com/manager/cloud/>`_
 
