@@ -84,9 +84,28 @@
   register: result
   changed_when: '"Applying " in result.stdout'
 
+- name: mkdir /root/.enough/{{ domain }}/api
+  file:
+    path: "/root/.enough/{{ domain }}/api"
+    state: directory
+
+- name: mkdir /root/.enough/{{ domain }}/api/hosting
+  file:
+    path: "/root/.enough/{{ domain }}/api/hosting"
+    state: directory
+
+- name: cp api/hosting/clouds.yml ~/.enough/{{ domain }}/api/hosting/clouds.yml
+  copy:
+    src: "{{ lookup('first_found', clouds_files) }}"
+    dest: "/root/.enough/{{ domain }}/api/hosting/clouds.yml"
+  vars:
+    clouds_files:
+      - "{{ api_config_directory }}/clouds.yml"
+      - "../../../../../inventories/common/group_vars/all/clouds.yml"
+
 - name: enough manage enough_api
   shell: |
-    enough --domain {{ domain }} manage enough_api {{ domain }} root '{{ gitlab_password }}'
+    enough --debug --domain {{ domain }} manage enough_api {{ domain }} root '{{ gitlab_password }}'
   register: result
   changed_when: '"Changed" in result.stdout'
 

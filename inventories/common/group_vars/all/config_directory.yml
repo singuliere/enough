@@ -1,0 +1,2 @@
+---
+enough_config_directory: lookup('pipe', 'echo ~/.enough')

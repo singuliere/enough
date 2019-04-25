@@ -11,4 +11,4 @@ trap "docker rm -f $name >& /dev/null || true ; docker rmi --no-prune $name >& /
     cat tests/tox.dockerfile
 ) | docker build --tag $name -f - .
 
-docker run --rm --name $name -v /var/run/docker.sock:/var/run/docker.sock $name tox
+docker run --rm --name $name -e SKIP_OPENSTACK_INTEGRATION_TESTS=true -v /var/run/docker.sock:/var/run/docker.sock $name tox

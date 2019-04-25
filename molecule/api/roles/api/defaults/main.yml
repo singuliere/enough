@@ -1,3 +1,4 @@
 ---
 api_admin_user: admin
 api_admin_password: Jidak0ov_
+api_config_directory: "{{ enough_config_directory }}/{{ domain }}/api/hosting"
