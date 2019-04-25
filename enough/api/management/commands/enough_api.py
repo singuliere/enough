@@ -13,14 +13,13 @@ class Command(BaseCommand):
         parser.add_argument('username')
         parser.add_argument('password')
 
-    def handle(self, *args, **kwargs):
+    def setup_gitlab_auth(self, *args, **kwargs):
         provider = 'gitlab'
         name = 'GitLab'
 
         existing = SocialApp.objects.filter(provider=provider)
         if existing:
-            self.stdout.write('Already exists')
-            return
+            return False
 
         gitlab = GitLab(f'https://lab.{kwargs["domain"]}')
         gitlab.login('root', kwargs['password'])
@@ -35,4 +34,13 @@ class Command(BaseCommand):
         sites = [i for i in Site.objects.all()]
         a.sites.add(*sites)
 
-        self.stdout.write('Created')
+        return True
+
+    def handle(self, *args, **kwargs):
+        changed = False
+        changed |= self.setup_gitlab_auth(*args, **kwargs)
+
+        if changed:
+            self.stdout.write('Changed')
+        else:
+            self.stdout.write('Up to date')
