@@ -46,7 +46,6 @@ def test_replace_content():
         assert d.replace_content(before) == after
 
 
-@pytest.mark.skipif('SKIP_INTEGRATION_TESTS' in os.environ, reason='skip integration test')
 def test_up_no_wait(docker_name, tcp_port):
     d = docker.Docker(docker_name, port=tcp_port)
     assert d.create_image()
@@ -55,7 +54,6 @@ def test_up_no_wait(docker_name, tcp_port):
     d.down()
 
 
-@pytest.mark.skipif('SKIP_INTEGRATION_TESTS' in os.environ, reason='skip integration test')
 def test_up_wait_for_services(docker_name, tcp_port):
     d = docker.Docker(docker_name, port=tcp_port)
     assert d.create_image()
@@ -64,7 +62,6 @@ def test_up_wait_for_services(docker_name, tcp_port):
     d.down()
 
 
-@pytest.mark.skipif('SKIP_INTEGRATION_TESTS' in os.environ, reason='skip integration test')
 def test_up_wait_for_services_fail(docker_name):
     class DockerFixtureIntegration(docker.Docker):
 
@@ -84,7 +81,6 @@ def test_up_wait_for_services_fail(docker_name):
     d.down()
 
 
-@pytest.mark.skipif('SKIP_INTEGRATION_TESTS' in os.environ, reason='skip integration test')
 def test_create_image(docker_name):
     d = docker.Docker(docker_name)
     assert d.create_image().startswith(docker_name)

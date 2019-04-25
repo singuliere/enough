@@ -1,0 +1,10 @@
+---
+# https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#configuration-files
+clouds:
+  ovh:
+    auth:
+      auth_url: "https://auth.cloud.ovh.net/v2.0/"  # OS_AUTH_URL
+      project_name: "12124722801405"  # OS_TENANT_NAME
+      username: "6WmkYtVQR"  # OS_USERNAME
+      password: "vq9VCPp4ZEPH5ZFmXjty3XEcF2E"  # OS_PASSWORD
+    region_name: "DE1"  # OS_REGION_NAME

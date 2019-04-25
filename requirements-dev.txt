@@ -97,6 +97,7 @@ pyparsing==2.3.0          # via cliff, cmd2, packaging
 pyperclip==1.7.0          # via cmd2
 pytest-cov==2.6.1
 pytest-django==3.4.8
+pytest-mock==1.10.4
 pytest==4.4.0
 python-dateutil==2.7.5    # via arrow
 python-gilt==1.2.1        # via molecule

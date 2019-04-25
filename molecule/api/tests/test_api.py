@@ -170,3 +170,22 @@ def test_create_or_upgrade(host):
     bind_ip = str(resolver.query(f'bind.{domain}.')[0])
     resolver.nameservers = [bind_ip]
     assert '4.3.2.1' == str(resolver.query(f'ns-bar.d.{domain}.', 'a')[0])
+
+
+def test_generate_clouds(host):
+    with host.sudo():
+        cmd = host.run("apt-get install -y python-openstackclient")
+        print(cmd.stdout)
+        print(cmd.stderr)
+        assert 0 == cmd.rc
+        cmd = host.run("ls /root/.enough/*/api/hosting/all/*")
+        print(cmd.stdout)
+        print(cmd.stderr)
+        assert 0 == cmd.rc
+        for clouds_file in cmd.stdout.split('\n'):
+            print(clouds_file)
+            cmd = host.run(
+                f"OS_CLIENT_CONFIG_FILE={clouds_file} openstack --os-cloud ovh image list")
+            print(cmd.stdout)
+            print(cmd.stderr)
+            assert 0 == cmd.rc

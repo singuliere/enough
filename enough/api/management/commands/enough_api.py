@@ -1,7 +1,9 @@
+from enough import settings
 from allauth.socialaccount.models import SocialApp
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 
+from enough.common.openstack import OpenStack
 from enough.common.gitlab import GitLab
 
 
@@ -9,18 +11,18 @@ class Command(BaseCommand):
     help = 'Create an API user'
 
     def add_arguments(self, parser):
+        parser.add_argument('--config', default=f'{settings.BASE_DIR}')
         parser.add_argument('domain')
         parser.add_argument('username')
         parser.add_argument('password')
 
-    def handle(self, *args, **kwargs):
+    def setup_gitlab_auth(self, *args, **kwargs):
         provider = 'gitlab'
         name = 'GitLab'
 
         existing = SocialApp.objects.filter(provider=provider)
         if existing:
-            self.stdout.write('Already exists')
-            return
+            return False
 
         gitlab = GitLab(f'https://lab.{kwargs["domain"]}')
         gitlab.login('root', kwargs['password'])
@@ -35,4 +37,18 @@ class Command(BaseCommand):
         sites = [i for i in Site.objects.all()]
         a.sites.add(*sites)
 
-        self.stdout.write('Created')
+        return True
+
+    def setup_hosting(self, *args, **kwargs):
+        o = OpenStack(f"{kwargs['config']}/api/hosting/clouds.yml")
+        return o.generate_clouds(f"{kwargs['config']}/api/hosting/all")
+
+    def handle(self, *args, **kwargs):
+        changed = False
+        changed |= self.setup_gitlab_auth(*args, **kwargs)
+        changed |= self.setup_hosting(*args, **kwargs)
+
+        if changed:
+            self.stdout.write('Changed')
+        else:
+            self.stdout.write('Up to date')
