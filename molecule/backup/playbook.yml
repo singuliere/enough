@@ -1,7 +1,7 @@
 ---
 - import_playbook: ../infrastructure/stretch-playbook.yml
 - name: setup backup
-  hosts: backup-host
+  hosts: bind-host
   become: true
 
   roles:
