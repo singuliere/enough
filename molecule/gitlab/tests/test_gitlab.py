@@ -41,7 +41,7 @@ def test_ci_runner(host, tmpdir):
                address=gitlab_utils.get_fqdn(),
                directory=str(tmpdir)))
 
-    for (what, expected) in (('OPENSTACK', 'OS_TENANT_NAME'),
+    for (what, expected) in (('OPENSTACK', 'OS_PROJECT_NAME'),
                              ('DOCKER', 'CONTAINER')):
         success = False
         for _ in range(40):

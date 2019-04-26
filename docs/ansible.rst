@@ -22,7 +22,9 @@ publicly exposed to brute force attacks.
 Creation
 --------
 
-Manually create `~/.enough/enough.community/group_vars/all/clouds.yml` from `~/openrc.sh` and check it works:
+Manually create `~/.enough/enough.community/group_vars/all/clouds.yml`
+by copying `clouds.yml.example` and getting values from `~/openrc.sh`
+and check it works:
 
 .. code::
 

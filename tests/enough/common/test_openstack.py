@@ -28,18 +28,18 @@ def test_generate_clouds(tmpdir, mocker):
     mocker.patch.object(o, 'region_list', return_value=['REGION1', 'REGION2'])
     assert o.generate_clouds(directory)
     assert (sorted(os.listdir(directory)) ==
-            ['11012f8ce408470f65eacf6daf0c132b', '742fb1a63c9a3b034dfea05e5c671602'])
+            ['0a0cfba24f6b66c174d69b8cad88116c', '3dc7afd06ca68c0fc999d4da3d725f96'])
 
     # REGION2 is removed, REGION4 is added
     mocker.patch.object(o, 'region_list', return_value=['REGION1', 'REGION4'])
     assert o.generate_clouds(directory)
     assert (sorted(os.listdir(directory)) ==
-            ['11012f8ce408470f65eacf6daf0c132b', 'e519b99d96c0a309ec29d1a9937f2009'])
+            ['0a0cfba24f6b66c174d69b8cad88116c', '100d3356910b5a57cf45dc5cdb194fe6'])
 
     # no change
     assert o.generate_clouds(directory) is False
 
-    os.link(f'{directory}/11012f8ce408470f65eacf6daf0c132b', f'{tmpdir}/in-use')
+    os.link(f'{directory}/0a0cfba24f6b66c174d69b8cad88116c', f'{tmpdir}/in-use')
     with pytest.raises(AssertionError) as e:
         mocker.patch.object(o, 'region_list', return_value=['REGION4'])
         o.generate_clouds(directory)
@@ -57,7 +57,7 @@ def test_allocate_cloud(tmpdir, mocker):
     o.generate_clouds(directory)
 
     assert (o.allocate_cloud(directory, f'{tmpdir}/one') ==
-            f'{directory}/11012f8ce408470f65eacf6daf0c132b')
+            f'{directory}/0a0cfba24f6b66c174d69b8cad88116c')
     assert (o.allocate_cloud(directory, f'{tmpdir}/two') ==
-            f'{directory}/742fb1a63c9a3b034dfea05e5c671602')
+            f'{directory}/3dc7afd06ca68c0fc999d4da3d725f96')
     assert o.allocate_cloud(directory, f'{tmpdir}/three') is False
