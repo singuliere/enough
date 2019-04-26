@@ -3,7 +3,9 @@ gitlab_password: Ind+GriazAj2
 gitlab_shared_runners_registration_token: 67ubD8XznZ7X4hv4hj9t
 
 gitlab_os_auth_url: "{{ clouds.ovh.auth.auth_url }}"
-gitlab_os_tenant_name: "{{ clouds.ovh.auth.project_name }}"
+gitlab_os_project_name: "{{ clouds.ovh.auth.project_name }}"
+gitlab_os_project_id: "{{ clouds.ovh.auth.project_id }}"
+gitlab_os_user_domain_name: "{{ clouds.ovh.auth.user_domain_name }}"
 gitlab_os_username: "{{ clouds.ovh.auth.username }}"
 gitlab_os_password: "{{ clouds.ovh.auth.password }}"
 gitlab_os_region_name: "{{ clouds.ovh.region_name }}"

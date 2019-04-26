@@ -3,8 +3,11 @@
 clouds:
   ovh:
     auth:
-      auth_url: "https://auth.cloud.ovh.net/v2.0/"  # OS_AUTH_URL
-      project_name: "12124722801405"  # OS_TENANT_NAME
-      username: "6WmkYtVQR"  # OS_USERNAME
-      password: "vq9VCPp4ZEPH5ZFmXjty3XEcF2E"  # OS_PASSWORD
-    region_name: "DE1"  # OS_REGION_NAME
+      auth_url: "https://auth.cloud.ovh.net/v3"  # OS_AUTH_URL
+      identity_api_version: "3"  # OS_IDENTITY_API_VERSION
+      project_name: "XXXXXX"  # OS_PROJECT_NAME
+      project_id: "XXXXX"  # OS_PROJECT_ID
+      user_domain_name: "Default"  # OS_USER_DOMAIN_NAME
+      username: "XXXXX"  # OS_USERNAME
+      password: "XXXXX"  # OS_PASSWORD
+    region_name: "XXX"  # OS_REGION_NAME

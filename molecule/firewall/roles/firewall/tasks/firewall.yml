@@ -3,9 +3,11 @@
   os_security_group: &os_auth
     auth:
       auth_url: "{{ clouds.ovh.auth.auth_url }}"
+      project_name: "{{ clouds.ovh.auth.project_name }}"
+      project_id: "{{ clouds.ovh.auth.project_id }}"
+      user_domain_name: "{{ clouds.ovh.auth.user_domain_name }}"
       username: "{{ clouds.ovh.auth.username }}"
       password: "{{ clouds.ovh.auth.password }}"
-      project_name: "{{ clouds.ovh.auth.project_name }}"
     region_name: "{{ clouds.ovh.region_name }}"
   when: false
 

@@ -50,7 +50,10 @@
         --name 'sd-runner' \
         --url https://gitlab.{{ domain }} \
         --env OS_AUTH_URL={{ gitlab_os_auth_url }} \
-        --env OS_TENANT_NAME={{ gitlab_os_tenant_name }} \
+        --env OS_IDENTITY_API_VERSION=3 \
+        --env OS_PROJECT_NAME={{ gitlab_os_project_name }} \
+        --env OS_PROJECT_ID={{ gitlab_os_project_id }} \
+        --env OS_USER_DOMAIN_NAME={{ gitlab_os_user_domain_name }} \
         --env OS_USERNAME={{ gitlab_os_username }} \
         --env OS_PASSWORD={{ gitlab_os_password }} \
         --env OS_REGION_NAME={{ gitlab_os_region_name }} \
