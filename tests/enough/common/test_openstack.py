@@ -1,5 +1,7 @@
 import os
 import pytest
+import yaml
+
 from enough.common.openstack import OpenStack
 
 
@@ -18,6 +20,23 @@ def test_region_empty(openstack_client):
         openstack_client.image.create(
             '--property=enough=fixture', '--file=/dev/null', 'remove-me')
     assert not OpenStack.region_empty(clouds_file)
+
+
+@pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
+                    reason='skip integration test')
+def test_heat_is_working(openstack_client, tmpdir):
+    o = OpenStack('inventories/common/group_vars/all/clouds.yml')
+    assert o.generate_clouds(tmpdir)
+    heat_paths = []
+    for f in sorted(os.listdir(tmpdir)):
+        path = f'{tmpdir}/{f}'
+        if o.heat_is_working(path):
+            heat_paths.append(path)
+    heat_regions = []
+    for path in heat_paths:
+        config = yaml.load(open(path))
+        heat_regions.append(config['clouds']['ovh']['region_name'])
+    assert heat_regions == ['GRA5', 'SBG5']
 
 
 def test_generate_clouds(tmpdir, mocker):
@@ -53,6 +72,7 @@ def test_allocate_cloud(tmpdir, mocker):
 
     mocker.patch.object(o, 'region_list', return_value=['REGION1', 'REGION2'])
     mocker.patch.object(o, 'region_empty', return_value=True)
+    mocker.patch.object(o, 'heat_is_working', return_value=True)
 
     o.generate_clouds(directory)
 
