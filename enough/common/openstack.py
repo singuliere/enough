@@ -88,11 +88,28 @@ class OpenStack(object):
         images = c.image.list('--private')
         return servers.strip() == '' and images.strip() == ''
 
+    @staticmethod
+    def heat_is_working(origin):
+        c = sh.openstack.bake('--os-cloud=ovh', _env={
+            'OS_CLIENT_CONFIG_FILE': origin,
+        })
+        # retry to verify the API is stable
+        for _ in range(5):
+            try:
+                c.stack.list()
+            except sh.ErrorReturnCode_1:
+                return False
+        return True
+
     def allocate_cloud(self, directory, destination):
         for f in sorted(os.listdir(directory)):
             origin = f'{directory}/{f}'
             os.link(origin, destination)
-            if os.stat(origin).st_nlink == 2 and self.region_empty(origin):
+            if (
+                    os.stat(origin).st_nlink == 2 and
+                    self.region_empty(origin) and
+                    self.heat_is_working(origin)
+            ):
                 return origin
             else:
                 os.unlink(destination)

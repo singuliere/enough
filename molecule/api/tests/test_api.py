@@ -174,7 +174,11 @@ def test_create_or_upgrade(host):
 
 def test_generate_clouds(host):
     with host.sudo():
-        cmd = host.run("apt-get install -y python-openstackclient")
+        cmd = host.run("""
+        apt-get install -y virtualenv gcc libffi-dev libssl-dev python-dev make
+        virtualenv /tmp/v
+        /tmp/v/bin/pip install python-openstackclient
+        """)
         print(cmd.stdout)
         print(cmd.stderr)
         assert 0 == cmd.rc
@@ -185,7 +189,8 @@ def test_generate_clouds(host):
         for clouds_file in cmd.stdout.split('\n'):
             print(clouds_file)
             cmd = host.run(
-                f"OS_CLIENT_CONFIG_FILE={clouds_file} openstack --os-cloud ovh image list")
+                f"OS_CLIENT_CONFIG_FILE={clouds_file} /tmp/v/bin/openstack "
+                "--os-cloud ovh image list")
             print(cmd.stdout)
             print(cmd.stderr)
             assert 0 == cmd.rc
