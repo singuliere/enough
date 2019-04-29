@@ -9,8 +9,7 @@ Registrar
 The `enough.community` domain name is registered at `Gandi
 <https://gandi.net>`_ under the user EC8591-GANDI.
 
-After the `bind-host` virtual machine is created with `molecule
-create -s preprod`, click on `Glue record management` in the Gandi web
+After the `bind-host` virtual machine is created, click on `Glue record management` in the Gandi web
 interface and set ns1 to the IP, i.e. 51.68.79.8 and wait a few
 minutes. Click on `Update DNS` and set the `DNS1` server to
 ns1.enough.community and click on `Add Gandi's secondary nameserver`

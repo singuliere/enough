@@ -6,15 +6,19 @@
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
     hosts_orig: "{{ lookup('file', '../../hosts-base.yml') | from_yaml }}"
-  roles:
-    - role: vm
-      vars:
-        state: absent
   tasks:
-    - name: destroy firewall
-      include_role:
-        name: firewall
-      vars:
-        firewall_server: "{{ item.name }}"
-        firewall_state: absent
+
+    - name: delete instances
+      register: stacks
+      os_stack:
+        auth:
+          auth_url: "{{ clouds.ovh.auth.auth_url }}"
+          project_name: "{{ clouds.ovh.auth.project_name }}"
+          project_id: "{{ clouds.ovh.auth.project_id }}"
+          user_domain_name: "{{ clouds.ovh.auth.user_domain_name }}"
+          username: "{{ clouds.ovh.auth.username }}"
+          password: "{{ clouds.ovh.auth.password }}"
+        region_name: "{{ clouds.ovh.region_name }}"
+        name: "{{ item.name }}"
+        state: absent
       loop: "{{ molecule_yml.platforms }}"
