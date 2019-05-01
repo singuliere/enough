@@ -18,9 +18,8 @@ data they contain can be lost. To recover a lost production VM:
 If the virtual machine is cattle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* Delete the broken machine if it is still around, e.g. ``openstack server delete website-host``
-* Create the machine again ``rm molecule/preprod/.molecule/state.yml ; molecule create -s preprod``
-* Remove the test hosts ``openstack server delete trusty-host``
+* Delete the broken machine if it is still around, e.g. ``openstack stack delete website-host``
+* Create the machine again `as if it was new <ansible>`__
 * :doc:`Run ansible <ansible>` so the DNS updates with the IP of the newly created VM
 
 If the virtual machine is a pet

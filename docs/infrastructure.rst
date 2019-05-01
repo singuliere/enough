@@ -20,7 +20,7 @@ The following OVH projects have been defined:
    A tenant has access to all the regions.
 
 * **OVH Project: Contributors**
-   - Region **DE1**: used for testing by Loïc Dachary
+   - Region **GRA5**: used for testing by Loïc Dachary
    - Region **SBG5**: used for testing by François Poulain
 
 * **OVH Project: CI**

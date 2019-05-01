@@ -1,0 +1,107 @@
+# https://docs.openstack.org/heat/stein/template_guide/openstack.html
+heat_template_version: 2017-02-24
+
+parameters:
+
+  port:
+    type: string
+    default: "22"
+
+  flavor:
+    type: string
+    default: "s1-2"
+
+  public_key:
+    type: string
+
+  volume_size:
+    type: number
+    default: 0
+
+  volume_name:
+    type: string
+    default: noname
+
+conditions:
+
+  need_volume: { not: { equals: [{get_param: volume_size}, 0]}}
+
+resources:
+  keypair:
+    type: OS::Nova::KeyPair
+    properties:
+      name: { get_param: 'OS::stack_name' }
+      public_key: { get_param: public_key }
+
+  instance:
+    type: OS::Nova::Server
+    properties:
+      name: { get_param: 'OS::stack_name' }
+      key_name: { get_resource: keypair }
+      image: Debian 9
+      flavor: { get_param: flavor }
+      security_groups:
+        - { get_resource: security_group }
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            sed -i -e '/^#Port/s/^.*$/Port $port/' /etc/ssh/sshd_config
+            systemctl restart ssh
+          params:
+            $port: { get_param: port }
+
+  volume:
+    type: OS::Cinder::Volume
+    condition: need_volume
+    properties:
+      name: { get_param: volume_name }
+      size: { get_param: volume_size }
+
+  attachment:
+    type: OS::Cinder::VolumeAttachment
+    condition: need_volume
+    properties:
+      instance_uuid: { get_resource: instance }
+      volume_id: { get_resource: volume }
+
+  security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      name: { get_param: 'OS::stack_name' }
+      rules:
+        - port_range_min: { get_param: port }
+          port_range_max: { get_param: port }
+          protocol: tcp
+          remote_ip_prefix: 0.0.0.0/0
+
+outputs:
+  output:
+    value:
+      # https://yaql.readthedocs.io/
+      yaql:
+        expression: "{ ipv4 => $.data.ipv4.select([$.addr]).where('.' in $[0]).first().first(), port => $.data.port }"
+        #
+        # { get_attr: [ my_instance, addresses, Ext-Net ] }
+        #
+        # looks like this:
+        #
+        # {
+        #          "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e9:50:e8",
+        #          "version": 6,
+        #          "addr": "2001:41d0:404:100::beb",
+        #          "OS-EXT-IPS:type": "fixed",
+        #          "port": "bae0fb68-f1cb-4c20-a1fc-c14e6ccd033a"
+        #        },
+        #        {
+        #          "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:e9:50:e8",
+        #          "version": 4,
+        #          "addr": "51.68.92.237",
+        #          "OS-EXT-IPS:type": "fixed",
+        #          "port": null
+        #        }
+        # }
+        #
+        data:
+          ipv4: { get_attr: [ instance, addresses, Ext-Net ] }
+          port: { get_param: port }

@@ -12,39 +12,44 @@
     enough_api_token: "{{ lookup('env', 'ENOUGH_API_TOKEN') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
     hosts_orig: "{{ lookup('file', '../../hosts-base.yml') | from_yaml }}"
-  pre_tasks:
-    - name: firewall for ssh ports
-      include_role:
-        name: firewall
-      vars:
-        firewall_server: "{{ item.name }}"
-        firewall_clients: [ 0.0.0.0/0 ]
-        firewall_protocols: [ tcp ]
-        firewall_ports: |
-          [ 22 ] + [
-            {% if item.name in hosts_orig.all.hosts %}
-              {{ hosts_orig.all.hosts[item.name].ansible_port | default('') }}
-            {% endif %}
-          ]
+  tasks:
+
+    - name: create instances
+      register: stacks
+      os_stack:
+        auth:
+          auth_url: "{{ clouds.ovh.auth.auth_url }}"
+          project_name: "{{ clouds.ovh.auth.project_name }}"
+          project_id: "{{ clouds.ovh.auth.project_id }}"
+          user_domain_name: "{{ clouds.ovh.auth.user_domain_name }}"
+          username: "{{ clouds.ovh.auth.username }}"
+          password: "{{ clouds.ovh.auth.password }}"
+        region_name: "{{ clouds.ovh.region_name }}"
+        name: "{{ item.name }}"
+        state: present
+        template: "../infrastructure/template-host.yaml"
+        parameters:
+          port: "{% if item.name in hosts_orig.all.hosts %}{{ hosts_orig.all.hosts[item.name].ansible_port | default('') }}{% else %}22{% endif %}"
+          flavor: "{{ item.flavor | default('s1-2') }}"
+          public_key: "{{ lookup('file', ssh_private_keyfile + '.pub') }}"
+          volume_size: "{% if item.volumes is defined %}{{ item.volumes[0].size }}{% else %}0{%endif%}"
+          volume_name: "{% if item.volumes is defined %}{{ item.volumes[0].name }}{% else %}noname{%endif%}"
       loop: "{{ molecule_yml.platforms }}"
 
-  roles:
-    - role: vm
-      vars:
-        state: present
-  tasks:
+    - debug:
+        var: stacks
 
     - name: instance configuration for molecule
       set_fact:
         instance_conf: |
           [
-            {% for s in server.results %}
+            {% for s in stacks.results %}
             {
-               'instance': '{{ s.openstack.name }}',
-               'address': '{{ s.openstack.accessIPv4 }}',
+               'instance': '{{ s.stack.stack_name }}',
+               'address': '{{ s.stack.outputs[0].output_value.ipv4 }}',
                'identity_file': '{{ ssh_private_keyfile }}',
-               'port': '{% if s.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[s.openstack.name].ansible_port is defined %}{{ hosts_orig.all.hosts[s.openstack.name].ansible_port }}{% else %}22{% endif %}',
-               'user': '{% if s.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[s.openstack.name].ansible_user is defined %}{{ hosts_orig.all.hosts[s.openstack.name].ansible_user }}{% else %}debian{% endif %}',
+               'port': '{{ s.stack.outputs[0].output_value.port }}',
+               'user': 'debian',
             },
             {% endfor %}
           ]
@@ -55,12 +60,12 @@
           {
            'all': {
             'hosts': {
-             {% for s in server.results %}
-              '{{ s.openstack.name }}':
+             {% for s in stacks.results %}
+              '{{ s.stack.name }}':
                 {
-                  'ansible_port': '{% if s.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[s.openstack.name].ansible_port is defined %}{{ hosts_orig.all.hosts[s.openstack.name].ansible_port }}{% else %}22{% endif %}',
-                  'ansible_host': '{{ s.openstack.accessIPv4 }}',
-                  'ansible_user': '{% if s.openstack.name in hosts_orig.all.hosts and hosts_orig.all.hosts[s.openstack.name].ansible_user is defined %}{{ hosts_orig.all.hosts[s.openstack.name].ansible_user }}{% else %}debian{% endif %}',
+                  'ansible_port': '{{ s.stack.outputs[0].output_value.port }}',
+                  'ansible_host': '{{ s.stack.outputs[0].output_value.ipv4 }}',
+                  'ansible_user': 'debian',
                 },
              {% endfor %}
             }
