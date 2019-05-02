@@ -37,7 +37,7 @@ def delegate_dns(zone, name, ip):
 
 
 def nsupdate(data, state):
-    basedir = settings.BASE_DIR
+    configdir = settings.CONFIG_DIR
     bind_host = data.get('bind_host', 'bind-host')
     args = [
         'server=localhost',
@@ -53,7 +53,7 @@ def nsupdate(data, state):
         '--user=debian',
         bind_host,
         '--one-line',
-        f'--playbook-dir={basedir}',
+        f'--playbook-dir={configdir}',
         '-m', 'nsupdate', '-a', " ".join(args),
         _env={
             'ANSIBLE_NOCOLOR': 'true',

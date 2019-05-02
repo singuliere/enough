@@ -13,10 +13,13 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 from os.path import dirname, join
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# Build paths inside the project like this: os.path.join(CONFIG_DIR, ...)
 ENOUGH_DOMAIN = os.environ.get('ENOUGH_DOMAIN', 'enough.community')
 
-BASE_DIR = os.path.expanduser(f'~/.enough/{ENOUGH_DOMAIN}')
+if os.path.exists('setup.cfg'):  # running from sources
+    CONFIG_DIR = '.'
+else:
+    CONFIG_DIR = os.path.expanduser(f'~/.enough/{ENOUGH_DOMAIN}')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -100,7 +103,7 @@ WSGI_APPLICATION = 'enough.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(CONFIG_DIR, 'db.sqlite3'),
     }
 }
 
