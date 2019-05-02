@@ -49,7 +49,7 @@ def nsupdate(data, state):
     r = ansible_utils.run(
         'ansible',
         '-i', f'{bind_host},',
-        '--private-key', f'{basedir}/id_rsa',
+        '--private-key', f'{configdir}/infrastructure_key',
         '--user=debian',
         bind_host,
         '--one-line',

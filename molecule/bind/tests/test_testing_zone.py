@@ -69,7 +69,7 @@ def test_subdomain_creation(host):
     other_bind_address = '1.2.3.4'
     localhost = host.get_host('ansible://localhost',
                               ansible_inventory=host.backend.ansible_inventory)
-    cmd = localhost.run('ssh -i ../../id_rsa '
+    cmd = localhost.run('ssh -i ../../infrastructure_key '
                         '-o BatchMode=yes -o StrictHostKeyChecking=no '
                         'subdomain@{address} {ns_ip} subsubdomain.test.{test_domain}'.format(
                             ns_ip=other_bind_address,

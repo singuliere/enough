@@ -52,11 +52,11 @@
     path: "/root/.enough/{{ domain }}"
     state: directory
 
-- name: cp /etc/ssh/ssh_host_rsa_key ~/.enough/{{ domain }}/id_rsa
+- name: cp /etc/ssh/ssh_host_rsa_key ~/.enough/{{ domain }}/infrastructure_key
   copy:
     remote_src: yes
     src: /etc/ssh/ssh_host_rsa_key
-    dest: "/root/.enough/{{ domain }}/id_rsa"
+    dest: "/root/.enough/{{ domain }}/infrastructure_key"
     owner: "{{ ansible_user }}"
     mode: 0444
 

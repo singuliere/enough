@@ -4,4 +4,4 @@ sudo apt-get install curl virtualenv python3 gcc libffi-dev libssl-dev python3-d
 virtualenv --python=python3 ../virtualenv
 source ../virtualenv/bin/activate
 pip install -r requirements.txt
-chmod 600 id_rsa # cannot be stored in git
+chmod 600 infrastructure_key # cannot be stored in git
