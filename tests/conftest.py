@@ -5,6 +5,7 @@ import sh
 import socket
 import time
 from enough.common.retry import retry
+from enough.common.openstack import OpenStack
 
 
 @pytest.fixture(autouse=True, scope='session')
@@ -88,11 +89,9 @@ def docker_name():
 
 
 @pytest.fixture
-def openstack_client():
-    c = sh.openstack.bake('--os-cloud=ovh', _env={
-        'OS_CLIENT_CONFIG_FILE': 'inventories/common/group_vars/all/clouds.yml',
-    })
-    yield c
-    for image_id in c.image.list(
-            '--property=enough=fixture', '-c', 'ID', '--format', 'value', _iter=True):
-        c.image.delete(image_id)
+def openstack_name():
+    prefix = 'enough_test_' + str(int(time.time()))
+    yield prefix
+    logging.getLogger('sh').setLevel(logging.CRITICAL)
+    o = OpenStack('inventories/common/group_vars/all/clouds.yml')
+    o.destroy_everything(prefix)

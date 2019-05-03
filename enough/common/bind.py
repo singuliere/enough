@@ -1,9 +1,10 @@
 import json
 import re
+import sh
 
 from django.conf import settings
 
-from enough.common import ansible_utils
+from enough.common.sh_utils import run_sh
 
 
 def delegate_dns(zone, name, ip):
@@ -37,7 +38,7 @@ def delegate_dns(zone, name, ip):
 
 
 def nsupdate(data, state):
-    basedir = settings.BASE_DIR
+    configdir = settings.CONFIG_DIR
     bind_host = data.get('bind_host', 'bind-host')
     args = [
         'server=localhost',
@@ -46,14 +47,14 @@ def nsupdate(data, state):
     for k in ('zone', 'record', 'ttl', 'type', 'value'):
         if k in data:
             args.append(f'{k}={data[k]}')
-    r = ansible_utils.run(
-        'ansible',
+    r = run_sh(
+        sh.ansible,
         '-i', f'{bind_host},',
-        '--private-key', f'{basedir}/id_rsa',
+        '--private-key', f'{configdir}/infrastructure_key',
         '--user=debian',
         bind_host,
         '--one-line',
-        f'--playbook-dir={basedir}',
+        f'--playbook-dir={configdir}',
         '-m', 'nsupdate', '-a', " ".join(args),
         _env={
             'ANSIBLE_NOCOLOR': 'true',

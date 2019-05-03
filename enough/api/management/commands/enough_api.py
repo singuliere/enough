@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'Create an API user'
 
     def add_arguments(self, parser):
-        parser.add_argument('--config', default=f'{settings.BASE_DIR}')
+        parser.add_argument('--config', default=f'{settings.CONFIG_DIR}')
         parser.add_argument('domain')
         parser.add_argument('username')
         parser.add_argument('password')

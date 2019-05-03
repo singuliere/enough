@@ -1,10 +1,67 @@
 import os
 import pytest
+import sh
 import yaml
 
-from enough.common.openstack import OpenStack
+from enough.common.openstack import Stack, Heat, OpenStack
 
 
+#
+# Stack
+#
+@pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
+                    reason='skip integration test')
+def test_stack_create_or_update(openstack_name):
+    d = {
+        'name': openstack_name,
+        'flavor': 's1-2',
+        'port': '22',
+        'volumes': [
+            {
+                'size': '1',
+                'name': openstack_name,
+            },
+        ],
+    }
+    s = Stack('inventories/common/group_vars/all/clouds.yml', d)
+    s.set_public_key('infrastructure_key.pub')
+    r = s.create_or_update()
+    assert r['port'] == '22'
+    assert 'ipv4' in r
+    assert r == s.create_or_update()
+    s.delete()
+
+
+#
+# Heat
+#
+@pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
+                    reason='skip integration test')
+def test_heat_is_working(tmpdir):
+    o = OpenStack('inventories/common/group_vars/all/clouds.yml')
+    assert o.generate_clouds(tmpdir)
+    heat_paths = []
+    for f in sorted(os.listdir(tmpdir)):
+        path = f'{tmpdir}/{f}'
+        if Heat(path).is_working():
+            heat_paths.append(path)
+    heat_regions = []
+    for path in heat_paths:
+        config = yaml.load(open(path))
+        heat_regions.append(config['clouds']['ovh']['region_name'])
+    assert heat_regions == ['GRA5', 'SBG5']
+
+
+def test_heat_definition():
+    definitions = Heat.get_stack_definitions()
+    assert 'bind-host' in definitions
+    definition = Heat.get_stack_definition('bind-host')
+    assert definition['name'] == 'bind-host'
+
+
+#
+# OpenStack
+#
 @pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
                     reason='skip integration test')
 def test_region_list():
@@ -14,29 +71,14 @@ def test_region_list():
 
 @pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
                     reason='skip integration test')
-def test_region_empty(openstack_client):
+def test_region_empty(openstack_name):
     clouds_file = 'inventories/common/group_vars/all/clouds.yml'
     if OpenStack.region_empty(clouds_file):
-        openstack_client.image.create(
-            '--property=enough=fixture', '--file=/dev/null', 'remove-me')
+        c = sh.openstack.bake('--os-cloud=ovh', _env={
+            'OS_CLIENT_CONFIG_FILE': clouds_file,
+        })
+        c.image.create('--file=/dev/null', openstack_name)
     assert not OpenStack.region_empty(clouds_file)
-
-
-@pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
-                    reason='skip integration test')
-def test_heat_is_working(openstack_client, tmpdir):
-    o = OpenStack('inventories/common/group_vars/all/clouds.yml')
-    assert o.generate_clouds(tmpdir)
-    heat_paths = []
-    for f in sorted(os.listdir(tmpdir)):
-        path = f'{tmpdir}/{f}'
-        if o.heat_is_working(path):
-            heat_paths.append(path)
-    heat_regions = []
-    for path in heat_paths:
-        config = yaml.load(open(path))
-        heat_regions.append(config['clouds']['ovh']['region_name'])
-    assert heat_regions == ['GRA5', 'SBG5']
 
 
 def test_generate_clouds(tmpdir, mocker):
@@ -68,12 +110,14 @@ def test_generate_clouds(tmpdir, mocker):
 def test_allocate_cloud(tmpdir, mocker):
     o = OpenStack('tests/enough/common/data/common/openstack/clouds.yml')
 
+    mocker.patch('enough.common.openstack.OpenStack.region_list',
+                 return_value=['REGION1', 'REGION2'])
+    mocker.patch('enough.common.openstack.OpenStack.region_empty',
+                 return_value=True)
+    mocker.patch('enough.common.openstack.Heat.is_working',
+                 return_value=True)
+
     directory = f'{tmpdir}/hosting'
-
-    mocker.patch.object(o, 'region_list', return_value=['REGION1', 'REGION2'])
-    mocker.patch.object(o, 'region_empty', return_value=True)
-    mocker.patch.object(o, 'heat_is_working', return_value=True)
-
     o.generate_clouds(directory)
 
     assert (o.allocate_cloud(directory, f'{tmpdir}/one') ==
