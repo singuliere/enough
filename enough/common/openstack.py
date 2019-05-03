@@ -7,6 +7,36 @@ import sh
 import yaml
 
 
+class Heat(object):
+
+    def __init__(self, config_file):
+        self.h = sh.openstack.bake('--os-cloud=ovh', _env={
+            'OS_CLIENT_CONFIG_FILE': config_file,
+        })
+
+    @staticmethod
+    def get_stack_definitions():
+        path = os.path.join(os.path.dirname(__file__), 'data/stacks.yaml')
+        return yaml.load(open(path))['stacks']
+
+    @staticmethod
+    def get_stack_definition(host):
+        definition = {
+            'name': host,
+        }
+        definition.update(Heat.get_stack_definitions()[host])
+        return definition
+
+    def is_working(self):
+        # retry to verify the API is stable
+        for _ in range(5):
+            try:
+                self.h.stack.list()
+            except sh.ErrorReturnCode_1:
+                return False
+        return True
+
+
 class OpenStack(object):
 
     def __init__(self, config_file):
@@ -89,26 +119,16 @@ class OpenStack(object):
         return servers.strip() == '' and images.strip() == ''
 
     @staticmethod
-    def heat_is_working(origin):
-        c = sh.openstack.bake('--os-cloud=ovh', _env={
-            'OS_CLIENT_CONFIG_FILE': origin,
-        })
-        # retry to verify the API is stable
-        for _ in range(5):
-            try:
-                c.stack.list()
-            except sh.ErrorReturnCode_1:
-                return False
-        return True
-
-    def allocate_cloud(self, directory, destination):
+    def allocate_cloud(directory, destination):
+        if os.path.exists(destination):
+            return True
         for f in sorted(os.listdir(directory)):
             origin = f'{directory}/{f}'
             os.link(origin, destination)
             if (
                     os.stat(origin).st_nlink == 2 and
-                    self.region_empty(origin) and
-                    self.heat_is_working(origin)
+                    OpenStack.region_empty(origin) and
+                    Heat(origin).is_working()
             ):
                 return origin
             else:

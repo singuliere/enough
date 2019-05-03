@@ -22,15 +22,18 @@ def test_region_empty(openstack_client):
     assert not OpenStack.region_empty(clouds_file)
 
 
+#
+# Heat
+#
 @pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
                     reason='skip integration test')
-def test_heat_is_working(openstack_client, tmpdir):
+def test_heat_is_working(tmpdir):
     o = OpenStack('inventories/common/group_vars/all/clouds.yml')
     assert o.generate_clouds(tmpdir)
     heat_paths = []
     for f in sorted(os.listdir(tmpdir)):
         path = f'{tmpdir}/{f}'
-        if o.heat_is_working(path):
+        if Heat(path).is_working():
             heat_paths.append(path)
     heat_regions = []
     for path in heat_paths:
@@ -68,12 +71,14 @@ def test_generate_clouds(tmpdir, mocker):
 def test_allocate_cloud(tmpdir, mocker):
     o = OpenStack('tests/enough/common/data/common/openstack/clouds.yml')
 
+    mocker.patch('enough.common.openstack.OpenStack.region_list',
+                 return_value=['REGION1', 'REGION2'])
+    mocker.patch('enough.common.openstack.OpenStack.region_empty',
+                 return_value=True)
+    mocker.patch('enough.common.openstack.Heat.is_working',
+                 return_value=True)
+
     directory = f'{tmpdir}/hosting'
-
-    mocker.patch.object(o, 'region_list', return_value=['REGION1', 'REGION2'])
-    mocker.patch.object(o, 'region_empty', return_value=True)
-    mocker.patch.object(o, 'heat_is_working', return_value=True)
-
     o.generate_clouds(directory)
 
     assert (o.allocate_cloud(directory, f'{tmpdir}/one') ==
