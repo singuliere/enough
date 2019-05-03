@@ -12,14 +12,17 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from os.path import dirname, join
+import sys
 
 # Build paths inside the project like this: os.path.join(CONFIG_DIR, ...)
 ENOUGH_DOMAIN = os.environ.get('ENOUGH_DOMAIN', 'enough.community')
 
 if os.path.exists('setup.cfg'):  # running from sources
     CONFIG_DIR = '.'
+    SHARE_DIR = '.'
 else:
     CONFIG_DIR = os.path.expanduser(f'~/.enough/{ENOUGH_DOMAIN}')
+    SHARE_DIR = f'{sys.prefix}/share/enough'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
