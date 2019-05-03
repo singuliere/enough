@@ -1,20 +1,10 @@
-import sh
 import json
-import io
 import re
+import sh
 import tempfile
 import textwrap
 
-
-def run(command, *args, **kwargs):
-    kwargs['_err_to_out'] = True
-    kwargs['_iter'] = "out"
-    kwargs['_truncate_exc'] = False
-    out = []
-    for line in sh.Command(command)(*args, **kwargs):
-        out.append(line)
-        print(line, end='', flush=True)
-    return "".join(out)
+from enough.common.sh_utils import run_sh
 
 
 def parse_output(output):
@@ -41,13 +31,13 @@ def get_variable(configuration_directory, role, variable, host):
         f.write(bytearray(playbook, 'utf-8'))
         f.flush()
         print(playbook)
-        out = io.StringIO()
-        sh.ansible_playbook('-e', f'rolevar={role}',
-                            '-e', 'variable={{ ' + variable + ' }}',
-                            '--limit', host,
-                            '--start-at-task=print variable',
-                            '-i', configuration_directory,
-                            '-i', 'inventories/common',
-                            f.name, _out=out, _env={'ANSIBLE_NOCOLOR': 'true'})
-        m = re.search(r'"variable": "(.*)"$', out.getvalue(), re.MULTILINE)
+        out = run_sh(sh.ansible_playbook,
+                     '-e', f'rolevar={role}',
+                     '-e', 'variable={{ ' + variable + ' }}',
+                     '--limit', host,
+                     '--start-at-task=print variable',
+                     '-i', 'inventories/common',
+                     '-i', configuration_directory,
+                     f.name, _env={'ANSIBLE_NOCOLOR': 'true'})
+        m = re.search(r'"variable": "(.*)"$', out, re.MULTILINE)
         return m.group(1)
