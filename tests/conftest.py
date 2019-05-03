@@ -1,3 +1,4 @@
+from io import StringIO
 import logging
 import os
 import pytest
@@ -87,12 +88,40 @@ def docker_name():
     docker_cleanup(prefix)
 
 
-@pytest.fixture
-def openstack_client():
+class OpenStackLeftovers(Exception):
+    pass
+
+
+@retry(OpenStackLeftovers, tries=7)
+def openstack_cleanup(prefix):
+    leftovers = []
     c = sh.openstack.bake('--os-cloud=ovh', _env={
         'OS_CLIENT_CONFIG_FILE': 'inventories/common/group_vars/all/clouds.yml',
     })
-    yield c
-    for image_id in c.image.list(
-            '--property=enough=fixture', '-c', 'ID', '--format', 'value', _iter=True):
-        c.image.delete(image_id)
+    for stack in c.stack.list('--format=value', '-c', 'Stack Name', _iter=True):
+        stack = stack.strip()
+        if prefix in stack:
+            leftovers.append(f'stack({stack})')
+            try:
+                out = StringIO()
+                c.stack.delete('--yes', '--wait', stack, _out=out)
+            except sh.ErrorReturnCode_1:
+                if 'Stack not found' not in out.getvalue():
+                    raise
+
+    for image in c.image.list('--format=value', '-c', 'Name', _iter=True):
+        image = image.strip()
+        if prefix in image:
+            leftovers.append(f'image({image})')
+            c.image.delete(image)
+
+    if leftovers:
+        raise OpenStackLeftovers('scheduled removal of ' + ' '.join(leftovers))
+
+
+@pytest.fixture
+def openstack_name():
+    prefix = 'enough_test_' + str(int(time.time()))
+    yield prefix
+    logging.getLogger('sh').setLevel(logging.CRITICAL)
+    openstack_cleanup(prefix)
