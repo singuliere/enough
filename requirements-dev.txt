@@ -46,7 +46,7 @@ docker[ssh]==3.7.2
 dockerpty==0.4.1          # via docker-compose
 docopt==0.6.2             # via docker-compose
 docutils==0.14            # via readme-renderer, sphinx
-dogpile.cache==0.6.8      # via openstacksdk
+dogpile.cache==0.7.1      # via openstacksdk
 fasteners==0.14.1         # via python-gilt
 filelock==3.0.10          # via tox
 flake8==3.5.0

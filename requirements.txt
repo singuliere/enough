@@ -41,7 +41,7 @@ docker-pycreds==0.4.0     # via docker
 docker[ssh]==3.7.2
 dockerpty==0.4.1          # via docker-compose
 docopt==0.6.2             # via docker-compose
-dogpile.cache==0.6.4      # via openstacksdk
+dogpile.cache==0.7.1      # via openstacksdk
 fasteners==0.14.1         # via python-gilt
 flake8==3.5.0             # via molecule
 future==0.17.1            # via cookiecutter
