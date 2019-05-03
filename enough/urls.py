@@ -27,6 +27,7 @@ from .views import member_index
 urlpatterns = [
     path('delegate-test-dns/', views.delegate_test_dns, name='delegate-test-dns'),
     path('create-or-upgrade/', views.create_or_upgrade, name='create-or-upgrade'),
+    path('hosted/<name>/', views.delete, name='delete'),
 
     url(r'^$', TemplateView.as_view(template_name='visitor/landing-index.html'),
         name='landing_index'),

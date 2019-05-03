@@ -24,10 +24,11 @@ def test_stack_create_or_update(openstack_name):
         ],
     }
     s = Stack('inventories/common/group_vars/all/clouds.yml', d)
-    r0 = s.create_or_update()
-    assert r0['port'] == '22'
-    assert 'ipv4' in r0
-    assert r0 == s.create_or_update()
+    s.set_public_key('infrastructure_key.pub')
+    r = s.create_or_update()
+    assert r['port'] == '22'
+    assert 'ipv4' in r
+    assert r == s.create_or_update()
     s.delete()
 
 
@@ -49,6 +50,13 @@ def test_heat_is_working(tmpdir):
         config = yaml.load(open(path))
         heat_regions.append(config['clouds']['ovh']['region_name'])
     assert heat_regions == ['GRA5', 'SBG5']
+
+
+def test_heat_definition():
+    definitions = Heat.get_stack_definitions()
+    assert 'bind-host' in definitions
+    definition = Heat.get_stack_definition('bind-host')
+    assert definition['name'] == 'bind-host'
 
 
 #

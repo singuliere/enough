@@ -4,6 +4,10 @@ import dns.resolver
 import gitlab_utils
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
+import tempfile
+
+from enough.common.openstack import OpenStack
+
 
 testinfra_hosts = ['api-host']
 
@@ -159,17 +163,22 @@ def test_create_or_upgrade(host):
     s = requests.Session()
     s.headers = {'Authorization': f'Token {token}'}
     s.verify = '../../certs'
-    data = {
-        "name": "bar",
-        "ip": "4.3.2.1",
-    }
-    r = s.post(f'{url}/create-or-upgrade/', json=data, timeout=60)
+    data = {"name": "bar"}
+    r = s.post(f'{url}/create-or-upgrade/', json=data, timeout=600)
     # print(r.text)
     r.raise_for_status()
     resolver = dns.resolver.Resolver()
     bind_ip = str(resolver.query(f'bind.{domain}.')[0])
     resolver.nameservers = [bind_ip]
-    assert '4.3.2.1' == str(resolver.query(f'ns-bar.d.{domain}.', 'a')[0])
+    assert str(resolver.query(f'ns-bar.d.{domain}.', 'a')[0])
+    r = s.delete(f'{url}/hosted/bar/', timeout=600)
+    with host.sudo():
+        content = host.file(f"/root/.enough/bar.d.{domain}/group_vars/all/clouds.yml").content
+    with tempfile.NamedTemporaryFile() as f:
+        f.write(content)
+        f.flush()
+        o = OpenStack(f.name)
+        o.destroy_everything(None)
 
 
 def test_generate_clouds(host):
