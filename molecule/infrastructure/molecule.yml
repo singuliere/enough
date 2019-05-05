@@ -19,8 +19,8 @@ provisioner:
     ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles
   inventory:
     links:
-      group_vars: ../../inventories/common/group_vars
-      host_vars: ../../inventories/common/host_vars
+      group_vars: ../../inventory/group_vars
+      host_vars: ../../inventory/host_vars
 scenario:
   name: infrastructure
   test_sequence:

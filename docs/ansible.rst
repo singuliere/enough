@@ -8,10 +8,9 @@ The default credentials (for Weblate, Discourse etc.) are only
 suitable for integration testing and must be overriden before
 deploying on publicly available hosts. The recommended way of doing this is to:
 
-* create a repository in `~/.enough/enough.community`
-* for each files containing secrets in `inventories/common`
-  (i.e. {host,group}_vars/\*\*/\*.yml`) create a matching file in
-  `~/.enough/enough.community`
+* create a repository in `~/.enough/enough.community/inventory`
+* for each files containing secrets i.e. {host,group}_vars/\*\*/\*.yml`) create a matching file in
+  `~/.enough/enough.community/inventory`
 * encrypt those files with `ansible vault <https://docs.ansible.com/ansible/latest/user_guide/vault.html>`_
 * share the password to decrypt the files with trusted administrators
 * push in a private repository
@@ -22,7 +21,7 @@ publicly exposed to brute force attacks.
 Creation
 --------
 
-Manually create `~/.enough/enough.community/group_vars/all/clouds.yml`
+Manually create `~/.enough/enough.community/inventory/group_vars/all/clouds.yml`
 by copying `clouds.yml.example` and getting values from `~/openrc.sh`
 and check it works:
 
@@ -96,7 +95,7 @@ The `ansible repository
    $ ansible-playbook --private-key ~/.enough/enough.community/infrastructure_key \
                       --vault-password-file=~/.enough/enough.community/vault_pass.txt \
                       -i inventories/common \
-                      -i ~/.enough/enough.community \
+                      -i ~/.enough/enough.community/inventory \
                       enough-community-playbook.yml
 
 Some hosts contain private information that belong to users who only
@@ -114,5 +113,5 @@ them as follows:
                     --vault-password-file=~/.enough/enough.community/vault_pass.txt \
                     -i inventories/common \
                     -i inventories/dachary \
-                    -i ~/.enough/enough.community \
+                    -i ~/.enough/enough.community/inventory \
                     enough-community-playbook.yml

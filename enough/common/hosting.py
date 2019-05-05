@@ -10,7 +10,7 @@ class Hosting(object):
         self.name = name
         self.domain = f"{name}.d.{settings.ENOUGH_DOMAIN}"
         self.config_dir = os.path.expanduser(f'~/.enough/{self.domain}')
-        d = f'{self.config_dir}/group_vars/all'
+        d = f'{self.config_dir}/inventory/group_vars/all'
         if not os.path.exists(d):
             os.makedirs(d)
         self.clouds_file = f'{d}/clouds.yml'

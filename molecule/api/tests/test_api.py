@@ -13,7 +13,7 @@ testinfra_hosts = ['api-host']
 
 
 def get_domain():
-    vars_dir = '../../inventories/common/group_vars/all'
+    vars_dir = '../../inventory/group_vars/all'
     return yaml.load(open(vars_dir + '/domain.yml'))['domain']
 
 
@@ -173,7 +173,8 @@ def test_create_or_upgrade(host):
     assert str(resolver.query(f'ns-bar.d.{domain}.', 'a')[0])
     r = s.delete(f'{url}/hosted/bar/', timeout=600)
     with host.sudo():
-        content = host.file(f"/root/.enough/bar.d.{domain}/group_vars/all/clouds.yml").content
+        content = host.file(
+            f"/root/.enough/bar.d.{domain}/inventory/group_vars/all/clouds.yml").content
     with tempfile.NamedTemporaryFile() as f:
         f.write(content)
         f.flush()

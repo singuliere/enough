@@ -76,7 +76,7 @@
       copy:
         content: |
           domain: enough.community
-        dest: "../../inventories/common/group_vars/all/domain.yml"
+        dest: "../../inventory/group_vars/all/domain.yml"
 
     - block:
 
@@ -112,14 +112,14 @@
           copy:
             content: |
               domain: {{ domain }}
-            dest: "../../inventories/common/group_vars/all/domain.yml"
+            dest: "../../inventory/group_vars/all/domain.yml"
 
       when: hosts_updates['all']['hosts']['bind-host'] is defined and (letsencrypt_staging | default(false))
 
     - name: Dump hosts_conf
       copy:
         content: "{{ hosts_orig | combine(hosts_updates, recursive=True) | to_yaml }}"
-        dest: "../../inventories/01-hosts.yml"
+        dest: "../../inventory-hosts.yml"
 
     - name: Dump instance config
       copy:

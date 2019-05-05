@@ -101,7 +101,7 @@
   vars:
     clouds_files:
       - "{{ api_config_directory }}/clouds.yml"
-      - "../../../../../inventories/common/group_vars/all/clouds.yml"
+      - "../../../../../inventory/group_vars/all/clouds.yml"
 
 - name: enough manage enough_api
   shell: |

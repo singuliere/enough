@@ -23,7 +23,7 @@ def test_stack_create_or_update(openstack_name):
             },
         ],
     }
-    s = Stack('inventories/common/group_vars/all/clouds.yml', d)
+    s = Stack('inventory/group_vars/all/clouds.yml', d)
     s.set_public_key('infrastructure_key.pub')
     r = s.create_or_update()
     assert r['port'] == '22'
@@ -38,7 +38,7 @@ def test_stack_create_or_update(openstack_name):
 @pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
                     reason='skip integration test')
 def test_heat_is_working(tmpdir):
-    o = OpenStack('inventories/common/group_vars/all/clouds.yml')
+    o = OpenStack('inventory/group_vars/all/clouds.yml')
     assert o.generate_clouds(tmpdir)
     heat_paths = []
     for f in sorted(os.listdir(tmpdir)):
@@ -65,14 +65,14 @@ def test_heat_definition():
 @pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
                     reason='skip integration test')
 def test_region_list():
-    o = OpenStack('inventories/common/group_vars/all/clouds.yml')
+    o = OpenStack('inventory/group_vars/all/clouds.yml')
     assert o.config['clouds']['ovh']['region_name'] in o.region_list()
 
 
 @pytest.mark.skipif('SKIP_OPENSTACK_INTEGRATION_TESTS' in os.environ,
                     reason='skip integration test')
 def test_region_empty(openstack_name):
-    clouds_file = 'inventories/common/group_vars/all/clouds.yml'
+    clouds_file = 'inventory/group_vars/all/clouds.yml'
     if OpenStack.region_empty(clouds_file):
         c = sh.openstack.bake('--os-cloud=ovh', _env={
             'OS_CLIENT_CONFIG_FILE': clouds_file,
