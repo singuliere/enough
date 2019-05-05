@@ -1,13 +1,23 @@
 import os
+import yaml
 
 from enough.common.hosting import Hosting
 
 
 def test_ensure_ssh_key(tmpdir):
-    h = Hosting({'name': 'NAME'})
+    h = Hosting('NAME')
     h.config_dir = tmpdir
     h.ensure_ssh_key()
     assert os.path.exists(f'{tmpdir}/infrastructure_key.pub')
+
+
+def test_populate_config(tmpdir):
+    h = Hosting('NAME')
+    h.config_dir = tmpdir
+    h.populate_config()
+
+    domain = yaml.load(open(f'{tmpdir}/inventory/group_vars/all/domain.yml'))
+    assert domain['letsencrypt_staging'] is True
 
 
 def test_create_hosts(tmpdir, mocker):

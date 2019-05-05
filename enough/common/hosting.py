@@ -1,8 +1,12 @@
 from django.conf import settings
 from enough.common import bind, openstack
+import textwrap
 import os
 import sh
 import yaml
+
+from enough.common.sh_utils import run_sh
+from enough.common import ansible_utils
 
 
 class Hosting(object):
@@ -44,6 +48,25 @@ class Hosting(object):
             }
         ))
         return names
+
+    def populate_config(self):
+        d = f'{self.config_dir}/inventory/group_vars/all'
+        if not os.path.exists(d):
+            os.makedirs(d)
+        open(f'{d}/private-key.yml', 'w').write(textwrap.dedent(f"""\
+        ---
+        ssh_private_keyfile: {self.config_dir}/infrastructure_key
+        """))
+
+        staging = ansible_utils.get_variable(
+            'bind', 'letsencrypt_staging', 'bind-host')
+
+        open(f'{d}/domain.yml', 'w').write(textwrap.dedent(f"""\
+        ---
+        domain: {self.domain}
+        production_domain: {self.domain}
+        letsencrypt_staging: {staging}
+        """))
 
     def create_or_upgrade(self):
         assert openstack.OpenStack.allocate_cloud(
