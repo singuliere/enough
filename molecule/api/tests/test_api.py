@@ -164,7 +164,7 @@ def test_create_or_upgrade(host):
     s.headers = {'Authorization': f'Token {token}'}
     s.verify = '../../certs'
     data = {"name": "bar"}
-    r = s.post(f'{url}/create-or-upgrade/', json=data, timeout=600)
+    r = s.post(f'{url}/create-or-upgrade/', json=data, timeout=3600)
     # print(r.text)
     r.raise_for_status()
     resolver = dns.resolver.Resolver()
