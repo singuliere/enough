@@ -79,6 +79,11 @@ class Hosting(object):
         bind.delegate_dns(f'd.{settings.ENOUGH_DOMAIN}', self.name, bind_host['ipv4'])
         names = self.create_hosts(f'{key}.pub')
         self.populate_config()
+        run_sh(ansible_utils.bake_ansible_playbook(),
+               '-i', f'{self.config_dir}/inventory',
+               '--private-key', key,
+               '--limit', ','.join(names + ('localhost',)),
+               'playbook.yml')
 
     def delete(self):
         for host in openstack.Heat.get_stack_definitions():
