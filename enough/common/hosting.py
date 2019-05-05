@@ -71,13 +71,17 @@ class Hosting(object):
     def create_or_upgrade(self):
         assert openstack.OpenStack.allocate_cloud(
             f'{settings.CONFIG_DIR}/api/hosting/all', self.clouds_file)
-        s = openstack.Stack(self.clouds_file, openstack.Heat.get_stack_definition('bind-host'))
+        s = openstack.Stack(self.clouds_file,
+                            openstack.Heat.get_stack_definition('bind-host'))
         key = self.ensure_ssh_key()
         s.set_public_key(f'{key}.pub')
         bind_host = s.create_or_update()
         bind.delegate_dns(f'd.{settings.ENOUGH_DOMAIN}', self.name, bind_host['ipv4'])
+        names = self.create_hosts(f'{key}.pub')
 
     def delete(self):
-        s = openstack.Stack(self.clouds_file, openstack.Heat.get_stack_definition('bind-host'))
-        s.delete()
+        for host in openstack.Heat.get_stack_definitions():
+            s = openstack.Stack(self.clouds_file,
+                                openstack.Heat.get_stack_definition(host))
+            s.delete()
         return {}
