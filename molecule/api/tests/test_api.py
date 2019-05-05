@@ -134,7 +134,7 @@ def api_sign_in(host):
 # debug with
 #
 # molecule login -s api --host=api-host
-# docker exec -ti tmp_enough-enough_1 journalctl -f --unit enough
+# docker exec -ti tmp_enough-enough_1 journalctl -n 200 -f --unit enough
 #
 def test_delegate_test_dns(host):
     token = api_sign_in(host)
