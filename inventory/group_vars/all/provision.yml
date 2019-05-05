@@ -1,0 +1,4 @@
+---
+ansible_user: debian
+ansible_port: 22
+ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null -o ControlMaster=auto -o ControlPersist=60s -o IdentitiesOnly=yes -o StrictHostKeyChecking=no

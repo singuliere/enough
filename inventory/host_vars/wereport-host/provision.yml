@@ -1,0 +1,4 @@
+---
+openstack_volumes:
+  - name: wereport-volume
+    size: 10
