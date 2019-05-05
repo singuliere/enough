@@ -2,6 +2,7 @@ from django.conf import settings
 from enough.common import bind, openstack
 import os
 import sh
+import yaml
 
 
 class Hosting(object):
@@ -20,6 +21,29 @@ class Hosting(object):
         if not os.path.exists(path):
             sh.ssh_keygen('-f', path, '-N', '', '-b', '4096', '-t', 'rsa')
         return path
+
+    def create_hosts(self, public_key):
+        names = ('bind-host', 'icinga-host', 'postfix-host', 'wazuh-host')
+        hosts = {}
+        for name in names:
+            s = openstack.Stack(self.clouds_file,
+                                openstack.Heat.get_stack_definition(name))
+            s.set_public_key(public_key)
+            r = s.create_or_update()
+            hosts[name] = {
+                'ansible_host': r['ipv4'],
+            }
+        d = f'{self.config_dir}/inventory'
+        if not os.path.exists(d):
+            os.makedirs(d)
+        open(f'{d}/hosts.yml', 'w').write(yaml.dump(
+            {
+                'all': {
+                    'hosts': hosts,
+                },
+            }
+        ))
+        return names
 
     def create_or_upgrade(self):
         assert openstack.OpenStack.allocate_cloud(
