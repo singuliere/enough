@@ -168,7 +168,9 @@ class OpenStack(object):
                     out = StringIO()
                     s.stack.delete('--yes', '--wait', stack, _out=out)
                 except sh.ErrorReturnCode_1:
-                    if 'Stack not found' not in out.getvalue():
+                    value = out.getvalue()
+                    if (('Stack not found' not in value) and
+                            ('could not be found' not in value)):
                         raise
 
         for image in s.image.list('--private', '--format=value', '-c', 'Name', _iter=True):
