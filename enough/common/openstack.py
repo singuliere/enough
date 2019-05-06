@@ -170,7 +170,7 @@ class OpenStack(object):
                 leftovers.append(f'stack({stack})')
                 try:
                     out = StringIO()
-                    s.stack.delete('--yes', '--wait', stack, _out=out)
+                    s.stack.delete('--yes', '--wait', stack, _out=out, _err_to_out=True)
                 except sh.ErrorReturnCode_1:
                     value = out.getvalue()
                     if (('Stack not found' not in value) and
