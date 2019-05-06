@@ -172,6 +172,7 @@ def test_create_or_upgrade(host):
     resolver.nameservers = [bind_ip]
     assert str(resolver.query(f'ns-bar.d.{domain}.', 'a')[0])
     r = s.delete(f'{url}/hosted/bar/', timeout=600)
+    r.raise_for_status()
     with host.sudo():
         content = host.file(
             f"/root/.enough/bar.d.{domain}/inventory/group_vars/all/clouds.yml").content

@@ -40,7 +40,8 @@ class Stack(object):
             parameters.append(f"--parameter=volume_size={d['volumes'][0]['size']}")
             parameters.append(f"--parameter=volume_name={d['volumes'][0]['name']}")
         run_sh(self.h, 'stack', action, d['name'],
-               '--wait', '--template', self.get_template(),
+               '--wait', '--timeout=600',
+               '--template', self.get_template(),
                *parameters)
         return self.get_output()
 
@@ -63,11 +64,14 @@ class Stack(object):
         return self._create_or_update(action)
 
     def delete(self):
-        self.h.stack.delete('--yes', '--wait', self.definition['name'])
+        name = self.definition['name']
+        if name not in self.list():
+            return
+
+        self.h.stack.delete('--yes', '--wait', name)
 
         @retry(AssertionError, 9)
         def wait_is_deleted():
-            name = self.definition['name']
             assert name not in self.list(), f'{name} deletion in progress'
         wait_is_deleted()
 
@@ -166,7 +170,7 @@ class OpenStack(object):
                 leftovers.append(f'stack({stack})')
                 try:
                     out = StringIO()
-                    s.stack.delete('--yes', '--wait', stack, _out=out)
+                    s.stack.delete('--yes', '--wait', stack, _out=out, _err_to_out=True)
                 except sh.ErrorReturnCode_1:
                     value = out.getvalue()
                     if (('Stack not found' not in value) and
