@@ -1,0 +1,5 @@
+global-exclude *~
+#
+# This allows dereferencing symbolic links, see https://stackoverflow.com/questions/55976838/how-can-setup-py-sdist-dereference-symbolic-links
+#
+graft molecule/
