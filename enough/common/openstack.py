@@ -40,7 +40,8 @@ class Stack(object):
             parameters.append(f"--parameter=volume_size={d['volumes'][0]['size']}")
             parameters.append(f"--parameter=volume_name={d['volumes'][0]['name']}")
         run_sh(self.h, 'stack', action, d['name'],
-               '--wait', '--template', self.get_template(),
+               '--wait', '--timeout=600',
+               '--template', self.get_template(),
                *parameters)
         return self.get_output()
 
