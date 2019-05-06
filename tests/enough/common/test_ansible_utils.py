@@ -12,5 +12,5 @@ def test_parse_output():
 def test_get_variable():
     defaults = yaml.load(open('molecule/api/roles/api/defaults/main.yml'))
     variable = 'api_admin_password'
-    value = ansible_utils.get_variable('inventories', 'api', variable, 'api-host')
+    value = ansible_utils.get_variable('api', variable, 'api-host')
     assert defaults[variable] == value

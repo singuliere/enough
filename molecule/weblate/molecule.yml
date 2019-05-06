@@ -15,7 +15,7 @@ platforms:
 provisioner:
   name: ansible
   options:
-    i: ../../inventories/common/firewall.yml
+    i: ../../inventory/firewall.yml
     limit: bind-host,postfix-host,icinga-host,weblate-host,localhost
   lint:
     name: ansible-lint
@@ -23,8 +23,8 @@ provisioner:
     ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../postfix/roles:../bind/roles:../icinga/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
   inventory:
     links:
-      group_vars: ../../inventories/common/group_vars
-      host_vars: ../../inventories/common/host_vars
+      group_vars: ../../inventory/group_vars
+      host_vars: ../../inventory/host_vars
 scenario:
   name: weblate
   test_sequence:

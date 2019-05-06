@@ -40,8 +40,7 @@ class Stack(object):
             parameters.append(f"--parameter=volume_size={d['volumes'][0]['size']}")
             parameters.append(f"--parameter=volume_name={d['volumes'][0]['name']}")
         run_sh(self.h, 'stack', action, d['name'],
-               '--format=json', '--wait',
-               '--template', self.get_template(),
+               '--wait', '--template', self.get_template(),
                *parameters)
         return self.get_output()
 
@@ -82,16 +81,23 @@ class Heat(object):
 
     @staticmethod
     def get_stack_definitions():
-        path = os.path.join(os.path.dirname(__file__), 'data/stacks.yaml')
-        return yaml.load(open(path))['stacks']
+        out = StringIO()
+        sh.ansible_inventory('-i', f'{settings.SHARE_DIR}/inventory',
+                             '-i', f'{settings.CONFIG_DIR}/inventory',
+                             '--vars', '--list', _out=out)
+        inventory = json.loads(out.getvalue())
+        return inventory['_meta']['hostvars']
 
     @staticmethod
     def get_stack_definition(host):
+        h = Heat.get_stack_definitions()[host]
         definition = {
             'name': host,
+            'port': h.get('ansible_port', '22'),
+            'flavor': h.get('openstack_flavor', 's1-2'),
         }
-        h = Heat.get_stack_definitions()[host] or {}
-        definition.update(h)
+        if 'openstack_volumes' in h:
+            definition['volumes'] = h['openstack_volumes']
         return definition
 
     def is_working(self):
@@ -162,7 +168,9 @@ class OpenStack(object):
                     out = StringIO()
                     s.stack.delete('--yes', '--wait', stack, _out=out)
                 except sh.ErrorReturnCode_1:
-                    if 'Stack not found' not in out.getvalue():
+                    value = out.getvalue()
+                    if (('Stack not found' not in value) and
+                            ('could not be found' not in value)):
                         raise
 
         for image in s.image.list('--private', '--format=value', '-c', 'Name', _iter=True):

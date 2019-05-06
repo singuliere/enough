@@ -93,5 +93,5 @@ def openstack_name():
     prefix = 'enough_test_' + str(int(time.time()))
     yield prefix
     logging.getLogger('sh').setLevel(logging.CRITICAL)
-    o = OpenStack('inventories/common/group_vars/all/clouds.yml')
+    o = OpenStack('inventory/group_vars/all/clouds.yml')
     o.destroy_everything(prefix)

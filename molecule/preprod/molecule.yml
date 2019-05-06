@@ -57,15 +57,15 @@ platforms:
 provisioner:
   name: ansible
   options:
-    i: ../../inventories/common/firewall.yml
+    i: ../../inventory/firewall.yml
   lint:
     name: ansible-lint
   env:
     ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../postfix/roles:../bind/roles:../icinga/roles:../backup/roles:../misc/roles:../packages/roles:../jdauphant.nginx/roles:../letsencrypt-nginx/roles
   inventory:
     links:
-      group_vars: ../../inventories/common/group_vars
-      host_vars: ../../inventories/common/host_vars
+      group_vars: ../../inventory/group_vars
+      host_vars: ../../inventory/host_vars
 scenario:
   name: preprod
   test_sequence:
