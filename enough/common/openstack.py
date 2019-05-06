@@ -64,11 +64,14 @@ class Stack(object):
         return self._create_or_update(action)
 
     def delete(self):
-        self.h.stack.delete('--yes', '--wait', self.definition['name'])
+        name = self.definition['name']
+        if name not in self.list():
+            return
+
+        self.h.stack.delete('--yes', '--wait', name)
 
         @retry(AssertionError, 9)
         def wait_is_deleted():
-            name = self.definition['name']
             assert name not in self.list(), f'{name} deletion in progress'
         wait_is_deleted()
 
