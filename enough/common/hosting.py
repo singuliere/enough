@@ -86,8 +86,9 @@ class Hosting(object):
                'playbook.yml')
 
     def delete(self):
-        for host in openstack.Heat.get_stack_definitions():
+        names = ('bind-host', 'icinga-host', 'postfix-host', 'wazuh-host')
+        for name in names:
             s = openstack.Stack(self.clouds_file,
-                                openstack.Heat.get_stack_definition(host))
+                                openstack.Heat.get_stack_definition(name))
             s.delete()
         return {}
