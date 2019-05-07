@@ -58,8 +58,7 @@ class Hosting(object):
         ssh_private_keyfile: {self.config_dir}/infrastructure_key
         """))
 
-        staging = ansible_utils.get_variable(
-            'bind', 'letsencrypt_staging', 'bind-host')
+        staging = os.path.exists('/etc/ssl/certs/fakelerootx1.pem')
 
         open(f'{d}/domain.yml', 'w').write(textwrap.dedent(f"""\
         ---

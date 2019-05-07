@@ -17,7 +17,7 @@ def test_populate_config(tmpdir):
     h.populate_config()
 
     domain = yaml.load(open(f'{tmpdir}/inventory/group_vars/all/domain.yml'))
-    assert domain['letsencrypt_staging'] is True
+    assert 'letsencrypt_staging' in domain
 
 
 def test_create_hosts(tmpdir, mocker):
