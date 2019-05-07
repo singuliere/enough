@@ -1,2 +1,2 @@
 ---
-enough_config_directory: "{{ lookup('pipe', 'echo ~/.enough') }}"
+enough_config_directory: "{{ '~/.enough' | expanduser }}"
