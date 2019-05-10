@@ -5,15 +5,11 @@ lint:
   name: yamllint
 platforms:
   - name: bind-host
-    flavor: "s1-2"
   - name: bind-client-host
-    flavor: "s1-2"
     groups:
       - firewall_ssh_server_group
   - name: external-host
-    flavor: "s1-2"
   - name: icinga-host
-    flavor: "s1-2"
 provisioner:
   name: ansible
   options:

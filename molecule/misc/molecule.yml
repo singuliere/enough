@@ -5,7 +5,6 @@ lint:
   name: yamllint
 platforms:
   - name: debian-host
-    flavor: "s1-2"
 provisioner:
   name: ansible
   lint:
