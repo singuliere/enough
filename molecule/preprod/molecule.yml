@@ -5,55 +5,35 @@ lint:
   name: yamllint
 platforms:
   - name: api-host
-    flavor: "s1-2"
   - name: bind-host
-    flavor: "s1-2"
   - name: postfix-host
-    flavor: "s1-2"
     # remove when https://github.com/ansible/molecule/issues/1650 is resolved
     groups:
       - wazuh_agent
   - name: icinga-host
-    flavor: "s1-2"
   - name: wazuh-host
-    flavor: "s1-2"
   - name: weblate-host
-    flavor: "s1-4"
     # remove when https://github.com/ansible/molecule/issues/1650 is resolved
     groups:
       - pets
   - name: gitlab-host
-    flavor: "s1-4"
   - name: runner-host
-    flavor: "s1-4"
   - name: packages-host
-    flavor: "s1-4"
   - name: website-host
-    flavor: "s1-2"
   - name: chat-host
-    flavor: "s1-2"
   - name: cloud-host
-    flavor: "s1-2"
     # remove when https://github.com/ansible/molecule/issues/1650 is resolved
     groups:
       - enough
       - firewall_ssh_server_group
       - firewall_web_server_group
-    volumes:
-      - name: cloud-volume
-        size: 100
   - name: wereport-host
-    flavor: "s1-2"
     # remove when https://github.com/ansible/molecule/issues/1650 is resolved
     groups:
       - enough
       - firewall_ssh_server_group
       - firewall_web_server_group
-    volumes:
-      - name: wereport-volume
-        size: 10
   - name: forum-host
-    flavor: "s1-4"
 provisioner:
   name: ansible
   options:

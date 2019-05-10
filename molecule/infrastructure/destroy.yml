@@ -5,20 +5,9 @@
   vars:
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
-    hosts_orig: "{{ lookup('file', '../../hosts-base.yml') | from_yaml }}"
   tasks:
 
     - name: delete instances
-      register: stacks
-      os_stack:
-        auth:
-          auth_url: "{{ clouds.ovh.auth.auth_url }}"
-          project_name: "{{ clouds.ovh.auth.project_name }}"
-          project_id: "{{ clouds.ovh.auth.project_id }}"
-          user_domain_name: "{{ clouds.ovh.auth.user_domain_name }}"
-          username: "{{ clouds.ovh.auth.username }}"
-          password: "{{ clouds.ovh.auth.password }}"
-        region_name: "{{ clouds.ovh.region_name }}"
-        name: "{{ item.name }}"
-        state: absent
+      shell: |
+        python -m enough.internal.cmd host delete {{ item.name }}
       loop: "{{ molecule_yml.platforms }}"

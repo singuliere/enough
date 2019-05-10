@@ -1,4 +1,4 @@
 ---
 openstack_volumes:
   - name: cloud-volume
-    size: 100
+    size: 10

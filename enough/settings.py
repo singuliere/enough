@@ -20,6 +20,9 @@ ENOUGH_DOMAIN = os.environ.get('ENOUGH_DOMAIN', 'enough.community')
 if os.path.exists('setup.cfg'):  # running from sources
     CONFIG_DIR = '.'
     SHARE_DIR = '.'
+elif os.path.exists('molecule.yml') and os.path.exists('../../setup.cfg'):  # running from molecule
+    CONFIG_DIR = '../..'
+    SHARE_DIR = '../..'
 else:
     CONFIG_DIR = os.path.expanduser(f'~/.enough/{ENOUGH_DOMAIN}')
     SHARE_DIR = f'{sys.prefix}/share/enough'

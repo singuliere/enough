@@ -5,11 +5,8 @@ lint:
   name: yamllint
 platforms:
   - name: bind-host
-    flavor: "s1-2"
   - name: icinga-host
-    flavor: "s1-2"
   - name: packages-host
-    flavor: "s1-4"
 provisioner:
   name: ansible
   options:

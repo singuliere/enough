@@ -6,7 +6,6 @@ pytest-cov==2.6.1
 pytest-mock==1.10.4
 pytest-django==3.4.8
 sphinx==1.8.2
-testinfra==1.14.0
 tox==3.5
 twine==1.13.0
 dnspython==1.16.0

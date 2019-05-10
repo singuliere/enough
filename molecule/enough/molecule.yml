@@ -5,20 +5,13 @@ lint:
   name: yamllint
 platforms:
   - name: bind-host
-    flavor: "s1-2"
   - name: postfix-host
-    flavor: "s1-2"
   - name: icinga-host
-    flavor: "s1-2"
   - name: cloud-host
-    flavor: "s1-2"
     groups:
       - enough
       - firewall_ssh_server_group
       - firewall_web_server_group
-    volumes:
-      - name: cloud-volume
-        size: 10
 provisioner:
   name: ansible
   options:

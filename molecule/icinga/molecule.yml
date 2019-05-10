@@ -5,15 +5,11 @@ lint:
   name: yamllint
 platforms:
   - name: bind-host
-    flavor: "s1-2"
   - name: icinga-host
-    flavor: "s1-2"
   - name: monitoring-client-host
-    flavor: "s1-2"
     groups:
       - firewall_ssh_server_group
   - name: monitoring-client2-host
-    flavor: "s1-2"
     groups:
       - firewall_ssh_server_group
 provisioner:

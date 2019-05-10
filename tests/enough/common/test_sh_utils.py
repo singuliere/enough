@@ -33,3 +33,22 @@ def test_run_sh_long(capsys):
     expected = 'a' * length
     assert expected in out
     assert f'STDOUT:\n{expected}' in err
+
+
+def test_run_sh_display_quiet(capsys):
+    logging.getLogger('sh').setLevel(logging.CRITICAL)
+    r = sh_utils.run_sh_display(sh.Command('./tests/enough/common/bin/sh_utils_run_ok.sh'), False)
+    expected = "stdout1\nstdout2\nstderr1\n"
+    assert r == expected
+    out, err = capsys.readouterr()
+    assert out == ''
+    assert err == ''
+
+
+def test_run_sh_display_verbose(capsys):
+    logging.getLogger('sh').setLevel(logging.CRITICAL)
+    r = sh_utils.run_sh_display(sh.Command('./tests/enough/common/bin/sh_utils_run_ok.sh'), True)
+    expected = "stdout1\nstdout2\nstderr1\n"
+    assert r == expected
+    out, err = capsys.readouterr()
+    assert out == expected

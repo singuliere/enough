@@ -9,7 +9,7 @@ docker
 docker-compose
 -e git+https://github.com/fmnisme/python-icinga2api.git@9a1a3cc7968d6c72bf49e97ef387b2824e6835e9#egg=icinga2api
 jinja2>=1.1
-molecule==2.16.0
+molecule==2.19.0
 netaddr==0.7.19
 openstacksdk==0.22.0
 python-openstackclient==3.18.0

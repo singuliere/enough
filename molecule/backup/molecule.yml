@@ -5,15 +5,13 @@ lint:
   name: yamllint
 platforms:
   - name: bind-host
-    flavor: "s1-2"
   - name: weblate-host
-    flavor: "s1-2"
     groups:
       - pets
 provisioner:
   name: ansible
   options:
-    i: ../../inventory/firewall.yml,../../inventory/02-all.yml
+    i: ../../inventory/firewall.yml
     limit: bind-host,weblate-host,localhost
   lint:
     name: ansible-lint

@@ -5,15 +5,10 @@ lint:
   name: yamllint
 platforms:
   - name: bind-host
-    flavor: "s1-2"
   - name: postfix-host
-    flavor: "s1-2"
   - name: icinga-host
-    flavor: "s1-2"
   - name: runner-host
-    flavor: "s1-2"
   - name: gitlab-host
-    flavor: "s1-4"
     groups:
       - gitlab
 provisioner:

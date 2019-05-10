@@ -5,7 +5,6 @@ lint:
   name: yamllint
 platforms:
   - name: server-host
-    flavor: "s1-2"
     groups:
       - firewall_dns_server_group
       - firewall_postfix_server_group
@@ -14,7 +13,6 @@ platforms:
       - firewall_ssh_server_group
       - firewall_icmp_server_group
   - name: client-host
-    flavor: "s1-2"
     groups:
       - firewall_dns_client_group
       - firewall_postfix_client_group
@@ -23,7 +21,6 @@ platforms:
       - firewall_ssh_client_group
       - firewall_icmp_client_group
   - name: gitlab-host
-    flavor: "s1-2"
 provisioner:
   name: ansible
   lint:

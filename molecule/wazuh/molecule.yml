@@ -5,15 +5,11 @@ lint:
   name: yamllint
 platforms:
   - name: bind-host
-    flavor: "s1-2"
   - name: postfix-host
-    flavor: "s1-2"
     groups:
       - wazuh_agent
   - name: icinga-host
-    flavor: "s1-2"
   - name: wazuh-host
-    flavor: "s1-2"
 provisioner:
   name: ansible
   options:

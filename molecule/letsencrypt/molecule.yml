@@ -5,9 +5,7 @@ lint:
   name: yamllint
 platforms:
   - name: certs-host
-    flavor: "s1-2"
   - name: nocerts-host
-    flavor: "s1-2"
 provisioner:
   name: ansible
   lint:
