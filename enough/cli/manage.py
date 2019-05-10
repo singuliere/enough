@@ -13,7 +13,6 @@ class Manage(Command):
 
     def take_action(self, parsed_args):
         os.environ['ENOUGH_DOMAIN'] = self.app.options.domain
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'enough.settings')
         try:
             from django.core.management import execute_from_command_line
         except ImportError as exc:
