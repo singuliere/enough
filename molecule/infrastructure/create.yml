@@ -11,30 +11,22 @@
     #
     enough_api_token: "{{ lookup('env', 'ENOUGH_API_TOKEN') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
-    hosts_orig: "{{ lookup('file', '../../hosts-base.yml') | from_yaml }}"
   tasks:
 
     - name: create instances
-      register: stacks
-      os_stack:
-        auth:
-          auth_url: "{{ clouds.ovh.auth.auth_url }}"
-          project_name: "{{ clouds.ovh.auth.project_name }}"
-          project_id: "{{ clouds.ovh.auth.project_id }}"
-          user_domain_name: "{{ clouds.ovh.auth.user_domain_name }}"
-          username: "{{ clouds.ovh.auth.username }}"
-          password: "{{ clouds.ovh.auth.password }}"
-        region_name: "{{ clouds.ovh.region_name }}"
-        name: "{{ item.name }}"
-        state: present
-        template: "../infrastructure/template-host.yaml"
-        parameters:
-          port: "{% if item.name in hosts_orig.all.hosts %}{{ hosts_orig.all.hosts[item.name].ansible_port | default('') }}{% else %}22{% endif %}"
-          flavor: "{{ item.flavor | default('s1-2') }}"
-          public_key: "{{ lookup('file', ssh_private_keyfile + '.pub') }}"
-          volume_size: "{% if item.volumes is defined %}{{ item.volumes[0].size }}{% else %}0{%endif%}"
-          volume_name: "{% if item.volumes is defined %}{{ item.volumes[0].name }}{% else %}noname{%endif%}"
+      register: out
+      shell: |
+        python -m enough.internal.cmd host create --format json {{ item.name }}
       loop: "{{ molecule_yml.platforms }}"
+
+    - name: stacks
+      set_fact:
+        stacks: |
+          [
+            {% for s in out.results %}
+            {{ s.stdout }},
+            {% endfor %}
+          ]
 
     - debug:
         var: stacks
@@ -43,34 +35,20 @@
       set_fact:
         instance_conf: |
           [
-            {% for s in stacks.results %}
+            {% for s in stacks %}
             {
-               'instance': '{{ s.stack.stack_name }}',
-               'address': '{{ s.stack.outputs[0].output_value.ipv4 }}',
+               'instance': '{{ s.name }}',
+               'address': '{{ s.ip }}',
                'identity_file': '{{ ssh_private_keyfile }}',
-               'port': '{{ s.stack.outputs[0].output_value.port }}',
-               'user': 'debian',
+               'port': '{{ s.port }}',
+               'user': '{{ s.user }}',
             },
             {% endfor %}
           ]
 
-    - name: hosts updates for inventory
+    - name: bind_host_ip
       set_fact:
-        hosts_updates: |
-          {
-           'all': {
-            'hosts': {
-             {% for s in stacks.results %}
-              '{{ s.stack.name }}':
-                {
-                  'ansible_port': '{{ s.stack.outputs[0].output_value.port }}',
-                  'ansible_host': '{{ s.stack.outputs[0].output_value.ipv4 }}',
-                  'ansible_user': 'debian',
-                },
-             {% endfor %}
-            }
-           }
-          }
+        bind_host_ip: "{% for s in stacks %}{% if s.name == 'bind-host' %}{{ s.ip }}{% endif %}{% endfor %}"
 
     - name: set the default domain to enough.community
       copy:
@@ -100,13 +78,13 @@
             body: |
               {
                 "name": "{{ subdomain }}",
-                "ip": "{{ hosts_updates['all']['hosts']['bind-host']['ansible_host'] }}"
+                "ip": "{{ bind_host_ip }}"
               }
             status_code: 201
           register: delegate_dns
 
         - debug:
-            msg: "{{ delegate_dns.json }}"
+            var: delegate_dns.json
 
         - name: save the test sub-domain
           copy:
@@ -114,7 +92,7 @@
               domain: {{ domain }}
             dest: "../../inventory/group_vars/all/domain.yml"
 
-      when: hosts_updates['all']['hosts']['bind-host'] is defined and (letsencrypt_staging | default(false))
+      when: bind_host_ip != '' and (letsencrypt_staging | default(false))
 
     - name: Dump instance config
       copy:

@@ -5,12 +5,7 @@ lint:
   name: yamllint
 platforms:
   - name: bind-host
-    flavor: "s1-2"
-  - name: volume-host
-    volumes:
-      - name: vol1
-        size: 2
-    flavor: "s1-2"
+  - name: wereport-host
 provisioner:
   name: ansible
   lint:
