@@ -1,9 +1,12 @@
+import os
 import sys
 
 from cliff.app import App
 from cliff.commandmanager import CommandManager
 
 from enough.version import __version__
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'enough.settings')
 
 
 class InternalApp(App):
