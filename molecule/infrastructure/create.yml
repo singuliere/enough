@@ -6,10 +6,6 @@
   vars:
     molecule_file: "{{ lookup('env', 'MOLECULE_FILE') }}"
     molecule_instance_config: "{{ lookup('env', 'MOLECULE_INSTANCE_CONFIG') }}"
-    #
-    # obtained manually from api.{{ production_domain }}
-    #
-    enough_api_token: "{{ lookup('env', 'ENOUGH_API_TOKEN') }}"
     molecule_yml: "{{ lookup('file', molecule_file) | from_yaml }}"
   tasks:
 
@@ -46,53 +42,9 @@
             {% endfor %}
           ]
 
-    - name: bind_host_ip
-      set_fact:
-        bind_host_ip: "{% for s in stacks %}{% if s.name == 'bind-host' %}{{ s.ip }}{% endif %}{% endfor %}"
-
-    - name: set the default domain to enough.community
-      copy:
-        content: |
-          domain: enough.community
-        dest: "../../inventory/group_vars/all/domain.yml"
-
-    - block:
-
-        - name: generate subdomain
-          shell: date +%s | rev | base32 | tr -d =
-          register: cmd
-
-        - set_fact:
-            subdomain: "{{ cmd.stdout|lower }}"
-
-        - set_fact:
-            domain: "{{ subdomain }}.test.enough.community"
-
-        - name: create DNS delegation for {{ domain }} (requires access to api.{{ production_domain }})
-          uri:
-            url: https://api.{{ production_domain }}/delegate-test-dns/
-            method: POST
-            headers:
-              Authorization: "Token {{ enough_api_token }}"
-            body_format: json
-            body: |
-              {
-                "name": "{{ subdomain }}",
-                "ip": "{{ bind_host_ip }}"
-              }
-            status_code: 201
-          register: delegate_dns
-
-        - debug:
-            var: delegate_dns.json
-
-        - name: save the test sub-domain
-          copy:
-            content: |
-              domain: {{ domain }}
-            dest: "../../inventory/group_vars/all/domain.yml"
-
-      when: bind_host_ip != '' and (letsencrypt_staging | default(false))
+    - name: if bind-host exists, create and delegate a new test subdomain
+      shell: |
+        python -m enough.internal.cmd --domain {{ production_domain }} create test subdomain
 
     - name: Dump instance config
       copy:

@@ -5,6 +5,7 @@ pip-tools==3.6.1
 pytest-cov==2.6.1
 pytest-mock==1.10.4
 pytest-django==3.4.8
+requests_mock==1.6.0
 sphinx==1.8.2
 tox==3.5
 twine==1.13.0

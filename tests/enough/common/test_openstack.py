@@ -2,6 +2,9 @@ import os
 import pytest
 import sh
 import yaml
+import requests_mock as requests_mock_module
+
+from tests.modified_environ import modified_environ
 
 from enough.common.openstack import Stack, Heat, OpenStack
 
@@ -57,6 +60,33 @@ def test_heat_definition():
     assert 'bind-host' in definitions
     definition = Heat.get_stack_definition('bind-host')
     assert definition['name'] == 'bind-host'
+
+
+def test_create_test_subdomain_no_bind(mocker):
+    mocker.patch('os.path.exists', return_value=True)
+    mocker.patch('enough.common.openstack.Stack.list', return_value=[])
+    h = Heat('inventory/group_vars/all/clouds.yml')
+    assert h.create_test_subdomain('my.tld') is None
+
+
+def test_create_test_subdomain_with_bind(tmpdir, mocker, requests_mock):
+    mocker.patch('enough.settings.CONFIG_DIR', str(tmpdir))
+    d = f'{tmpdir}/inventory/group_vars/all'
+    os.makedirs(d)
+    assert not os.path.exists(f'{d}/domain.yml')
+    mocker.patch('os.path.exists', return_value=True)
+    mocker.patch('enough.common.openstack.Stack.list', return_value=['bind-host'])
+    mocker.patch('enough.common.openstack.Stack.set_public_key')
+    mocker.patch('enough.common.openstack.Stack.create_or_update', return_value={
+        'ipv4': '1.2.3.4',
+    })
+    mocker.patch('enough.common.openstack.Heat.get_stack_definition')
+    requests_mock.post(requests_mock_module.ANY, status_code=201)
+    h = Heat('inventory/group_vars/all/clouds.yml')
+    with modified_environ(ENOUGH_API_TOKEN="TOKEN"):
+        fqdn = h.create_test_subdomain('my.tld')
+    assert '.test.my.tld' in fqdn
+    assert os.path.exists(f'{d}/domain.yml')
 
 
 #
