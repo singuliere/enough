@@ -5,7 +5,7 @@ import os
 import sh
 import yaml
 
-from enough.common.sh_utils import run_sh
+from enough.common.sh_utils import run_sh_display
 from enough.common import ansible_utils
 
 
@@ -19,6 +19,7 @@ class Hosting(object):
         if not os.path.exists(d):
             os.makedirs(d)
         self.clouds_file = f'{d}/clouds.yml'
+        self.debug = False
 
     def ensure_ssh_key(self):
         path = f'{self.config_dir}/infrastructure_key'
@@ -33,6 +34,7 @@ class Hosting(object):
             s = openstack.Stack(self.clouds_file,
                                 openstack.Heat.get_stack_definition(name))
             s.set_public_key(public_key)
+            s.debug = self.debug
             r = s.create_or_update()
             hosts[name] = {
                 'ansible_host': r['ipv4'],
@@ -78,11 +80,12 @@ class Hosting(object):
         bind.delegate_dns(f'd.{settings.ENOUGH_DOMAIN}', self.name, bind_host['ipv4'])
         names = self.create_hosts(f'{key}.pub')
         self.populate_config()
-        run_sh(ansible_utils.bake_ansible_playbook(),
-               '-i', f'{self.config_dir}/inventory',
-               '--private-key', key,
-               '--limit', ','.join(names + ('localhost',)),
-               'playbook.yml')
+        run_sh_display(ansible_utils.bake_ansible_playbook(),
+                       self.debug,
+                       '-i', f'{self.config_dir}/inventory',
+                       '--private-key', key,
+                       '--limit', ','.join(names + ('localhost',)),
+                       'playbook.yml')
 
     def delete(self):
         names = ('bind-host', 'icinga-host', 'postfix-host', 'wazuh-host')
