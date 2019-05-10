@@ -116,11 +116,6 @@
 
       when: hosts_updates['all']['hosts']['bind-host'] is defined and (letsencrypt_staging | default(false))
 
-    - name: Dump hosts_conf
-      copy:
-        content: "{{ hosts_orig | combine(hosts_updates, recursive=True) | to_yaml }}"
-        dest: "../../inventory-hosts.yml"
-
     - name: Dump instance config
       copy:
         # NOTE(retr0h): Workaround for Ansible 2.2.

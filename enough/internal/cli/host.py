@@ -38,3 +38,11 @@ class Delete(Command):
         s = openstack.Stack(clouds_file, openstack.Heat.get_stack_definition(parsed_args.name))
         s.debug = self.app.options.debug
         s.delete()
+
+
+class Inventory(Command):
+    "Write an ansible compatible inventory of all hosts"
+
+    def take_action(self, parsed_args):
+        clouds_file = f'{settings.CONFIG_DIR}/inventory/group_vars/all/clouds.yml'
+        openstack.Heat(clouds_file).write_inventory()

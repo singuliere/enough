@@ -3,7 +3,6 @@ from enough.common import bind, openstack
 import textwrap
 import os
 import sh
-import yaml
 
 from enough.common.sh_utils import run_sh_display
 from enough.common import ansible_utils
@@ -29,26 +28,12 @@ class Hosting(object):
 
     def create_hosts(self, public_key):
         names = ('bind-host', 'icinga-host', 'postfix-host', 'wazuh-host')
-        hosts = {}
-        for name in names:
-            s = openstack.Stack(self.clouds_file,
-                                openstack.Heat.get_stack_definition(name))
-            s.set_public_key(public_key)
-            s.debug = self.debug
-            r = s.create_or_update()
-            hosts[name] = {
-                'ansible_host': r['ipv4'],
-            }
+        h = openstack.Heat(self.clouds_file)
+        inventory = h.to_inventory(h.create_or_update(names))
         d = f'{self.config_dir}/inventory'
         if not os.path.exists(d):
             os.makedirs(d)
-        open(f'{d}/hosts.yml', 'w').write(yaml.dump(
-            {
-                'all': {
-                    'hosts': hosts,
-                },
-            }
-        ))
+        open(f'{d}/hosts.yml', 'w').write(inventory)
         return names
 
     def populate_config(self):

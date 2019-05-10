@@ -15,7 +15,7 @@ from enough.common.retry import retry
 
 class Stack(object):
 
-    def __init__(self, config_file, definition):
+    def __init__(self, config_file, definition=None):
         self.h = sh.openstack.bake('--os-cloud=ovh', _env={
             'OS_CLIENT_CONFIG_FILE': config_file,
         })
@@ -82,6 +82,8 @@ class Stack(object):
 class Heat(object):
 
     def __init__(self, config_file):
+        self.clouds_file = config_file
+        self.debug = False
         self.h = sh.openstack.bake('--os-cloud=ovh', _env={
             'OS_CLIENT_CONFIG_FILE': config_file,
         })
@@ -115,6 +117,37 @@ class Heat(object):
             except sh.ErrorReturnCode_1:
                 return False
         return True
+
+    def create_or_update(self, names):
+        r = {}
+        for name in names:
+            s = Stack(self.clouds_file, Heat.get_stack_definition(name))
+            s.set_public_key(f'{settings.CONFIG_DIR}/infrastructure_key.pub')
+            s.debug = self.debug
+            r[name] = s.create_or_update()
+        return r
+
+    def to_inventory(self, stacks):
+        hosts = {}
+        for name, info in stacks.items():
+            hosts[name] = {
+                'ansible_host': info['ipv4'],
+            }
+        return yaml.dump(
+            {
+                'all': {
+                    'hosts': hosts,
+                },
+            }
+        )
+
+    def write_inventory(self):
+        names = Stack(self.clouds_file).list()
+        inventory = self.to_inventory(self.create_or_update(names))
+        d = f'{settings.CONFIG_DIR}/inventory'
+        if not os.path.exists(d):
+            os.makedirs(d)
+        open(f'{d}/hosts.yml', 'w').write(inventory)
 
 
 class OpenStackLeftovers(Exception):

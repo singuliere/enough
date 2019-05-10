@@ -50,37 +50,23 @@ Running
 Creating new hosts
 ~~~~~~~~~~~~~~~~~~
 
-From a checkout of the `infrastructure
-<https://lab.enough.community/main/infrastructure>`_ repository:
+.. note:: do not run the following from a git checkout. If run from
+          sources, the test environment will be used instead of the
+	  production environment.
 
 .. code::
 
-   $ public_key="$(cat ~/.enough/enough.community/infrastructure_key.pub)"
-   $ export OS_CLIENT_CONFIG_FILE=~/.enough/enough.community/group_vars/all/clouds.yml
-   $ openstack --os-cloud ovh stack create --wait \
-               --parameter "public_key=$public_key" \
-	       --parameter "port=22" \
-	       --parameter "flavor=s1-2" \
-	       --parameter "volume_size=1" \
-	       --parameter "volume_name=some-volume" \
-	       -t molecule/infrastructure/template-host.yaml some-host
+   $ python -m enough.internal.cmd --domain enough.community host create some-host
+   $ python -m enough.internal.cmd --domain enough.community host inventory
 
-* **port** is optional and defaults to **22**
-* **flavor** is optional and defaults to **s1-2**
-* **volume_size** and **volume_name** optional and no volume is created if they are not specified.
-
-It will output the IP address of the new host, which must be manually
-copied to `~/.enough/enough.community/01-hosts.yml` and committed to
-the repository.
+It will set the IP address of the new host into `~/.enough/enough.community/hosts.yml`.
 
 .. code::
 
-    all:
-      hosts:
-        some-host:
-          ansible_host: 51.68.78.253
-          ansible_port: '22'
-          ansible_user: debian
+  all:
+    hosts:
+      bind-host: {ansible_host: 51.68.89.70}
+      wereport-host: {ansible_host: 51.68.88.149}
 
 
 Updating
