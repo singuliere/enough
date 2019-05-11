@@ -1,3 +1,4 @@
+import base64
 from bs4 import BeautifulSoup
 import copy
 import hashlib
@@ -6,6 +7,8 @@ import json
 import os
 import requests
 import sh
+import textwrap
+import time
 import yaml
 
 from enough import settings
@@ -148,6 +151,38 @@ class Heat(object):
         if not os.path.exists(d):
             os.makedirs(d)
         open(f'{d}/hosts.yml', 'w').write(inventory)
+
+    def create_test_subdomain(self, domain):
+        # exclusively when running from molecule
+        assert os.path.exists('molecule.yml')
+        d = f"{settings.CONFIG_DIR}/inventory/group_vars/all"
+        assert os.path.exists(d)
+        if 'bind-host' not in Stack(self.clouds_file).list():
+            return None
+        s = Stack(self.clouds_file, Heat.get_stack_definition('bind-host'))
+        s.set_public_key(f'{settings.CONFIG_DIR}/infrastructure_key.pub')
+        bind_host = s.create_or_update()
+
+        # reverse so the leftmost part varies, for human readability
+        s = str(int(time.time()))[::-1]
+        subdomain = base64.b32encode(s.encode('ascii')).decode('ascii').lower()
+
+        fqdn = f'{subdomain}.test.{domain}'
+
+        token = os.environ['ENOUGH_API_TOKEN']
+
+        r = requests.post(f'https://api.{domain}/delegate-test-dns/',
+                          headers={'Authorization': f'Token {token}'},
+                          json={
+                              'name': fqdn,
+                              'ip': bind_host['ipv4'],
+                          })
+        r.raise_for_status()
+        open(f'{d}/domain.yml', 'w').write(textwrap.dedent(f"""\
+        ---
+        domain: {fqdn}
+        """))
+        return fqdn
 
 
 class OpenStackLeftovers(Exception):
