@@ -181,7 +181,7 @@ class Heat(object):
         r = requests.post(f'https://api.{domain}/delegate-test-dns/',
                           headers={'Authorization': f'Token {token}'},
                           json={
-                              'name': fqdn,
+                              'name': subdomain,
                               'ip': bind_host['ipv4'],
                           })
         r.raise_for_status()
