@@ -16,19 +16,25 @@ from enough import settings
 from enough.common.retry import retry
 
 
-class Stack(object):
+class OpenStackBase(object):
 
-    def __init__(self, config_file, definition=None):
+    def __init__(self, config_file):
+        self.config_file = config_file
         log = logging.getLogger(__name__)
-        self.h = sh.openstack.bake(
+        self.o = sh.openstack.bake(
             '--os-cloud=ovh',
             _tee=True,
             _out=lambda x: log.info(x.strip()),
             _err=lambda x: log.info(x.strip()),
-            _env={'OS_CLIENT_CONFIG_FILE': config_file},
+            _env={'OS_CLIENT_CONFIG_FILE': self.config_file},
         )
+
+
+class Stack(OpenStackBase):
+
+    def __init__(self, config_file, definition=None):
+        super().__init__(config_file)
         self.definition = definition
-        self.debug = False
 
     def get_template(self):
         return f'{settings.SHARE_DIR}/molecule/infrastructure/template-host.yaml'
@@ -48,21 +54,21 @@ class Stack(object):
         if 'volumes' in d and int(d['volumes'][0]['size']) > 0:
             parameters.append(f"--parameter=volume_size={d['volumes'][0]['size']}")
             parameters.append(f"--parameter=volume_name={d['volumes'][0]['name']}")
-        self.h.stack(action, d['name'],
+        self.o.stack(action, d['name'],
                      '--wait', '--timeout=600',
                      '--template', self.get_template(),
                      *parameters)
         return self.get_output()
 
     def get_output(self):
-        r = self.h.stack('output', 'show', '--format=value', '-c=output', '--all',
+        r = self.o.stack('output', 'show', '--format=value', '-c=output', '--all',
                          self.definition['name'])
         return json.loads(r.stdout)['output_value']
 
     def list(self):
         return [
             s.strip() for s in
-            self.h.stack.list('--format=value', '-c', 'Stack Name', _iter=True)
+            self.o.stack.list('--format=value', '-c', 'Stack Name', _iter=True)
         ]
 
     def create_or_update(self):
@@ -77,7 +83,7 @@ class Stack(object):
         if name not in self.list():
             return
 
-        self.h.stack.delete('--yes', '--wait', name)
+        self.o.stack.delete('--yes', '--wait', name)
 
         @retry(AssertionError, 9)
         def wait_is_deleted():
@@ -85,19 +91,7 @@ class Stack(object):
         wait_is_deleted()
 
 
-class Heat(object):
-
-    def __init__(self, config_file):
-        self.clouds_file = config_file
-        self.debug = False
-        log = logging.getLogger(__name__)
-        self.h = sh.openstack.bake(
-            '--os-cloud=ovh',
-            _tee=True,
-            _out=lambda x: log.info(x.strip()),
-            _err=lambda x: log.info(x.strip()),
-            _env={'OS_CLIENT_CONFIG_FILE': config_file},
-        )
+class Heat(OpenStackBase):
 
     @staticmethod
     def get_stack_definitions():
@@ -123,7 +117,7 @@ class Heat(object):
         # retry to verify the API is stable
         for _ in range(5):
             try:
-                self.h.stack.list()
+                self.o.stack.list()
             except sh.ErrorReturnCode_1:
                 return False
         return True
@@ -151,8 +145,8 @@ class Heat(object):
         )
 
     def write_inventory(self):
-        names = Stack(self.clouds_file).list()
-        inventory = self.to_inventory(self.create_or_update(names))
+        names = Stack(self.config_file).list()
+        inventory = self.to_inventory(self.create_or_update(names, None))
         d = f'{settings.CONFIG_DIR}/inventory'
         if not os.path.exists(d):
             os.makedirs(d)
@@ -163,9 +157,9 @@ class Heat(object):
         assert os.path.exists('molecule.yml')
         d = f"{settings.CONFIG_DIR}/inventory/group_vars/all"
         assert os.path.exists(d)
-        if 'bind-host' not in Stack(self.clouds_file).list():
+        if 'bind-host' not in Stack(self.config_file).list():
             return None
-        s = Stack(self.clouds_file, Heat.get_stack_definition('bind-host'))
+        s = Stack(self.config_file, Heat.get_stack_definition('bind-host'))
         s.set_public_key(f'{settings.CONFIG_DIR}/infrastructure_key.pub')
         bind_host = s.create_or_update()
 
@@ -195,10 +189,10 @@ class OpenStackLeftovers(Exception):
     pass
 
 
-class OpenStack(object):
+class OpenStack(OpenStackBase):
 
     def __init__(self, config_file):
-        self.config_file = config_file
+        super().__init__(config_file)
         self.config = yaml.load(open(config_file))
         self.auth = self.config['clouds']['ovh']['auth']
         self.horizon_session = None
@@ -237,33 +231,25 @@ class OpenStack(object):
 
     @retry(OpenStackLeftovers, tries=7)
     def destroy_everything(self, prefix):
-        log = logging.getLogger(__name__)
-        s = sh.openstack.bake(
-            '--os-cloud=ovh',
-            _tee=True,
-            _out=lambda x: log.info(x.strip()),
-            _err=lambda x: log.info(x.strip()),
-            _env={'OS_CLIENT_CONFIG_FILE': self.config_file},
-        )
         leftovers = []
-        for stack in s.stack.list('--format=value', '-c', 'Stack Name', _iter=True):
+        for stack in self.o.stack.list('--format=value', '-c', 'Stack Name', _iter=True):
             stack = stack.strip()
             if prefix is None or prefix in stack:
                 leftovers.append(f'stack({stack})')
                 try:
                     out = StringIO()
-                    s.stack.delete('--yes', '--wait', stack, _out=out, _err_to_out=True)
+                    self.o.stack.delete('--yes', '--wait', stack, _out=out, _err_to_out=True)
                 except sh.ErrorReturnCode_1:
                     value = out.getvalue()
                     if (('Stack not found' not in value) and
                             ('could not be found' not in value)):
                         raise
 
-        for image in s.image.list('--private', '--format=value', '-c', 'Name', _iter=True):
+        for image in self.o.image.list('--private', '--format=value', '-c', 'Name', _iter=True):
             image = image.strip()
             if prefix is None or prefix in image:
                 leftovers.append(f'image({image})')
-                s.image.delete(image)
+                self.o.image.delete(image)
 
         if leftovers:
             raise OpenStackLeftovers('scheduled removal of ' + ' '.join(leftovers))
@@ -301,18 +287,9 @@ class OpenStack(object):
             changed = True
         return changed
 
-    @staticmethod
-    def region_empty(origin):
-        log = logging.getLogger(__name__)
-        c = sh.openstack.bake(
-            '--os-cloud=ovh',
-            _tee=True,
-            _out=lambda x: log.info(x.strip()),
-            _err=lambda x: log.info(x.strip()),
-            _env={'OS_CLIENT_CONFIG_FILE': origin},
-        )
-        servers = c.server.list()
-        images = c.image.list('--private')
+    def region_empty(self):
+        servers = self.o.server.list()
+        images = self.o.image.list('--private')
         return servers.strip() == '' and images.strip() == ''
 
     @staticmethod
@@ -324,7 +301,7 @@ class OpenStack(object):
             os.link(origin, destination)
             if (
                     os.stat(origin).st_nlink == 2 and
-                    OpenStack.region_empty(origin) and
+                    OpenStack(origin).region_empty() and
                     Heat(origin).is_working()
             ):
                 return origin

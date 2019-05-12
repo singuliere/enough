@@ -103,12 +103,12 @@ def test_region_list():
                     reason='skip integration test')
 def test_region_empty(openstack_name):
     clouds_file = 'inventory/group_vars/all/clouds.yml'
-    if OpenStack.region_empty(clouds_file):
+    if OpenStack(clouds_file).region_empty():
         c = sh.openstack.bake('--os-cloud=ovh', _env={
             'OS_CLIENT_CONFIG_FILE': clouds_file,
         })
         c.image.create('--file=/dev/null', openstack_name)
-    assert not OpenStack.region_empty(clouds_file)
+    assert not OpenStack(clouds_file).region_empty()
 
 
 def test_generate_clouds(tmpdir, mocker):
