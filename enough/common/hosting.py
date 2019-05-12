@@ -28,7 +28,7 @@ class Hosting(object):
     def create_hosts(self, public_key):
         names = ('bind-host', 'icinga-host', 'postfix-host', 'wazuh-host')
         h = openstack.Heat(self.clouds_file)
-        inventory = h.to_inventory(h.create_or_update(names))
+        inventory = h.to_inventory(h.create_or_update(names, public_key))
         d = f'{self.config_dir}/inventory'
         if not os.path.exists(d):
             os.makedirs(d)

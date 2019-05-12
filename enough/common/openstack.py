@@ -128,12 +128,11 @@ class Heat(object):
                 return False
         return True
 
-    def create_or_update(self, names):
+    def create_or_update(self, names, public_key):
         r = {}
         for name in names:
-            s = Stack(self.clouds_file, Heat.get_stack_definition(name))
-            s.set_public_key(f'{settings.CONFIG_DIR}/infrastructure_key.pub')
-            s.debug = self.debug
+            s = Stack(self.config_file, Heat.get_stack_definition(name))
+            s.set_public_key(public_key)
             r[name] = s.create_or_update()
         return r
 
