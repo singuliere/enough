@@ -3,9 +3,6 @@ from rest_framework import permissions
 from allauth.socialaccount import models
 from enough.common.gitlab import GitLab
 
-import logging
-logger = logging.getLogger(__name__)
-
 
 #
 # The only justification for making this function instead of using the method is
