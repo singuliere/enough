@@ -21,7 +21,10 @@ def test_enough_docker_image(docker_name, mocker):
     assert r.stdout.decode('utf-8').strip() == image_name
 
 
-def test_enough_docker_service(docker_name, docker_options):
+def test_enough_docker_service(docker_name, docker_options, mocker):
+    # do not tamper with logging streams to avoid
+    # ValueError: I/O operation on closed file.
+    mocker.patch('cliff.app.App.configure_logging')
     assert main(['build', 'image', '--name', docker_name]) == 0
     assert main(['--debug', 'create', 'service', '--name', docker_name] + docker_options) == 0
     for name in sh.docker.ps('--format', '{{ .Names }}', _iter=True):
