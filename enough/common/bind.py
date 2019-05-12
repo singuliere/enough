@@ -1,10 +1,9 @@
 import json
+import logging
 import re
 import sh
 
 from django.conf import settings
-
-from enough.common.sh_utils import run_sh
 
 
 def delegate_dns(zone, name, ip):
@@ -47,8 +46,8 @@ def nsupdate(data, state):
     for k in ('zone', 'record', 'ttl', 'type', 'value'):
         if k in data:
             args.append(f'{k}={data[k]}')
-    r = run_sh(
-        sh.ansible,
+    logger = logging.getLogger(__name__)
+    r = sh.ansible(
         '-i', f'{bind_host},',
         '--private-key', f'{configdir}/infrastructure_key',
         '--user=debian',
@@ -56,10 +55,14 @@ def nsupdate(data, state):
         '--one-line',
         f'--playbook-dir={configdir}',
         '-m', 'nsupdate', '-a', " ".join(args),
+        _tee=True,
+        _truncate_exc=False,
+        _out=lambda x: logger.info(x.strip()),
+        _err=lambda x: logger.info(x.strip()),
         _env={
             'ANSIBLE_NOCOLOR': 'true',
             'ANSIBLE_HOST_KEY_CHECKING': 'False',
         })
-    json_result = re.sub(r'.*?=> ', '', r)
+    json_result = re.sub(r'.*?=> ', '', r.stdout.decode('utf-8'))
     print(json_result)
     return json.loads(json_result)

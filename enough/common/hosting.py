@@ -4,7 +4,6 @@ import textwrap
 import os
 import sh
 
-from enough.common.sh_utils import run_sh_display
 from enough.common import ansible_utils
 
 
@@ -29,7 +28,7 @@ class Hosting(object):
     def create_hosts(self, public_key):
         names = ('bind-host', 'icinga-host', 'postfix-host', 'wazuh-host')
         h = openstack.Heat(self.clouds_file)
-        inventory = h.to_inventory(h.create_or_update(names))
+        inventory = h.to_inventory(h.create_or_update(names, public_key))
         d = f'{self.config_dir}/inventory'
         if not os.path.exists(d):
             os.makedirs(d)
@@ -65,12 +64,11 @@ class Hosting(object):
         bind.delegate_dns(f'd.{settings.ENOUGH_DOMAIN}', self.name, bind_host['ipv4'])
         names = self.create_hosts(f'{key}.pub')
         self.populate_config()
-        run_sh_display(ansible_utils.bake_ansible_playbook(),
-                       self.debug,
-                       '-i', f'{self.config_dir}/inventory',
-                       '--private-key', key,
-                       '--limit', ','.join(names + ('localhost',)),
-                       'playbook.yml')
+        ansible_utils.bake_ansible_playbook()(
+            '-i', f'{self.config_dir}/inventory',
+            '--private-key', key,
+            '--limit', ','.join(names + ('localhost',)),
+            'playbook.yml')
 
     def delete(self):
         names = ('bind-host', 'icinga-host', 'postfix-host', 'wazuh-host')
