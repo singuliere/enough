@@ -91,9 +91,8 @@ class Docker(object):
         results = []
         for id in ids:
             id = id.strip()
-            result = StringIO()
-            self.docker('inspect', f'--format={format}', id, _out=result)
-            results.append(result.getvalue().strip())
+            r = self.docker('inspect', f'--format={format}', id)
+            results.append(r.stdout.decode('utf-8').strip())
         return results
 
     def wait_for_services(self):

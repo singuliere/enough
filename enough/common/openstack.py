@@ -19,9 +19,14 @@ from enough.common.retry import retry
 class Stack(object):
 
     def __init__(self, config_file, definition=None):
-        self.h = sh.openstack.bake('--os-cloud=ovh', _env={
-            'OS_CLIENT_CONFIG_FILE': config_file,
-        })
+        log = logging.getLogger(__name__)
+        self.h = sh.openstack.bake(
+            '--os-cloud=ovh',
+            _tee=True,
+            _out=lambda x: log.info(x.strip()),
+            _err=lambda x: log.info(x.strip()),
+            _env={'OS_CLIENT_CONFIG_FILE': config_file},
+        )
         self.definition = definition
         self.debug = False
 
@@ -85,17 +90,21 @@ class Heat(object):
     def __init__(self, config_file):
         self.clouds_file = config_file
         self.debug = False
-        self.h = sh.openstack.bake('--os-cloud=ovh', _env={
-            'OS_CLIENT_CONFIG_FILE': config_file,
-        })
+        log = logging.getLogger(__name__)
+        self.h = sh.openstack.bake(
+            '--os-cloud=ovh',
+            _tee=True,
+            _out=lambda x: log.info(x.strip()),
+            _err=lambda x: log.info(x.strip()),
+            _env={'OS_CLIENT_CONFIG_FILE': config_file},
+        )
 
     @staticmethod
     def get_stack_definitions():
-        out = StringIO()
-        sh.ansible_inventory('-i', f'{settings.SHARE_DIR}/inventory',
-                             '-i', f'{settings.CONFIG_DIR}/inventory',
-                             '--vars', '--list', _out=out)
-        inventory = json.loads(out.getvalue())
+        r = sh.ansible_inventory('-i', f'{settings.SHARE_DIR}/inventory',
+                                 '-i', f'{settings.CONFIG_DIR}/inventory',
+                                 '--vars', '--list')
+        inventory = json.loads(r.stdout)
         return inventory['_meta']['hostvars']
 
     @staticmethod
@@ -229,9 +238,14 @@ class OpenStack(object):
 
     @retry(OpenStackLeftovers, tries=7)
     def destroy_everything(self, prefix):
-        s = sh.openstack.bake('--os-cloud=ovh', _env={
-            'OS_CLIENT_CONFIG_FILE': self.config_file,
-        })
+        log = logging.getLogger(__name__)
+        s = sh.openstack.bake(
+            '--os-cloud=ovh',
+            _tee=True,
+            _out=lambda x: log.info(x.strip()),
+            _err=lambda x: log.info(x.strip()),
+            _env={'OS_CLIENT_CONFIG_FILE': self.config_file},
+        )
         leftovers = []
         for stack in s.stack.list('--format=value', '-c', 'Stack Name', _iter=True):
             stack = stack.strip()
@@ -290,9 +304,14 @@ class OpenStack(object):
 
     @staticmethod
     def region_empty(origin):
-        c = sh.openstack.bake('--os-cloud=ovh', _env={
-            'OS_CLIENT_CONFIG_FILE': origin,
-        })
+        log = logging.getLogger(__name__)
+        c = sh.openstack.bake(
+            '--os-cloud=ovh',
+            _tee=True,
+            _out=lambda x: log.info(x.strip()),
+            _err=lambda x: log.info(x.strip()),
+            _env={'OS_CLIENT_CONFIG_FILE': origin},
+        )
         servers = c.server.list()
         images = c.image.list('--private')
         return servers.strip() == '' and images.strip() == ''

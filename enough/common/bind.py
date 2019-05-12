@@ -63,6 +63,6 @@ def nsupdate(data, state):
             'ANSIBLE_NOCOLOR': 'true',
             'ANSIBLE_HOST_KEY_CHECKING': 'False',
         })
-    json_result = re.sub(r'.*?=> ', '', r)
+    json_result = re.sub(r'.*?=> ', '', r.stdout.decode('utf-8'))
     print(json_result)
     return json.loads(json_result)
