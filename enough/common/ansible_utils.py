@@ -1,11 +1,11 @@
 import json
+import logging
 import re
 import sh
 import tempfile
 import textwrap
 
 from enough import settings
-from enough.common.sh_utils import run_sh
 
 
 def parse_output(output):
@@ -17,8 +17,13 @@ def bake_ansible_playbook():
     args = ['-i', 'inventory']
     if settings.CONFIG_DIR != '.':
         args.extend(['-i', f'{settings.CONFIG_DIR}/inventory'])
+    logger = logging.getLogger(__name__)
     return sh.ansible_playbook.bake(
         *args,
+        _tee=True,
+        _out=lambda x: logger.info(x.strip()),
+        _err=lambda x: logger.info(x.strip()),
+        _truncate_exc=False,
         _cwd=settings.SHARE_DIR,
         _env={'ANSIBLE_NOCOLOR': 'true'},
     )
@@ -43,11 +48,11 @@ def get_variable(role, variable, host):
         f.write(bytearray(playbook, 'utf-8'))
         f.flush()
         print(playbook)
-        out = run_sh(bake_ansible_playbook(),
-                     '-e', f'rolevar={role}',
-                     '-e', 'variable={{ ' + variable + ' }}',
-                     '--limit', host,
-                     '--start-at-task=print variable',
-                     f.name)
-        m = re.search(r'"msg": ">(.*)<"$', out, re.MULTILINE)
+        r = bake_ansible_playbook()(
+            '-e', f'rolevar={role}',
+            '-e', 'variable={{ ' + variable + ' }}',
+            '--limit', host,
+            '--start-at-task=print variable',
+            f.name)
+        m = re.search(r'"msg": ">(.*)<"$', r.stdout.decode('utf-8'), re.MULTILINE)
         return m.group(1)

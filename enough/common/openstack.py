@@ -4,6 +4,7 @@ import copy
 import hashlib
 from io import StringIO
 import json
+import logging
 import os
 import requests
 import sh
@@ -12,7 +13,6 @@ import time
 import yaml
 
 from enough import settings
-from enough.common.sh_utils import run_sh_display
 from enough.common.retry import retry
 
 
@@ -43,18 +43,16 @@ class Stack(object):
         if 'volumes' in d and int(d['volumes'][0]['size']) > 0:
             parameters.append(f"--parameter=volume_size={d['volumes'][0]['size']}")
             parameters.append(f"--parameter=volume_name={d['volumes'][0]['name']}")
-        run_sh_display(self.h, self.debug,
-                       'stack', action, d['name'],
-                       '--wait', '--timeout=600',
-                       '--template', self.get_template(),
-                       *parameters)
+        self.h.stack(action, d['name'],
+                     '--wait', '--timeout=600',
+                     '--template', self.get_template(),
+                     *parameters)
         return self.get_output()
 
     def get_output(self):
-        r = run_sh_display(self.h, self.debug,
-                           'stack', 'output', 'show', '--format=value', '-c=output', '--all',
-                           self.definition['name'])
-        return json.loads(r)['output_value']
+        r = self.h.stack('output', 'show', '--format=value', '-c=output', '--all',
+                         self.definition['name'])
+        return json.loads(r.stdout)['output_value']
 
     def list(self):
         return [
