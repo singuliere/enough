@@ -7,6 +7,7 @@ import logging
 import os
 import requests
 import sh
+import socket
 import textwrap
 import time
 import yaml
@@ -62,7 +63,9 @@ class Stack(OpenStackBase):
     def get_output(self):
         r = self.o.stack('output', 'show', '--format=value', '-c=output', '--all',
                          self.definition['name'])
-        return json.loads(r.stdout)['output_value']
+        result = json.loads(r.stdout)
+        assert 'output_error' not in result, result['output_error']
+        return result['output_value']
 
     def list(self):
         return [
@@ -75,7 +78,17 @@ class Stack(OpenStackBase):
             action = 'update'
         else:
             action = 'create'
-        return self._create_or_update(action)
+        info = self._create_or_update(action)
+        if action == 'create':
+            @retry((socket.timeout, ConnectionRefusedError), 9)
+            def wait_for_ssh(ip, port):
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.settimeout(5)
+                s.connect((ip, int(port)))
+                line = s.makefile("rb").readline()
+                assert line.startswith(b'SSH-')
+            wait_for_ssh(info['ipv4'], info['port'])
+        return info
 
     def delete(self):
         name = self.definition['name']
