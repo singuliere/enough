@@ -2,7 +2,6 @@ import base64
 from bs4 import BeautifulSoup
 import copy
 import hashlib
-from io import StringIO
 import json
 import logging
 import os
@@ -232,18 +231,12 @@ class OpenStack(OpenStackBase):
     @retry(OpenStackLeftovers, tries=7)
     def destroy_everything(self, prefix):
         leftovers = []
-        for stack in self.o.stack.list('--format=value', '-c', 'Stack Name', _iter=True):
-            stack = stack.strip()
-            if prefix is None or prefix in stack:
-                leftovers.append(f'stack({stack})')
-                try:
-                    out = StringIO()
-                    self.o.stack.delete('--yes', '--wait', stack, _out=out, _err_to_out=True)
-                except sh.ErrorReturnCode_1:
-                    value = out.getvalue()
-                    if (('Stack not found' not in value) and
-                            ('could not be found' not in value)):
-                        raise
+        r = self.o.stack.list('--format=json', '-c', 'Stack Name', '-c', 'Stack Status')
+        for name, status in [(x["Stack Name"], x["Stack Status"]) for x in json.loads(r.stdout)]:
+            if prefix is None or prefix in name:
+                leftovers.append(f'stack({name})')
+                if not status.startswith('DELETE'):
+                    self.o.stack.delete('--yes', '--wait', name)
 
         for image in self.o.image.list('--private', '--format=value', '-c', 'Name', _iter=True):
             image = image.strip()
