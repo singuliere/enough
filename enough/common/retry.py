@@ -1,5 +1,8 @@
+import logging
 import time
 from functools import wraps
+
+logger = logging.getLogger(__name__)
 
 
 class RetryException(Exception):
@@ -15,7 +18,7 @@ def retry(exceptions, tries=2, delay=1):
                 try:
                     return f(*args, **kwargs)
                 except exceptions as e:
-                    print('{}, Retrying in {} seconds...'.format(e, mdelay))
+                    logger.info('{}, Retrying in {} seconds...'.format(e, mdelay))
                     time.sleep(mdelay)
                     mtries -= 1
                     mdelay *= 2
