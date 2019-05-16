@@ -1,0 +1,3 @@
+---
+certificate_authority: letsencrypt_staging
+certificate_local_directory: "{{ enough_domain_config_directory }}/certs"

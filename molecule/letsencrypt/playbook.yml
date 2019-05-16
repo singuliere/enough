@@ -1,4 +1,0 @@
----
-- import_playbook: ../infrastructure/stretch-playbook.yml
-- import_playbook: letsencrypt-playbook.yml
-- import_playbook: test-letsencrypt-playbook.yml
