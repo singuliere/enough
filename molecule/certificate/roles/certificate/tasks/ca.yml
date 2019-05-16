@@ -1,0 +1,73 @@
+---
+- become: no
+  delegate_to: localhost
+  block:
+
+  - name: mkdir -p '{{ certificate_local_directory }}'
+    when: (certificate_authority == "ownca") or (certificate_authority == "letsencrypt_staging")
+    file:
+      path: "{{ certificate_local_directory }}"
+      state: directory
+  
+  - name: 'Check if a local CA file exists'
+    when: certificate_authority == "ownca"
+    stat:
+      path: "{{ certificate_local_directory }}/ca.crt"
+    register: local_ca
+  
+  - when: (certificate_authority == "ownca") and (not local_ca.stat.exists)
+    block:
+      - name: Generate privatekey (CA)
+        openssl_privatekey:
+          path: '{{ certificate_local_directory }}/ca_privatekey.key'
+  
+      - name: Generate CSR (CA)
+        openssl_csr:
+          path: '{{ certificate_local_directory }}/ca_csr.csr'
+          privatekey_path: '{{ certificate_local_directory }}/ca_privatekey.key'
+          subject:
+            commonName: Self Signed CA
+          basic_constraints:
+            - 'CA:TRUE'
+          basic_constraints_critical: true
+  
+      - name: Generate selfsigned CA certificate
+        openssl_certificate:
+          path: '{{ certificate_local_directory }}/ca.crt'
+          csr_path: '{{ certificate_local_directory }}/ca_csr.csr'
+          privatekey_path: '{{ certificate_local_directory }}/ca_privatekey.key'
+          provider: selfsigned
+          selfsigned_digest: sha256
+  
+- name: mkdir -p /usr/local/share/ca-certificates/infrastructure
+  when: (certificate_authority == "ownca") or (certificate_authority == "letsencrypt_staging")
+  file:
+    path: /usr/local/share/ca-certificates/infrastructure
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: upload fake LE certs
+  when: certificate_authority == "letsencrypt_staging"
+  copy:
+    src: "files/certs/{{ item }}"
+    dest: "/usr/local/share/ca-certificates/infrastructure/{{ item | replace('.pem', '.crt') }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - fakeleintermediatex1.pem
+    - fakelerootx1.pem
+
+- name: upload ownca certs
+  when: certificate_authority == "ownca"
+  copy:
+    src: "{{ certificate_local_directory }}/ca.crt"
+    dest: "/usr/local/share/ca-certificates/infrastructure/enough.crt"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: update-ca-certificates
+  command: update-ca-certificates --fresh

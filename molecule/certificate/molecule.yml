@@ -1,0 +1,55 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: bind-host
+    groups:
+      - firewall_web_server_group
+  - name: website-host
+    groups:
+      - firewall_web_server_group
+  - name: weblate-host
+    groups:
+      - firewall_web_server_group
+  - name: postfix-host
+    groups:
+      - firewall_web_server_group
+  - name: runner-host
+    groups:
+      - firewall_web_server_group
+  - name: cloud-host
+    groups:
+      - firewall_web_server_group
+provisioner:
+  name: ansible
+  options:
+    i: ../../inventory/firewall.yml
+    limit: bind-host,website-host,weblate-host,postfix-host,runner-host,cloud-host,localhost
+#  options:
+#    vvv: True
+  lint:
+    name: ansible-lint
+  env:
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../enough-nginx/roles:../jdauphant.nginx/roles
+  inventory:
+    links:
+      group_vars: ../../inventory/group_vars
+      host_vars: ../../inventory/host_vars
+scenario:
+  name: certificate
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: True
+    s: True
+#    k: test_certs
+  lint:
+    name: flake8
