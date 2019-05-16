@@ -1,2 +1,3 @@
 ---
 enough_config_directory: "{{ '~/.enough' | expanduser }}"
+enough_domain_config_directory: "{{ enough_config_directory }}/{{ domain }}"
