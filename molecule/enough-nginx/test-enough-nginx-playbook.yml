@@ -1,0 +1,32 @@
+- name: setup nginx server
+  hosts: website-host
+  become: true
+
+  roles:
+    - role: enough-nginx
+      vars:
+        enough_nginx_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        enough_nginx_sites: "# SOMETHING TESTS CAN GREP"
+
+- name: setup nginx server with reverse proxy
+  hosts: weblate-host
+  become: true
+
+  roles:
+    - role: enough-nginx
+      vars:
+        enough_nginx_reverse_proxy: 127.0.0.1:8080
+        enough_nginx_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+
+    - role: jdauphant.nginx
+      vars:
+        nginx_sites:
+          backend:
+            - |
+              listen 8080;
+              server_name _;
+              root /tmp;
+
+  tasks:
+    - name: insert content in reverse proxy
+      shell: echo SOMETHING > /tmp/index.html

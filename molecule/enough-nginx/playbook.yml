@@ -1,0 +1,6 @@
+---
+- import_playbook: ../infrastructure/stretch-playbook.yml
+- import_playbook: ../firewall/firewall-playbook.yml
+- import_playbook: ../bind/bind-playbook.yml
+- import_playbook: ../bind/bind-client-playbook.yml
+- import_playbook: test-enough-nginx-playbook.yml

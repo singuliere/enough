@@ -1,0 +1,80 @@
+---
+- name: Create /var/cache/nginx
+  file:
+    path: /var/cache/nginx
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: install nginx
+  include_role:
+    name: jdauphant.nginx
+  # do **not** try vars: | ... until https://github.com/ansible/ansible/issues/19084
+  # is resolved
+  vars:
+    nginx_http_params:
+      # because server names can be long when using test subdomains
+      - server_names_hash_bucket_size 128
+    nginx_configs: |
+       {
+         '{{ enough_nginx_fqdn }}': [
+         {% if enough_nginx_reverse_proxy | default(false) %}
+         """
+              upstream {{ enough_nginx_fqdn }}.backend {
+                server {{ enough_nginx_reverse_proxy }};
+                keepalive 32;
+              }
+              proxy_cache_path /var/cache/nginx/{{ enough_nginx_fqdn }} levels=1:2 keys_zone={{ enough_nginx_fqdn }}:10m max_size=1g inactive=120m use_temp_path=off;
+         """
+         {% endif %}
+         ]
+       }
+    nginx_sites: |
+       {
+         '{{ enough_nginx_fqdn }}': [
+           'listen 80',
+           'server_name {{ enough_nginx_fqdn }}',
+           """{{ enough_nginx_sites }}""",
+           {% if enough_nginx_reverse_proxy | default(false) %}
+           """
+              location / {
+                  proxy_set_header Upgrade $http_upgrade;
+                  proxy_set_header Connection "upgrade";
+                  proxy_set_header Host $http_host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+                  proxy_set_header X-Frame-Options SAMEORIGIN;
+
+                  client_body_timeout 60;
+                  client_max_body_size 50M;
+                  send_timeout 300;
+                  lingering_timeout 5;
+
+                  proxy_buffers 256 16k;
+                  proxy_buffer_size 16k;
+                  proxy_connect_timeout 90;
+                  proxy_send_timeout 300;
+                  proxy_read_timeout 600s;
+                  proxy_pass http://{{ enough_nginx_fqdn }}.backend;
+                  proxy_http_version 1.1;
+
+                  proxy_cache {{ enough_nginx_fqdn }};
+                  proxy_cache_revalidate on;
+                  proxy_cache_min_uses 2;
+                  proxy_cache_use_stale timeout;
+                  proxy_cache_lock on;
+              }
+           """
+           {% endif %}
+         ]
+       }
+
+# do not use notify here so actions that are part of the same playbook have
+# a properly configured nginx and not the one running with the installation
+# defaults
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
