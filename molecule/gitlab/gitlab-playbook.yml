@@ -25,15 +25,23 @@
       vars:
         install_ssh_records_host: lab
 
-    - role: letsencrypt-nginx
+    - role: enough-nginx
       # do **not** use vars here because of https://github.com/ansible/ansible/issues/50278
-      letsencrypt_nginx_reverse_proxy: 127.0.0.1:8080
-      letsencrypt_nginx_fqdn: "{{ gitlab_vhost_fqdn }}"
+      enough_nginx_reverse_proxy: 127.0.0.1:8080
+      enough_nginx_fqdn: "{{ gitlab_vhost_fqdn }}"
 
-    - role: letsencrypt-nginx
+    - role: certificate
+      certificate_fqdn: "{{ gitlab_vhost_fqdn }}"
+      certificate_installer: nginx
+
+    - role: enough-nginx
       # do **not** use vars here because of https://github.com/ansible/ansible/issues/50278
-      letsencrypt_nginx_reverse_proxy: 127.0.0.1:8080
-      letsencrypt_nginx_fqdn: "{{ short_gitlab_vhost_fqdn }}"
+      enough_nginx_reverse_proxy: 127.0.0.1:8080
+      enough_nginx_fqdn: "{{ short_gitlab_vhost_fqdn }}"
+
+    - role: certificate
+      certificate_fqdn: "{{ short_gitlab_vhost_fqdn }}"
+      certificate_installer: nginx
 
     - role: monitor_http_vhost
       http_vhost_https: true
