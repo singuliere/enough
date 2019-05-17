@@ -15,7 +15,7 @@ provisioner:
   lint:
     name: ansible-lint
   env:
-    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../icinga/roles:../letsencrypt-nginx/roles:../jdauphant.nginx/roles
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../icinga/roles:../enough-nginx/roles:../certificate/roles:../jdauphant.nginx/roles
   inventory:
     links:
       group_vars: ../../inventory/group_vars
