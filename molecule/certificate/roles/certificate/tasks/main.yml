@@ -1,0 +1,4 @@
+---
+- include_tasks: ca.yml
+- include_tasks: certificate.yml
+  when: certificate_create | default(false)

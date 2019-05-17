@@ -6,9 +6,15 @@
   roles:
     - role: ansible-role-docker
     - role: docker
-    - role: api
 
-    - role: letsencrypt-nginx
+    - role: enough-nginx
       vars:
-        letsencrypt_nginx_reverse_proxy: 127.0.0.1:8000
-        letsencrypt_nginx_fqdn: "{{ api_vhost_fqdn }}"
+        enough_nginx_reverse_proxy: 127.0.0.1:8000
+        enough_nginx_fqdn: "{{ api_vhost_fqdn }}"
+
+    - role: certificate
+      vars:
+        certificate_fqdn: "{{ api_vhost_fqdn }}"
+        certificate_installer: nginx
+
+    - role: api

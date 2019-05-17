@@ -1,0 +1,39 @@
+---
+driver:
+  name: openstack
+lint:
+  name: yamllint
+platforms:
+  - name: bind-host
+  - name: website-host
+  - name: weblate-host
+provisioner:
+  name: ansible
+  options:
+    i: ../../inventory/firewall.yml
+    limit: bind-host,weblate-host,website-host,localhost
+#  options:
+#    vvv: True
+  lint:
+    name: ansible-lint
+  env:
+    ANSIBLE_ROLES_PATH: roles:../infrastructure/roles:../firewall/roles:../bind/roles:../jdauphant.nginx/roles
+  inventory:
+    links:
+      group_vars: ../../inventory/group_vars
+      host_vars: ../../inventory/host_vars
+scenario:
+  name: enough-nginx
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - verify
+    - destroy
+verifier:
+  name: testinfra
+  options:
+    v: True
+    s: True
+  lint:
+    name: flake8

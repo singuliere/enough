@@ -1,0 +1,4 @@
+---
+# enough_nginx_fqdn: "mydomain.com"
+enough_nginx_sites: ""
+# enough_nginx_reverse_proxy:

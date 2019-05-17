@@ -1,0 +1,9 @@
+---
+# letsencrypt, letsencrypt_staging, ownca
+certificate_authority: letsencrypt_staging
+certificate_create: true
+certificate_email: "contact@{{ domain }}"
+# certificate_fqdn:
+# certificate_installer:
+certificate_directory: /etc/certificates
+certificate_local_directory: /tmp/certificates

@@ -7,6 +7,17 @@
     - role: docker_filesystem
     - role: ansible-role-docker
     - role: docker
+
+    - role: enough-nginx
+      vars:
+        enough_nginx_reverse_proxy: 127.0.0.1:8080
+        enough_nginx_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
+
+    - role: certificate
+      vars:
+        certificate_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"
+        certificate_installer: nginx
+
     - role: nextcloud
       vars:
         vhost_fqdn: "{{ inventory_hostname | replace('-host','') }}.{{ domain }}"

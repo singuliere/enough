@@ -13,5 +13,5 @@ def test_sshfp(host):
     cmd = host.run('dig sshfp +noall +answer @ns1.{domain} lab.{domain}'.format(
         domain=domain))
     assert cmd.rc == 0
-    assert 'IN\tSSHFP' in cmd.stdout
+    assert 'IN SSHFP' in cmd.stdout
     assert 'lab.' + domain in cmd.stdout

@@ -1,6 +1,0 @@
----
-letsencrypt_nginx_email: "contact@{{ domain }}"
-# letsencrypt_nginx_fqdn: "mydomain.com"
-# letsencrypt_nginx_client: true
-letsencrypt_nginx_sites: ""
-# letsencrypt_nginx_reverse_proxy:

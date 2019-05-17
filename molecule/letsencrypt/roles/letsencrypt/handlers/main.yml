@@ -1,3 +1,0 @@
----
-- name: update-ca-certificates
-  command: update-ca-certificates --fresh

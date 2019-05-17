@@ -1,0 +1,109 @@
+---
+- name: apt-get install certbot
+  apt:
+    name:
+      - certbot
+    state: present
+
+- name: apt-get install python-certbot-nginx
+  when: (certificate_installer | default()) == "nginx"
+  apt:
+    name:
+      - python-certbot-nginx
+    state: present
+
+- name: mkdir -p {{ certificate_directory }}
+  file:
+    path: "{{ certificate_directory }}"
+    state: directory
+
+- when: (certificate_authority == "letsencrypt") or (certificate_authority == "letsencrypt_staging")
+  block:
+
+  - name: call lets encrypt on {{ certificate_fqdn }}
+    command: >-
+      certbot -n
+        --agree-tos
+        --email {{ certificate_email }}
+        -d {{ certificate_fqdn }}
+        --authenticator {{ certificate_installer | default('standalone') }}
+        {% if certificate_authority == "letsencrypt_staging" %}--test-cert{% endif %}
+        certonly
+
+  - name: ln -s /etc/letsencrypt/live/{{ certificate_fqdn }}/privkey.pem {{ certificate_directory }}/{{ certificate_fqdn }}.key
+    file:
+      src: "/etc/letsencrypt/live/{{ certificate_fqdn }}/privkey.pem"
+      dest: "{{ certificate_directory }}/{{ certificate_fqdn }}.key"
+      state: link
+
+  - name: ln -s /etc/letsencrypt/live/{{ certificate_fqdn }}/fullchain.pem {{ certificate_directory }}/{{ certificate_fqdn }}.chain.crt
+    file:
+      src: "/etc/letsencrypt/live/{{ certificate_fqdn }}/fullchain.pem"
+      dest: "{{ certificate_directory }}/{{ certificate_fqdn }}.chain.crt"
+      state: link
+
+  - name: ln -s /etc/letsencrypt/live/{{ certificate_fqdn }}/cert.pem {{ certificate_directory }}/{{ certificate_fqdn }}.crt
+    file:
+      src: "/etc/letsencrypt/live/{{ certificate_fqdn }}/cert.pem"
+      dest: "{{ certificate_directory }}/{{ certificate_fqdn }}.crt"
+      state: link
+
+- when: certificate_authority == "ownca"
+  block:
+
+  - name: Generate privatekey (cert)
+    become: no
+    delegate_to: localhost
+    openssl_privatekey:
+      path: "{{ certificate_local_directory }}/{{ certificate_fqdn }}.key"
+
+  - name: Generate CSR (cert)
+    become: no
+    delegate_to: localhost
+    openssl_csr:
+      path: '{{ certificate_local_directory }}/{{ certificate_fqdn }}.csr'
+      privatekey_path: '{{ certificate_local_directory }}/{{ certificate_fqdn }}.key'
+      subject_alt_name: 'DNS:{{ certificate_fqdn }}'
+
+  - name: Generate certificate
+    become: no
+    delegate_to: localhost
+    openssl_certificate:
+      path: '{{ certificate_local_directory }}/{{ certificate_fqdn }}.crt'
+      csr_path: '{{ certificate_local_directory }}/{{ certificate_fqdn }}.csr'
+      privatekey_path: '{{ certificate_local_directory }}/{{ certificate_fqdn }}.key'
+      ownca_path: '{{ certificate_local_directory }}/ca.crt'
+      ownca_privatekey_path: '{{ certificate_local_directory }}/ca_privatekey.key'
+      provider: ownca
+      ownca_digest: sha256
+
+  - name: Create chain file
+    become: no
+    delegate_to: localhost
+    shell: 'cat {{ certificate_fqdn }}.crt ca.crt > {{ certificate_fqdn }}.chain.crt'
+    args:
+      chdir: '{{ certificate_local_directory }}'
+      creates: '{{ certificate_fqdn }}.chain.crt'
+
+  - name: cp {{ certificate_local_directory }}/{{ certificate_fqdn }}.* {{ certificate_directory }}/
+    copy:
+      src: "{{ certificate_local_directory }}/{{ item }}"
+      dest: "{{ certificate_directory }}/{{ item }}"
+    loop:
+      - "{{ certificate_fqdn }}.chain.crt"
+      - "{{ certificate_fqdn }}.key"
+      - "{{ certificate_fqdn }}.crt"
+
+- name: install certificates for {{ certificate_fqdn }}
+  when: certificate_installer | default(false)
+  command: >-
+    certbot -n
+      --email {{ certificate_email }}
+      -d {{ certificate_fqdn }}
+      install --{{ certificate_installer }}
+      --redirect
+      --pre-hook  "systemctl stop {{ certificate_installer }}"
+      --post-hook "systemctl start {{ certificate_installer }}"
+      --key-path {{ certificate_directory }}/{{ certificate_fqdn }}.key
+      --cert-path {{ certificate_directory }}/{{ certificate_fqdn }}.crt
+      --fullchain-path {{ certificate_directory }}/{{ certificate_fqdn }}.chain.crt

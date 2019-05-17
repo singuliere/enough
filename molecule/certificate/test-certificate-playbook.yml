@@ -1,0 +1,107 @@
+---
+- name: setup ownca
+  hosts: cloud-host
+  become: true
+
+  roles:
+    - role: enough-nginx
+      vars:
+        enough_nginx_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        enough_nginx_sites: "# SOMETHING TESTS CAN GREP"
+        
+    - role: certificate
+      vars:
+        certificate_authority: ownca
+        certificate_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        certificate_email: "contact-nginx@something.com"
+        certificate_installer: nginx
+
+- name: setup reverse proxy fake LE
+  hosts: weblate-host
+  become: true
+
+  roles:
+    - role: enough-nginx
+      vars:
+        enough_nginx_reverse_proxy: 127.0.0.1:8080
+        enough_nginx_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+
+    - role: jdauphant.nginx
+      vars:
+        nginx_sites:
+          backend:
+            - |
+              listen 8080;
+              server_name _;
+              root /tmp;
+
+    - role: certificate
+      vars:
+        certificate_authority: letsencrypt_staging
+        certificate_email: "contact-nginx@something.com"
+        certificate_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        certificate_installer: nginx
+
+  tasks:
+    - name: insert content in reverse proxy
+      shell: echo SOMETHING > /tmp/index.html
+
+- name: get the certificate but do not install it
+  hosts: postfix-host
+  become: true
+
+  roles:
+    - role: certificate
+      vars:
+        certificate_authority: ownca
+        certificate_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        certificate_email: "contact-nginx@something.com"
+
+- name: setup fake LE
+  hosts: website-host
+  become: true
+
+  roles:
+    - role: enough-nginx
+      vars:
+        enough_nginx_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        enough_nginx_sites: "# SOMETHING TESTS CAN GREP"
+        
+    - role: certificate
+      vars:
+        certificate_authority: letsencrypt_staging
+        certificate_email: "contact-nginx@something.com"
+        certificate_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        certificate_installer: nginx
+
+- name: setup real LE
+  hosts: bind-host
+  become: true
+
+  roles:
+    - role: enough-nginx
+      vars:
+        enough_nginx_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        enough_nginx_sites: "# SOMETHING TESTS CAN GREP"
+        
+    - role: certificate
+      vars:
+        certificate_authority: letsencrypt
+        certificate_fqdn: "{{ inventory_hostname }}.{{ domain }}"
+        certificate_email: "contact-nginx@something.com"
+        certificate_installer: nginx
+
+- name: setup client
+  hosts: runner-host
+  become: true
+
+  roles:
+    - role: certificate
+      vars:
+        certificate_authority: ownca
+        certificate_create: false
+
+    - role: certificate
+      vars:
+        certificate_authority: letsencrypt_staging
+        certificate_create: false

@@ -7,4 +7,7 @@
     - role: ansible-role-docker
       docker_install_compose: false
 
+    - role: certificate
+      certificate_create: false
+
     - role: gitlab-ci
