@@ -1,5 +1,5 @@
 ---
-- name: install letsencrypt certificate if needed
+- name: install certificate if needed
   hosts: 'postfix-host'
 
   roles:
@@ -14,8 +14,10 @@
       delegate_to: localhost
       become: false
 
-    - role: certbot-postfix
+    - role: certificate
       become: true
+      vars:
+        certificate_fqdn: "postfix-host.{{ domain }}"
 
     - role: firewall
       vars:
@@ -68,13 +70,13 @@
             of a publicly-referenced Postfix SMTP server.
           section: 'smtpd-tls'
         - name: 'smtpd_tls_cert_file'
-          value: '/etc/letsencrypt/live/postfix-host.{{ domain }}/cert.pem'
+          value: '/etc/certificates/postfix-host.{{ domain }}.crt'
           section: 'smtpd-tls'
         - name: 'smtpd_tls_key_file'
-          value: '/etc/letsencrypt/live/postfix-host.{{ domain }}/privkey.pem'
+          value: '/etc/certificates/postfix-host.{{ domain }}.key'
           section: 'smtpd-tls'
         - name: 'smtpd_tls_CAfile'
-          value: '/etc/letsencrypt/live/postfix-host.{{ domain }}/chain.pem'
+          value: '/etc/certificates/postfix-host.{{ domain }}.chain.crt'
           section: 'smtpd-tls'
       postfix__maincf: "{{ base__maincf + TLS__maincf }}"
       postfix__restrictions_maincf: [ ]
