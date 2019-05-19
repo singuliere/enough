@@ -6,13 +6,17 @@ from django.conf import settings
 from enough.common import openstack
 
 
+def set_common_options(parser):
+    parser.add_argument('name')
+    return parser
+
+
 class Create(ShowOne):
     "Create or update a host"
 
     def get_parser(self, prog_name):
         parser = super().get_parser(prog_name)
-        parser.add_argument('name')
-        return parser
+        return set_common_options(parser)
 
     def take_action(self, parsed_args):
         clouds_file = f'{settings.CONFIG_DIR}/inventory/group_vars/all/clouds.yml'
@@ -30,8 +34,7 @@ class Delete(Command):
 
     def get_parser(self, prog_name):
         parser = super().get_parser(prog_name)
-        parser.add_argument('name')
-        return parser
+        return set_common_options(parser)
 
     def take_action(self, parsed_args):
         clouds_file = f'{settings.CONFIG_DIR}/inventory/group_vars/all/clouds.yml'
