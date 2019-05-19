@@ -15,13 +15,13 @@ log = logging.getLogger(__name__)
 
 class Docker(object):
 
-    def __init__(self, name, **kwargs):
-        self.bake_docker(kwargs.get('docker'))
+    def __init__(self, **kwargs):
         self.root = kwargs.get('root', os.path.join(os.path.dirname(__file__), '..'))
-        self.name = name
+        self.name = kwargs.get('name')
         self.port = kwargs.get('port', '8000')
         self.retry = kwargs.get('retry', 9)
         self.domain = kwargs.get('domain', 'enough.community')
+        self.bake_docker(kwargs.get('docker'))
         self.bake_docker_compose(kwargs.get('docker_compose'))
 
     def bake_docker(self, docker):

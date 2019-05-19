@@ -32,25 +32,25 @@ class HostDocker(Host):
 
 class HostOpenStack(Host):
 
-    def __init__(self, args):
-        self.args = args
+    def __init__(self, **kwargs):
+        self.args = kwargs
         self.clouds_file = f'{settings.CONFIG_DIR}/inventory/group_vars/all/clouds.yml'
 
     def create_or_update(self):
-        s = openstack.Stack(self.clouds_file, openstack.Heat.get_stack_definition(self.args.name))
+        s = openstack.Stack(self.clouds_file, openstack.Heat.get_stack_definition(self.args['name']))
         s.set_public_key(f'{settings.CONFIG_DIR}/infrastructure_key.pub')
         return s.create_or_update(self)
 
     def delete(self):
-        s = openstack.Stack(self.clouds_file, openstack.Heat.get_stack_definition(self.args.name))
+        s = openstack.Stack(self.clouds_file, openstack.Heat.get_stack_definition(self.args['name']))
         s.delete()
 
     def write_inventory(self):
         openstack.Heat(self.clouds_file).write_inventory()
 
 
-def host_factory(args):
-    if args.driver == 'openstack':
-        return HostOpenStack(args)
+def host_factory(**kwargs):
+    if kwargs['driver'] == 'openstack':
+        return HostOpenStack(**kwargs)
     else:
-        return HostDocker(args)
+        return HostDocker(**kwargs)
