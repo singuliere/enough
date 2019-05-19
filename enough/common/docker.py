@@ -26,7 +26,12 @@ class Docker(object):
 
     def bake_docker(self, docker):
         cmd = docker or 'docker'
-        self.docker = sh.Command(cmd).bake(_truncate_exc=False)
+        self.docker = sh.Command(cmd).bake(
+            _truncate_exc=False,
+            _tee=True,
+            _out=lambda x: log.info(x.strip()),
+            _err=lambda x: log.info(x.strip()),
+        )
         # .bake(_out=sys.stdout, _err=sys.stderr, )
 
     def bake_docker_compose(self, docker_compose):
@@ -39,7 +44,13 @@ class Docker(object):
         compose.write(content.encode('utf-8'))
         compose.flush()
         cmd = docker_compose or 'docker-compose'
-        self.docker_compose = sh.Command(cmd).bake('-f', compose.name, _truncate_exc=False)
+        self.docker_compose = sh.Command(cmd).bake(
+            '-f', compose.name,
+            _truncate_exc=False,
+            _tee=True,
+            _out=lambda x: log.info(x.strip()),
+            _err=lambda x: log.info(x.strip()),
+        )
         self.compose_file = compose  # so that it is kept until self is deleted
 
     def get_compose_content(self):
