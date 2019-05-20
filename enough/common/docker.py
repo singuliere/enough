@@ -15,19 +15,23 @@ log = logging.getLogger(__name__)
 
 class Docker(object):
 
-    def __init__(self, name, **kwargs):
-        self.bake_docker(kwargs.get('docker'))
+    def __init__(self, **kwargs):
         self.root = kwargs.get('root', os.path.join(os.path.dirname(__file__), '..'))
-        self.name = name
+        self.name = kwargs.get('name')
         self.port = kwargs.get('port', '8000')
         self.retry = kwargs.get('retry', 9)
         self.domain = kwargs.get('domain', 'enough.community')
+        self.bake_docker(kwargs.get('docker'))
         self.bake_docker_compose(kwargs.get('docker_compose'))
 
     def bake_docker(self, docker):
         cmd = docker or 'docker'
-        self.docker = sh.Command(cmd).bake(_truncate_exc=False)
-        # .bake(_out=sys.stdout, _err=sys.stderr, )
+        self.docker = sh.Command(cmd).bake(
+            _truncate_exc=False,
+            _tee=True,
+            _out=lambda x: log.info(x.strip()),
+            _err=lambda x: log.info(x.strip()),
+        )
 
     def bake_docker_compose(self, docker_compose):
         content = self.get_compose_content()
@@ -39,8 +43,22 @@ class Docker(object):
         compose.write(content.encode('utf-8'))
         compose.flush()
         cmd = docker_compose or 'docker-compose'
-        self.docker_compose = sh.Command(cmd).bake('-f', compose.name, _truncate_exc=False)
+        self.docker_compose = sh.Command(cmd).bake(
+            '-f', compose.name,
+            _truncate_exc=False,
+            _tee=True,
+            _out=lambda x: log.info(x.strip()),
+            _err=lambda x: log.info(x.strip()),
+        )
         self.compose_file = compose  # so that it is kept until self is deleted
+
+    def create_network(self, name):
+        existing = self.docker.network.ls('--format={{ .Name }}',
+                                          f'--filter=name={name}').stdout
+        if existing != b'':
+            return False
+        self.docker.network.create(name)
+        return True
 
     def get_compose_content(self):
         f = os.path.join(self.root, 'common/data/docker-compose.yml')

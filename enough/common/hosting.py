@@ -12,7 +12,7 @@ class Hosting(object):
     def __init__(self, name):
         self.name = name
         self.domain = f"{name}.d.{settings.ENOUGH_DOMAIN}"
-        self.config_dir = os.path.expanduser(f'~/.enough/{self.domain}')
+        self.config_dir = settings.CONFIG_DIR
         d = f'{self.config_dir}/inventory/group_vars/all'
         if not os.path.exists(d):
             os.makedirs(d)

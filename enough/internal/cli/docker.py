@@ -37,7 +37,7 @@ class Create(Command):
     class DockerEnough(Docker):
 
         def get_compose_content(self):
-            f = os.path.join(self.root, 'internal/data/docker-compose.yml')
+            f = os.path.join(self.root, 'internal/data/enough-docker-compose.yml')
             return self.replace_content(open(f).read())
 
     def get_parser(self, prog_name):

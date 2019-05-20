@@ -16,14 +16,14 @@ class DockerFixture(docker.Docker):
 
 def test_init():
     name = 'NAME'
-    d = DockerFixture(name)
+    d = DockerFixture(name=name)
     assert d.name == name
 
 
 def test_get_image_name():
     docker_name = 'DOCKER_NAME'
     suffix = 'SUFFIX'
-    d = DockerFixture(docker_name)
+    d = DockerFixture(name=docker_name)
     assert d.get_image_name(suffix) == docker_name + '_' + suffix
     assert d.get_image_name(None) == docker_name
 
@@ -32,7 +32,7 @@ def test_get_image_name_with_version():
     docker_name = 'DOCKER_NAME'
     suffix = 'SUFFIX'
     with modified_environ('DOCKER_HOST'):
-        d = DockerFixture(docker_name)
+        d = DockerFixture(name=docker_name)
         image_name = d.get_image_name(suffix) + ':' + str(__version__)
         assert d.get_image_name_with_version(suffix) == image_name
 
@@ -40,14 +40,14 @@ def test_get_image_name_with_version():
 def test_replace_content():
     docker_name = 'DOCKER_NAME'
     with modified_environ('DOCKER_HOST'):
-        d = DockerFixture(docker_name)
+        d = DockerFixture(name=docker_name)
         before = 'Name = {{ this.get_image_name_with_version(None) }}'
         after = 'Name = ' + d.get_image_name_with_version(None)
         assert d.replace_content(before) == after
 
 
 def test_up_no_wait(docker_name, tcp_port):
-    d = docker.Docker(docker_name, port=tcp_port)
+    d = docker.Docker(name=docker_name, port=tcp_port)
     assert d.create_image()
     d.up()
     assert d.inspect('{{ .Path }}') == ['/sbin/init']
@@ -55,7 +55,7 @@ def test_up_no_wait(docker_name, tcp_port):
 
 
 def test_up_wait_for_services(docker_name, tcp_port):
-    d = docker.Docker(docker_name, port=tcp_port)
+    d = docker.Docker(name=docker_name, port=tcp_port)
     assert d.create_image()
     d.up_wait_for_services()
     assert '"Status":"healthy"' in d.get_logs()
@@ -74,7 +74,7 @@ def test_up_wait_for_services_fail(docker_name):
             f = os.path.join(self.root, 'common/data/docker-compose-fail.yml')
             return self.replace_content(open(f).read())
 
-    d = DockerFixtureIntegration(docker_name)
+    d = DockerFixtureIntegration(name=docker_name)
     assert d.create_image()
     with pytest.raises(retry.RetryException):
         d.up_wait_for_services()
@@ -82,5 +82,11 @@ def test_up_wait_for_services_fail(docker_name):
 
 
 def test_create_image(docker_name):
-    d = docker.Docker(docker_name)
+    d = docker.Docker(name=docker_name)
     assert d.create_image().startswith(docker_name)
+
+
+def test_create_network(docker_name):
+    d = docker.Docker(name=docker_name)
+    assert d.create_network(docker_name) is True
+    assert d.create_network(docker_name) is False

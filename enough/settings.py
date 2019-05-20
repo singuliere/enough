@@ -27,6 +27,8 @@ else:
     CONFIG_DIR = os.path.expanduser(f'~/.enough/{ENOUGH_DOMAIN}')
     SHARE_DIR = f'{sys.prefix}/share/enough'
 
+CERTS_DIR = f'{CONFIG_DIR}/certs'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
