@@ -1,3 +1,4 @@
+from django.conf import settings
 import os
 import requests
 import time
@@ -19,7 +20,7 @@ class GitLab(object):
     def _session(self):
         self.s = requests.Session()
         if 'REQUESTS_CA_BUNDLE' not in os.environ:
-            self.s.verify = '../../certs'
+            self.s.verify = settings.CERTS_DIR
         self.s.api = self.url + '/api/v4'
 
     def login(self, username, password):
