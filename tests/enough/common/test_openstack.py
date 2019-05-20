@@ -52,7 +52,8 @@ def test_heat_is_working(tmpdir):
     for path in heat_paths:
         config = yaml.load(open(path))
         heat_regions.append(config['clouds']['ovh']['region_name'])
-    assert heat_regions == ['GRA5', 'SBG5']
+    assert 'SBG5' in heat_regions
+    assert 'GRA5' in heat_regions
 
 
 def test_heat_definition():
