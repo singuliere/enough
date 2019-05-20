@@ -32,7 +32,6 @@ class Docker(object):
             _out=lambda x: log.info(x.strip()),
             _err=lambda x: log.info(x.strip()),
         )
-        # .bake(_out=sys.stdout, _err=sys.stderr, )
 
     def bake_docker_compose(self, docker_compose):
         content = self.get_compose_content()
