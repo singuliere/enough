@@ -2,8 +2,8 @@ import logging
 import os
 import pytest
 import sh
-import socket
 import time
+from enough.common import tcp
 from enough.common.retry import retry
 from enough.common.openstack import OpenStack
 
@@ -13,17 +13,9 @@ def debug_enough():
     logging.getLogger('enough').setLevel(logging.DEBUG)
 
 
-def get_tcp_port():
-    tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    tcp.bind(('', 0))
-    addr, port = tcp.getsockname()
-    tcp.close()
-    return str(port)
-
-
 @pytest.fixture
 def tcp_port():
-    return str(get_tcp_port())
+    return str(tcp.free_port())
 
 
 def docker_conf():
@@ -33,7 +25,7 @@ def docker_conf():
         }
     else:
         return {
-            'port': get_tcp_port(),
+            'port': tcp.free_port(),
         }
 
 

@@ -1,5 +1,5 @@
 from enough.common.host import host_factory
-from tests import conftest
+from enough.common import tcp
 
 
 def test_docker_create_or_update(docker_name, tcp_port):
@@ -16,7 +16,7 @@ def test_docker_create_or_update(docker_name, tcp_port):
 
 def test_docker_create_or_update_same_network(docker_name):
     name1 = f'{docker_name}1'
-    port1 = conftest.get_tcp_port()
+    port1 = tcp.free_port()
     host1 = host_factory(**{
         'driver': 'docker',
         'name': name1,
@@ -27,7 +27,7 @@ def test_docker_create_or_update_same_network(docker_name):
     assert '"Status":"healthy"' in host1.d.get_logs()
 
     name2 = f'{docker_name}2'
-    port2 = conftest.get_tcp_port()
+    port2 = tcp.free_port()
     host2 = host_factory(**{
         'driver': 'docker',
         'name': name2,
