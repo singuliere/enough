@@ -52,6 +52,14 @@ class Docker(object):
         )
         self.compose_file = compose  # so that it is kept until self is deleted
 
+    def create_network(self, name):
+        existing = self.docker.network.ls('--format={{ .Name }}',
+                                          f'--filter=name={name}').stdout
+        if existing != b'':
+            return False
+        self.docker.network.create(name)
+        return True
+
     def get_compose_content(self):
         f = os.path.join(self.root, 'common/data/docker-compose.yml')
         return self.replace_content(open(f).read())

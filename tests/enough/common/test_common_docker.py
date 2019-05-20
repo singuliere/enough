@@ -84,3 +84,9 @@ def test_up_wait_for_services_fail(docker_name):
 def test_create_image(docker_name):
     d = docker.Docker(name=docker_name)
     assert d.create_image().startswith(docker_name)
+
+
+def test_create_network(docker_name):
+    d = docker.Docker(name=docker_name)
+    assert d.create_network(docker_name) is True
+    assert d.create_network(docker_name) is False
