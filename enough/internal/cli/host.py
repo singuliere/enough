@@ -21,7 +21,7 @@ class Create(ShowOne):
     def take_action(self, parsed_args):
         args = copy(self.app.options)
         args.update(parsed_args)
-        host = host_factory(vars(args))
+        host = host_factory(**vars(args))
         r = host.create_or_update()
         columns = ('name', 'user', 'port', 'ip')
         data = (parsed_args.name, 'debian', r['port'], r['ipv4'])
@@ -37,7 +37,7 @@ class Delete(Command):
         return set_common_options(parser)
 
     def take_action(self, parsed_args):
-        host = host_factory(vars(parsed_args))
+        host = host_factory(**vars(parsed_args))
         host.delete()
 
 
@@ -49,5 +49,5 @@ class Inventory(Command):
         return set_common_options(parser)
 
     def take_action(self, parsed_args):
-        host = host_factory(vars(parsed_args))
+        host = host_factory(**vars(parsed_args))
         host.write_inventory()
