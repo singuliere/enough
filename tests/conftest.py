@@ -81,8 +81,6 @@ def docker_cleanup(prefix):
 @pytest.fixture
 def docker_name():
     prefix = 'enough_test_' + str(int(time.time()))
-    if 'DOCKER_HOST' not in os.environ:
-        sh.docker.swarm.init(_ok_code=[1, 0])
     yield prefix
     docker_cleanup(prefix)
 
