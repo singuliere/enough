@@ -2,6 +2,8 @@ import os
 from django.conf import settings
 from enough.common import openstack, docker
 from abc import ABC, abstractmethod
+import shutil
+import tempfile
 
 
 class Host(ABC):
@@ -26,9 +28,11 @@ class HostDocker(Host):
         def create_image(self):
             name = super().create_image()
             dockerfile = os.path.join(self.root, 'internal/data/infrastructure.dockerfile')
-            return self._create_image(None,
-                                      '--build-arg', f'IMAGE_NAME={name}',
-                                      '-f', dockerfile, '.')
+            with tempfile.TemporaryDirectory() as d:
+                shutil.copy(f'{settings.CONFIG_DIR}/infrastructure_key.pub', d)
+                return self._create_image(None,
+                                          '--build-arg', f'IMAGE_NAME={name}',
+                                          '-f', dockerfile, d)
 
         def get_compose_content(self):
             f = os.path.join(self.root, 'internal/data/infrastructure-docker-compose.yml')

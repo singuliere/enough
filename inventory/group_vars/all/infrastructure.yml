@@ -1,0 +1,3 @@
+---
+# infrastructure_driver: openstack
+infrastructure_driver: docker

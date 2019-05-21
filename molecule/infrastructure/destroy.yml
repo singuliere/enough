@@ -9,5 +9,5 @@
 
     - name: delete instances
       shell: |
-        python -m enough.internal.cmd host delete {{ item.name }}
+        python -m enough.internal.cmd host delete --driver {{ infrastructure_driver }} {{ item.name }}
       loop: "{{ molecule_yml.platforms }}"
