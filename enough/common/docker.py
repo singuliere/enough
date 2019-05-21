@@ -101,6 +101,13 @@ class Docker(object):
             self.print_logs()
             raise
 
+    def create_or_update(self):
+        if self.inspect('placeholder'):
+            return False
+        self.create_image()
+        self.up_wait_for_services()
+        return True
+
     def up(self):
         self.docker_compose('up', '-d')
 
