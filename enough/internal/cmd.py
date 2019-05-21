@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 
@@ -18,6 +19,19 @@ class InternalApp(App):
             command_manager=CommandManager('enough.internal.cli'),
             deferred_help=True,
             )
+
+    def configure_logging(self):
+        super().configure_logging()
+
+        root_logger = logging.getLogger('')
+        root_logger.setLevel(logging.WARNING)
+
+        level = {0: logging.WARNING,
+                 1: logging.INFO,
+                 2: logging.DEBUG}.get(self.options.verbose_level, logging.DEBUG)
+
+        root_logger = logging.getLogger('enough')
+        root_logger.setLevel(level)
 
     def build_option_parser(self, description, version, argparse_kwargs=None):
         parser = super().build_option_parser(description, version, argparse_kwargs)

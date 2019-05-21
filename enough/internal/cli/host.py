@@ -1,8 +1,8 @@
-from copy import copy
 from cliff.show import ShowOne
 from cliff.command import Command
 
 from enough.common.host import host_factory
+from enough.common import tcp
 
 
 def set_common_options(parser):
@@ -19,12 +19,13 @@ class Create(ShowOne):
         return set_common_options(parser)
 
     def take_action(self, parsed_args):
-        args = copy(self.app.options)
-        args.update(parsed_args)
-        host = host_factory(**vars(args))
-        r = host.create_or_update()
+        args = vars(self.app.options)
+        args.update(vars(parsed_args))
+        args['port'] = tcp.free_port()
+        host = host_factory(**args)
+        host.create_or_update()
         columns = ('name', 'user', 'port', 'ip')
-        data = (parsed_args.name, 'debian', r['port'], r['ipv4'])
+        data = (parsed_args.name, 'debian', args['port'], '0.0.0.0')
         return (columns, data)
 
 
