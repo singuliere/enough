@@ -79,6 +79,14 @@ def test_get_public_port(docker_name, tcp_port):
     d.down()
 
 
+def test_get_ip(docker_name, tcp_port):
+    d = docker.Docker(name=docker_name, port=tcp_port)
+    assert d.create_image()
+    d.up_wait_for_services()
+    assert '.' in d.get_ip()
+    d.down()
+
+
 def test_up_wait_for_services_fail(docker_name):
     class DockerFixtureIntegration(docker.Docker):
 

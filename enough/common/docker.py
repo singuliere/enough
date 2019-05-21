@@ -109,6 +109,9 @@ class Docker(object):
         self.up_wait_for_services()
         return True
 
+    def get_ip(self):
+        return self.inspect('{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}')[0]
+
     def get_public_port(self, private_port):
         bindings = self.inspect('{{ json .HostConfig.PortBindings }}')
         if bindings:
