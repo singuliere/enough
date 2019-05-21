@@ -1,6 +1,7 @@
 from __future__ import print_function
 from io import StringIO
 import jinja2
+import json
 import logging
 import os
 import sys
@@ -107,6 +108,14 @@ class Docker(object):
         self.create_image()
         self.up_wait_for_services()
         return True
+
+    def get_public_port(self, private_port):
+        bindings = self.inspect('{{ json .HostConfig.PortBindings }}')
+        if bindings:
+            bindings = json.loads(bindings[0])
+            return bindings[f'{private_port}/tcp'][0]['HostPort']
+        else:
+            return None
 
     def up(self):
         self.docker_compose('up', '-d')
