@@ -62,6 +62,21 @@ def test_up_wait_for_services(docker_name, tcp_port):
     d.down()
 
 
+def test_create_or_update(docker_name, tcp_port):
+    d = docker.Docker(name=docker_name, port=tcp_port)
+    assert d.create_or_update() is True
+    assert d.create_or_update() is False
+
+
+def test_get_public_port(docker_name, tcp_port):
+    d = docker.Docker(name=docker_name, port=tcp_port)
+    assert d.get_public_port('8000') is None
+    assert d.create_image()
+    d.up_wait_for_services()
+    assert d.get_public_port('8000') == tcp_port
+    d.down()
+
+
 def test_up_wait_for_services_fail(docker_name):
     class DockerFixtureIntegration(docker.Docker):
 
