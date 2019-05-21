@@ -17,7 +17,6 @@ class Hosting(object):
         if not os.path.exists(d):
             os.makedirs(d)
         self.clouds_file = f'{d}/clouds.yml'
-        self.debug = False
 
     def ensure_ssh_key(self):
         path = f'{self.config_dir}/infrastructure_key'

@@ -62,7 +62,7 @@ class HostOpenStack(Host):
         s = openstack.Stack(self.clouds_file,
                             openstack.Heat.get_stack_definition(self.args['name']))
         s.set_public_key(f'{settings.CONFIG_DIR}/infrastructure_key.pub')
-        return s.create_or_update(self)
+        return s.create_or_update()
 
     def delete(self):
         s = openstack.Stack(self.clouds_file,
