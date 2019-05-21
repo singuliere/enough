@@ -54,7 +54,7 @@ class HostDocker(Host):
             self.d = HostDocker.DockerInfrastructure(**self.args)
             self.d.create_or_update()
         return {
-            'ipv4': '0.0.0.0',
+            'ipv4': self.d.get_ip(),
             'port': port,
         }
 
