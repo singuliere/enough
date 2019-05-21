@@ -45,8 +45,8 @@ class HostDocker(Host):
     def create_or_update(self):
         self.d.create_network(self.args['domain'])
         self.d.name = self.args['name']
-        self.d.create_image()
-        self.d.up_wait_for_services()
+        self.d.create_or_update()
+        return self.d.get_public_port('22')
 
     def delete(self):
         self.d.name = self.args['name']

@@ -21,11 +21,15 @@ class Create(ShowOne):
     def take_action(self, parsed_args):
         args = vars(self.app.options)
         args.update(vars(parsed_args))
-        args['port'] = tcp.free_port()
         host = host_factory(**args)
-        host.create_or_update()
+        port = host.d.get_public_port('22')
+        if not port:
+            port = tcp.free_port()
+            args['port'] = port
+            host = host_factory(**args)
+            host.create_or_update()
         columns = ('name', 'user', 'port', 'ip')
-        data = (parsed_args.name, 'debian', args['port'], '0.0.0.0')
+        data = (parsed_args.name, 'debian', port, '0.0.0.0')
         return (columns, data)
 
 
