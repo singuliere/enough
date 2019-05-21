@@ -59,6 +59,8 @@ def test_up_wait_for_services(docker_name, tcp_port):
     assert d.create_image()
     d.up_wait_for_services()
     assert '"Status":"healthy"' in d.get_logs()
+    assert d.docker_compose.exec(
+        '-T', docker_name, 'hostname').stdout.strip().decode('utf-8') == docker_name
     d.down()
 
 

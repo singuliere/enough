@@ -11,6 +11,7 @@ services:
       timeout: 3s
       retries: 20
     command: ''
+    hostname: {{ this.name }}
     image: {{ this.get_image_name_with_version('base') }}
     working_dir: /opt
     tmpfs:
