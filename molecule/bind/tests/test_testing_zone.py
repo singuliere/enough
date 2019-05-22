@@ -19,16 +19,17 @@ def test_update(host):
     hostname = host.run("hostname -s").stdout.strip()
     bind_host = host.get_host('ansible://bind-host',
                               ansible_inventory=host.backend.ansible_inventory)
-    cmd = bind_host.run('''
+    address = bind_host.ansible.get_variables()['ansible_host']
+    cmd = bind_host.run(f'''
         nsupdate <<EOF
-        server bind-host
-        zone test.{}
-        update add {}.test.{}. 1800 TXT "Updated by nsupdate ssh-ed from {}"
+        server {address}
+        zone test.{domain}
+        update add {hostname}.test.{domain}. 1800 TXT "Updated by nsupdate"
         show
         send
         quit
         EOF
-        '''.format(domain, hostname, domain, hostname))
+        ''')
     assert 0 == cmd.rc
 
 
@@ -46,14 +47,15 @@ def test_clean_update(host):
     hostname = host.run("hostname -s").stdout.strip()
     host = host.get_host('ansible://bind-host',
                          ansible_inventory=host.backend.ansible_inventory)
-    cmd = host.run('''
+    address = host.ansible.get_variables()['ansible_host']
+    cmd = host.run(f'''
         nsupdate <<EOF
-        server bind-host
-        zone test.{}
-        update delete {}.test.{}. TXT
+        server {address}
+        zone test.{domain}
+        update delete {hostname}.test.{domain}. TXT
         show
         send
         quit
         EOF
-        '''.format(domain, hostname, domain))
+        ''')
     assert 0 == cmd.rc

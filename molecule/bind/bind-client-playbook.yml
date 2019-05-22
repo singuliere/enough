@@ -24,7 +24,7 @@
   pre_tasks:
     - name: set A
       nsupdate:
-        server: bind-host
+        server: "{{ hostvars['bind-host']['ansible_host'] }}"
         zone: "{{ domain }}"
         record: "{{ dns_a_record }}"
         ttl: 1800
@@ -34,7 +34,7 @@
 
     - name: set CNAME
       nsupdate:
-        server: bind-host
+        server: "{{ hostvars['bind-host']['ansible_host'] }}"
         zone: "{{ domain }}"
         record: "{{ dns_cname_record }}"
         ttl: 1800

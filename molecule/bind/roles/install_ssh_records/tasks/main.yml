@@ -37,7 +37,7 @@
 
 - name: install SSHFP records
   nsupdate:
-    server: bind-host
+    server: "{{ hostvars['bind-host']['ansible_host'] }}"
     zone: "{{ domain }}"
     record: "{{ sshfp.0 }}"
     ttl: 604800
