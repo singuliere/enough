@@ -113,7 +113,7 @@
 
   tasks:
 
-    - name: apt-get install virtualenv, python-pip and python-setuptools
+    - name: apt-get install python-pip and python-setuptools
       apt:
         name: [ python-pip, python-setuptools ]
 
