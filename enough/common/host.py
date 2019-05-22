@@ -55,7 +55,7 @@ class HostDocker(Host):
             self.d.create_or_update()
         return {
             'ipv4': self.d.get_ip(),
-            'port': port,
+            'port': '22',
         }
 
     def delete(self):

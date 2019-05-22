@@ -21,7 +21,7 @@ def test_update(host):
                               ansible_inventory=host.backend.ansible_inventory)
     cmd = bind_host.run('''
         nsupdate <<EOF
-        server localhost
+        server bind-host
         zone test.{}
         update add {}.test.{}. 1800 TXT "Updated by nsupdate ssh-ed from {}"
         show
@@ -48,7 +48,7 @@ def test_clean_update(host):
                          ansible_inventory=host.backend.ansible_inventory)
     cmd = host.run('''
         nsupdate <<EOF
-        server localhost
+        server bind-host
         zone test.{}
         update delete {}.test.{}. TXT
         show

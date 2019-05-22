@@ -7,12 +7,22 @@
       - mariadb-client
     state: present
 
+- name: start mariadb
+  service:
+    name: mariadb
+    state: started
+
 - name: apt-get install icinga2
   apt:
     name:
       - icinga2
       - icinga2-ido-mysql
     state: present
+
+- name: start icinga2
+  service:
+    name: icinga2
+    state: started
 
 - name: apt-get install monitoring plugins
   apt:

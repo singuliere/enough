@@ -11,7 +11,7 @@
     - name: create instances
       register: out
       shell: |
-        python -m enough.internal.cmd host create --driver {{ infrastructure_driver }} --format json {{ item.name }}
+        python -m enough.internal.cmd host create --domain {{ domain }} --driver {{ infrastructure_driver }} --format json {{ item.name }}
       loop: "{{ molecule_yml.platforms }}"
 
     - name: instances

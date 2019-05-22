@@ -24,7 +24,7 @@
   pre_tasks:
     - name: set A
       nsupdate:
-        server: localhost
+        server: bind-host
         zone: "{{ domain }}"
         record: "{{ dns_a_record }}"
         ttl: 1800
@@ -34,7 +34,7 @@
 
     - name: set CNAME
       nsupdate:
-        server: localhost
+        server: bind-host
         zone: "{{ domain }}"
         record: "{{ dns_cname_record }}"
         ttl: 1800
@@ -61,5 +61,6 @@
 
   tasks:
     - name: set hostname
+      when: infrastructure_driver == 'openstack'
       hostname:
         name: '{{ inventory_hostname }}.{{ domain }}'

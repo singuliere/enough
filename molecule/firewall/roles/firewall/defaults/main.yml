@@ -1,3 +1,4 @@
 ---
+firewall_enabled: true
 firewall_state: present
 firewall_rule_state: present

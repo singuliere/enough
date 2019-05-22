@@ -5,11 +5,11 @@ testinfra_hosts = ['icinga-host']
 
 class TestChecks(IcingaHelper):
 
-    def test_host(self):
+    def test_icinga_host(self):
         r = self.get_client().objects.get('Host', 'bind-host')
         assert r['attrs']['name'] == 'bind-host'
 
-    def test_service(self, host):
+    def test_icinga_service(self, host):
         #  r = self.get_client().objects.list('Service', joins=['host.name'])
         with host.sudo():
             host.run("systemctl restart icinga2")

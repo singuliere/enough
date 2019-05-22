@@ -47,7 +47,7 @@
           options {
             directory "/var/cache/bind";
             auth-nxdomain no;    # conform to RFC1035
-            listen-on-v6 { any; };
+            listen-on { {{ ansible_host }}; };
             allow-query { any; };
             recursion yes;
             allow-transfer  {
@@ -113,7 +113,7 @@
 
   tasks:
 
-    - name: apt-get install virtualenv, python-pip and python-setuptools
+    - name: apt-get install python-pip and python-setuptools
       apt:
         name: [ python-pip, python-setuptools ]
 
