@@ -19,11 +19,6 @@
       - icinga2-ido-mysql
     state: present
 
-- name: start icinga2
-  service:
-    name: icinga2
-    state: started
-
 - name: apt-get install monitoring plugins
   apt:
     name: [ monitoring-plugins, nagios-plugins-contrib ]
@@ -237,3 +232,13 @@
 - name: enable monitoring module
   command: icingacli module enable monitoring
   changed_when: False
+
+- name: start icinga2
+  service:
+    name: icinga2
+    state: restarted
+
+- name: stop apache2
+  service:
+    name: apache2
+    state: stopped
