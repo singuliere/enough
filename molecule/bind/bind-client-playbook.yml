@@ -61,5 +61,6 @@
 
   tasks:
     - name: set hostname
+      when: infrastructure_driver == 'openstack'
       hostname:
         name: '{{ inventory_hostname }}.{{ domain }}'

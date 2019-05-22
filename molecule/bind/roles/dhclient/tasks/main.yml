@@ -1,10 +1,24 @@
 ---
-- name: setup dhclient.conf
-  template:
-    src: dhclient.conf.j2
-    dest: /etc/dhcp/dhclient.conf
-  register: dhclient
+- when: infrastructure_driver == 'openstack'
+  block:
+  - name: setup dhclient.conf
+    template:
+      src: dhclient.conf.j2
+      dest: /etc/dhcp/dhclient.conf
+    register: dhclient
 
-- name: restart all interfaces to reload dhclient.conf and update /etc/resolv.conf
-  shell: "ifdown -a ; ifup -a"
-  when: dhclient is changed
+  - name: restart all interfaces to reload dhclient.conf and update /etc/resolv.conf
+    shell: "ifdown -a ; ifup -a"
+    when: dhclient is changed
+
+- when: infrastructure_driver == 'docker'
+  block:
+  - name: setup resolv.conf
+    template:
+      src: resolv.conf.j2
+      # copying directly to /etc/resolv.conf won't work because it is bind mounted by docker
+      dest: /tmp/resolv.conf
+
+  - name: copy to resolv.conf
+    shell: |
+      cat /tmp/resolv.conf > /etc/resolv.conf
