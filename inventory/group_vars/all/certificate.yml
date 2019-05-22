@@ -1,5 +1,4 @@
 ---
-# certificate_authority: ownca
 # certificate_authority: letsencrypt
-certificate_authority: letsencrypt_staging
+certificate_authority: "{% if infrastructure_driver == 'openstack' %}letsencrypt_staging{% else %}ownca{% endif %}"
 certificate_local_directory: "{{ enough_domain_config_directory }}/certs"
