@@ -4,6 +4,7 @@ from enough.common import retry
 import urllib3
 import yaml
 import testinfra
+from tests.infrastructure import get_driver
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -25,9 +26,13 @@ class IcingaHelper(object):
             )
 
     def get_address(self):
-        vars_dir = '../../inventory/group_vars/all'
-        return 'icinga.' + yaml.load(
-            open(vars_dir + '/domain.yml'))['domain']
+        if get_driver() == 'openstack':
+            vars_dir = '../../inventory/group_vars/all'
+            return 'icinga.' + yaml.load(
+                open(vars_dir + '/domain.yml'))['domain']
+        else:
+            host = testinfra.get_host('ansible://icinga-host', ansible_inventory=self.inventory)
+            return host.ansible.get_variables()['ansible_host']
 
     def get_client(self):
         (user, password) = self.get_auth()
