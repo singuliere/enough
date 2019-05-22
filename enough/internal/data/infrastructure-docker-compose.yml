@@ -12,6 +12,8 @@ services:
       retries: 20
     command: ''
     hostname: {{ this.name }}
+    domainname: {{ this.domain }}
+    dns_search: {{ this.domain }}
     image: {{ this.get_image_name('') }}
     working_dir: /opt
     tmpfs:
@@ -20,8 +22,9 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      - /etc/ssl/certs:/etc/ssl/certs:ro
-      - /usr/local/share/ca-certificates/infrastructure:/usr/local/share/ca-certificates/infrastructure:ro
+      - {{ this.config_dir }}/{{ this.name }}/opt:/opt
+#      - {{ this.config_dir }}/{{ this.name }}/etc/ssl/certs:/etc/ssl/certs
+      - {{ this.config_dir }}/{{ this.name }}/usr/local/share/ca-certificates/infrastructure:/usr/local/share/ca-certificates/infrastructure
     security_opt:
       - seccomp=unconfined
     cap_add:

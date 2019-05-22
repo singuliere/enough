@@ -8,6 +8,7 @@ import sys
 import sh
 import tempfile
 
+from enough import settings
 from enough.version import __version__
 from enough.common.retry import retry, RetryException
 
@@ -17,6 +18,7 @@ log = logging.getLogger(__name__)
 class Docker(object):
 
     def __init__(self, **kwargs):
+        self.config_dir = settings.CONFIG_DIR
         self.root = kwargs.get('root', os.path.join(os.path.dirname(__file__), '..'))
         self.name = kwargs.get('name')
         self.port = kwargs.get('port', '8000')
