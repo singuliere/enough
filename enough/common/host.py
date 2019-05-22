@@ -1,9 +1,11 @@
 import os
-from django.conf import settings
-from enough.common import openstack, docker
 from abc import ABC, abstractmethod
 import shutil
 import tempfile
+
+from enough import settings
+from enough.common import openstack, docker
+from enough.common import tcp
 
 
 class Host(ABC):
@@ -40,13 +42,21 @@ class HostDocker(Host):
 
     def __init__(self, **kwargs):
         self.args = kwargs
-        self.d = HostDocker.DockerInfrastructure(**kwargs)
+        self.d = HostDocker.DockerInfrastructure(**self.args)
 
     def create_or_update(self):
         self.d.create_network(self.args['domain'])
         self.d.name = self.args['name']
-        self.d.create_or_update()
-        return self.d.get_public_port('22')
+        port = self.d.get_public_port('22')
+        if not port:
+            port = tcp.free_port()
+            self.args['port'] = port
+            self.d = HostDocker.DockerInfrastructure(**self.args)
+            self.d.create_or_update()
+        return {
+            'ipv4': self.d.get_ip(),
+            'port': port,
+        }
 
     def delete(self):
         self.d.name = self.args['name']

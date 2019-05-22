@@ -32,3 +32,9 @@ gitlab:
   hosts:
     gitlab-host:
     api-host:
+
+testing:
+  hosts:
+    external-host:
+    bind-client-host:
+
