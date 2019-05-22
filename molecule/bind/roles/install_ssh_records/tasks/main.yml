@@ -37,7 +37,7 @@
 
 - name: install SSHFP records
   nsupdate:
-    server: localhost
+    server: bind-host
     zone: "{{ domain }}"
     record: "{{ sshfp.0 }}"
     ttl: 604800
