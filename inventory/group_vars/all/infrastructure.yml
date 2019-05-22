@@ -1,4 +1,4 @@
 ---
-# infrastructure_driver: openstack
-infrastructure_driver: docker
+infrastructure_driver: openstack
+# infrastructure_driver: docker
 firewall_enabled: "{% if infrastructure_driver == 'openstack' %}true{% else %}false{% endif %}"
