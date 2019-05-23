@@ -11,3 +11,6 @@ ENV REQUESTS_CA_BUNDLE /etc/ssl/certs
 RUN useradd --shell /bin/bash debian && echo "debian ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 COPY infrastructure_key.pub /home/debian/.ssh/authorized_keys
 RUN chown -R debian:debian /home/debian
+
+# allow deb-systemd-invoke to start systemd services
+RUN rm /usr/sbin/policy-rc.d
