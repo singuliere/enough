@@ -1,3 +1,5 @@
 ---
+enough_storage_root_directory: "/opt/enough/{{ domain }}"
+enough_storage_directory: "{{ enough_storage_root_directory }}/{{ inventory_hostname }}"
 enough_config_directory: "{{ '~/.enough' | expanduser }}"
 enough_domain_config_directory: "{{ enough_config_directory }}/{{ domain }}"

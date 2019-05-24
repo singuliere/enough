@@ -23,6 +23,7 @@ services:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/enough/{{ this.domain }}:/opt/enough/{{ this.domain }}
       - {{ this.config_dir }}/{{ this.name }}/opt:/opt
 #      - {{ this.config_dir }}/{{ this.name }}/etc/ssl/certs:/etc/ssl/certs
       - {{ this.config_dir }}/{{ this.name }}/usr/local/share/ca-certificates/infrastructure:/usr/local/share/ca-certificates/infrastructure
