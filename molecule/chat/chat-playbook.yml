@@ -3,14 +3,20 @@
   hosts: chat-host
   become: true
 
+  pre_tasks:
+
+    - when: infrastructure_driver == 'openstack'
+      block:
+        - include_role:
+            name: ansible-role-docker
+
   roles:
-    - role: ansible-role-docker
     - role: docker
     - role: mattermost
 
     - role: enough-nginx
       vars:
-        enough_nginx_reverse_proxy: 127.0.0.1:8000
+        enough_nginx_reverse_proxy: mattermost_app_1:8000
         enough_nginx_fqdn: "{{ chat_vhost_fqdn }}"
 
     - role: certificate

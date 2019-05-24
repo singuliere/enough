@@ -29,7 +29,7 @@ services:
         - PGID=1000
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - 8000
     volumes:
       - ./volumes/app/mattermost/config:/mattermost/config:rw
       - ./volumes/app/mattermost/data:/mattermost/data:rw
@@ -42,3 +42,10 @@ services:
       - MM_DBNAME=mattermost
       # in case your config is not in default location
       #- MM_CONFIG=/mattermost/config/config.json
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: {{ domain }}

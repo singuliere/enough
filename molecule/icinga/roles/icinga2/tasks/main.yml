@@ -238,7 +238,9 @@
     name: icinga2
     state: restarted
 
+# this should not be necessary https://lab.enough.community/main/infrastructure/issues/121
 - name: stop apache2
+  when: infrastructure_driver == 'docker'
   service:
     name: apache2
     state: stopped

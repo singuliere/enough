@@ -7,6 +7,22 @@
     group: root
     mode: 0755
 
+- name: resolve the reverse_proxy backend address
+  when: enough_nginx_reverse_proxy | default(false)
+  register: reverse_proxy
+  shell: |
+    if echo {{ enough_nginx_reverse_proxy }} | grep -q 127.0.0.1 ; then
+       echo -n {{ enough_nginx_reverse_proxy }}
+    else
+       set $(echo {{ enough_nginx_reverse_proxy }} | sed -e 's/:/ /')
+       if getent hosts $1 ; then
+         echo -n {{ enough_nginx_reverse_proxy }}
+       else
+         docker inspect -f {{ '"{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}"' }} $1 | tr -d '\n'
+         echo -n ":$2"
+       fi
+    fi
+
 - name: install nginx
   include_role:
     name: jdauphant.nginx
@@ -19,10 +35,10 @@
     nginx_configs: |
        {
          '{{ enough_nginx_fqdn }}': [
-         {% if enough_nginx_reverse_proxy | default(false) %}
+         {% if reverse_proxy is changed %}
          """
               upstream {{ enough_nginx_fqdn }}.backend {
-                server {{ enough_nginx_reverse_proxy }};
+                server {{ reverse_proxy.stdout }};
                 keepalive 32;
               }
               proxy_cache_path /var/cache/nginx/{{ enough_nginx_fqdn }} levels=1:2 keys_zone={{ enough_nginx_fqdn }}:10m max_size=1g inactive=120m use_temp_path=off;
@@ -36,7 +52,7 @@
            'listen 80',
            'server_name {{ enough_nginx_fqdn }}',
            """{{ enough_nginx_sites }}""",
-           {% if enough_nginx_reverse_proxy | default(false) %}
+           {% if reverse_proxy is changed %}
            """
               location / {
                   proxy_set_header Upgrade $http_upgrade;
