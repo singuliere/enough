@@ -23,3 +23,8 @@
     path: "~/.ansible/cp/{{ ansible_host }}-{{ ansible_port }}-{{ ansible_user }}"
     state: absent
   become: False
+
+- name: docker network create {{ domain }}
+  when: infrastructure_driver == 'openstack'
+  docker_network:
+    name: "{{ domain }}"
