@@ -4,28 +4,25 @@
     name: git
     state: present
 
-- name: chown debian /srv
+- name: chown debian {{ enough_storage_directory }}
   file:
-    path: /srv
+    path: "{{ enough_storage_directory }}"
+    state: directory
     owner: debian
 
 - name: git clone https://github.com/mattermost/mattermost-docker.git
   git:
     repo: https://github.com/mattermost/mattermost-docker.git
     force: yes
-    dest: /srv/mattermost
-  become: False
-
-- name: cleanup docker leftovers
-  shell: docker system prune --force
+    dest: "{{ enough_storage_directory }}/mattermost"
   become: False
 
 - name: create mattermost directories
   file:
-    dest: '/srv/mattermost/volumes/{{ item }}'
-    state: 'directory'
-    owner: 'debian'
-    group: 'debian'
+    dest: '{{ enough_storage_directory }}/mattermost/volumes/{{ item }}'
+    state: directory
+    owner: debian
+    group: debian
     mode: '0755'
   loop:
     - app
@@ -37,9 +34,17 @@
 - name: Copy docker-compose-infrastructure.yml
   template:
     src: docker-compose-infrastructure.yml
-    dest: /srv/mattermost/docker-compose-infrastructure.yml
+    dest: "{{ enough_storage_directory }}/mattermost/docker-compose-infrastructure.yml"
     owner: debian
     mode: "0600"
-  notify:
-    - recreate mattermost
   become: False
+
+- name: recreate mattermost
+  docker_service:
+    project_name: mattermost
+    files: docker-compose-infrastructure.yml
+    project_src: "{{ enough_storage_directory }}/mattermost"
+    state: present
+#  environment:
+#    TMPDIR: /opt # this is required for docker-compose to not fail with libz.so.1: failed to map segment
+
