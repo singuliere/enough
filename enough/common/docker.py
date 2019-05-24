@@ -47,7 +47,8 @@ class Docker(object):
         compose.flush()
         cmd = docker_compose or 'docker-compose'
         self.docker_compose = sh.Command(cmd).bake(
-            '-f', compose.name,
+            '--project-name', 'enough',
+            '--file', compose.name,
             _truncate_exc=False,
             _tee=True,
             _out=lambda x: log.info(x.strip()),
